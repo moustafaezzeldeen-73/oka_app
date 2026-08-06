@@ -101,6 +101,7 @@ export async function fetchOrderStatus({ orderNumber, trackingNumber, phone }) {
       step: json.step ?? stepFromBostaState(json.bostaStateCode),
       stateLabel: json.stateLabel ?? null,
       trackingNumber: json.trackingNumber ?? trackingNumber ?? null,
+      courier: json.courier ?? null,
       updates: Array.isArray(json.updates) ? json.updates : [],
     };
   } catch {

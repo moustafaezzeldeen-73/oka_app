@@ -181,10 +181,20 @@ app.get('/customer/orders', async (req, res) => {
       if (d.trackingNumber) byRef.set(d.trackingNumber, d);
     }
 
+    /**
+     * Each order gets its own delivery or none at all.
+     *
+     * The only trustworthy links are the AWB Shopify recorded on the
+     * fulfilment, and an exact businessReference match. Matching on the
+     * customer's phone would attach an arbitrary one of their deliveries to
+     * every one of their orders — with several orders in flight that is
+     * guaranteed to show the wrong shipment somewhere, which is worse than
+     * showing none.
+     */
     const orders = customer.orders.map((o) => {
       const delivery =
-        byRef.get(String(o.name).replace(/^#/, '')) ??
         (o.trackingNumber ? byRef.get(o.trackingNumber) : null) ??
+        byRef.get(String(o.name).replace(/^#/, '')) ??
         null;
       const code = delivery?.state?.code ?? null;
 
@@ -203,9 +213,15 @@ app.get('/customer/orders', async (req, res) => {
         .sort((a, b) => new Date(a.at) - new Date(b.at))
         .map(({ at, ...row }) => row);
 
+      const awb = delivery?.trackingNumber ?? o.trackingNumber ?? null;
+
       return {
         ...o,
-        trackingNumber: delivery?.trackingNumber ?? o.trackingNumber,
+        trackingNumber: awb,
+        // Distinguishes "no shipment yet" from "shipment exists, no events" —
+        // the app says different things for each.
+        hasAwb: Boolean(awb),
+        hasDelivery: Boolean(delivery),
         bostaStateCode: code,
         stateLabel: delivery?.state?.value ?? null,
         step: o.cancelledAt ? 0 : stepFromState(code),

@@ -23,9 +23,9 @@ export default function OrdersScreen() {
    * falls back to the order just placed in this session.
    */
   const orders = state.remoteOrders ?? [];
-  const remote =
-    orders.find((o) => o.name === state.selectedOrderName) ??
-    (orders.length === 1 ? orders[0] : null);
+  // The list is always the entry point for real orders — one order still gets
+  // picked from a list, so the flow does not change shape at two orders.
+  const remote = orders.find((o) => o.name === state.selectedOrderName) ?? null;
   const order = remote
     ? {
         number: remote.name,
@@ -36,6 +36,9 @@ export default function OrdersScreen() {
         heroImg: remote.items?.[0]?.image ? { uri: remote.items[0].image } : null,
         items: remote.items,
         cancelled: remote.cancelled,
+        shipTo: remote.shipTo ?? null,
+        hasAwb: remote.hasAwb,
+        hasDelivery: remote.hasDelivery,
       }
     : state.order;
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
@@ -73,9 +76,9 @@ export default function OrdersScreen() {
       try {
         const r = await fetchCustomerOrders({ token: state.session.token, lang: d.lang });
         actions.setRemoteOrders(r.orders ?? []);
-        const shown =
-          (r.orders ?? []).find((o) => o.name === state.selectedOrderName) ??
-          (r.orders?.length === 1 ? r.orders[0] : null);
+        // Only ever the order that is actually open — never "the first one",
+        // which is how another order's shipment ended up on this screen.
+        const shown = (r.orders ?? []).find((o) => o.name === state.selectedOrderName) ?? null;
         setLive(
           shown
             ? {
@@ -156,7 +159,7 @@ export default function OrdersScreen() {
 
   const { control } = useRefresh(loadStatus);
 
-  /** Several orders and none opened yet — show the list. */
+  /** No order open — the list is the entry point. */
   if (!order) {
     return (
       <FadeIn style={styles.root}>
@@ -226,33 +229,28 @@ export default function OrdersScreen() {
     d.isRtl ? 'تم التوصيل' : 'Delivered',
   ];
 
-  const fallbackUpdates = d.isRtl
-    ? [
-        ['تم تأكيد الدفع واستلام الطلب', 'اليوم ١٠:٤٢ ص'],
-        ['جاري تجهيز الطلب في المخزن', 'اليوم ١١:١٥ ص'],
-        ['تم تعيين مندوب التوصيل', 'اليوم ١٢:٣٠ م'],
-        ['الطلب في الطريق إلى مركز الفرز', 'قيد الانتظار'],
-        ['الطلب خارج للتوصيل', 'قيد الانتظار'],
-      ]
-    : [
-        ['Payment confirmed, order received', 'Today 10:42 AM'],
-        ['Order being prepared at the warehouse', 'Today 11:15 AM'],
-        ['Courier assigned to your order', 'Today 12:30 PM'],
-        ['On the way to the sorting hub', 'Pending'],
-        ['Out for delivery', 'Pending'],
-      ];
+  /**
+   * Real events only. The prototype's invented timeline ("Courier assigned",
+   * "On the way to the sorting hub") used to fill this space whenever the
+   * service returned nothing, which made an order with no shipment look like
+   * one already in transit.
+   */
+  const updates = (live?.updates ?? []).map((u) => ({
+    text: u.text,
+    time: u.time,
+    done: u.done,
+  }));
 
-  const updates =
-    live?.updates?.length > 0
-      ? live.updates.map((u) => ({ text: u.text, time: u.time, done: u.done }))
-      : fallbackUpdates.map(([text, time], i) => ({ text, time, done: i < 3 }));
+  // Only meaningful for a real Shopify order; a locally-placed one never has
+  // an AWB to report on.
+  const awaitingAwb = Boolean(remote) && !order.hasAwb;
 
   return (
     <FadeIn style={styles.root}>
       <ScrollView showsVerticalScrollIndicator={false} refreshControl={control}>
         <ScreenHeader
           title={d.isRtl ? 'تفاصيل الطلب' : 'Order Details'}
-          onBack={() => (orders.length > 1 ? actions.backToOrderList() : actions.goTab('home'))}
+          onBack={() => (orders.length ? actions.backToOrderList() : actions.goTab('home'))}
           isRtl={d.isRtl}
         />
 
@@ -338,8 +336,25 @@ export default function OrdersScreen() {
           ))}
         </View>
 
-        {/* `max-height:148px; overflow-y:auto` in the prototype — it has to be a
-            real scroller, and nestedScrollEnabled lets it scroll inside the page. */}
+        {awaitingAwb ? (
+          <View style={styles.awaiting}>
+            <Txt isRtl={d.isRtl} style={styles.awaitingTxt}>
+              {d.isRtl
+                ? 'لسه ما اتعملش بوليصة شحن للطلب ده. هتظهر تحديثات بوسطة هنا أول ما تتصدر.'
+                : 'No AWB has been issued for this order yet. Bosta updates will appear here once it is.'}
+            </Txt>
+          </View>
+        ) : updates.length === 0 ? (
+          <View style={styles.awaiting}>
+            <Txt isRtl={d.isRtl} style={styles.awaitingTxt}>
+              {d.isRtl
+                ? 'لا توجد تحديثات بعد لهذا الطلب.'
+                : 'No updates for this order yet.'}
+            </Txt>
+          </View>
+        ) : (
+        /* `max-height:148px; overflow-y:auto` in the prototype — it has to be a
+           real scroller, and nestedScrollEnabled lets it scroll inside the page. */
         <ScrollView
           style={styles.updates}
           nestedScrollEnabled
@@ -365,23 +380,38 @@ export default function OrdersScreen() {
             </View>
           ))}
         </ScrollView>
+        )}
 
         <Divider style={styles.ruleTop} />
 
+        {/* The address this order actually shipped to — not the account's
+            current default, which may since have changed. */}
         <Field label={d.isRtl ? 'الشحن إلى' : 'Ships to'} isRtl={d.isRtl}>
-          <Txt isRtl={d.isRtl} style={styles.fieldStrong}>{STR[d.lang].name}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{STR[d.lang].street}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{d.t(state.city)}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldPhone}>{`⁦${STR[d.lang].phone}⁩`}</Txt>
+          <Txt isRtl={d.isRtl} style={styles.fieldStrong}>
+            {order.shipTo?.name || state.customer?.name || STR[d.lang].name}
+          </Txt>
+          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
+            {order.shipTo?.street || STR[d.lang].street}
+          </Txt>
+          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
+            {order.shipTo?.city || d.t(state.city)}
+          </Txt>
+          <Txt isRtl={d.isRtl} style={styles.fieldPhone}>
+            {`⁦${order.shipTo?.phone || state.customer?.phone || STR[d.lang].phone}⁩`}
+          </Txt>
         </Field>
 
         <Divider style={styles.ruleTop} />
 
         <Field label={d.isRtl ? 'التوصيل' : 'Delivers'} isRtl={d.isRtl}>
-          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{order.cityDays}</Txt>
           <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
-            {d.isRtl ? 'توصيل سريع' : 'Express Delivery'}
+            {order.cityDays || (d.isRtl ? 'توصيل سريع' : 'Express Delivery')}
           </Txt>
+          {live?.courier ? (
+            <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
+              {(d.isRtl ? 'المندوب: ' : 'Courier: ') + live.courier}
+            </Txt>
+          ) : null}
         </Field>
 
         <Divider style={styles.ruleTop} />
@@ -463,6 +493,16 @@ const styles = StyleSheet.create({
   orderTotal: { fontSize: 13.5, fontWeight: W.bold, color: C.ink },
   orderMeta: { fontSize: 12.5, color: C.inkSoft, marginTop: 3 },
   orderState: { fontSize: 12, fontWeight: W.bold, marginTop: 4 },
+
+  awaiting: {
+    marginHorizontal: 22,
+    padding: 15,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0,0,0,0.04)',
+    borderWidth: 1,
+    borderColor: C.cardBorder,
+  },
+  awaitingTxt: { fontSize: 12.5, lineHeight: 19, color: C.inkSoft },
 
   itemsList: { paddingHorizontal: 22, paddingBottom: 18, gap: 10 },
   itemsLabel: { fontSize: 12.5, fontWeight: W.bold, color: 'rgba(110,110,115,0.9)', marginBottom: 2 },

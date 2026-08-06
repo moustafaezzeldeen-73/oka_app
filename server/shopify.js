@@ -247,7 +247,10 @@ const CUSTOMER_ORDERS = `
                 displayFulfillmentStatus
                 displayFinancialStatus
                 totalPriceSet { shopMoney { amount currencyCode } }
-                shippingAddress { address1 city phone }
+                shippingAddress {
+                  firstName lastName name
+                  address1 address2 city province zip phone
+                }
                 lineItems(first: 25) {
                   edges {
                     node {
@@ -294,6 +297,23 @@ export async function findCustomerOrders(identifier) {
       total: Number(o.totalPriceSet?.shopMoney?.amount ?? 0),
       currency: o.totalPriceSet?.shopMoney?.currencyCode ?? 'EGP',
       city: o.shippingAddress?.city ?? null,
+      // The order's own delivery address, not the account's current default —
+      // an order shipped to a previous address must keep showing that one.
+      shipTo: o.shippingAddress
+        ? {
+            name:
+              o.shippingAddress.name ||
+              [o.shippingAddress.firstName, o.shippingAddress.lastName].filter(Boolean).join(' '),
+            street: [o.shippingAddress.address1, o.shippingAddress.address2]
+              .filter(Boolean)
+              .join(', '),
+            city: [o.shippingAddress.city, o.shippingAddress.province]
+              .filter(Boolean)
+              .join(', '),
+            zip: o.shippingAddress.zip ?? null,
+            phone: o.shippingAddress.phone ?? null,
+          }
+        : null,
       trackingNumber: o.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.number ?? null,
       fulfilledAt: o.fulfillments?.[0]?.createdAt ?? null,
       cancelledAt: o.cancelledAt ?? null,
