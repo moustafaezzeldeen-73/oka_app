@@ -1,0 +1,15 @@
+node_modules/
+.expo/
+dist/
+web-build/
+*.log
+
+# Secrets — never commit. The Admin API token and Bosta key belong in the
+# server's environment, not in this repository.
+.env
+.env.*
+!.env.example
+
+# macOS / editors
+.DS_Store
+*.tsbuildinfo
