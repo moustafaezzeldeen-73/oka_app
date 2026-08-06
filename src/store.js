@@ -41,6 +41,11 @@ const INITIAL = {
   newAddr: null,
   newAddrType: 'home',
   locationFound: false,
+
+  /** Sign-in session. `customer` is whatever the service could resolve. */
+  session: null,
+  customer: null,
+  remoteOrders: null,
 };
 
 const StoreContext = createContext(null);
@@ -162,6 +167,11 @@ export function useActions() {
 
       redeemReward: (id) =>
         patch((s) => ({ redeemedRewards: { ...s.redeemedRewards, [id]: true } })),
+
+      signedIn: ({ token, customer, staff, via }) =>
+        patch({ session: { token, staff, via }, customer, screen: 'orders', stack: [] }),
+      signOut: () => patch({ session: null, customer: null, remoteOrders: null, screen: 'account', stack: [] }),
+      setRemoteOrders: (remoteOrders) => patch({ remoteOrders }),
 
       selectAddress: (selectedAddress) => patch({ selectedAddress }),
       setNewAddrField: (key, val) =>

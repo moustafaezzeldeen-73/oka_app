@@ -20,6 +20,22 @@ export default function CheckoutScreen() {
   const [placing, setPlacing] = useState(false);
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
 
+  /**
+   * The signed-in customer wins; the address they typed comes next; the
+   * prototype's placeholder person is only ever a last resort, and shipping
+   * every order under one name was exactly that resort firing every time.
+   */
+  const buyer = {
+    name: state.customer?.name || state.newAddr?.name || STR[d.lang].name,
+    email: state.customer?.email || null,
+    phone: state.customer?.phone || state.newAddr?.phone || STR[d.lang].phone,
+    street:
+      state.newAddr?.street ||
+      state.customer?.address?.address1 ||
+      STR[d.lang].street,
+    city: state.newAddr?.city || state.customer?.address?.city || d.t(state.city),
+  };
+
   const hero = d.cartEntries[0];
   const payOptions = [
     { id: 'cod', label: d.t('cod') },
@@ -53,10 +69,11 @@ export default function CheckoutScreen() {
         discount: d.discountRaw,
         total: d.totalRaw,
         customer: {
-          name: STR[d.lang].name,
-          phone: STR[d.lang].phone,
-          street: STR[d.lang].street,
-          city: d.t(state.city),
+          name: buyer.name,
+          email: buyer.email,
+          phone: buyer.phone,
+          street: buyer.street,
+          city: buyer.city,
         },
       });
 
@@ -117,10 +134,10 @@ export default function CheckoutScreen() {
         <Divider style={styles.rule} />
 
         <Field label={d.isRtl ? 'الشحن إلى' : 'Ships to'} isRtl={d.isRtl}>
-          <Txt isRtl={d.isRtl} style={styles.fieldStrong}>{STR[d.lang].name}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{STR[d.lang].street}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{d.t(state.city)}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldPhone}>{`⁦${STR[d.lang].phone}⁩`}</Txt>
+          <Txt isRtl={d.isRtl} style={styles.fieldStrong}>{buyer.name}</Txt>
+          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{buyer.street}</Txt>
+          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{buyer.city}</Txt>
+          <Txt isRtl={d.isRtl} style={styles.fieldPhone}>{`⁦${buyer.phone}⁩`}</Txt>
         </Field>
 
         <Divider style={styles.ruleTop} />

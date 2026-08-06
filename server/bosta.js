@@ -22,30 +22,89 @@ function authHeaders() {
 const sameRef = (a, b) =>
   String(a ?? '').replace(/^#/, '') === String(b ?? '').replace(/^#/, '');
 
-/** Finds the delivery created for a given Shopify order name. */
-export async function findDeliveryByOrderName(orderName) {
-  const res = await fetch(`${BASE}/deliveries/search`, {
-    method: 'POST',
-    headers: authHeaders(),
-    body: JSON.stringify({ search: String(orderName).replace(/^#/, ''), limit: 10, page: 1 }),
-  });
-  if (!res.ok) throw new Error(`Bosta search returned ${res.status}`);
-  const json = await res.json();
-  const list = json?.data?.deliveries ?? [];
-  return list.find((d) => sameRef(d.businessReference, orderName)) ?? list[0] ?? null;
+/**
+ * Bosta's search endpoint has moved between API versions, and a wrong base URL
+ * fails as an unhelpful 404. Each candidate is tried in turn and the one that
+ * answers is remembered, so the cost is paid once per process.
+ */
+const SEARCH_PATHS = ['/deliveries/search', '/deliveries/business/search'];
+let workingSearchPath = null;
+
+async function search(term) {
+  const paths = workingSearchPath ? [workingSearchPath] : SEARCH_PATHS;
+  let lastError = null;
+
+  for (const path of paths) {
+    try {
+      const res = await fetch(`${BASE}${path}`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ search: String(term).replace(/^#/, ''), limit: 20, page: 1 }),
+      });
+      if (res.status === 401 || res.status === 403) {
+        throw new Error(`Bosta rejected the API key (${res.status}) — check BOSTA_API_KEY`);
+      }
+      if (!res.ok) {
+        lastError = new Error(`Bosta ${path} returned ${res.status}`);
+        continue;
+      }
+      const json = await res.json();
+      workingSearchPath = path;
+      return json?.data?.deliveries ?? [];
+    } catch (err) {
+      lastError = err;
+      if (String(err.message).includes('rejected the API key')) throw err;
+    }
+  }
+  throw lastError ?? new Error('Bosta search failed');
+}
+
+/**
+ * Finds the delivery for a Shopify order.
+ *
+ * Bosta's `businessReference` is set by whatever created the AWB. It does not
+ * always equal the Shopify order name, so an exact reference match is tried
+ * first, then the customer phone, then the plain search hit.
+ */
+export async function findDeliveryByOrderName(orderName, { phone } = {}) {
+  const list = await search(orderName);
+  const exact = list.find((d) => sameRef(d.businessReference, orderName));
+  if (exact) return exact;
+
+  if (phone) {
+    const digits = String(phone).replace(/\D/g, '').slice(-10);
+    const byPhone = list.find((d) =>
+      String(d.receiver?.phone ?? '').replace(/\D/g, '').endsWith(digits),
+    );
+    if (byPhone) return byPhone;
+  }
+  return list[0] ?? null;
 }
 
 /** Looks a delivery up directly by its AWB. */
 export async function findDeliveryByTracking(trackingNumber) {
-  const res = await fetch(`${BASE}/deliveries/search`, {
-    method: 'POST',
-    headers: authHeaders(),
-    body: JSON.stringify({ search: trackingNumber, limit: 5, page: 1 }),
-  });
-  if (!res.ok) throw new Error(`Bosta search returned ${res.status}`);
-  const json = await res.json();
-  const list = json?.data?.deliveries ?? [];
+  const list = await search(trackingNumber);
   return list.find((d) => d.trackingNumber === trackingNumber) ?? list[0] ?? null;
+}
+
+/** Every delivery for a customer's phone number — the staff order view. */
+export async function findDeliveriesByPhone(phone) {
+  if (!phone) return [];
+  const digits = String(phone).replace(/\D/g, '').slice(-10);
+  const list = await search(digits);
+  return list.filter((d) =>
+    String(d.receiver?.phone ?? '').replace(/\D/g, '').endsWith(digits),
+  );
+}
+
+/** Surfaces the real reason a Bosta call failed, for the /health check. */
+export async function pingBosta() {
+  try {
+    const list = await search('1');
+    return { ok: true, path: workingSearchPath, sample: list.length };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
 }
 
 /**

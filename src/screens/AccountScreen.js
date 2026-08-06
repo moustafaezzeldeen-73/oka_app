@@ -27,11 +27,24 @@ export default function AccountScreen() {
           {d.t('accountTitle')}
         </Txt>
 
-        <View style={styles.guest}>
-          <Txt isRtl={d.isRtl} style={styles.guestTxt}>
-            {d.t('guestPrompt')}
-          </Txt>
-        </View>
+        {state.customer ? (
+          <View style={styles.guest}>
+            <Txt isRtl={d.isRtl} style={styles.guestTxt}>
+              {state.customer.name || state.customer.email || state.customer.phone}
+            </Txt>
+            {state.session?.staff ? (
+              <Txt isRtl={d.isRtl} style={styles.staffTag}>
+                {d.isRtl ? 'وضع الموظفين — بيانات عميل حقيقية' : 'Staff mode — real customer data'}
+              </Txt>
+            ) : null}
+          </View>
+        ) : (
+          <Press onPress={() => actions.goTo('signIn')} activeScale={0.98} style={styles.guest}>
+            <Txt isRtl={d.isRtl} style={styles.guestTxt}>
+              {d.t('guestPrompt')}
+            </Txt>
+          </Press>
+        )}
 
         <View style={styles.list}>
           <Row
@@ -73,7 +86,14 @@ export default function AccountScreen() {
           />
           <Row label={d.t('faq')} d={d} rowDir={rowDir} />
           <Row label={d.t('legal')} d={d} rowDir={rowDir} />
-          <Row label={d.t('signOut')} d={d} rowDir={rowDir} last signOut />
+          <Row
+            label={state.customer ? d.t('signOut') : d.isRtl ? 'تسجيل الدخول' : 'Sign in'}
+            onPress={state.customer ? actions.signOut : () => actions.goTo('signIn')}
+            d={d}
+            rowDir={rowDir}
+            last
+            signOut
+          />
         </View>
         <View style={{ height: 26 }} />
       </ScrollView>
@@ -140,6 +160,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.12)',
   },
   guestTxt: { fontSize: 13, fontWeight: W.semibold },
+  staffTag: { fontSize: 11.5, fontWeight: W.bold, color: '#b3261e', marginTop: 5 },
   list: {
     marginHorizontal: 22,
     borderRadius: 18,

@@ -4,6 +4,8 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
 import { fetchOrderStatus } from '../api/orders';
+import { cancelShopifyOrder, editShopifyOrder, fetchCustomerOrders } from '../api/auth';
+import { Alert } from 'react-native';
 import { useRefresh } from '../useRefresh';
 import { C, W } from '../theme';
 import { chevronFlip } from '../rtl';
@@ -16,20 +18,81 @@ export default function OrdersScreen() {
   const { state } = useStore();
   const actions = useActions();
   const d = useDerived();
-  const order = state.order;
+
+  /**
+   * A signed-in customer sees their real Shopify orders; otherwise the screen
+   * falls back to the order just placed in this session.
+   */
+  const remote = state.remoteOrders?.[0] ?? null;
+  const order = remote
+    ? {
+        number: remote.name,
+        total: d.fmtPrice(Math.round(remote.total)),
+        cityDays: remote.city ?? '',
+        trackingNumber: remote.trackingNumber,
+        heroTitle: remote.items?.[0]?.title ?? '',
+        heroImg: remote.items?.[0]?.image ? { uri: remote.items[0].image } : null,
+        items: remote.items,
+        cancelled: remote.cancelled,
+      }
+    : state.order;
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
 
   /** Live Bosta/Shopify status, when the order service is reachable. */
   const [live, setLive] = useState(null);
 
   const loadStatus = useCallback(async () => {
+    // Signed in: pull the customer's real orders, each already joined to Bosta.
+    if (state.session?.token) {
+      try {
+        const r = await fetchCustomerOrders({ token: state.session.token, lang: d.lang });
+        actions.setRemoteOrders(r.orders ?? []);
+        const first = r.orders?.[0];
+        if (first) {
+          setLive({
+            step: first.step,
+            stateLabel: first.stateLabel,
+            trackingNumber: first.trackingNumber,
+            updates: first.updates ?? [],
+          });
+        }
+        return;
+      } catch {
+        // fall through to the single-order path
+      }
+    }
     if (!order) return;
     const r = await fetchOrderStatus({
       orderNumber: order.number,
       trackingNumber: order.trackingNumber,
     });
     setLive(r);
-  }, [order?.number, order?.trackingNumber]);
+  }, [state.session?.token, d.lang, order?.number, order?.trackingNumber]);
+
+  /** Cancels the real Shopify order, not just the local copy. */
+  const doCancel = useCallback(() => {
+    const name = order?.number;
+    Alert.alert(
+      d.isRtl ? 'إلغاء الطلب' : 'Cancel order',
+      d.isRtl ? `هيتم إلغاء الطلب ${name} نهائياً.` : `Order ${name} will be cancelled.`,
+      [
+        { text: d.isRtl ? 'رجوع' : 'Back', style: 'cancel' },
+        {
+          text: d.isRtl ? 'إلغاء الطلب' : 'Cancel order',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await cancelShopifyOrder(name, state.session?.token);
+              actions.cancelOrder();
+              loadStatus();
+            } catch (err) {
+              Alert.alert(d.isRtl ? 'تعذّر الإلغاء' : 'Could not cancel', String(err.message ?? err));
+            }
+          },
+        },
+      ],
+    );
+  }, [order?.number, state.session?.token, d.isRtl, actions, loadStatus]);
 
   useEffect(() => {
     loadStatus();
@@ -213,7 +276,7 @@ export default function OrdersScreen() {
               {d.isRtl ? 'تعديل' : 'Edit'}
             </Txt>
           </Press>
-          <Press onPress={actions.cancelOrder} style={styles.cancelBtn}>
+          <Press onPress={doCancel} style={styles.cancelBtn}>
             <Txt center style={styles.cancelTxt}>
               {d.isRtl ? 'إلغاء الطلب' : 'Cancel Order'}
             </Txt>

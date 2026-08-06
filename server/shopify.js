@@ -192,3 +192,197 @@ export async function setRedeemed(customerId, total) {
   const errs = data.metafieldsSet.userErrors;
   if (errs?.length) throw new Error(errs.map((e) => e.message).join('; '));
 }
+
+/* ── Customer lookup, order edit and cancel ────────────────────────────── */
+
+const CUSTOMER_ORDERS = `
+  query OkaCustomerOrders($q: String!) {
+    customers(first: 1, query: $q) {
+      edges {
+        node {
+          id
+          email
+          firstName
+          lastName
+          phone
+          defaultAddress { address1 address2 city province zip phone }
+          orders(first: 20, sortKey: CREATED_AT, reverse: true) {
+            edges {
+              node {
+                id
+                name
+                createdAt
+                cancelledAt
+                displayFulfillmentStatus
+                displayFinancialStatus
+                totalPriceSet { shopMoney { amount currencyCode } }
+                shippingAddress { address1 city phone }
+                lineItems(first: 25) {
+                  edges {
+                    node {
+                      id
+                      title
+                      quantity
+                      variant { id }
+                      originalUnitPriceSet { shopMoney { amount } }
+                      image { url }
+                    }
+                  }
+                }
+                fulfillments(first: 5) { trackingInfo { number url company } }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/** Finds a customer by email or phone and returns their recent orders. */
+export async function findCustomerOrders(identifier) {
+  const isEmail = String(identifier).includes('@');
+  const q = isEmail ? `email:${identifier}` : `phone:${identifier}`;
+  const data = await adminGraphql(CUSTOMER_ORDERS, { q });
+  const node = data.customers.edges[0]?.node;
+  if (!node) return null;
+
+  return {
+    id: node.id,
+    email: node.email,
+    name: [node.firstName, node.lastName].filter(Boolean).join(' '),
+    phone: node.phone ?? node.defaultAddress?.phone ?? null,
+    address: node.defaultAddress ?? null,
+    orders: node.orders.edges.map(({ node: o }) => ({
+      id: o.id,
+      name: o.name,
+      createdAt: o.createdAt,
+      cancelled: Boolean(o.cancelledAt),
+      fulfillmentStatus: o.displayFulfillmentStatus,
+      financialStatus: o.displayFinancialStatus,
+      total: Number(o.totalPriceSet?.shopMoney?.amount ?? 0),
+      currency: o.totalPriceSet?.shopMoney?.currencyCode ?? 'EGP',
+      city: o.shippingAddress?.city ?? null,
+      trackingNumber: o.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.number ?? null,
+      items: o.lineItems.edges.map(({ node: li }) => ({
+        id: li.id,
+        title: li.title,
+        quantity: li.quantity,
+        variantId: li.variant?.id ?? null,
+        price: Number(li.originalUnitPriceSet?.shopMoney?.amount ?? 0),
+        image: li.image?.url ?? null,
+      })),
+    })),
+  };
+}
+
+/** Resolves an order name (#100121) to its Shopify id. */
+export async function orderIdByName(orderName) {
+  const order = await findOrder(orderName);
+  return order?.id ?? null;
+}
+
+const ORDER_CANCEL = `
+  mutation OkaOrderCancel($orderId: ID!, $reason: OrderCancelReason!) {
+    orderCancel(orderId: $orderId, reason: $reason, refund: false, restock: true, notifyCustomer: true) {
+      job { id }
+      orderCancelUserErrors { field message }
+    }
+  }
+`;
+
+export async function cancelOrder(orderId, reason = 'CUSTOMER') {
+  const data = await adminGraphql(ORDER_CANCEL, { orderId, reason });
+  const errs = data.orderCancel.orderCancelUserErrors;
+  if (errs?.length) throw new Error(errs.map((e) => e.message).join('; '));
+  return { ok: true, jobId: data.orderCancel.job?.id ?? null };
+}
+
+const EDIT_BEGIN = `
+  mutation OkaEditBegin($id: ID!) {
+    orderEditBegin(id: $id) {
+      calculatedOrder {
+        id
+        lineItems(first: 50) { edges { node { id quantity } } }
+      }
+      userErrors { field message }
+    }
+  }
+`;
+
+const EDIT_QTY = `
+  mutation OkaEditQty($id: ID!, $lineItemId: ID!, $quantity: Int!) {
+    orderEditSetQuantity(id: $id, lineItemId: $lineItemId, quantity: $quantity, restock: true) {
+      calculatedOrder { id }
+      userErrors { field message }
+    }
+  }
+`;
+
+const EDIT_ADD = `
+  mutation OkaEditAdd($id: ID!, $variantId: ID!, $quantity: Int!) {
+    orderEditAddVariant(id: $id, variantId: $variantId, quantity: $quantity) {
+      calculatedOrder { id }
+      userErrors { field message }
+    }
+  }
+`;
+
+const EDIT_COMMIT = `
+  mutation OkaEditCommit($id: ID!) {
+    orderEditCommit(id: $id, notifyCustomer: true, staffNote: "Edited from the OKA app") {
+      order { id name totalPriceSet { shopMoney { amount } } }
+      userErrors { field message }
+    }
+  }
+`;
+
+const bail = (result, key) => {
+  const errs = result[key]?.userErrors;
+  if (errs?.length) throw new Error(errs.map((e) => e.message).join('; '));
+  return result[key];
+};
+
+/**
+ * Applies an edit to a real Shopify order.
+ *
+ * `lines` is the desired end state: [{ variantId, quantity }]. Existing lines
+ * are matched by the calculated order's own line ids; anything the order does
+ * not already have is added as a new variant.
+ */
+export async function editOrder(orderId, lines) {
+  const begun = bail(await adminGraphql(EDIT_BEGIN, { id: orderId }), 'orderEditBegin');
+  const calcId = begun.calculatedOrder.id;
+  const existing = begun.calculatedOrder.lineItems.edges.map((e) => e.node);
+
+  // Quantity changes first, then additions — Shopify recalculates as it goes.
+  for (let i = 0; i < existing.length; i += 1) {
+    const want = lines[i];
+    const quantity = want ? want.quantity : 0;
+    if (quantity !== existing[i].quantity) {
+      bail(
+        await adminGraphql(EDIT_QTY, { id: calcId, lineItemId: existing[i].id, quantity }),
+        'orderEditSetQuantity',
+      );
+    }
+  }
+
+  for (const line of lines.slice(existing.length)) {
+    if (!line.variantId || line.quantity <= 0) continue;
+    bail(
+      await adminGraphql(EDIT_ADD, {
+        id: calcId,
+        variantId: line.variantId,
+        quantity: line.quantity,
+      }),
+      'orderEditAddVariant',
+    );
+  }
+
+  const committed = bail(await adminGraphql(EDIT_COMMIT, { id: calcId }), 'orderEditCommit');
+  return {
+    ok: true,
+    orderName: committed.order?.name ?? null,
+    total: Number(committed.order?.totalPriceSet?.shopMoney?.amount ?? 0),
+  };
+}

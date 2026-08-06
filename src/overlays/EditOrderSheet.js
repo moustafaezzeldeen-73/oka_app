@@ -1,5 +1,5 @@
-import React from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { CATS } from '../data';
 import { useActions, useDerived, useStore } from '../store';
@@ -8,6 +8,7 @@ import { FadeIn } from '../components/anim';
 import { Img, Press, Txt } from '../components/ui';
 import { QtyStepper, SumRow } from '../components/parts';
 import { Close } from '../components/Icons';
+import { editShopifyOrder } from '../api/auth';
 
 /** The "Edit Order" bottom sheet: scrim + panel, both fading in as in the web build. */
 export default function EditOrderSheet() {
@@ -16,6 +17,38 @@ export default function EditOrderSheet() {
   const d = useDerived();
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
   const editCart = state.editCart || {};
+  const [saving, setSaving] = useState(false);
+
+  /**
+   * Commits the edit to the real Shopify order. The desired end state is sent
+   * as a list of variant/quantity pairs and Shopify recalculates the totals,
+   * restocks removed units and emails the customer.
+   */
+  const accept = async () => {
+    if (saving) return;
+    const orderName = state.order?.number;
+    const lines = d.editCartEntries
+      .map((e) => ({ variantId: e.p.variantId, quantity: e.qty }))
+      .filter((l) => l.variantId);
+
+    if (!orderName || !lines.length) {
+      actions.acceptEditOrder();
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await editShopifyOrder(orderName, lines, state.session?.token);
+      actions.acceptEditOrder();
+    } catch (err) {
+      Alert.alert(
+        d.isRtl ? 'تعذّر حفظ التعديل' : 'Could not save the edit',
+        String(err.message ?? err),
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <>
@@ -140,10 +173,14 @@ export default function EditOrderSheet() {
             labelStyle={styles.footTotal}
             valueStyle={styles.footTotal}
           />
-          <Press onPress={actions.acceptEditOrder} activeScale={0.98} style={styles.accept}>
-            <Txt center style={styles.acceptTxt}>
-              {d.isRtl ? 'قبول التعديلات' : 'Accept Changes'}
-            </Txt>
+          <Press onPress={accept} activeScale={0.98} style={styles.accept}>
+            {saving ? (
+              <ActivityIndicator color="#ffffff" />
+            ) : (
+              <Txt center style={styles.acceptTxt}>
+                {d.isRtl ? 'قبول التعديلات' : 'Accept Changes'}
+              </Txt>
+            )}
           </Press>
         </View>
       </FadeIn>

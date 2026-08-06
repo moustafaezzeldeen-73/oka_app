@@ -1,12 +1,24 @@
 import express from 'express';
 
-import { createOrder, findCustomerLoyalty, findOrder, setRedeemed } from './shopify.js';
 import {
+  cancelOrder,
+  createOrder,
+  editOrder,
+  findCustomerLoyalty,
+  findCustomerOrders,
+  findOrder,
+  orderIdByName,
+  setRedeemed,
+} from './shopify.js';
+import {
+  findDeliveriesByPhone,
   findDeliveryByOrderName,
   findDeliveryByTracking,
+  pingBosta,
   stepFromState,
   toUpdates,
 } from './bosta.js';
+import { authenticate, issueToken, verifyToken } from './auth.js';
 
 /**
  * OKA order service.
@@ -41,7 +53,129 @@ const fail = (res, err, status = 502) => {
   res.status(status).json({ error: err.message ?? String(err) });
 };
 
-app.get('/health', (_req, res) => res.json({ ok: true }));
+app.get('/health', async (_req, res) => {
+  // Reports each dependency separately, so a broken Bosta key is visible
+  // without having to place an order to find out.
+  const shopify = await findOrder('#1')
+    .then(() => ({ ok: true }))
+    .catch((e) => ({ ok: false, error: e.message }));
+  const bosta = await pingBosta();
+  res.json({ ok: true, shopify, bosta });
+});
+
+/** Reads the session a request is acting under, if any. */
+function session(req) {
+  const header = req.headers.authorization ?? '';
+  return verifyToken(header.replace(/^Bearer /, ''));
+}
+
+/**
+ * Sign-in.
+ *
+ * TESTING ONLY — see server/auth.js. The master password opens any customer's
+ * account, and the Google/Apple buttons accept whatever identifier they are
+ * given without verifying it. Both must be replaced before release.
+ */
+app.post('/auth/login', async (req, res) => {
+  const { identifier, password, provider } = req.body ?? {};
+  const auth = authenticate({ identifier, password, provider });
+  if (!auth.ok) return res.status(401).json({ error: auth.error });
+
+  try {
+    const customer = await findCustomerOrders(auth.identifier).catch(() => null);
+    return res.json({
+      token: issueToken({ identifier: auth.identifier, via: auth.via, staff: !!auth.staff }),
+      via: auth.via,
+      staff: !!auth.staff,
+      customer: customer
+        ? { id: customer.id, name: customer.name, email: customer.email, phone: customer.phone,
+            address: customer.address }
+        : { id: null, name: null, email: auth.identifier.includes('@') ? auth.identifier : null,
+            phone: auth.identifier.includes('@') ? null : auth.identifier, address: null },
+      known: Boolean(customer),
+    });
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/**
+ * A signed-in customer's real orders, each joined to its Bosta delivery so the
+ * app can show live shipment state per order.
+ */
+app.get('/customer/orders', async (req, res) => {
+  const s = session(req);
+  const identifier = s?.identifier ?? req.query.identifier;
+  if (!identifier) return res.status(401).json({ error: 'not signed in' });
+  const lang = req.query.lang === 'en' ? 'en' : 'ar';
+
+  try {
+    const customer = await findCustomerOrders(identifier);
+    if (!customer) return res.json({ customer: null, orders: [] });
+
+    const deliveries = await findDeliveriesByPhone(customer.phone).catch(() => []);
+    const byRef = new Map();
+    for (const d of deliveries) {
+      if (d.businessReference) byRef.set(String(d.businessReference).replace(/^#/, ''), d);
+      if (d.trackingNumber) byRef.set(d.trackingNumber, d);
+    }
+
+    const orders = customer.orders.map((o) => {
+      const delivery =
+        byRef.get(String(o.name).replace(/^#/, '')) ??
+        (o.trackingNumber ? byRef.get(o.trackingNumber) : null) ??
+        null;
+      const code = delivery?.state?.code ?? null;
+      return {
+        ...o,
+        trackingNumber: delivery?.trackingNumber ?? o.trackingNumber,
+        bostaStateCode: code,
+        stateLabel: delivery?.state?.value ?? null,
+        step: stepFromState(code),
+        courier: delivery?.star?.name ?? null,
+        updates: toUpdates(delivery, lang),
+      };
+    });
+
+    return res.json({
+      customer: { name: customer.name, email: customer.email, phone: customer.phone,
+                  address: customer.address },
+      orders,
+      staff: Boolean(s?.staff),
+    });
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/** Cancels a real Shopify order. */
+app.post('/orders/:name/cancel', async (req, res) => {
+  try {
+    const id = await orderIdByName(req.params.name);
+    if (!id) return res.status(404).json({ error: `order ${req.params.name} not found` });
+    const result = await cancelOrder(id, req.body?.reason ?? 'CUSTOMER');
+    return res.json(result);
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/**
+ * Applies an edit to a real Shopify order. `lines` is the desired end state:
+ * [{ variantId, quantity }].
+ */
+app.post('/orders/:name/edit', async (req, res) => {
+  const lines = req.body?.lines;
+  if (!Array.isArray(lines)) return res.status(400).json({ error: 'lines[] is required' });
+  try {
+    const id = await orderIdByName(req.params.name);
+    if (!id) return res.status(404).json({ error: `order ${req.params.name} not found` });
+    const result = await editOrder(id, lines);
+    return res.json(result);
+  } catch (err) {
+    return fail(res, err);
+  }
+});
 
 /** Native checkout: turn the app's basket into a real Shopify order. */
 app.post('/orders', async (req, res) => {
@@ -87,7 +221,7 @@ app.get('/orders/status', async (req, res) => {
     const delivery = knownAwb
       ? await findDeliveryByTracking(knownAwb).catch(() => null)
       : orderName
-        ? await findDeliveryByOrderName(orderName).catch(() => null)
+        ? await findDeliveryByOrderName(orderName, { phone: req.query.phone }).catch(() => null)
         : null;
 
     const awb = delivery?.trackingNumber ?? knownAwb ?? null;

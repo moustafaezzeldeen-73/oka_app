@@ -16,10 +16,16 @@ import { DarkFill, DoublePress, Glass, Img, Press, Txt } from '../components/ui'
 import { FadeIn } from '../components/anim';
 import { Cube, Tag } from '../components/Icons';
 
-/** Nav strip geometry, straight from the prototype's `grid-auto-columns:86px`. */
+/**
+ * Selector geometry.
+ *
+ * The lens is fixed at the centre of the screen and the strip scrolls beneath
+ * it, so the active collection is always the one under the lens. Side padding
+ * of (screenWidth - itemWidth) / 2 lets the first and last items reach the
+ * centre.
+ */
 const NAV_ITEM = 86;
-const NAV_PAD = 22;
-const LENS_LEFT = 33;
+const LENS = 64;
 
 const OFFER_W = 264;
 const OFFER_GAP = 16;
@@ -96,62 +102,67 @@ export default function HomeScreen() {
     [isRtl, navSource],
   );
 
-  const lens = useSharedValue(posOf(state.activeCollectionIndex) * NAV_ITEM);
-  const lensStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: lens.value }],
-  }));
+  /**
+   * The strip and the feed drive each other. `driver` records which one the
+   * user is touching, so the programmatic scroll it triggers on the other does
+   * not bounce straight back and fight the gesture.
+   */
+  const driver = useRef(null);
+  const navPad = Math.max(0, winW / 2 - NAV_ITEM / 2);
 
   const centerNav = useCallback(
     (idx, animated = true) => {
-      if (!navW) return;
-      const target = Math.max(0, posOf(idx) * NAV_ITEM + NAV_ITEM / 2 - navW / 2);
-      navRef.current?.scrollTo({ x: target, animated });
+      navRef.current?.scrollTo({ x: posOf(idx) * NAV_ITEM, animated });
     },
-    [navW, posOf],
+    [posOf],
   );
 
-  /**
-   * Park the strip on the active collection once its width is known, and again
-   * whenever direction flips — otherwise a right-to-left strip opens showing
-   * its last item.
-   */
+  const setActive = useCallback(
+    (idx, { haptic = true, moveNav = true, moveFeed = false } = {}) => {
+      if (idx === state.activeCollectionIndex) return;
+      if (moveNav) centerNav(idx);
+      if (moveFeed && feedH) feedRef.current?.scrollTo({ y: idx * feedH, animated: true });
+      actions.setActiveCollection(idx);
+      if (haptic) snapCollection();
+    },
+    [state.activeCollectionIndex, centerNav, actions, feedH],
+  );
+
+  /** Park the strip under the lens once its width is known, and on direction flip. */
   React.useEffect(() => {
-    lens.value = posOf(state.activeCollectionIndex) * NAV_ITEM;
     centerNav(state.activeCollectionIndex, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navW, isRtl]);
 
-  const setActive = useCallback(
-    (idx, { haptic = true } = {}) => {
-      if (idx === state.activeCollectionIndex) return;
-      lens.value = withTiming(posOf(idx) * NAV_ITEM, {
-        duration: D.lens,
-        easing: EASE.out,
-      });
-      centerNav(idx);
-      actions.setActiveCollection(idx);
-      if (haptic) snapCollection();
+  /** Scrolling the selector itself selects a collection and moves the feed. */
+  const onNavScroll = useCallback(
+    (e) => {
+      if (driver.current === 'feed') return;
+      const pos = Math.round(e.nativeEvent.contentOffset.x / NAV_ITEM);
+      const logical = isRtl ? navCount - 1 - pos : pos;
+      const clamped = Math.max(0, Math.min(navCount - 1, logical));
+      setActive(clamped, { moveNav: false, moveFeed: true });
     },
-    [state.activeCollectionIndex, lens, posOf, centerNav, actions],
+    [isRtl, navCount, setActive],
   );
 
-  /** `onFeedVerticalScroll`: idx = round(scrollTop / clientHeight). */
+  /** Scrolling the feed moves the selector under the lens. */
   const onFeedScroll = useCallback(
     (e) => {
       if (!feedH) return;
       const idx = Math.round(e.nativeEvent.contentOffset.y / feedH);
-      setActive(Math.max(0, Math.min(navCount - 1, idx)));
+      setActive(Math.max(0, Math.min(navCount - 1, idx)), { moveNav: true });
     },
     [feedH, navCount, setActive],
   );
 
-  /** `scrollToCollection` — tapping the selector drives the feed. */
+  /** Tapping a selector item drives the feed. */
   const scrollToCollection = useCallback(
     (idx) => {
       feedRef.current?.scrollTo({ y: idx * feedH, animated: true });
-      setActive(idx);
+      setActive(idx, { moveNav: true });
     },
-    [feedH],
+    [feedH, setActive],
   );
 
   const sidePadOffers = Math.max(0, winW / 2 - OFFER_W / 2);
@@ -173,14 +184,22 @@ export default function HomeScreen() {
           </Press>
         </View>
 
-        <ScrollView
-          ref={navRef}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          onLayout={(e) => setNavW(e.nativeEvent.layout.width)}
-          contentContainerStyle={styles.navContent}
-        >
-          <Animated.View style={[styles.lens, lensStyle]} pointerEvents="none" />
+        <View style={styles.navWrap}>
+          {/* Fixed at the centre — whatever sits under it is the active one. */}
+          <View style={styles.lens} pointerEvents="none" />
+          <ScrollView
+            ref={navRef}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={NAV_ITEM}
+            decelerationRate="fast"
+            onLayout={(e) => setNavW(e.nativeEvent.layout.width)}
+            onScrollBeginDrag={() => { driver.current = 'nav'; }}
+            onMomentumScrollEnd={(e) => { onNavScroll(e); driver.current = null; }}
+            onScrollEndDrag={onNavScroll}
+            scrollEventThrottle={16}
+            contentContainerStyle={[styles.navContent, { paddingHorizontal: navPad }]}
+          >
           {navDisplay.map((nav) => {
             const logical = navSource.indexOf(nav);
             return (
@@ -193,7 +212,8 @@ export default function HomeScreen() {
               />
             );
           })}
-        </ScrollView>
+          </ScrollView>
+        </View>
       </Glass>
 
       {/* ── vertical snap feed ────────────────────────────────────── */}
@@ -204,7 +224,8 @@ export default function HomeScreen() {
             pagingEnabled
             decelerationRate="fast"
             showsVerticalScrollIndicator={false}
-            onMomentumScrollEnd={onFeedScroll}
+            onScrollBeginDrag={() => { driver.current = 'feed'; }}
+            onMomentumScrollEnd={(e) => { onFeedScroll(e); driver.current = null; }}
             onScrollEndDrag={onFeedScroll}
             scrollEventThrottle={16}
             refreshControl={control}
@@ -511,20 +532,17 @@ const styles = StyleSheet.create({
   },
   langTxt: { fontWeight: W.bold, fontSize: 12 },
 
-  navContent: {
-    position: 'relative',
-    paddingTop: 6,
-    paddingBottom: 18,
-    paddingHorizontal: NAV_PAD,
-    flexDirection: 'row',
-  },
+  navWrap: { position: 'relative' },
+  navContent: { paddingTop: 6, paddingBottom: 18, flexDirection: 'row' },
   lens: {
     position: 'absolute',
     top: 5,
-    left: LENS_LEFT,
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    alignSelf: 'center',
+    left: '50%',
+    marginLeft: -LENS / 2,
+    width: LENS,
+    height: LENS,
+    borderRadius: LENS / 2,
     backgroundColor: 'rgba(255,255,255,0.16)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.75)',

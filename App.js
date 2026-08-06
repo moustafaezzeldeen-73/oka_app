@@ -28,6 +28,7 @@ import AddressesScreen from './src/screens/AddressesScreen';
 import AddAddressScreen from './src/screens/AddAddressScreen';
 import LoyaltyScreen from './src/screens/LoyaltyScreen';
 import AccountScreen from './src/screens/AccountScreen';
+import SignInScreen from './src/screens/SignInScreen';
 import ArOverlay from './src/overlays/ArOverlay';
 import ArViewer from './src/overlays/ArViewer';
 import EditOrderSheet from './src/overlays/EditOrderSheet';
@@ -57,6 +58,7 @@ const SCREENS = {
   addAddress: AddAddressScreen,
   loyalty: LoyaltyScreen,
   account: AccountScreen,
+  signIn: SignInScreen,
 };
 
 export default function App() {
