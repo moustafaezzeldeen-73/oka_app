@@ -436,3 +436,104 @@ export async function findCustomerAddresses(identifier) {
     }))
     .sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
 }
+
+/* ── Catalogue (Admin API — server-side only) ────────────────────────────
+ * The app has no Storefront token configured, and the Admin token already
+ * proves it can reach everything the catalogue needs. Serving products
+ * through the same server that already serves orders means the app never
+ * has to hold a second Shopify credential at all.
+ */
+
+/** Local category ids that don't share a handle with an existing collection. */
+const COLLECTION_HANDLE_OVERRIDES = {
+  tobacco: 'ready-to-smoke-bowls',
+};
+
+const CATALOGUE_PRODUCT_FIELDS = `
+  id
+  handle
+  title
+  description
+  featuredImage { url }
+  titleAr: metafield(namespace: "oka", key: "title_ar") { value }
+  descriptionAr: metafield(namespace: "oka", key: "description_ar") { value }
+  variants(first: 1) {
+    edges { node { id availableForSale inventoryQuantity price } }
+  }
+  media(first: 8) {
+    edges { node { __typename ... on Model3d { sources { url format } } } }
+  }
+`;
+
+function toCatalogueProduct(node, catId) {
+  const variant = node.variants?.edges?.[0]?.node;
+  const model = node.media?.edges?.map((e) => e.node)?.find((m) => m.__typename === 'Model3d');
+  const sourceUrl = (fmt) => model?.sources?.find((s) => s.format === fmt)?.url ?? null;
+
+  return {
+    id: node.handle,
+    shopifyId: node.id,
+    variantId: variant?.id ?? null,
+    cat: catId,
+    price: Math.round(Number(variant?.price ?? 0)),
+    stock: variant?.inventoryQuantity ?? (variant?.availableForSale ? 99 : 0),
+    titleEn: node.title,
+    titleAr: node.titleAr?.value || node.title,
+    descEn: node.description ?? '',
+    descAr: node.descriptionAr?.value || node.description || '',
+    img: node.featuredImage?.url ?? null,
+    usdzUrl: sourceUrl('usdz'),
+    glbUrl: sourceUrl('glb'),
+    available: variant?.availableForSale ?? true,
+  };
+}
+
+/**
+ * Loads every collection the app navigates by, each with its products, in one
+ * request. Collections with no Shopify counterpart are skipped rather than
+ * guessed at — see COLLECTION_HANDLE_OVERRIDES for the one known rename.
+ */
+export async function fetchAdminCatalogue(localIds) {
+  const handleFor = (id) => COLLECTION_HANDLE_OVERRIDES[id] ?? id;
+
+  const query = `
+    query OkaCatalogue {
+      ${localIds
+        .map(
+          (id, i) => `
+        c${i}: collectionByHandle(handle: ${JSON.stringify(handleFor(id))}) {
+          id
+          handle
+          title
+          image { url }
+          titleAr: metafield(namespace: "oka", key: "title_ar") { value }
+          products(first: 40) { edges { node { ${CATALOGUE_PRODUCT_FIELDS} } } }
+        }`,
+        )
+        .join('\n')}
+    }
+  `;
+
+  const data = await adminGraphql(query);
+  const cats = [];
+  const products = [];
+
+  localIds.forEach((localId, i) => {
+    const c = data[`c${i}`];
+    if (!c) return; // no matching Shopify collection for this local id
+    cats.push({
+      id: localId,
+      en: c.title,
+      ar: c.titleAr?.value || c.title,
+      img: c.image?.url ?? null,
+      shopifyId: c.id,
+    });
+    c.products.edges.forEach(({ node }) => {
+      if (!products.some((p) => p.id === node.handle)) {
+        products.push(toCatalogueProduct(node, localId));
+      }
+    });
+  });
+
+  return { cats, products };
+}

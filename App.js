@@ -10,8 +10,8 @@ import { CANVAS_GRAD, CANVAS_LOCS } from './src/theme';
 import { StoreProvider, useActions, useDerived, useStore } from './src/store';
 import { useShopifyCart } from './src/useShopifyCart';
 import { insetEnd, insetStart } from './src/rtl';
-import { fetchCatalogue } from './src/api/shopify';
-import { hasStorefront } from './src/api/config';
+import { fetchServerCatalogue } from './src/api/catalogue';
+import { hasService } from './src/api/config';
 import { hasModel } from './src/ar';
 import { CATS } from './src/data';
 
@@ -71,14 +71,14 @@ export default function App() {
 
   /** Re-runnable so pull-to-refresh can ask Shopify for the catalogue again. */
   const reloadCatalogue = useCallback(async () => {
-    if (!hasStorefront()) {
-      console.warn('[oka] EXPO_PUBLIC_SHOPIFY_STOREFRONT_TOKEN is not set — running on the bundled catalogue');
+    if (!hasService()) {
+      console.warn('[oka] EXPO_PUBLIC_OKA_SERVICE_URL is not set — running on the bundled catalogue');
       return;
     }
     try {
-      const c = await fetchCatalogue(CATS.map((cat) => cat.id));
+      const c = await fetchServerCatalogue(CATS.map((cat) => cat.id));
       if (c.products.length) setCatalogue(c);
-      else console.warn('[oka] Shopify returned zero products for the configured collections');
+      else console.warn('[oka] server returned zero products for the configured collections');
     } catch (err) {
       console.error('[oka] catalogue sync failed:', err?.message ?? err);
     }

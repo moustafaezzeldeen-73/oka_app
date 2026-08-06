@@ -19,7 +19,7 @@ import {
   toUpdates,
 } from './bosta.js';
 import { authenticate, issueToken, verifyToken } from './auth.js';
-import { findCustomerAddresses } from './shopify.js';
+import { fetchAdminCatalogue, findCustomerAddresses } from './shopify.js';
 
 /**
  * OKA order service.
@@ -161,6 +161,25 @@ app.get('/customer/orders', async (req, res) => {
       orders,
       staff: Boolean(s?.staff),
     });
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/**
+ * Product catalogue, served from the Admin API so the app never needs a
+ * second Shopify credential. `?ids=` is the app's local category ids
+ * (comma-separated); omit it to get the app's default set.
+ */
+const DEFAULT_CATALOGUE_IDS = [
+  'hookahs', 'tobacco', 'accessories', 'oka-parts', 'hoses', 'coal', 'dark-tobacco', 'bowls',
+];
+
+app.get('/catalogue', async (req, res) => {
+  const ids = req.query.ids ? String(req.query.ids).split(',').filter(Boolean) : DEFAULT_CATALOGUE_IDS;
+  try {
+    const result = await fetchAdminCatalogue(ids);
+    return res.json(result);
   } catch (err) {
     return fail(res, err);
   }
