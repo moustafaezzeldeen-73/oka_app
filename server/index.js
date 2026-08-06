@@ -53,14 +53,31 @@ const fail = (res, err, status = 502) => {
   res.status(status).json({ error: err.message ?? String(err) });
 };
 
+/**
+ * Health is a diagnostic, so it must always answer — a dependency that hangs
+ * is reported as a timeout rather than being allowed to hang the request.
+ */
+const withDeadline = (promise, ms, label) =>
+  Promise.race([
+    promise,
+    new Promise((resolve) => setTimeout(() => resolve({ ok: false, error: `${label} timed out after ${ms}ms` }), ms)),
+  ]);
+
 app.get('/health', async (_req, res) => {
-  // Reports each dependency separately, so a broken Bosta key is visible
-  // without having to place an order to find out.
-  const shopify = await findOrder('#1')
-    .then(() => ({ ok: true }))
-    .catch((e) => ({ ok: false, error: e.message }));
-  const bosta = await pingBosta();
-  res.json({ ok: true, shopify, bosta });
+  const env = {
+    SHOPIFY_SHOP_DOMAIN: Boolean(process.env.SHOPIFY_SHOP_DOMAIN),
+    SHOPIFY_ADMIN_TOKEN: Boolean(process.env.SHOPIFY_ADMIN_TOKEN),
+    BOSTA_API_KEY: Boolean(process.env.BOSTA_API_KEY),
+  };
+
+  const shopify = await withDeadline(
+    findOrder('#1').then(() => ({ ok: true })).catch((e) => ({ ok: false, error: e.message })),
+    16000,
+    'shopify',
+  );
+  const bosta = await withDeadline(pingBosta(), 10000, 'bosta');
+
+  res.json({ ok: true, env, shopify, bosta });
 });
 
 /** Reads the session a request is acting under, if any. */

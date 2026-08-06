@@ -24,6 +24,7 @@ export async function adminGraphql(query, variables = {}) {
       'X-Shopify-Access-Token': token,
     },
     body: JSON.stringify({ query, variables }),
+    signal: AbortSignal.timeout(Number(process.env.SHOPIFY_TIMEOUT_MS ?? 15000)),
   });
 
   if (!res.ok) {

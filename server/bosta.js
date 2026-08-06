@@ -13,6 +13,13 @@
 
 const BASE = process.env.BOSTA_API_URL || 'https://app.bosta.co/api/v2';
 
+/** Bosta occasionally stalls; an unbounded fetch would hang the whole route. */
+const TIMEOUT_MS = Number(process.env.BOSTA_TIMEOUT_MS ?? 8000);
+
+function fetchWithTimeout(url, init) {
+  return fetch(url, { ...init, signal: AbortSignal.timeout(TIMEOUT_MS) });
+}
+
 function authHeaders() {
   const key = process.env.BOSTA_API_KEY;
   if (!key) throw new Error('Missing required environment variable: BOSTA_API_KEY');
@@ -36,7 +43,7 @@ async function search(term) {
 
   for (const path of paths) {
     try {
-      const res = await fetch(`${BASE}${path}`, {
+      const res = await fetchWithTimeout(`${BASE}${path}`, {
         method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify({ search: String(term).replace(/^#/, ''), limit: 20, page: 1 }),
@@ -45,7 +52,10 @@ async function search(term) {
         throw new Error(`Bosta rejected the API key (${res.status}) — check BOSTA_API_KEY`);
       }
       if (!res.ok) {
-        lastError = new Error(`Bosta ${path} returned ${res.status}`);
+        // Carry the body through: Bosta explains itself in the response, and a
+        // bare status code sent us chasing the wrong endpoint once already.
+        const body = await res.text().catch(() => '');
+        lastError = new Error(`Bosta ${path} returned ${res.status} ${body.slice(0, 160)}`);
         continue;
       }
       const json = await res.json();
