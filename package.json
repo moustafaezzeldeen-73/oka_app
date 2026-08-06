@@ -4,10 +4,13 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "expo start",
-    "ios": "expo start --ios",
-    "android": "expo start --android",
+    "start": "expo start --tunnel",
+    "start:clear": "expo start --tunnel --clear",
+    "start:lan": "expo start",
+    "ios": "expo start --tunnel --ios",
+    "android": "expo start --tunnel --android",
     "web": "expo start --web",
+    "server": "npm --prefix server start",
     "lint": "expo lint"
   },
   "dependencies": {
@@ -35,6 +38,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@expo/ngrok": "^4.1.3",
     "babel-preset-expo": "~54.0.12"
   }
 }
