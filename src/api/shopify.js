@@ -45,7 +45,16 @@ function toProduct(node, catId) {
   const arTitle = node.titleAr?.value;
   const arDesc = node.descriptionAr?.value;
 
+  // 3D media, when the product has any. USDZ drives iOS AR Quick Look; GLB is
+  // kept for a future Android/GL viewer.
+  const model = node.media?.edges
+    ?.map((e) => e.node)
+    ?.find((m) => m.__typename === 'Model3d');
+  const sourceUrl = (fmt) => model?.sources?.find((s) => s.format === fmt)?.url ?? null;
+
   return {
+    usdzUrl: sourceUrl('usdz'),
+    glbUrl: sourceUrl('glb'),
     id: node.handle,
     shopifyId: node.id,
     variantId: variant?.id ?? null,
@@ -67,6 +76,9 @@ const PRODUCT_FIELDS = `
   title
   description
   featuredImage { url }
+  media(first: 8) {
+    edges { node { __typename ... on Model3d { sources { url format } } } }
+  }
   priceRange { minVariantPrice { amount currencyCode } }
   titleAr: metafield(namespace: "oka", key: "title_ar") { value }
   descriptionAr: metafield(namespace: "oka", key: "description_ar") { value }

@@ -8,6 +8,7 @@ import Svg, { Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
 
 import { CANVAS_GRAD, CANVAS_LOCS } from './src/theme';
 import { StoreProvider, useDerived, useStore } from './src/store';
+import { useShopifyCart } from './src/useShopifyCart';
 import { insetEnd, insetStart } from './src/rtl';
 import { fetchCatalogue } from './src/api/shopify';
 import { hasStorefront } from './src/api/config';
@@ -94,6 +95,9 @@ function Shell() {
   const { state } = useStore();
   const d = useDerived();
   const insets = useSafeAreaInsets();
+
+  // Keeps a real Shopify cart in step with the local one, when configured.
+  useShopifyCart();
 
   /**
    * The prototype's 402×874 frame put content 54px below the top of the screen

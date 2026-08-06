@@ -141,7 +141,14 @@ export default function OrdersScreen() {
           ))}
         </View>
 
-        <View style={styles.updates}>
+        {/* `max-height:148px; overflow-y:auto` in the prototype — it has to be a
+            real scroller, and nestedScrollEnabled lets it scroll inside the page. */}
+        <ScrollView
+          style={styles.updates}
+          nestedScrollEnabled
+          showsVerticalScrollIndicator
+          contentContainerStyle={{ paddingBottom: 2 }}
+        >
           {updates.map((u, i) => (
             <View key={i} style={[styles.updateRow, rowDir]}>
               <View
@@ -160,7 +167,7 @@ export default function OrdersScreen() {
               </View>
             </View>
           ))}
-        </View>
+        </ScrollView>
 
         <Divider style={styles.ruleTop} />
 

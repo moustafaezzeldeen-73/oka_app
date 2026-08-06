@@ -9,7 +9,8 @@ import { C, D, EASE, W } from '../theme';
 import { insetStart } from '../rtl';
 import { FadeIn, Pop } from '../components/anim';
 import { Img, Press, Txt } from '../components/ui';
-import { ArCross, Close } from '../components/Icons';
+import { ArCross, Close, Cube } from '../components/Icons';
+import { canOpenInSpace, openInSpace } from '../ar';
 
 /**
  * "See it on your table" — a simulated AR placement view.
@@ -107,19 +108,36 @@ export default function ArOverlay() {
         </View>
       </View>
 
-      {/* gesture hints */}
-      <View style={[styles.controls, rowDir]}>
-        {controls.map((c) => (
-          <View key={c.label} style={styles.control}>
-            <View style={styles.controlBtn}>
-              <Txt style={styles.controlGlyph}>{c.glyph}</Txt>
-            </View>
-            <Txt center style={styles.controlLabel}>
-              {c.label}
+      {/* Real AR when the product has a 3D model on Shopify; otherwise the
+          simulated preview above is all we can offer. */}
+      {canOpenInSpace(p) ? (
+        <View style={styles.liveWrap}>
+          <Press onPress={() => openInSpace(p)} activeScale={0.97} style={styles.liveBtn}>
+            <Cube size={17} color="#1d1d1f" />
+            <Txt style={styles.liveTxt}>
+              {d.isRtl ? 'شوفها في مكانك بالكاميرا' : 'View in your space'}
             </Txt>
-          </View>
-        ))}
-      </View>
+          </Press>
+          <Txt center style={styles.liveHint}>
+            {d.isRtl
+              ? 'هتفتح كاميرا الآيفون وتحط المنتج بحجمه الحقيقي'
+              : 'Opens your camera and places it at real size'}
+          </Txt>
+        </View>
+      ) : (
+        <View style={[styles.controls, rowDir]}>
+          {controls.map((c) => (
+            <View key={c.label} style={styles.control}>
+              <View style={styles.controlBtn}>
+                <Txt style={styles.controlGlyph}>{c.glyph}</Txt>
+              </View>
+              <Txt center style={styles.controlLabel}>
+                {c.label}
+              </Txt>
+            </View>
+          ))}
+        </View>
+      )}
 
       {/* product panel */}
       <View style={styles.panelWrap}>
@@ -223,6 +241,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(24,20,16,0.62)',
   },
   scaleTxt: { fontSize: 10.5, fontWeight: W.bold, color: '#ffffff' },
+
+  liveWrap: { zIndex: 3, paddingHorizontal: 20, paddingBottom: 14, gap: 8 },
+  liveBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 9,
+    paddingVertical: 14,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.95)',
+    boxShadow: '0 8px 20px rgba(0,0,0,0.24)',
+  },
+  liveTxt: { fontSize: 14.5, fontWeight: W.bold, color: C.ink },
+  liveHint: { fontSize: 11.5, fontWeight: W.semibold, color: 'rgba(255,255,255,0.9)' },
 
   controls: { zIndex: 3, justifyContent: 'center', gap: 10, paddingHorizontal: 20, paddingBottom: 14 },
   control: { alignItems: 'center', gap: 7, width: 82 },
