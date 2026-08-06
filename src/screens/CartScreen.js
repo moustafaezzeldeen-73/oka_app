@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import { useActions, useDerived, useStore } from '../store';
+import { useRefresh } from '../useRefresh';
 import { success } from '../haptics';
 import { C, W } from '../theme';
 import { textDir } from '../rtl';
@@ -10,9 +11,10 @@ import { DarkFill, Img, Press, Progress, Txt } from '../components/ui';
 import { Cta, QtyStepper, SumRow } from '../components/parts';
 
 export default function CartScreen() {
-  const { state, products } = useStore();
+  const { state, products, reloadCatalogue } = useStore();
   const actions = useActions();
   const d = useDerived();
+  const { control } = useRefresh(reloadCatalogue);
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
 
   const bestSellers = useMemo(
@@ -29,7 +31,11 @@ export default function CartScreen() {
 
   return (
     <FadeIn style={styles.root}>
-      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        refreshControl={control}
+      >
         <Txt isRtl={d.isRtl} style={styles.title}>
           {d.t('cartTitle')}
         </Txt>

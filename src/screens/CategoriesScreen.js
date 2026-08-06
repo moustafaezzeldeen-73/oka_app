@@ -3,18 +3,20 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { CATS } from '../data';
 import { useActions, useDerived, useStore } from '../store';
+import { useRefresh } from '../useRefresh';
 import { C, W } from '../theme';
 import { FadeIn } from '../components/anim';
 import { Img, Press, Txt } from '../components/ui';
 
 export default function CategoriesScreen() {
-  const { products } = useStore();
+  const { products, reloadCatalogue } = useStore();
   const actions = useActions();
   const d = useDerived();
+  const { control } = useRefresh(reloadCatalogue);
 
   return (
     <FadeIn style={styles.root}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} refreshControl={control}>
         <Txt isRtl={d.isRtl} style={styles.title}>
           {d.t('categoriesTitle')}
         </Txt>

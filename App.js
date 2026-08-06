@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,11 +7,12 @@ import { StatusBar } from 'expo-status-bar';
 import Svg, { Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
 
 import { CANVAS_GRAD, CANVAS_LOCS } from './src/theme';
-import { StoreProvider, useDerived, useStore } from './src/store';
+import { StoreProvider, useActions, useDerived, useStore } from './src/store';
 import { useShopifyCart } from './src/useShopifyCart';
 import { insetEnd, insetStart } from './src/rtl';
 import { fetchCatalogue } from './src/api/shopify';
 import { hasStorefront } from './src/api/config';
+import { hasModel } from './src/ar';
 import { CATS } from './src/data';
 
 import TabBar from './src/components/TabBar';
@@ -28,6 +29,7 @@ import AddAddressScreen from './src/screens/AddAddressScreen';
 import LoyaltyScreen from './src/screens/LoyaltyScreen';
 import AccountScreen from './src/screens/AccountScreen';
 import ArOverlay from './src/overlays/ArOverlay';
+import ArViewer from './src/overlays/ArViewer';
 import EditOrderSheet from './src/overlays/EditOrderSheet';
 
 /** Screens that keep the tab bar visible — same list as the prototype. */
@@ -65,25 +67,25 @@ export default function App() {
    */
   const [catalogue, setCatalogue] = useState(null);
 
-  useEffect(() => {
-    if (!hasStorefront()) return undefined;
-    let cancelled = false;
-    fetchCatalogue(CATS.map((c) => c.id))
-      .then((c) => {
-        if (!cancelled && c.products.length) setCatalogue(c);
-      })
-      .catch(() => {
-        /* stay on the bundled catalogue */
-      });
-    return () => {
-      cancelled = true;
-    };
+  /** Re-runnable so pull-to-refresh can ask Shopify for the catalogue again. */
+  const reloadCatalogue = useCallback(async () => {
+    if (!hasStorefront()) return;
+    try {
+      const c = await fetchCatalogue(CATS.map((cat) => cat.id));
+      if (c.products.length) setCatalogue(c);
+    } catch {
+      /* stay on whatever catalogue we already have */
+    }
   }, []);
+
+  useEffect(() => {
+    reloadCatalogue();
+  }, [reloadCatalogue]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <StoreProvider catalogue={catalogue}>
+        <StoreProvider catalogue={catalogue} reloadCatalogue={reloadCatalogue}>
           <Shell />
         </StoreProvider>
       </SafeAreaProvider>
@@ -93,6 +95,7 @@ export default function App() {
 
 function Shell() {
   const { state } = useStore();
+  const actions = useActions();
   const d = useDerived();
   const insets = useSafeAreaInsets();
 
@@ -143,7 +146,21 @@ function Shell() {
 
       {showTabBar && <TabBar bottomInset={bottomPad} />}
 
-      {state.arProductId && <ArOverlay />}
+      {/* Products with a 3D model get the real in-app viewer — camera behind,
+          model in front. Everything else falls back to the simulated preview. */}
+      {state.arProductId ? (
+        hasModel(d.byId(state.arProductId)) ? (
+          <ArViewer
+            product={d.byId(state.arProductId)}
+            title={d.title(d.byId(state.arProductId))}
+            price={d.fmtPrice(d.byId(state.arProductId).price)}
+            isRtl={d.isRtl}
+            onClose={() => actions.closeAr()}
+          />
+        ) : (
+          <ArOverlay />
+        )
+      ) : null}
       {state.editOrderOpen && <EditOrderSheet />}
 
       <StatusBar style="dark" />

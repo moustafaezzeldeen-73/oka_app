@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { GOLD_TIER, LOYALTY_REWARDS, REWARD_COSTS } from '../data';
 import { useActions, useDerived, useStore } from '../store';
+import { useRefresh } from '../useRefresh';
 import { success } from '../haptics';
 import { C, D, W } from '../theme';
 import { arDigits } from '../rtl';
@@ -12,9 +13,10 @@ import { Press, Progress, Txt } from '../components/ui';
 import { ScreenHeader } from '../components/parts';
 
 export default function LoyaltyScreen() {
-  const { state } = useStore();
+  const { state, reloadCatalogue } = useStore();
   const actions = useActions();
   const d = useDerived();
+  const { control } = useRefresh(reloadCatalogue);
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
   const balance = d.loyaltyBalance;
 
@@ -32,7 +34,7 @@ export default function LoyaltyScreen() {
 
   return (
     <FadeIn style={styles.root}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} refreshControl={control}>
         <ScreenHeader title={d.t('loyaltyRow')} onBack={actions.goBack} isRtl={d.isRtl} />
 
         {/* tier card */}

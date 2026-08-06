@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { CATS, OFFERS, SHOP_LOGO } from '../data';
 import { useActions, useDerived, useStore } from '../store';
+import { useRefresh } from '../useRefresh';
 import { snapCollection, snapNotch, success } from '../haptics';
 import { C, D, EASE, GLASS_LENS_SHADOW, GLASS_PILL_SHADOW, W } from '../theme';
 import { DarkFill, DoublePress, Glass, Img, Press, Txt } from '../components/ui';
@@ -62,11 +63,12 @@ function useRtlStart(isRtl, count, step) {
  * to the active collection and the strip auto-centres it.
  */
 export default function HomeScreen() {
-  const { state, products } = useStore();
+  const { state, products, reloadCatalogue } = useStore();
   const actions = useActions();
   const d = useDerived();
   const { isRtl } = d;
   const { width: winW } = useWindowDimensions();
+  const { control } = useRefresh(reloadCatalogue);
 
   const feedRef = useRef(null);
   const navRef = useRef(null);
@@ -205,6 +207,7 @@ export default function HomeScreen() {
             onMomentumScrollEnd={onFeedScroll}
             onScrollEndDrag={onFeedScroll}
             scrollEventThrottle={16}
+            refreshControl={control}
           >
             <OffersPage
               height={feedH}

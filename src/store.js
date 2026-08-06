@@ -45,7 +45,7 @@ const INITIAL = {
 
 const StoreContext = createContext(null);
 
-export function StoreProvider({ children, catalogue }) {
+export function StoreProvider({ children, catalogue, reloadCatalogue }) {
   const [state, setState] = useState(INITIAL);
 
   /** `this.setState(patch | updater)` */
@@ -57,8 +57,8 @@ export function StoreProvider({ children, catalogue }) {
   const products = catalogue?.products?.length ? catalogue.products : LOCAL_PRODUCTS;
 
   const value = useMemo(
-    () => ({ state, patch, products }),
-    [state, patch, products],
+    () => ({ state, patch, products, reloadCatalogue }),
+    [state, patch, products, reloadCatalogue],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

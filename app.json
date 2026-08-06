@@ -13,10 +13,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#f5f5f7"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.oka.app"
+      "bundleIdentifier": "com.oka.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "OKA uses the camera to show products in your space in AR.",
+        "NSPhotoLibraryUsageDescription": "OKA needs photo access only if you save an AR snapshot."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -24,11 +30,22 @@
         "backgroundColor": "#f5f5f7"
       },
       "package": "com.oka.app",
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/brand/icon.png"
     },
-    "plugins": ["expo-font"]
+    "plugins": [
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "OKA uses the camera to show products in your space in AR."
+        }
+      ]
+    ]
   }
 }

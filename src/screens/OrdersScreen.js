@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
 import { fetchOrderStatus } from '../api/orders';
+import { useRefresh } from '../useRefresh';
 import { C, W } from '../theme';
 import { chevronFlip } from '../rtl';
 import { FadeIn } from '../components/anim';
@@ -20,19 +21,21 @@ export default function OrdersScreen() {
 
   /** Live Bosta/Shopify status, when the order service is reachable. */
   const [live, setLive] = useState(null);
-  useEffect(() => {
-    let cancelled = false;
-    if (!order) return undefined;
-    fetchOrderStatus({
+
+  const loadStatus = useCallback(async () => {
+    if (!order) return;
+    const r = await fetchOrderStatus({
       orderNumber: order.number,
       trackingNumber: order.trackingNumber,
-    }).then((r) => {
-      if (!cancelled) setLive(r);
     });
-    return () => {
-      cancelled = true;
-    };
+    setLive(r);
   }, [order?.number, order?.trackingNumber]);
+
+  useEffect(() => {
+    loadStatus();
+  }, [loadStatus]);
+
+  const { control } = useRefresh(loadStatus);
 
   if (!order) {
     return (
@@ -78,7 +81,7 @@ export default function OrdersScreen() {
 
   return (
     <FadeIn style={styles.root}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} refreshControl={control}>
         <ScreenHeader
           title={d.isRtl ? 'تفاصيل الطلب' : 'Order Details'}
           onBack={() => actions.goTab('home')}

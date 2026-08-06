@@ -17,20 +17,42 @@ import { Linking, Platform } from 'react-native';
  * before a Storefront token is configured. Once the live catalogue loads,
  * `product.usdzUrl` from Shopify takes precedence.
  */
+const CDN = 'https://cdn.shopify.com/3d/models/o';
+
 export const BUNDLED_MODELS = {
-  cobra: 'https://cdn.shopify.com/3d/models/o/919c44a3d2ae8a47/OKA_COB_Mold.usdz',
-  'carbon-black':
-    'https://cdn.shopify.com/3d/models/o/1582d4c8f26f1c92/vortex_full_hookahs-black.usdz',
-  'black-tobacco':
-    'https://cdn.shopify.com/3d/models/o/9b37177626afeb92/OKA-Black_Tobacco.usdz',
-  'black-tobacco-plate':
-    'https://cdn.shopify.com/3d/models/o/9b37177626afeb92/OKA-Black_Tobacco.usdz',
+  cobra: {
+    usdz: `${CDN}/919c44a3d2ae8a47/OKA_COB_Mold.usdz`,
+    glb: `${CDN}/b86f5d0bee54f986/OKA_COB_Mold.glb`,
+  },
+  'carbon-black': {
+    usdz: `${CDN}/1582d4c8f26f1c92/vortex_full_hookahs-black.usdz`,
+    glb: `${CDN}/5ec7e8fa40a79a87/vortex_full_hookahs-black.glb`,
+  },
+  'black-tobacco': {
+    usdz: `${CDN}/9b37177626afeb92/OKA-Black_Tobacco.usdz`,
+    glb: `${CDN}/0bec520c48090d99/OKA-Black_Tobacco.glb`,
+  },
+  'black-tobacco-plate': {
+    usdz: `${CDN}/9b37177626afeb92/OKA-Black_Tobacco.usdz`,
+    glb: `${CDN}/0bec520c48090d99/OKA-Black_Tobacco.glb`,
+  },
 };
 
-/** The USDZ for a product, preferring whatever Shopify returned. */
+/** USDZ (iOS AR Quick Look), preferring whatever Shopify returned. */
 export function modelUrlFor(product) {
   if (!product) return null;
-  return product.usdzUrl ?? BUNDLED_MODELS[product.id] ?? null;
+  return product.usdzUrl ?? BUNDLED_MODELS[product.id]?.usdz ?? null;
+}
+
+/** GLB (the in-app viewer), preferring whatever Shopify returned. */
+export function glbUrlFor(product) {
+  if (!product) return null;
+  return product.glbUrl ?? BUNDLED_MODELS[product.id]?.glb ?? null;
+}
+
+/** True when the product can be shown in the in-app AR viewer. */
+export function hasModel(product) {
+  return Boolean(glbUrlFor(product) || modelUrlFor(product));
 }
 
 /** True when tapping AR should hand off to the system viewer. */

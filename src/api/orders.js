@@ -15,12 +15,20 @@ async function post(path, body) {
     fetch(`${SERVICE_URL}${path}`, {
       method: 'POST',
       signal,
-      headers: { 'Content-Type': 'application/json' },
+      // Codespaces answers a port-forward request with an HTML login page
+      // unless the port is public; asking for JSON makes that failure obvious
+      // rather than surfacing as a confusing parse error.
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(body),
     }),
   );
-  if (!res.ok) throw new Error(`service-http-${res.status}`);
-  return res.json();
+  const text = await res.text();
+  if (!res.ok) throw new Error(`service HTTP ${res.status}: ${text.slice(0, 200)}`);
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(`service returned non-JSON (is the port public?): ${text.slice(0, 120)}`);
+  }
 }
 
 async function get(path) {
@@ -42,19 +50,23 @@ function localOrderNumber() {
  */
 export async function submitOrder(payload) {
   if (!hasService()) {
-    return { orderNumber: localOrderNumber(), offline: true };
+    console.warn('[oka] EXPO_PUBLIC_OKA_SERVICE_URL is not set — order stays local');
+    return { orderNumber: localOrderNumber(), offline: true, reason: 'no-service-url' };
   }
   try {
     const json = await post('/orders', payload);
+    if (!json.orderNumber) throw new Error(json.error ?? 'service returned no order number');
     return {
-      orderNumber: json.orderNumber ?? localOrderNumber(),
+      orderNumber: json.orderNumber,
       shopifyOrderId: json.shopifyOrderId ?? null,
       trackingNumber: json.trackingNumber ?? null,
     };
-  } catch {
-    // A failed hand-off must not strand the shopper mid-checkout; the service
-    // reconciles from the mirrored Shopify cart.
-    return { orderNumber: localOrderNumber(), offline: true };
+  } catch (err) {
+    // The shopper is never stranded mid-checkout, but the failure must be
+    // visible — silently falling back to a local number is how a broken
+    // integration hides for a week.
+    console.error('[oka] order submission failed:', err?.message ?? err);
+    return { orderNumber: localOrderNumber(), offline: true, reason: String(err?.message ?? err) };
   }
 }
 
