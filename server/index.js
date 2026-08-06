@@ -1,7 +1,12 @@
 import express from 'express';
 
 import { createOrder, findCustomerLoyalty, findOrder, setRedeemed } from './shopify.js';
-import { findDeliveryByOrderName, stepFromState, toUpdates, trackDelivery } from './bosta.js';
+import {
+  findDeliveryByOrderName,
+  findDeliveryByTracking,
+  stepFromState,
+  toUpdates,
+} from './bosta.js';
 
 /**
  * OKA order service.
@@ -73,29 +78,32 @@ app.get('/orders/status', async (req, res) => {
   try {
     const shopifyOrder = orderName ? await findOrder(orderName) : null;
 
-    let delivery = null;
-    let awb =
-      tracking ??
-      shopifyOrder?.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.number ??
-      null;
+    // Prefer an explicit AWB, then Shopify's own tracking number, then a
+    // lookup by order name — Bosta records carry it as `businessReference`.
+    const awbFromShopify =
+      shopifyOrder?.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.number ?? null;
+    const knownAwb = tracking ?? awbFromShopify;
 
-    if (!awb && orderName) {
-      delivery = await findDeliveryByOrderName(orderName).catch(() => null);
-      awb = delivery?.trackingNumber ?? null;
-    }
+    const delivery = knownAwb
+      ? await findDeliveryByTracking(knownAwb).catch(() => null)
+      : orderName
+        ? await findDeliveryByOrderName(orderName).catch(() => null)
+        : null;
 
-    const timeline = awb ? await trackDelivery(awb).catch(() => null) : null;
-    const stateCode = delivery?.state?.code ?? timeline?.state?.code ?? null;
+    const awb = delivery?.trackingNumber ?? knownAwb ?? null;
+    const stateCode = delivery?.state?.code ?? null;
 
     return res.json({
       orderNumber: shopifyOrder?.name ?? orderName ?? null,
       trackingNumber: awb,
       bostaStateCode: stateCode,
-      stateLabel: delivery?.state?.value ?? timeline?.state?.value ?? null,
+      stateLabel: delivery?.state?.value ?? null,
       step: stepFromState(stateCode),
       fulfillmentStatus: shopifyOrder?.displayFulfillmentStatus ?? null,
       financialStatus: shopifyOrder?.displayFinancialStatus ?? null,
-      updates: toUpdates(delivery, timeline, lang),
+      courier: delivery?.star?.name ?? null,
+      attempts: delivery?.numberOfAttempts ?? 0,
+      updates: toUpdates(delivery, lang),
     });
   } catch (err) {
     return fail(res, err);
