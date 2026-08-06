@@ -19,6 +19,7 @@ import {
   toUpdates,
 } from './bosta.js';
 import { authenticate, issueToken, verifyToken } from './auth.js';
+import { findCustomerAddresses } from './shopify.js';
 
 /**
  * OKA order service.
@@ -160,6 +161,19 @@ app.get('/customer/orders', async (req, res) => {
       orders,
       staff: Boolean(s?.staff),
     });
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/** A signed-in customer's real saved addresses. */
+app.get('/customer/addresses', async (req, res) => {
+  const s = session(req);
+  const identifier = s?.identifier ?? req.query.identifier;
+  if (!identifier) return res.status(401).json({ error: 'not signed in' });
+  try {
+    const addresses = await findCustomerAddresses(identifier);
+    return res.json({ addresses });
   } catch (err) {
     return fail(res, err);
   }

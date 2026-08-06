@@ -138,7 +138,9 @@ const ORDER_STATUS = `
 `;
 
 export async function findOrder(orderName) {
-  const data = await adminGraphql(ORDER_STATUS, { q: `name:${orderName}` });
+  // Shopify's search parser wants the value quoted when it contains
+  // punctuation — an unquoted "#100121" was silently matching nothing.
+  const data = await adminGraphql(ORDER_STATUS, { q: `name:"${orderName}"` });
   return data.orders.edges[0]?.node ?? null;
 }
 
@@ -386,4 +388,51 @@ export async function editOrder(orderId, lines) {
     orderName: committed.order?.name ?? null,
     total: Number(committed.order?.totalPriceSet?.shopMoney?.amount ?? 0),
   };
+}
+
+/* ── Customer addresses ────────────────────────────────────────────────── */
+
+const CUSTOMER_ADDRESSES = `
+  query OkaCustomerAddresses($q: String!) {
+    customers(first: 1, query: $q) {
+      edges {
+        node {
+          id
+          defaultAddress { id }
+          addresses(first: 10) {
+            id
+            firstName
+            lastName
+            address1
+            address2
+            city
+            province
+            zip
+            phone
+          }
+        }
+      }
+    }
+  }
+`;
+
+/** A customer's saved addresses, default first. */
+export async function findCustomerAddresses(identifier) {
+  const isEmail = String(identifier).includes('@');
+  const q = isEmail ? `email:${identifier}` : `phone:${identifier}`;
+  const data = await adminGraphql(CUSTOMER_ADDRESSES, { q });
+  const node = data.customers.edges[0]?.node;
+  if (!node) return [];
+
+  const defaultId = node.defaultAddress?.id ?? null;
+  return (node.addresses ?? [])
+    .map((a) => ({
+      id: a.id,
+      name: [a.firstName, a.lastName].filter(Boolean).join(' '),
+      street: [a.address1, a.address2].filter(Boolean).join(', '),
+      city: a.province ? `${a.city}, ${a.province}` : a.city,
+      phone: a.phone,
+      isDefault: a.id === defaultId,
+    }))
+    .sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
 }

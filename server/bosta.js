@@ -72,9 +72,14 @@ async function search(term) {
 /**
  * Finds the delivery for a Shopify order.
  *
- * Bosta's `businessReference` is set by whatever created the AWB. It does not
- * always equal the Shopify order name, so an exact reference match is tried
- * first, then the customer phone, then the plain search hit.
+ * Bosta's `businessReference` is set by whatever created the AWB, and on this
+ * store it does not equal the Shopify order name (Bosta refs look like
+ * "#2594621", Shopify order names like "#100121" — different counters
+ * entirely). An exact reference match is tried first, in case some orders do
+ * use it; otherwise the customer's phone is the only reliable signal, so that
+ * is required. Returning "the first search hit" when neither matches used to
+ * silently show one customer's shipment on another's order — no match now
+ * means no match, not a guess.
  */
 export async function findDeliveryByOrderName(orderName, { phone } = {}) {
   const list = await search(orderName);
@@ -83,18 +88,20 @@ export async function findDeliveryByOrderName(orderName, { phone } = {}) {
 
   if (phone) {
     const digits = String(phone).replace(/\D/g, '').slice(-10);
-    const byPhone = list.find((d) =>
-      String(d.receiver?.phone ?? '').replace(/\D/g, '').endsWith(digits),
-    );
-    if (byPhone) return byPhone;
+    if (digits) {
+      const byPhone = list.find((d) =>
+        String(d.receiver?.phone ?? '').replace(/\D/g, '').endsWith(digits),
+      );
+      if (byPhone) return byPhone;
+    }
   }
-  return list[0] ?? null;
+  return null;
 }
 
-/** Looks a delivery up directly by its AWB. */
+/** Looks a delivery up directly by its AWB — the one case a bare id is safe. */
 export async function findDeliveryByTracking(trackingNumber) {
   const list = await search(trackingNumber);
-  return list.find((d) => d.trackingNumber === trackingNumber) ?? list[0] ?? null;
+  return list.find((d) => d.trackingNumber === trackingNumber) ?? null;
 }
 
 /** Every delivery for a customer's phone number — the staff order view. */

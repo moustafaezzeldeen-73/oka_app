@@ -86,11 +86,15 @@ export function stepFromBostaState(code) {
  * Live shipment status for one order: Shopify fulfilment plus the Bosta
  * timeline, already merged by the service.
  */
-export async function fetchOrderStatus({ orderNumber, trackingNumber }) {
+export async function fetchOrderStatus({ orderNumber, trackingNumber, phone }) {
   if (!hasService() || (!orderNumber && !trackingNumber)) return null;
   const qs = new URLSearchParams();
   if (orderNumber) qs.set('order', orderNumber);
   if (trackingNumber) qs.set('tracking', trackingNumber);
+  // Bosta's own reference does not equal the Shopify order name on this
+  // store, so the phone is what actually finds the right delivery — see
+  // findDeliveryByOrderName in server/bosta.js.
+  if (phone) qs.set('phone', phone);
   try {
     const json = await get(`/orders/status?${qs.toString()}`);
     return {

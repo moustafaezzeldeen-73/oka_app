@@ -45,6 +45,10 @@ export function fetchCustomerOrders({ token, lang }) {
   return call(`/customer/orders?lang=${lang}`, { token });
 }
 
+export function fetchCustomerAddresses(token) {
+  return call('/customer/addresses', { token });
+}
+
 export function cancelShopifyOrder(orderName, token) {
   return call(`/orders/${encodeURIComponent(orderName)}/cancel`, {
     method: 'POST',

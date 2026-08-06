@@ -1,77 +1,129 @@
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 
 import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
+import { fetchCustomerAddresses } from '../api/auth';
+import { useRefresh } from '../useRefresh';
 import { C, W } from '../theme';
 import { FadeIn } from '../components/anim';
 import { Press, Txt } from '../components/ui';
 import { ScreenHeader } from '../components/parts';
 import { Plus } from '../components/Icons';
 
+/**
+ * Real addresses for a signed-in customer; the prototype's two-address demo
+ * ("Nourhan Adel", home/work) as a guest preview otherwise — same shape, so
+ * the screen looks identical either way, but it stops lying about whose
+ * address is on screen once someone actually signs in.
+ */
 export default function AddressesScreen() {
   const { state } = useStore();
   const actions = useActions();
   const d = useDerived();
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
 
-  const list = d.isRtl
+  const [remote, setRemote] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const load = useCallback(async () => {
+    if (!state.session?.token) return;
+    setLoading(true);
+    try {
+      const r = await fetchCustomerAddresses(state.session.token);
+      setRemote(r.addresses ?? []);
+    } catch {
+      setRemote([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [state.session?.token]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const { control } = useRefresh(load);
+
+  const demo = d.isRtl
     ? [
-        { id: 'home', label: 'المنزل', name: 'نورهان عادل', street: '١٤ شارع النصر، مدينة نصر', city: 'القاهرة' },
-        { id: 'work', label: 'العمل', name: 'نورهان عادل', street: '٢٧ شارع جامعة الدول، المهندسين', city: 'الجيزة' },
+        { id: 'home', label: 'المنزل', name: 'نورهان عادل', street: '١٤ شارع النصر، مدينة نصر', city: 'القاهرة', isDefault: true },
+        { id: 'work', label: 'العمل', name: 'نورهان عادل', street: '٢٧ شارع جامعة الدول، المهندسين', city: 'الجيزة', isDefault: false },
       ]
     : [
-        { id: 'home', label: 'Home', name: 'Nourhan Adel', street: '14 Al Nasr St, Nasr City', city: 'Cairo' },
-        { id: 'work', label: 'Work', name: 'Nourhan Adel', street: '27 Gameat Al Dowal St, Mohandessin', city: 'Giza' },
+        { id: 'home', label: 'Home', name: 'Nourhan Adel', street: '14 Al Nasr St, Nasr City', city: 'Cairo', isDefault: true },
+        { id: 'work', label: 'Work', name: 'Nourhan Adel', street: '27 Gameat Al Dowal St, Mohandessin', city: 'Giza', isDefault: false },
       ];
+
+  const list = state.session?.token
+    ? (remote ?? []).map((a, i) => ({
+        id: a.id,
+        label: a.isDefault ? (d.isRtl ? 'الافتراضي' : 'Default') : d.isRtl ? `عنوان ${i + 1}` : `Address ${i + 1}`,
+        name: a.name || state.customer?.name || '',
+        street: a.street,
+        city: a.city,
+        phone: a.phone || state.customer?.phone,
+        isDefault: a.isDefault,
+      }))
+    : demo;
 
   return (
     <FadeIn style={styles.root}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} refreshControl={control}>
         <ScreenHeader title={d.t('myAddresses')} onBack={actions.goBack} isRtl={d.isRtl} />
 
-        {list.map((a) => {
-          const active = (state.selectedAddress || 'home') === a.id;
-          return (
-            <Press
-              key={a.id}
-              onPress={() => actions.selectAddress(a.id)}
-              style={[
-                styles.card,
-                {
-                  borderWidth: active ? 1.5 : 1,
-                  borderColor: active ? C.ink : 'rgba(0,0,0,0.1)',
-                  backgroundColor: active ? 'rgba(0,0,0,0.035)' : 'transparent',
-                },
-              ]}
-            >
-              <View style={[styles.cardRow, rowDir]}>
-                <View style={{ minWidth: 0, flex: 1 }}>
-                  <View style={[styles.labelRow, rowDir]}>
-                    <Txt style={styles.label}>{a.label}</Txt>
-                    {a.id === 'home' && (
-                      <View style={styles.badge}>
-                        <Txt style={styles.badgeTxt}>{d.isRtl ? 'الافتراضي' : 'Default'}</Txt>
-                      </View>
-                    )}
+        {loading && !remote ? (
+          <ActivityIndicator style={{ marginTop: 30 }} color={C.ink} />
+        ) : list.length === 0 ? (
+          <Txt center style={styles.empty}>
+            {d.isRtl ? 'لا توجد عناوين محفوظة' : 'No saved addresses yet'}
+          </Txt>
+        ) : (
+          list.map((a) => {
+            const active = (state.selectedAddress || list[0]?.id) === a.id;
+            return (
+              <Press
+                key={a.id}
+                onPress={() => actions.selectAddress(a.id)}
+                style={[
+                  styles.card,
+                  {
+                    borderWidth: active ? 1.5 : 1,
+                    borderColor: active ? C.ink : 'rgba(0,0,0,0.1)',
+                    backgroundColor: active ? 'rgba(0,0,0,0.035)' : 'transparent',
+                  },
+                ]}
+              >
+                <View style={[styles.cardRow, rowDir]}>
+                  <View style={{ minWidth: 0, flex: 1 }}>
+                    <View style={[styles.labelRow, rowDir]}>
+                      <Txt style={styles.label}>{a.label}</Txt>
+                      {a.isDefault && (
+                        <View style={styles.badge}>
+                          <Txt style={styles.badgeTxt}>{d.isRtl ? 'الافتراضي' : 'Default'}</Txt>
+                        </View>
+                      )}
+                    </View>
+                    <Txt isRtl={d.isRtl} style={styles.line}>{a.name}</Txt>
+                    <Txt isRtl={d.isRtl} style={styles.line}>{a.street}</Txt>
+                    <Txt isRtl={d.isRtl} style={styles.line}>{a.city}</Txt>
+                    {a.phone ? (
+                      <Txt isRtl={d.isRtl} style={styles.phone}>{`⁦${a.phone}⁩`}</Txt>
+                    ) : null}
                   </View>
-                  <Txt isRtl={d.isRtl} style={styles.line}>{a.name}</Txt>
-                  <Txt isRtl={d.isRtl} style={styles.line}>{a.street}</Txt>
-                  <Txt isRtl={d.isRtl} style={styles.line}>{a.city}</Txt>
-                  <Txt isRtl={d.isRtl} style={styles.phone}>{`⁦${STR[d.lang].phone}⁩`}</Txt>
+                  <View style={styles.radio}>
+                    <View
+                      style={[
+                        styles.radioDot,
+                        { backgroundColor: active ? C.accent : 'transparent' },
+                      ]}
+                    />
+                  </View>
                 </View>
-                <View style={styles.radio}>
-                  <View
-                    style={[
-                      styles.radioDot,
-                      { backgroundColor: active ? C.accent : 'transparent' },
-                    ]}
-                  />
-                </View>
-              </View>
-            </Press>
-          );
-        })}
+              </Press>
+            );
+          })
+        )}
 
         <View style={styles.addWrap}>
           <Press
@@ -90,6 +142,7 @@ export default function AddressesScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
+  empty: { paddingVertical: 40, paddingHorizontal: 22, fontSize: 13.5, color: C.inkSoft },
   card: { marginHorizontal: 22, marginBottom: 12, padding: 16, borderRadius: 20 },
   cardRow: { alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 },
   labelRow: { alignItems: 'center', gap: 8 },

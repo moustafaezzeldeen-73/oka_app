@@ -71,12 +71,16 @@ export default function App() {
 
   /** Re-runnable so pull-to-refresh can ask Shopify for the catalogue again. */
   const reloadCatalogue = useCallback(async () => {
-    if (!hasStorefront()) return;
+    if (!hasStorefront()) {
+      console.warn('[oka] EXPO_PUBLIC_SHOPIFY_STOREFRONT_TOKEN is not set — running on the bundled catalogue');
+      return;
+    }
     try {
       const c = await fetchCatalogue(CATS.map((cat) => cat.id));
       if (c.products.length) setCatalogue(c);
-    } catch {
-      /* stay on whatever catalogue we already have */
+      else console.warn('[oka] Shopify returned zero products for the configured collections');
+    } catch (err) {
+      console.error('[oka] catalogue sync failed:', err?.message ?? err);
     }
   }, []);
 

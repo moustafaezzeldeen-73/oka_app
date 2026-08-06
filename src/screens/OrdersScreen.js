@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 
 import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
 import { fetchOrderStatus } from '../api/orders';
-import { cancelShopifyOrder, editShopifyOrder, fetchCustomerOrders } from '../api/auth';
-import { Alert } from 'react-native';
+import { cancelShopifyOrder, fetchCustomerOrders } from '../api/auth';
 import { useRefresh } from '../useRefresh';
 import { C, W } from '../theme';
 import { chevronFlip } from '../rtl';
@@ -38,6 +37,30 @@ export default function OrdersScreen() {
     : state.order;
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
 
+  /**
+   * Every line in the order, not just the hero item. A real order (`remote`)
+   * already carries full line items from Shopify; a locally-placed order only
+   * has {productId: qty}, resolved back to the catalogue here.
+   */
+  const orderItems = remote
+    ? (remote.items ?? []).map((it) => ({
+        key: it.id,
+        title: it.title,
+        qty: it.quantity,
+        price: d.fmtPrice(Math.round(it.price * it.quantity)),
+        img: it.image ? { uri: it.image } : null,
+      }))
+    : Object.entries(state.order?.items ?? {}).map(([id, qty]) => {
+        const p = d.byId(id);
+        return {
+          key: id,
+          title: p ? d.title(p) : id,
+          qty,
+          price: p ? d.fmtPrice(p.price * qty) : '',
+          img: p?.img,
+        };
+      });
+
   /** Live Bosta/Shopify status, when the order service is reachable. */
   const [live, setLive] = useState(null);
 
@@ -65,9 +88,10 @@ export default function OrdersScreen() {
     const r = await fetchOrderStatus({
       orderNumber: order.number,
       trackingNumber: order.trackingNumber,
+      phone: state.customer?.phone || STR[d.lang].phone,
     });
     setLive(r);
-  }, [state.session?.token, d.lang, order?.number, order?.trackingNumber]);
+  }, [state.session?.token, d.lang, order?.number, order?.trackingNumber, state.customer?.phone]);
 
   /** Cancels the real Shopify order, not just the local copy. */
   const doCancel = useCallback(() => {
@@ -167,6 +191,32 @@ export default function OrdersScreen() {
             <ChevronRight />
           </View>
         </View>
+
+        {/* The hero row above shows only the first item — every order can hold
+            several, so the full breakdown is listed here. */}
+        {orderItems.length > 1 && (
+          <View style={styles.itemsList}>
+            <Txt isRtl={d.isRtl} style={styles.itemsLabel}>
+              {d.isRtl ? `كل العناصر (${d.num(orderItems.length)})` : `All items (${orderItems.length})`}
+            </Txt>
+            {orderItems.map((it) => (
+              <View key={it.key} style={[styles.itemRow, rowDir]}>
+                <View style={styles.itemImg}>
+                  {it.img && <Img source={it.img} contentFit="contain" style={styles.fill} />}
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Txt isRtl={d.isRtl} style={styles.itemTitle} numberOfLines={2}>
+                    {it.title}
+                  </Txt>
+                  <Txt isRtl={d.isRtl} style={styles.itemQty}>
+                    {d.isRtl ? `الكمية: ${d.num(it.qty)}` : `Qty: ${it.qty}`}
+                  </Txt>
+                </View>
+                <Txt style={styles.itemPrice}>{it.price}</Txt>
+              </View>
+            ))}
+          </View>
+        )}
 
         <Divider style={styles.rule} />
 
@@ -309,6 +359,21 @@ const styles = StyleSheet.create({
   empty: { paddingVertical: 60, paddingHorizontal: 22, color: C.ink, fontSize: 13.5 },
 
   heroRow: { alignItems: 'center', gap: 14, paddingHorizontal: 22, paddingBottom: 22 },
+  itemsList: { paddingHorizontal: 22, paddingBottom: 18, gap: 10 },
+  itemsLabel: { fontSize: 12.5, fontWeight: W.bold, color: 'rgba(110,110,115,0.9)', marginBottom: 2 },
+  itemRow: {
+    alignItems: 'center',
+    gap: 12,
+    padding: 10,
+    borderRadius: 16,
+    backgroundColor: C.cardBg,
+    borderWidth: 1,
+    borderColor: C.cardBorder,
+  },
+  itemImg: { width: 48, height: 48, borderRadius: 10, overflow: 'hidden', backgroundColor: 'rgba(0,0,0,0.03)' },
+  itemTitle: { fontSize: 13, fontWeight: W.semibold, lineHeight: 17 },
+  itemQty: { fontSize: 11.5, color: 'rgba(110,110,115,0.9)', marginTop: 2 },
+  itemPrice: { fontSize: 13, fontWeight: W.bold, color: C.ink },
   heroImg: { width: 78, height: 88, alignItems: 'center', justifyContent: 'center' },
   heroMeta: { flex: 1, minWidth: 0 },
   heroTitle: { fontSize: 15.5, fontWeight: W.semibold, lineHeight: 21 },
