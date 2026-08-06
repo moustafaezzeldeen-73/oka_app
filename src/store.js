@@ -46,6 +46,10 @@ const INITIAL = {
   session: null,
   customer: null,
   remoteOrders: null,
+  /** Which of `remoteOrders` the detail view is showing; null = the list. */
+  selectedOrderName: null,
+  /** Bumped after an edit or cancel so the order screen refetches. */
+  ordersVersion: 0,
 };
 
 const StoreContext = createContext(null);
@@ -150,10 +154,15 @@ export function useActions() {
       cancelOrder: () =>
         patch((s) => ({ order: s.order ? { ...s.order, status: 'cancelled' } : s.order })),
 
-      editOrder: () =>
+      /**
+       * `seed` is {productId: qty}. A real Shopify order carries line items
+       * keyed by variant, so the caller resolves those back to catalogue
+       * products first — the sheet itself only ever speaks product ids.
+       */
+      editOrder: (seed) =>
         patch((s) => ({
           editOrderOpen: true,
-          editCart: { ...((s.order && s.order.items) || {}) },
+          editCart: seed ? { ...seed } : { ...((s.order && s.order.items) || {}) },
         })),
       closeEditOrder: () => patch({ editOrderOpen: false, editCart: null }),
       acceptEditOrder: () => patch({ editOrderOpen: false }),
@@ -172,6 +181,10 @@ export function useActions() {
         patch({ session: { token, staff, via }, customer, screen: 'orders', stack: [] }),
       signOut: () => patch({ session: null, customer: null, remoteOrders: null, screen: 'account', stack: [] }),
       setRemoteOrders: (remoteOrders) => patch({ remoteOrders }),
+      openOrder: (selectedOrderName) => patch({ selectedOrderName }),
+      backToOrderList: () => patch({ selectedOrderName: null }),
+      /** Forces the order screen to pull fresh state after a mutation. */
+      ordersChanged: () => patch((s) => ({ ordersVersion: s.ordersVersion + 1 })),
 
       selectAddress: (selectedAddress) => patch({ selectedAddress }),
       setNewAddrField: (key, val) =>

@@ -7,6 +7,31 @@
 
 const API_VERSION = process.env.SHOPIFY_API_VERSION || '2025-07';
 
+/**
+ * Shopify rejects anything that is not E.164, and the app was sending the
+ * prototype's display format ("+20 100 123 4567") straight through — spaces
+ * and all — so every order failed phone validation.
+ *
+ * Egyptian mobiles are 10 digits after the country code, usually written
+ * locally with a leading 0 (01001234567). Both forms, and an already-correct
+ * +20…, normalise to the same +20XXXXXXXXXX.
+ */
+export function normalizePhone(raw, countryCode = '20') {
+  if (!raw) return null;
+  let digits = String(raw).replace(/\D/g, '');
+  if (!digits) return null;
+
+  if (digits.startsWith('00')) digits = digits.slice(2);
+  if (digits.startsWith(countryCode)) digits = digits.slice(countryCode.length);
+  digits = digits.replace(/^0+/, '');
+
+  // An Egyptian mobile is 10 digits (1XXXXXXXXX). Anything else is more likely
+  // a typo than a number Shopify will accept, so it is dropped rather than
+  // sent along to fail validation server-side.
+  if (digits.length !== 10) return null;
+  return `+${countryCode}${digits}`;
+}
+
 function requireEnv(name) {
   const v = process.env[name];
   if (!v) throw new Error(`Missing required environment variable: ${name}`);
@@ -81,19 +106,22 @@ export async function createOrder(payload) {
   });
 
   const [firstName, ...rest] = String(customer.name || '').trim().split(/\s+/);
+  const phone = normalizePhone(customer.phone);
   const address = {
     firstName: firstName || 'OKA',
     lastName: rest.join(' ') || 'Customer',
     address1: customer.street || '',
     city: customer.city || '',
     countryCode: 'EG',
-    phone: customer.phone || '',
+    // Omitted entirely when it cannot be normalised — an invalid phone fails
+    // the whole order, an absent one does not.
+    ...(phone ? { phone } : {}),
   };
 
   const order = {
     lineItems,
     email: customer.email || undefined,
-    phone: customer.phone || undefined,
+    ...(phone ? { phone } : {}),
     currency: 'EGP',
     shippingAddress: address,
     billingAddress: address,
@@ -232,7 +260,7 @@ const CUSTOMER_ORDERS = `
                     }
                   }
                 }
-                fulfillments(first: 5) { trackingInfo { number url company } }
+                fulfillments(first: 5) { createdAt trackingInfo { number url company } }
               }
             }
           }
@@ -267,6 +295,8 @@ export async function findCustomerOrders(identifier) {
       currency: o.totalPriceSet?.shopMoney?.currencyCode ?? 'EGP',
       city: o.shippingAddress?.city ?? null,
       trackingNumber: o.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.number ?? null,
+      fulfilledAt: o.fulfillments?.[0]?.createdAt ?? null,
+      cancelledAt: o.cancelledAt ?? null,
       items: o.lineItems.edges.map(({ node: li }) => ({
         id: li.id,
         title: li.title,

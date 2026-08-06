@@ -19,6 +19,49 @@ import {
   toUpdates,
 } from './bosta.js';
 import { authenticate, issueToken, verifyToken } from './auth.js';
+
+/**
+ * Shopify's own milestones, merged into the Bosta timeline so the order screen
+ * shows one story rather than only the courier's half of it. Same shape as
+ * Bosta's rows, and only events that have actually happened.
+ */
+function shopifyEvents(order, lang) {
+  const ar = lang === 'ar';
+  const fmt = (t) =>
+    t
+      ? new Date(t).toLocaleString(ar ? 'ar-EG' : 'en-GB', {
+          day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+          timeZone: 'Africa/Cairo',
+        })
+      : '';
+
+  const rows = [];
+  if (order.createdAt) {
+    rows.push({
+      at: order.createdAt,
+      text: ar ? 'تم استلام الطلب' : 'Order received',
+      time: fmt(order.createdAt),
+      done: true,
+    });
+  }
+  if (order.fulfilledAt) {
+    rows.push({
+      at: order.fulfilledAt,
+      text: ar ? 'تم تجهيز الطلب وشحنه' : 'Order fulfilled and handed to the courier',
+      time: fmt(order.fulfilledAt),
+      done: true,
+    });
+  }
+  if (order.cancelledAt) {
+    rows.push({
+      at: order.cancelledAt,
+      text: ar ? 'تم إلغاء الطلب' : 'Order cancelled',
+      time: fmt(order.cancelledAt),
+      done: true,
+    });
+  }
+  return rows;
+}
 import { fetchAdminCatalogue, findCustomerAddresses } from './shopify.js';
 
 /**
@@ -144,14 +187,30 @@ app.get('/customer/orders', async (req, res) => {
         (o.trackingNumber ? byRef.get(o.trackingNumber) : null) ??
         null;
       const code = delivery?.state?.code ?? null;
+
+      // One chronological story from both systems, oldest first.
+      const merged = [...shopifyEvents(o, lang), ...toUpdates(delivery, lang).map((u, i) => ({
+        ...u,
+        at: delivery ? [
+          delivery.createdAt,
+          delivery.collectedFromBusiness ?? delivery.state?.pickedUpTime,
+          delivery.state?.receivedAtWarehouse?.time,
+          delivery.state?.delivering?.time,
+          delivery.state?.deliveryTime,
+        ].filter(Boolean)[i] ?? null : null,
+      }))]
+        .filter((r) => r.at)
+        .sort((a, b) => new Date(a.at) - new Date(b.at))
+        .map(({ at, ...row }) => row);
+
       return {
         ...o,
         trackingNumber: delivery?.trackingNumber ?? o.trackingNumber,
         bostaStateCode: code,
         stateLabel: delivery?.state?.value ?? null,
-        step: stepFromState(code),
+        step: o.cancelledAt ? 0 : stepFromState(code),
         courier: delivery?.star?.name ?? null,
-        updates: toUpdates(delivery, lang),
+        updates: merged,
       };
     });
 

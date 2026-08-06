@@ -167,9 +167,12 @@ const fmt = (t, ar) => {
 };
 
 /**
- * Builds the update rows the app displays from a delivery record. Steps that
- * have not happened yet are still listed, marked `done: false`, so the shopper
- * sees the whole journey rather than only what has elapsed.
+ * Builds the update rows the app displays from a delivery record.
+ *
+ * Only what has actually happened is listed — the current state and everything
+ * before it, newest last. Listing future steps as "Pending" padded the
+ * timeline with events that had not occurred and made a Created shipment look
+ * like it was already moving.
  */
 export function toUpdates(delivery, lang = 'ar') {
   if (!delivery) return [];
@@ -185,21 +188,18 @@ export function toUpdates(delivery, lang = 'ar') {
     { key: 'delivered', at: st.deliveryTime },
   ];
 
-  const out = rows.map((r) => ({
-    text: pick(r.key, ar, r.vars),
-    time: r.at ? fmt(r.at, ar) : ar ? 'قيد الانتظار' : 'Pending',
-    done: Boolean(r.at),
-  }));
-
   // A failed attempt is worth surfacing — it usually means the courier could
   // not reach the customer, which is the shopper's cue to act.
   if ((delivery.numberOfAttempts ?? 0) > 0 && !st.deliveryTime) {
-    out.splice(4, 0, {
-      text: pick('attempt', ar),
-      time: fmt(delivery.updatedAt, ar),
-      done: true,
-    });
+    rows.push({ key: 'attempt', at: delivery.updatedAt });
   }
 
-  return out;
+  return rows
+    .filter((r) => Boolean(r.at))
+    .sort((a, b) => new Date(a.at) - new Date(b.at))
+    .map((r) => ({
+      text: pick(r.key, ar, r.vars),
+      time: fmt(r.at, ar),
+      done: true,
+    }));
 }

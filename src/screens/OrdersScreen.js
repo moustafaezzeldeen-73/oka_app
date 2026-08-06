@@ -14,7 +14,7 @@ import { ScreenHeader } from '../components/parts';
 import { ChevronRight } from '../components/Icons';
 
 export default function OrdersScreen() {
-  const { state } = useStore();
+  const { state, products } = useStore();
   const actions = useActions();
   const d = useDerived();
 
@@ -22,7 +22,10 @@ export default function OrdersScreen() {
    * A signed-in customer sees their real Shopify orders; otherwise the screen
    * falls back to the order just placed in this session.
    */
-  const remote = state.remoteOrders?.[0] ?? null;
+  const orders = state.remoteOrders ?? [];
+  const remote =
+    orders.find((o) => o.name === state.selectedOrderName) ??
+    (orders.length === 1 ? orders[0] : null);
   const order = remote
     ? {
         number: remote.name,
@@ -70,15 +73,19 @@ export default function OrdersScreen() {
       try {
         const r = await fetchCustomerOrders({ token: state.session.token, lang: d.lang });
         actions.setRemoteOrders(r.orders ?? []);
-        const first = r.orders?.[0];
-        if (first) {
-          setLive({
-            step: first.step,
-            stateLabel: first.stateLabel,
-            trackingNumber: first.trackingNumber,
-            updates: first.updates ?? [],
-          });
-        }
+        const shown =
+          (r.orders ?? []).find((o) => o.name === state.selectedOrderName) ??
+          (r.orders?.length === 1 ? r.orders[0] : null);
+        setLive(
+          shown
+            ? {
+                step: shown.step,
+                stateLabel: shown.stateLabel,
+                trackingNumber: shown.trackingNumber,
+                updates: shown.updates ?? [],
+              }
+            : null,
+        );
         return;
       } catch {
         // fall through to the single-order path
@@ -91,7 +98,30 @@ export default function OrdersScreen() {
       phone: state.customer?.phone || STR[d.lang].phone,
     });
     setLive(r);
-  }, [state.session?.token, d.lang, order?.number, order?.trackingNumber, state.customer?.phone]);
+  }, [
+    state.session?.token,
+    d.lang,
+    order?.number,
+    order?.trackingNumber,
+    state.customer?.phone,
+    state.selectedOrderName,
+    state.ordersVersion,
+  ]);
+
+  /**
+   * Seeds the edit sheet. A remote order lists Shopify line items keyed by
+   * variant id, so each is resolved back to the catalogue product that carries
+   * that variant; a local order is already keyed by product id.
+   */
+  const editSeed = useCallback(() => {
+    if (!remote) return undefined;
+    const seed = {};
+    for (const it of remote.items ?? []) {
+      const p = products.find((pp) => pp.variantId && pp.variantId === it.variantId);
+      if (p) seed[p.id] = it.quantity;
+    }
+    return seed;
+  }, [remote, products]);
 
   /** Cancels the real Shopify order, not just the local copy. */
   const doCancel = useCallback(() => {
@@ -108,7 +138,9 @@ export default function OrdersScreen() {
             try {
               await cancelShopifyOrder(name, state.session?.token);
               actions.cancelOrder();
-              loadStatus();
+              // Pull the order back from Shopify so the screen shows what the
+              // store actually says, not an optimistic guess.
+              actions.ordersChanged();
             } catch (err) {
               Alert.alert(d.isRtl ? 'تعذّر الإلغاء' : 'Could not cancel', String(err.message ?? err));
             }
@@ -124,15 +156,64 @@ export default function OrdersScreen() {
 
   const { control } = useRefresh(loadStatus);
 
+  /** Several orders and none opened yet — show the list. */
   if (!order) {
     return (
       <FadeIn style={styles.root}>
-        <Txt isRtl={d.isRtl} style={styles.bigTitle}>
-          {d.t('ordersTitle')}
-        </Txt>
-        <Txt center style={styles.empty}>
-          {d.t('noOrders')}
-        </Txt>
+        <ScrollView showsVerticalScrollIndicator={false} refreshControl={control}>
+          <Txt isRtl={d.isRtl} style={styles.bigTitle}>
+            {d.t('ordersTitle')}
+          </Txt>
+
+          {orders.length === 0 ? (
+            <Txt center style={styles.empty}>
+              {d.t('noOrders')}
+            </Txt>
+          ) : (
+            orders.map((o) => (
+              <Press
+                key={o.name}
+                onPress={() => actions.openOrder(o.name)}
+                activeScale={0.99}
+                style={[styles.orderCard, rowDir]}
+              >
+                <View style={styles.orderThumb}>
+                  {o.items?.[0]?.image ? (
+                    <Img source={{ uri: o.items[0].image }} contentFit="contain" style={styles.fill} />
+                  ) : null}
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <View style={[styles.orderTop, rowDir]}>
+                    <Txt style={styles.orderName}>{o.name}</Txt>
+                    <Txt style={styles.orderTotal}>{d.fmtPrice(Math.round(o.total))}</Txt>
+                  </View>
+                  <Txt isRtl={d.isRtl} style={styles.orderMeta} numberOfLines={1}>
+                    {(o.items ?? []).length > 1
+                      ? d.isRtl
+                        ? `${o.items[0].title} و${d.num(o.items.length - 1)} أخرى`
+                        : `${o.items[0].title} +${o.items.length - 1} more`
+                      : o.items?.[0]?.title ?? ''}
+                  </Txt>
+                  <Txt
+                    isRtl={d.isRtl}
+                    style={[
+                      styles.orderState,
+                      { color: o.cancelled ? '#b3261e' : o.step >= 3 ? C.green : C.inkSoft },
+                    ]}
+                  >
+                    {o.cancelled
+                      ? d.isRtl ? 'ملغي' : 'Cancelled'
+                      : o.stateLabel ?? (d.isRtl ? 'قيد المعالجة' : 'Processing')}
+                  </Txt>
+                </View>
+                <View style={chevronFlip(d.isRtl)}>
+                  <ChevronRight size={15} />
+                </View>
+              </Press>
+            ))
+          )}
+          <View style={{ height: 26 }} />
+        </ScrollView>
       </FadeIn>
     );
   }
@@ -171,7 +252,7 @@ export default function OrdersScreen() {
       <ScrollView showsVerticalScrollIndicator={false} refreshControl={control}>
         <ScreenHeader
           title={d.isRtl ? 'تفاصيل الطلب' : 'Order Details'}
-          onBack={() => actions.goTab('home')}
+          onBack={() => (orders.length > 1 ? actions.backToOrderList() : actions.goTab('home'))}
           isRtl={d.isRtl}
         />
 
@@ -318,7 +399,7 @@ export default function OrdersScreen() {
 
         <View style={[styles.actions, rowDir]}>
           <Press
-            onPress={actions.editOrder}
+            onPress={() => actions.editOrder(editSeed())}
             activeBg="rgba(0,0,0,0.04)"
             style={styles.editBtn}
           >
@@ -359,6 +440,30 @@ const styles = StyleSheet.create({
   empty: { paddingVertical: 60, paddingHorizontal: 22, color: C.ink, fontSize: 13.5 },
 
   heroRow: { alignItems: 'center', gap: 14, paddingHorizontal: 22, paddingBottom: 22 },
+  orderCard: {
+    alignItems: 'center',
+    gap: 12,
+    marginHorizontal: 22,
+    marginBottom: 12,
+    padding: 12,
+    borderRadius: 18,
+    backgroundColor: C.cardBg,
+    borderWidth: 1,
+    borderColor: C.cardBorder,
+  },
+  orderThumb: {
+    width: 54,
+    height: 54,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(0,0,0,0.03)',
+  },
+  orderTop: { alignItems: 'center', justifyContent: 'space-between' },
+  orderName: { fontSize: 14, fontWeight: W.heavy },
+  orderTotal: { fontSize: 13.5, fontWeight: W.bold, color: C.ink },
+  orderMeta: { fontSize: 12.5, color: C.inkSoft, marginTop: 3 },
+  orderState: { fontSize: 12, fontWeight: W.bold, marginTop: 4 },
+
   itemsList: { paddingHorizontal: 22, paddingBottom: 18, gap: 10 },
   itemsLabel: { fontSize: 12.5, fontWeight: W.bold, color: 'rgba(110,110,115,0.9)', marginBottom: 2 },
   itemRow: {

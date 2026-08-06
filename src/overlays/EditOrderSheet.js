@@ -26,7 +26,7 @@ export default function EditOrderSheet() {
    */
   const accept = async () => {
     if (saving) return;
-    const orderName = state.order?.number;
+    const orderName = state.selectedOrderName ?? state.order?.number;
     const lines = d.editCartEntries
       .map((e) => ({ variantId: e.p.variantId, quantity: e.qty }))
       .filter((l) => l.variantId);
@@ -40,6 +40,9 @@ export default function EditOrderSheet() {
     try {
       await editShopifyOrder(orderName, lines, state.session?.token);
       actions.acceptEditOrder();
+      // The edit landed on Shopify; pull the order back so the screen behind
+      // this sheet reflects it instead of the pre-edit copy.
+      actions.ordersChanged();
     } catch (err) {
       Alert.alert(
         d.isRtl ? 'تعذّر حفظ التعديل' : 'Could not save the edit',
