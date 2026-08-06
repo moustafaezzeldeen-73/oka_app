@@ -1,5 +1,5 @@
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { GOLD_TIER, LOYALTY_REWARDS, REWARD_COSTS } from '../data';
@@ -11,14 +11,65 @@ import { arDigits } from '../rtl';
 import { FadeIn } from '../components/anim';
 import { Press, Progress, Txt } from '../components/ui';
 import { ScreenHeader } from '../components/parts';
+import { fetchLoyalty, redeemReward as redeemOnShopify } from '../api/loyalty';
 
 export default function LoyaltyScreen() {
   const { state, reloadCatalogue } = useStore();
   const actions = useActions();
   const d = useDerived();
-  const { control } = useRefresh(reloadCatalogue);
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
-  const balance = d.loyaltyBalance;
+
+  /**
+   * The real balance, derived by the service from what this customer has
+   * actually spent minus what they have redeemed. The 1,240-point demo figure
+   * only stands in when nobody is signed in.
+   */
+  const [remote, setRemote] = useState(null);
+  const phone = state.customer?.phone ?? null;
+
+  const load = useCallback(async () => {
+    if (!phone) {
+      setRemote(null);
+      return;
+    }
+    const r = await fetchLoyalty(phone);
+    setRemote(r?.demo ? null : r);
+  }, [phone]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const { control } = useRefresh(async () => {
+    await Promise.all([reloadCatalogue?.(), load()]);
+  });
+
+  const balance = remote ? remote.balance : d.loyaltyBalance;
+  const isDemo = !remote;
+
+  const redeem = async (r) => {
+    if (!phone) {
+      Alert.alert(
+        d.isRtl ? 'سجّل دخولك الأول' : 'Sign in first',
+        d.isRtl
+          ? 'لازم تسجل دخولك عشان نقدر نخصم النقاط من حسابك.'
+          : 'Sign in so the points can be deducted from your account.',
+      );
+      return;
+    }
+    try {
+      const res = await redeemOnShopify(phone, r.id, r.pts);
+      if (!res.ok) throw new Error('the service refused the redemption');
+      actions.redeemReward(r.id);
+      success();
+      load();
+    } catch (err) {
+      Alert.alert(
+        d.isRtl ? 'تعذّر الاستبدال' : 'Could not redeem',
+        String(err.message ?? err),
+      );
+    }
+  };
 
   const earnRules = d.isRtl
     ? [
@@ -70,6 +121,13 @@ export default function LoyaltyScreen() {
             fill={['#ffffff', '#d8d8dd']}
             style={{ marginTop: 18 }}
           />
+          {isDemo ? (
+            <Txt isRtl={d.isRtl} style={styles.demoTag}>
+              {d.isRtl
+                ? 'رصيد تجريبي — سجّل دخولك عشان تشوف نقاطك الحقيقية'
+                : 'Demo balance — sign in to see your real points'}
+            </Txt>
+          ) : null}
           <Txt isRtl={d.isRtl} style={styles.nextTier}>
             {balance >= GOLD_TIER
               ? d.isRtl
@@ -104,8 +162,7 @@ export default function LoyaltyScreen() {
                 <Press
                   onPress={() => {
                     if (redeemed || !affordable) return;
-                    actions.redeemReward(r.id);
-                    success();
+                    redeem(r);
                   }}
                   activeScale={!redeemed && affordable ? 0.95 : 1}
                   style={[
@@ -191,6 +248,7 @@ const styles = StyleSheet.create({
   points: { fontSize: 40, fontWeight: W.heavy, lineHeight: 42, color: '#ffffff' },
   pointsUnit: { fontSize: 14, fontWeight: W.semibold, color: 'rgba(255,255,255,0.85)', paddingBottom: 4 },
   nextTier: { fontSize: 12, marginTop: 9, color: 'rgba(255,255,255,0.85)' },
+  demoTag: { fontSize: 11.5, marginTop: 10, color: '#ffd7a8', fontWeight: W.bold },
 
   sectionTitle: { paddingHorizontal: 22, paddingBottom: 10, fontWeight: W.bold, fontSize: 16 },
   rewards: {

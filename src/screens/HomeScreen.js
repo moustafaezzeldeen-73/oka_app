@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { CATS, OFFERS, SHOP_LOGO } from '../data';
+import { OFFERS, SHOP_LOGO } from '../data';
 import { useActions, useDerived, useStore } from '../store';
 import { useRefresh } from '../useRefresh';
 import { snapCollection, snapNotch, success } from '../haptics';
@@ -69,7 +69,7 @@ function useRtlStart(isRtl, count, step) {
  * to the active collection and the strip auto-centres it.
  */
 export default function HomeScreen() {
-  const { state, products, reloadCatalogue } = useStore();
+  const { state, products, cats, reloadCatalogue } = useStore();
   const actions = useActions();
   const d = useDerived();
   const { isRtl } = d;
@@ -83,8 +83,8 @@ export default function HomeScreen() {
 
   /** [Offers, ...categories] — the selector's source list. */
   const navSource = useMemo(
-    () => [{ id: 'offers', en: 'Offers', ar: 'العروض', isOffers: true }, ...CATS],
-    [],
+    () => [{ id: 'offers', en: 'Offers', ar: 'العروض', isOffers: true }, ...cats],
+    [cats],
   );
   const navCount = navSource.length;
 
@@ -237,7 +237,7 @@ export default function HomeScreen() {
               d={d}
               actions={actions}
             />
-            {CATS.map((cat, ci) => (
+            {cats.map((cat, ci) => (
               <CollectionPage
                 key={cat.id}
                 cat={cat}

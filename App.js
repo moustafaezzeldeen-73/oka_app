@@ -9,6 +9,7 @@ import Svg, { Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
 import { CANVAS_GRAD, CANVAS_LOCS } from './src/theme';
 import { StoreProvider, useActions, useDerived, useStore } from './src/store';
 import { useShopifyCart } from './src/useShopifyCart';
+import { useWishlistSync } from './src/useWishlistSync';
 import { insetEnd, insetStart } from './src/rtl';
 import { fetchServerCatalogue } from './src/api/catalogue';
 import { hasService } from './src/api/config';
@@ -107,6 +108,8 @@ function Shell() {
 
   // Keeps a real Shopify cart in step with the local one, when configured.
   useShopifyCart();
+  // Persists the wishlist against the customer rather than the app process.
+  useWishlistSync();
 
   /**
    * The prototype's 402×874 frame put content 54px below the top of the screen

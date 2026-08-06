@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 import {
+  CATS as LOCAL_CATS,
   CITY_FEES,
   FREE_SHIPPING_THRESHOLD,
   GOLD_TIER,
@@ -64,10 +65,14 @@ export function StoreProvider({ children, catalogue, reloadCatalogue }) {
 
   /** The live catalogue wins as soon as it arrives; otherwise the bundled one. */
   const products = catalogue?.products?.length ? catalogue.products : LOCAL_PRODUCTS;
+  // Categories were being fetched and then thrown away — every screen still
+  // read the bundled list, so Shopify's own collection titles and artwork
+  // never appeared.
+  const cats = catalogue?.cats?.length ? catalogue.cats : LOCAL_CATS;
 
   const value = useMemo(
-    () => ({ state, patch, products, reloadCatalogue }),
-    [state, patch, products, reloadCatalogue],
+    () => ({ state, patch, products, cats, reloadCatalogue }),
+    [state, patch, products, cats, reloadCatalogue],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

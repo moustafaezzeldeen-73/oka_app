@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { CATS } from '../data';
 import { useActions, useDerived, useStore } from '../store';
 import { useRefresh } from '../useRefresh';
 import { success } from '../haptics';
@@ -13,12 +12,12 @@ import { GridCard } from '../components/parts';
 import { ChevronLeft } from '../components/Icons';
 
 export default function CollectionScreen() {
-  const { state, products, reloadCatalogue } = useStore();
+  const { state, products, cats, reloadCatalogue } = useStore();
   const actions = useActions();
   const d = useDerived();
   const { control } = useRefresh(reloadCatalogue);
 
-  const cat = CATS.find((c) => c.id === state.collectionCategory);
+  const cat = cats.find((c) => c.id === state.collectionCategory);
   const list = useMemo(
     () =>
       state.collectionCategory === 'all'

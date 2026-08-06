@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { CATS } from '../data';
 import { useActions, useDerived, useStore } from '../store';
 import { useRefresh } from '../useRefresh';
 import { C, W } from '../theme';
@@ -9,7 +8,7 @@ import { FadeIn } from '../components/anim';
 import { Img, Press, Txt } from '../components/ui';
 
 export default function CategoriesScreen() {
-  const { products, reloadCatalogue } = useStore();
+  const { products, cats, reloadCatalogue } = useStore();
   const actions = useActions();
   const d = useDerived();
   const { control } = useRefresh(reloadCatalogue);
@@ -21,7 +20,7 @@ export default function CategoriesScreen() {
           {d.t('categoriesTitle')}
         </Txt>
 
-        {CATS.map((c) => {
+        {cats.map((c) => {
           const first = products.find((p) => p.cat === c.id);
           const count = products.filter((p) => p.cat === c.id).length;
           return (

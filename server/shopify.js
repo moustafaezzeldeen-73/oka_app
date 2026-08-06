@@ -587,3 +587,156 @@ export async function fetchAdminCatalogue(localIds) {
 
   return { cats, products };
 }
+
+/* ── Checkout totals, addresses, wishlist ───────────────────────────────── */
+
+const DRAFT_CALCULATE = `
+  mutation OkaCalculate($input: DraftOrderInput!) {
+    draftOrderCalculate(input: $input) {
+      calculatedDraftOrder {
+        subtotalPriceSet { shopMoney { amount } }
+        totalShippingPriceSet { shopMoney { amount } }
+        totalDiscountsSet { shopMoney { amount } }
+        totalTaxSet { shopMoney { amount } }
+        totalPriceSet { shopMoney { amount } }
+        appliedDiscount { title value valueType }
+      }
+      userErrors { field message }
+    }
+  }
+`;
+
+/**
+ * Asks Shopify what this basket actually costs.
+ *
+ * Shipping tiers and discount codes were being computed in the app from
+ * hardcoded tables, so the total a shopper agreed to could differ from what
+ * the store charged. Shopify is the authority on both; this returns its
+ * numbers, and the caller falls back to the local estimate only if the call
+ * fails outright.
+ */
+export async function calculateTotals({ items = [], customer = {}, shipping, discountCode }) {
+  const lineItems = items
+    .map((it) =>
+      it.variantId
+        ? { variantId: it.variantId, quantity: it.quantity }
+        : {
+            title: it.title || it.id,
+            quantity: it.quantity,
+            originalUnitPrice: String(it.price ?? 0),
+          },
+    )
+    .filter((l) => l.quantity > 0);
+
+  if (!lineItems.length) throw new Error('no line items to calculate');
+
+  const phone = normalizePhone(customer.phone);
+  const input = {
+    lineItems,
+    ...(customer.email ? { email: customer.email } : {}),
+    shippingAddress: {
+      address1: customer.street || '',
+      city: customer.city || '',
+      countryCode: 'EG',
+      ...(phone ? { phone } : {}),
+    },
+    ...(shipping != null
+      ? { shippingLine: { title: 'Delivery', priceWithCurrency: { amount: String(shipping), currencyCode: 'EGP' } } }
+      : {}),
+    ...(discountCode ? { appliedDiscount: { code: discountCode } } : {}),
+  };
+
+  const data = await adminGraphql(DRAFT_CALCULATE, { input });
+  const { calculatedDraftOrder: c, userErrors } = data.draftOrderCalculate;
+  if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join('; '));
+
+  const money = (node) => Math.round(Number(node?.shopMoney?.amount ?? 0));
+  return {
+    subtotal: money(c.subtotalPriceSet),
+    shipping: money(c.totalShippingPriceSet),
+    discount: money(c.totalDiscountsSet),
+    tax: money(c.totalTaxSet),
+    total: money(c.totalPriceSet),
+    discountTitle: c.appliedDiscount?.title ?? null,
+    discountApplied: Boolean(c.appliedDiscount),
+  };
+}
+
+const ADDRESS_CREATE = `
+  mutation OkaAddressCreate($customerId: ID!, $address: MailingAddressInput!) {
+    customerAddressCreate(customerId: $customerId, address: $address) {
+      customerAddress { id }
+      userErrors { field message }
+    }
+  }
+`;
+
+/** Saves a new address onto the customer's Shopify record. */
+export async function createCustomerAddress(identifier, addr) {
+  const customer = await findCustomerOrders(identifier);
+  if (!customer) throw new Error('customer not found');
+
+  const [firstName, ...rest] = String(addr.name || customer.name || '').trim().split(/\s+/);
+  const data = await adminGraphql(ADDRESS_CREATE, {
+    customerId: customer.id,
+    address: {
+      firstName: firstName || 'OKA',
+      lastName: rest.join(' ') || 'Customer',
+      address1: addr.street || '',
+      address2: addr.building || '',
+      city: addr.city || '',
+      countryCode: 'EG',
+      ...(normalizePhone(addr.phone) ? { phone: normalizePhone(addr.phone) } : {}),
+    },
+  });
+  const { customerAddress, userErrors } = data.customerAddressCreate;
+  if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join('; '));
+  return { id: customerAddress?.id ?? null };
+}
+
+const CUSTOMER_METAFIELD = `
+  query OkaCustomerMeta($q: String!) {
+    customers(first: 1, query: $q) {
+      edges { node { id metafield(namespace: "oka", key: "wishlist") { value } } }
+    }
+  }
+`;
+
+/** The wishlist, kept on the customer so it survives a reinstall. */
+export async function getWishlist(identifier) {
+  const isEmail = String(identifier).includes('@');
+  const data = await adminGraphql(CUSTOMER_METAFIELD, {
+    q: isEmail ? `email:${identifier}` : `phone:${identifier}`,
+  });
+  const node = data.customers.edges[0]?.node;
+  if (!node) return { ids: [] };
+  try {
+    return { ids: JSON.parse(node.metafield?.value ?? '[]') };
+  } catch {
+    return { ids: [] };
+  }
+}
+
+export async function setWishlist(identifier, ids) {
+  const isEmail = String(identifier).includes('@');
+  const data = await adminGraphql(CUSTOMER_METAFIELD, {
+    q: isEmail ? `email:${identifier}` : `phone:${identifier}`,
+  });
+  const node = data.customers.edges[0]?.node;
+  if (!node) throw new Error('customer not found');
+
+  const res = await adminGraphql(SET_REDEEMED.replace('OkaSetRedeemed', 'OkaSetWishlist'), {
+    metafields: [
+      {
+        ownerId: node.id,
+        namespace: 'oka',
+        key: 'wishlist',
+        type: 'json',
+        value: JSON.stringify(ids ?? []),
+      },
+    ],
+  });
+  const errs = res.metafieldsSet.userErrors;
+  if (errs?.length) throw new Error(errs.map((e) => e.message).join('; '));
+  return { ok: true };
+}

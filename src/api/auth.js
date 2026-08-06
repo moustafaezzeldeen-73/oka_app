@@ -65,3 +65,25 @@ export function editShopifyOrder(orderName, lines, token) {
     body: { lines },
   });
 }
+
+/** Saves a new address onto the signed-in customer's Shopify record. */
+export function saveCustomerAddress(address, token) {
+  return call('/customer/addresses', { method: 'POST', token, body: { address } });
+}
+
+/** Wishlist, stored on the customer so it survives a reinstall. */
+export function fetchWishlist(token) {
+  return call('/customer/wishlist', { token });
+}
+
+export function saveWishlist(ids, token) {
+  return call('/customer/wishlist', { method: 'POST', token, body: { ids } });
+}
+
+/**
+ * What the basket actually costs, according to Shopify — shipping tiers and
+ * discount codes included, rather than the app's local estimate.
+ */
+export function calculateCheckout(payload) {
+  return call('/checkout/calculate', { method: 'POST', body: payload });
+}

@@ -4,6 +4,20 @@ import { createCart, setCartLines } from './api/shopify';
 import { hasStorefront } from './api/config';
 import { useStore } from './store';
 
+/*
+ * NOTE — inert on this store.
+ *
+ * Cart mirroring runs on the Storefront API, because Shopify's Cart API is the
+ * only thing that produces a cart the store's own abandoned-cart flows can
+ * see; the Admin API has no equivalent. This store's app is a Partner app with
+ * no Storefront token, so hasStorefront() is false and this hook does nothing.
+ *
+ * It is kept rather than deleted because it starts working the moment a
+ * Storefront token is configured — see the README. Until then the cart is
+ * local to the device, and the order created at checkout is what reaches
+ * Shopify.
+ */
+
 /**
  * Mirrors the local cart into a Shopify cart.
  *

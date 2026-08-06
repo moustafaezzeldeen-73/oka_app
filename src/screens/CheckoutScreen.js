@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -12,6 +12,7 @@ import { Divider, Img, Press, Txt } from '../components/ui';
 import { Cta, ScreenHeader } from '../components/parts';
 import { ChevronRight, MastercardMark } from '../components/Icons';
 import { submitOrder } from '../api/orders';
+import { calculateCheckout } from '../api/auth';
 
 export default function CheckoutScreen() {
   const { state } = useStore();
@@ -35,6 +36,52 @@ export default function CheckoutScreen() {
       STR[d.lang].street,
     city: state.newAddr?.city || state.customer?.address?.city || d.t(state.city),
   };
+
+  /**
+   * Shipping tiers and discount codes were computed from hardcoded tables, so
+   * the total a shopper agreed to could differ from what Shopify charged.
+   * Shopify is asked for the real figures; the local estimate is only a
+   * placeholder until they arrive, and the fallback if the call fails.
+   */
+  const [quote, setQuote] = useState(null);
+  const [quoteError, setQuoteError] = useState(false);
+
+  const lineItems = d.cartEntries.map((ce) => ({
+    id: ce.id,
+    variantId: ce.product.variantId,
+    quantity: ce.qty,
+    price: ce.product.price,
+    title: ce.product.titleEn,
+  }));
+
+  const quoteKey = JSON.stringify([lineItems, state.city, state.discountApplied, state.discountCode]);
+
+  const loadQuote = useCallback(async () => {
+    if (!lineItems.length) return;
+    try {
+      const q = await calculateCheckout({
+        items: lineItems,
+        customer: { street: buyer.street, city: buyer.city, phone: buyer.phone, email: buyer.email },
+        shipping: d.shippingRaw,
+        discountCode: state.discountApplied ? state.discountCode : null,
+      });
+      setQuote(q);
+      setQuoteError(false);
+    } catch {
+      setQuote(null);
+      setQuoteError(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quoteKey]);
+
+  useEffect(() => {
+    loadQuote();
+  }, [loadQuote]);
+
+  /** Shopify's number when we have it, the local estimate until then. */
+  const totalRaw = quote?.total ?? d.totalRaw;
+  const shippingRaw = quote?.shipping ?? d.shippingRaw;
+  const totalLabel = d.fmtPrice(totalRaw);
 
   const hero = d.cartEntries[0];
   const payOptions = [
@@ -64,10 +111,10 @@ export default function CheckoutScreen() {
         city: state.city,
         paymentMethod: state.paymentMethod,
         discountCode: state.discountApplied ? state.discountCode : null,
-        subtotal: d.subtotalRaw,
-        shipping: d.shippingRaw,
-        discount: d.discountRaw,
-        total: d.totalRaw,
+        subtotal: quote?.subtotal ?? d.subtotalRaw,
+        shipping: shippingRaw,
+        discount: quote?.discount ?? d.discountRaw,
+        total: totalRaw,
         customer: {
           name: buyer.name,
           email: buyer.email,
@@ -82,7 +129,7 @@ export default function CheckoutScreen() {
         number: result.orderNumber,
         shopifyOrderId: result.shopifyOrderId ?? null,
         trackingNumber: result.trackingNumber ?? null,
-        total: d.fmtPrice(d.totalRaw),
+        total: totalLabel,
         cityDays: d.cityDays[state.city],
         itemCount: d.cartCount,
         heroImg: hero ? hero.product.img : null,
@@ -108,7 +155,7 @@ export default function CheckoutScreen() {
               {hero ? d.title(hero.product) : ''}
             </Txt>
             <Txt isRtl={d.isRtl} style={styles.heroTotal}>
-              {d.fmtPrice(d.totalRaw)}
+              {totalLabel}
             </Txt>
           </View>
           <View style={chevronFlip(d.isRtl)}>
@@ -188,7 +235,7 @@ export default function CheckoutScreen() {
             ))}
             {state.paymentMethod === 'cod' && (
               <Txt isRtl={d.isRtl} style={styles.codNote}>
-                {`${d.t('codNote')}: ${d.fmtPrice(d.totalRaw)}`}
+                {`${d.t('codNote')}: ${totalLabel}`}
               </Txt>
             )}
           </View>
@@ -198,8 +245,15 @@ export default function CheckoutScreen() {
 
         <Field label={d.t('total')} isRtl={d.isRtl} style={{ paddingBottom: 110 }}>
           <Txt isRtl={d.isRtl} style={styles.arrivesTitle}>
-            {d.fmtPrice(d.totalRaw)}
+            {totalLabel}
           </Txt>
+          {quoteError ? (
+            <Txt isRtl={d.isRtl} style={styles.quoteWarn}>
+              {d.isRtl
+                ? 'ده تقدير مبدئي — ما قدرناش نتأكد من الإجمالي مع شوبيفاي.'
+                : 'Estimated — we could not confirm this total with Shopify.'}
+            </Txt>
+          ) : null}
         </Field>
       </ScrollView>
 
@@ -287,6 +341,7 @@ const styles = StyleSheet.create({
   fawry: { fontSize: 8.5, fontWeight: W.heavy, color: '#e8b100' },
   meeza: { fontSize: 8.5, fontWeight: W.heavy, color: '#0a7a3c' },
   codNote: { fontSize: 12.5, color: C.ink, lineHeight: 19 },
+  quoteWarn: { fontSize: 11.5, color: '#8c1d18', lineHeight: 17, marginTop: 6 },
 
   placeBar: {
     position: 'absolute',

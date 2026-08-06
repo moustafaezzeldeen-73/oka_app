@@ -1,5 +1,5 @@
-import React from 'react';
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { STR } from '../data';
@@ -11,12 +11,96 @@ import { FadeIn } from '../components/anim';
 import { Press, Txt } from '../components/ui';
 import { Cta, ScreenHeader } from '../components/parts';
 import { Crosshair, Pin } from '../components/Icons';
+import { saveCustomerAddress } from '../api/auth';
 
 export default function AddAddressScreen() {
   const { state } = useStore();
   const actions = useActions();
   const d = useDerived();
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
+  const [locating, setLocating] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  /**
+   * Real GPS. This used to fill in a hardcoded Dokki address regardless of
+   * where the phone actually was, which looked convincing and was never true.
+   */
+  const locate = async () => {
+    if (locating) return;
+    setLocating(true);
+    try {
+      const Location = await import('expo-location');
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          d.isRtl ? 'إذن الموقع مرفوض' : 'Location permission denied',
+          d.isRtl
+            ? 'فعّل إذن الموقع من إعدادات الجهاز عشان نملأ العنوان تلقائياً.'
+            : 'Enable location access in Settings to fill the address automatically.',
+        );
+        return;
+      }
+
+      const pos = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+      const [place] = await Location.reverseGeocodeAsync(pos.coords);
+      if (!place) throw new Error('no address found for this location');
+
+      actions.findMyLocation({
+        street: [place.street, place.name].filter(Boolean).join(' ') || place.district || '',
+        building: '',
+        city: [place.city ?? place.subregion, place.region].filter(Boolean).join(', '),
+        landmark: place.district ?? '',
+        phone: state.customer?.phone ?? state.newAddr?.phone ?? '',
+      });
+    } catch (err) {
+      Alert.alert(
+        d.isRtl ? 'تعذّر تحديد الموقع' : 'Could not find your location',
+        String(err.message ?? err),
+      );
+    } finally {
+      setLocating(false);
+    }
+  };
+
+  /** Saves onto the customer's Shopify record; the form used to go nowhere. */
+  const save = async () => {
+    if (saving) return;
+    const addr = state.newAddr ?? {};
+    if (!addr.street || !addr.city) {
+      Alert.alert(
+        d.isRtl ? 'ناقص بيانات' : 'Missing details',
+        d.isRtl ? 'اكتب الشارع والمدينة على الأقل.' : 'Street and city are required.',
+      );
+      return;
+    }
+    if (!state.session?.token) {
+      Alert.alert(
+        d.isRtl ? 'سجّل دخولك الأول' : 'Sign in first',
+        d.isRtl
+          ? 'لازم تسجل دخولك عشان يتحفظ العنوان على حسابك.'
+          : 'Sign in so the address can be saved to your account.',
+      );
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await saveCustomerAddress(
+        { ...addr, name: addr.name || state.customer?.name },
+        state.session.token,
+      );
+      actions.goTo('addresses');
+    } catch (err) {
+      Alert.alert(
+        d.isRtl ? 'تعذّر حفظ العنوان' : 'Could not save the address',
+        String(err.message ?? err),
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const fields = [
     { key: 'street', label: d.isRtl ? 'الشارع' : 'Street address', ph: d.isRtl ? '١٤ شارع النصر' : '14 Al Nasr St' },
@@ -66,19 +150,17 @@ export default function AddAddressScreen() {
           <Press
             onPress={() => {
               selectionTick();
-              actions.findMyLocation({
-                street: d.isRtl ? '٩ شارع الثورة، الدقي' : '9 Al Thawra St, Dokki',
-                building: d.isRtl ? 'عمارة ٤، الدور ٣' : 'Building 4, Floor 3',
-                city: d.isRtl ? 'الجيزة' : 'Giza',
-                landmark: '',
-                phone: STR[d.lang].phone,
-              });
+              locate();
             }}
             activeScale={0.96}
             style={[styles.locBtn, rowDir, insetEnd(d.isRtl, 12)]}
           >
-            <Crosshair size={15} />
-            <Txt style={styles.locTxt}>{d.isRtl ? 'تحديد موقعي' : 'Find my location'}</Txt>
+            {locating ? <ActivityIndicator size="small" color={C.ink} /> : <Crosshair size={15} />}
+            <Txt style={styles.locTxt}>
+              {locating
+                ? d.isRtl ? 'بنحدد موقعك…' : 'Locating…'
+                : d.isRtl ? 'تحديد موقعي' : 'Find my location'}
+            </Txt>
           </Press>
         </View>
 
@@ -136,11 +218,13 @@ export default function AddAddressScreen() {
           </View>
 
           <Cta
-            label={d.isRtl ? 'حفظ العنوان' : 'Save address'}
-            onPress={() => actions.goTo('addresses')}
+            label={saving ? '' : d.isRtl ? 'حفظ العنوان' : 'Save address'}
+            onPress={save}
             style={{ marginTop: 6 }}
             textStyle={{ fontWeight: W.bold }}
-          />
+          >
+            {saving ? <ActivityIndicator color="#ffffff" /> : undefined}
+          </Cta>
         </View>
       </ScrollView>
     </FadeIn>

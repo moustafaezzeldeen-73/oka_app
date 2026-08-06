@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
-import { CATS } from '../data';
 import { useActions, useDerived, useStore } from '../store';
 import { C, D, W } from '../theme';
 import { FadeIn } from '../components/anim';
@@ -12,7 +11,7 @@ import { editShopifyOrder } from '../api/auth';
 
 /** The "Edit Order" bottom sheet: scrim + panel, both fading in as in the web build. */
 export default function EditOrderSheet() {
-  const { state, products } = useStore();
+  const { state, products, cats } = useStore();
   const actions = useActions();
   const d = useDerived();
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
@@ -118,7 +117,7 @@ export default function EditOrderSheet() {
             {d.isRtl ? 'كل المنتجات' : 'ALL PRODUCTS'}
           </Txt>
 
-          {CATS.map((c) => {
+          {cats.map((c) => {
             const group = products.filter((p) => p.cat === c.id);
             if (!group.length) return null;
             return (

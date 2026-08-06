@@ -1,14 +1,20 @@
 import express from 'express';
 
 import {
+  calculateTotals,
   cancelOrder,
+  createCustomerAddress,
   createOrder,
   editOrder,
+  fetchAdminCatalogue,
+  findCustomerAddresses,
   findCustomerLoyalty,
   findCustomerOrders,
   findOrder,
+  getWishlist,
   orderIdByName,
   setRedeemed,
+  setWishlist,
 } from './shopify.js';
 import {
   findDeliveriesByPhone,
@@ -62,8 +68,6 @@ function shopifyEvents(order, lang) {
   }
   return rows;
 }
-import { fetchAdminCatalogue, findCustomerAddresses } from './shopify.js';
-
 /**
  * OKA order service.
  *
@@ -268,6 +272,55 @@ app.get('/customer/addresses', async (req, res) => {
   try {
     const addresses = await findCustomerAddresses(identifier);
     return res.json({ addresses });
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/**
+ * What this basket actually costs, according to Shopify — shipping tiers and
+ * discount codes included. The app used to compute both from hardcoded tables.
+ */
+app.post('/checkout/calculate', async (req, res) => {
+  try {
+    const totals = await calculateTotals(req.body ?? {});
+    return res.json(totals);
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/** Saves a new address onto the signed-in customer's Shopify record. */
+app.post('/customer/addresses', async (req, res) => {
+  const s = session(req);
+  const identifier = s?.identifier ?? req.body?.identifier;
+  if (!identifier) return res.status(401).json({ error: 'not signed in' });
+  try {
+    const result = await createCustomerAddress(identifier, req.body?.address ?? {});
+    return res.json(result);
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/** Wishlist, stored on the customer so it survives a reinstall. */
+app.get('/customer/wishlist', async (req, res) => {
+  const s = session(req);
+  const identifier = s?.identifier ?? req.query.identifier;
+  if (!identifier) return res.status(401).json({ error: 'not signed in' });
+  try {
+    return res.json(await getWishlist(identifier));
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+app.post('/customer/wishlist', async (req, res) => {
+  const s = session(req);
+  const identifier = s?.identifier ?? req.body?.identifier;
+  if (!identifier) return res.status(401).json({ error: 'not signed in' });
+  try {
+    return res.json(await setWishlist(identifier, req.body?.ids ?? []));
   } catch (err) {
     return fail(res, err);
   }
