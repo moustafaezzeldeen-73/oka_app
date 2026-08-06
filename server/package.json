@@ -6,8 +6,8 @@
   "description": "Credential-holding backend for the OKA app: native checkout, order status, loyalty.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js"
+    "start": "node --env-file=.env index.js",
+    "dev": "node --watch --env-file=.env index.js"
   },
   "dependencies": {
     "express": "^4.21.2"
