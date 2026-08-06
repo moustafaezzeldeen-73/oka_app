@@ -19,53 +19,86 @@ export default function OrdersScreen() {
   const d = useDerived();
 
   /**
-   * A signed-in customer sees their real Shopify orders; otherwise the screen
-   * falls back to the order just placed in this session.
+   * One list, whatever the source. Real Shopify orders for a signed-in
+   * customer, plus the order placed in this session if it is not already
+   * among them. The list is always the entry point — the screen used to jump
+   * straight into a detail view whenever exactly one order existed, which is
+   * why no list ever appeared for a guest.
    */
-  const orders = state.remoteOrders ?? [];
-  // The list is always the entry point for real orders — one order still gets
-  // picked from a list, so the flow does not change shape at two orders.
-  const remote = orders.find((o) => o.name === state.selectedOrderName) ?? null;
-  const order = remote
+  const remoteOrders = state.remoteOrders ?? [];
+  const signedIn = Boolean(state.session?.token);
+
+  const localRow =
+    state.order && !remoteOrders.some((o) => o.name === state.order.number)
+      ? {
+          name: state.order.number,
+          total: null,
+          totalLabel: state.order.total,
+          items: Object.entries(state.order.items ?? {}).map(([id, qty]) => {
+            const p = d.byId(id);
+            return {
+              id,
+              title: p ? d.title(p) : id,
+              quantity: qty,
+              price: p?.price ?? 0,
+              image: null,
+              localImg: p?.img ?? null,
+              variantId: p?.variantId ?? null,
+            };
+          }),
+          cancelled: state.order.status === 'cancelled',
+          local: true,
+          shipTo: null,
+          hasAwb: Boolean(state.order.trackingNumber),
+          trackingNumber: state.order.trackingNumber ?? null,
+          city: state.order.cityDays ?? '',
+          stateLabel: null,
+          step: 0,
+        }
+      : null;
+
+  const listRows = [...remoteOrders, ...(localRow ? [localRow] : [])];
+  const selected = listRows.find((o) => o.name === state.selectedOrderName) ?? null;
+  const remote = selected && !selected.local ? selected : null;
+
+  const order = selected
     ? {
-        number: remote.name,
-        total: d.fmtPrice(Math.round(remote.total)),
-        cityDays: remote.city ?? '',
-        trackingNumber: remote.trackingNumber,
-        heroTitle: remote.items?.[0]?.title ?? '',
-        heroImg: remote.items?.[0]?.image ? { uri: remote.items[0].image } : null,
-        items: remote.items,
-        cancelled: remote.cancelled,
-        shipTo: remote.shipTo ?? null,
-        hasAwb: remote.hasAwb,
-        hasDelivery: remote.hasDelivery,
+        number: selected.name,
+        total: selected.totalLabel ?? d.fmtPrice(Math.round(selected.total ?? 0)),
+        cityDays: selected.city ?? '',
+        trackingNumber: selected.trackingNumber,
+        heroTitle: selected.items?.[0]?.title ?? '',
+        heroImg: selected.items?.[0]?.image
+          ? { uri: selected.items[0].image }
+          : selected.items?.[0]?.localImg ?? null,
+        items: selected.items,
+        cancelled: selected.cancelled,
+        shipTo: selected.shipTo ?? null,
+        hasAwb: selected.hasAwb,
+        local: Boolean(selected.local),
       }
-    : state.order;
+    : null;
+
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
+
+  /**
+   * A local order exists only on this device — checkout never reached Shopify,
+   * so there is nothing on the store to edit or cancel.
+   */
+  const isLocalOnly = Boolean(order?.local || String(order?.number ?? '').startsWith('OKA-'));
 
   /**
    * Every line in the order, not just the hero item. A real order (`remote`)
    * already carries full line items from Shopify; a locally-placed order only
    * has {productId: qty}, resolved back to the catalogue here.
    */
-  const orderItems = remote
-    ? (remote.items ?? []).map((it) => ({
-        key: it.id,
-        title: it.title,
-        qty: it.quantity,
-        price: d.fmtPrice(Math.round(it.price * it.quantity)),
-        img: it.image ? { uri: it.image } : null,
-      }))
-    : Object.entries(state.order?.items ?? {}).map(([id, qty]) => {
-        const p = d.byId(id);
-        return {
-          key: id,
-          title: p ? d.title(p) : id,
-          qty,
-          price: p ? d.fmtPrice(p.price * qty) : '',
-          img: p?.img,
-        };
-      });
+  const orderItems = (selected?.items ?? []).map((it) => ({
+    key: it.id,
+    title: it.title,
+    qty: it.quantity,
+    price: d.fmtPrice(Math.round((it.price ?? 0) * it.quantity)),
+    img: it.image ? { uri: it.image } : it.localImg ?? null,
+  }));
 
   /** Live Bosta/Shopify status, when the order service is reachable. */
   const [live, setLive] = useState(null);
@@ -94,7 +127,11 @@ export default function OrdersScreen() {
         // fall through to the single-order path
       }
     }
-    if (!order) return;
+    // A local-only order has nothing on Shopify or Bosta to ask about.
+    if (!order || order.local) {
+      setLive(null);
+      return;
+    }
     const r = await fetchOrderStatus({
       orderNumber: order.number,
       trackingNumber: order.trackingNumber,
@@ -168,12 +205,27 @@ export default function OrdersScreen() {
             {d.t('ordersTitle')}
           </Txt>
 
-          {orders.length === 0 ? (
-            <Txt center style={styles.empty}>
-              {d.t('noOrders')}
-            </Txt>
+          {listRows.length === 0 ? (
+            <>
+              <Txt center style={styles.empty}>
+                {d.t('noOrders')}
+              </Txt>
+              {!signedIn ? (
+                <Press
+                  onPress={() => actions.goTo('signIn')}
+                  activeScale={0.99}
+                  style={styles.notice}
+                >
+                  <Txt isRtl={d.isRtl} style={styles.noticeTxt}>
+                    {d.isRtl
+                      ? 'سجّل دخولك عشان تشوف طلباتك الحقيقية وتتبع الشحن.'
+                      : 'Sign in to see your real orders and track their delivery.'}
+                  </Txt>
+                </Press>
+              ) : null}
+            </>
           ) : (
-            orders.map((o) => (
+            listRows.map((o) => (
               <Press
                 key={o.name}
                 onPress={() => actions.openOrder(o.name)}
@@ -183,12 +235,16 @@ export default function OrdersScreen() {
                 <View style={styles.orderThumb}>
                   {o.items?.[0]?.image ? (
                     <Img source={{ uri: o.items[0].image }} contentFit="contain" style={styles.fill} />
+                  ) : o.items?.[0]?.localImg ? (
+                    <Img source={o.items[0].localImg} contentFit="contain" style={styles.fill} />
                   ) : null}
                 </View>
                 <View style={{ flex: 1, minWidth: 0 }}>
                   <View style={[styles.orderTop, rowDir]}>
                     <Txt style={styles.orderName}>{o.name}</Txt>
-                    <Txt style={styles.orderTotal}>{d.fmtPrice(Math.round(o.total))}</Txt>
+                    <Txt style={styles.orderTotal}>
+                      {o.totalLabel ?? d.fmtPrice(Math.round(o.total ?? 0))}
+                    </Txt>
                   </View>
                   <Txt isRtl={d.isRtl} style={styles.orderMeta} numberOfLines={1}>
                     {(o.items ?? []).length > 1
@@ -206,7 +262,9 @@ export default function OrdersScreen() {
                   >
                     {o.cancelled
                       ? d.isRtl ? 'ملغي' : 'Cancelled'
-                      : o.stateLabel ?? (d.isRtl ? 'قيد المعالجة' : 'Processing')}
+                      : o.local
+                        ? d.isRtl ? 'محلي — لم يصل لشوبيفاي' : 'Local — never reached Shopify'
+                        : o.stateLabel ?? (d.isRtl ? 'قيد المعالجة' : 'Processing')}
                   </Txt>
                 </View>
                 <View style={chevronFlip(d.isRtl)}>
@@ -244,15 +302,34 @@ export default function OrdersScreen() {
   // Only meaningful for a real Shopify order; a locally-placed one never has
   // an AWB to report on.
   const awaitingAwb = Boolean(remote) && !order.hasAwb;
+  const localNoTracking = Boolean(order?.local);
 
   return (
     <FadeIn style={styles.root}>
       <ScrollView showsVerticalScrollIndicator={false} refreshControl={control}>
         <ScreenHeader
           title={d.isRtl ? 'تفاصيل الطلب' : 'Order Details'}
-          onBack={() => (orders.length ? actions.backToOrderList() : actions.goTab('home'))}
+          onBack={actions.backToOrderList}
           isRtl={d.isRtl}
         />
+
+        {!signedIn || isLocalOnly ? (
+          <Press
+            onPress={() => actions.goTo('signIn')}
+            activeScale={0.99}
+            style={styles.notice}
+          >
+            <Txt isRtl={d.isRtl} style={styles.noticeTxt}>
+              {!signedIn
+                ? d.isRtl
+                  ? 'مش مسجل دخول — ده طلب الجلسة الحالية بس. سجّل دخولك عشان تشوف طلباتك الحقيقية وتقدر تعدّل أو تلغي.'
+                  : "You're not signed in — this is this session's order only. Sign in to see your real orders and to edit or cancel them."
+                : d.isRtl
+                  ? 'الطلب ده اتعمل محلياً وما وصلش لشوبيفاي، فمفيش حاجة تتعدّل أو تتلغي عليه.'
+                  : 'This order was created locally and never reached Shopify, so there is nothing on the store to edit or cancel.'}
+            </Txt>
+          </Press>
+        ) : null}
 
         <View style={[styles.heroRow, rowDir]}>
           <View style={styles.heroImg}>
@@ -336,7 +413,15 @@ export default function OrdersScreen() {
           ))}
         </View>
 
-        {awaitingAwb ? (
+        {localNoTracking ? (
+          <View style={styles.awaiting}>
+            <Txt isRtl={d.isRtl} style={styles.awaitingTxt}>
+              {d.isRtl
+                ? 'الطلب ده محلي ومش موجود على شوبيفاي، فمفيش تحديثات شحن ليه.'
+                : 'This order is local and does not exist on Shopify, so there is no shipping to track.'}
+            </Txt>
+          </View>
+        ) : awaitingAwb ? (
           <View style={styles.awaiting}>
             <Txt isRtl={d.isRtl} style={styles.awaitingTxt}>
               {d.isRtl
@@ -429,15 +514,36 @@ export default function OrdersScreen() {
 
         <View style={[styles.actions, rowDir]}>
           <Press
-            onPress={() => actions.editOrder(editSeed())}
+            onPress={() =>
+              isLocalOnly || !signedIn
+                ? Alert.alert(
+                    d.isRtl ? 'غير متاح' : 'Not available',
+                    d.isRtl
+                      ? 'لازم تسجل دخولك وتفتح طلب حقيقي من شوبيفاي عشان تعدّله.'
+                      : 'Sign in and open a real Shopify order to edit it.',
+                  )
+                : actions.editOrder(editSeed())
+            }
             activeBg="rgba(0,0,0,0.04)"
-            style={styles.editBtn}
+            style={[styles.editBtn, (isLocalOnly || !signedIn) && styles.disabled]}
           >
             <Txt center style={styles.editTxt}>
               {d.isRtl ? 'تعديل' : 'Edit'}
             </Txt>
           </Press>
-          <Press onPress={doCancel} style={styles.cancelBtn}>
+          <Press
+            onPress={() =>
+              isLocalOnly || !signedIn
+                ? Alert.alert(
+                    d.isRtl ? 'غير متاح' : 'Not available',
+                    d.isRtl
+                      ? 'لازم تسجل دخولك وتفتح طلب حقيقي من شوبيفاي عشان تلغيه.'
+                      : 'Sign in and open a real Shopify order to cancel it.',
+                  )
+                : doCancel()
+            }
+            style={[styles.cancelBtn, (isLocalOnly || !signedIn) && styles.disabled]}
+          >
             <Txt center style={styles.cancelTxt}>
               {d.isRtl ? 'إلغاء الطلب' : 'Cancel Order'}
             </Txt>
@@ -493,6 +599,18 @@ const styles = StyleSheet.create({
   orderTotal: { fontSize: 13.5, fontWeight: W.bold, color: C.ink },
   orderMeta: { fontSize: 12.5, color: C.inkSoft, marginTop: 3 },
   orderState: { fontSize: 12, fontWeight: W.bold, marginTop: 4 },
+
+  disabled: { opacity: 0.45 },
+  notice: {
+    marginHorizontal: 22,
+    marginBottom: 16,
+    padding: 14,
+    borderRadius: 16,
+    backgroundColor: 'rgba(179,38,30,0.07)',
+    borderWidth: 1,
+    borderColor: 'rgba(179,38,30,0.25)',
+  },
+  noticeTxt: { fontSize: 12.5, lineHeight: 19, color: '#8c1d18', fontWeight: W.semibold },
 
   awaiting: {
     marginHorizontal: 22,
