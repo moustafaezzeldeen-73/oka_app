@@ -691,7 +691,7 @@ export async function calculateTotals({ items = [], customer = {}, shipping, dis
 const ADDRESS_CREATE = `
   mutation OkaAddressCreate($customerId: ID!, $address: MailingAddressInput!, $setAsDefault: Boolean) {
     customerAddressCreate(customerId: $customerId, address: $address, setAsDefault: $setAsDefault) {
-      customerAddress { id }
+      address { id }
       userErrors { field message }
     }
   }
@@ -720,9 +720,9 @@ export async function createCustomerAddress(identifier, addr) {
       ...(normalizePhone(addr.phone) ? { phone: normalizePhone(addr.phone) } : {}),
     },
   });
-  const { customerAddress, userErrors } = data.customerAddressCreate;
+  const { address: created, userErrors } = data.customerAddressCreate;
   if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join('; '));
-  return { id: customerAddress?.id ?? null };
+  return { id: created?.id ?? null };
 }
 
 const ADDRESS_SET_DEFAULT = `

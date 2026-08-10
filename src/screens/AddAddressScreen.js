@@ -47,8 +47,15 @@ export default function AddAddressScreen() {
       const [place] = await Location.reverseGeocodeAsync(pos.coords);
       if (!place) throw new Error('no address found for this location');
 
+      // iOS reverse-geocoding sets `name` to a repeat of `street` whenever
+      // there's no distinct point of interest at the pin — joining them
+      // unconditionally produced "Kornish Al Nil Street Kornish Al Nil Street".
+      const streetParts = [place.street, place.name].filter(
+        (s, i, arr) => s && arr.findIndex((p) => p?.toLowerCase() === s.toLowerCase()) === i,
+      );
+
       actions.findMyLocation({
-        street: [place.street, place.name].filter(Boolean).join(' ') || place.district || '',
+        street: streetParts.join(' ') || place.district || '',
         building: '',
         city: [place.city ?? place.subregion, place.region].filter(Boolean).join(', '),
         landmark: place.district ?? '',
