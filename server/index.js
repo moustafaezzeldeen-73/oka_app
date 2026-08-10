@@ -19,7 +19,6 @@ import {
 } from './shopify.js';
 import {
   actionNeeded,
-  findDeliveriesByPhone,
   findDeliveryByOrderName,
   findDeliveryByTracking,
   pingBosta,
@@ -180,28 +179,20 @@ app.get('/customer/orders', async (req, res) => {
     const customer = await findCustomerOrders(identifier);
     if (!customer) return res.json({ customer: null, orders: [] });
 
-    const deliveries = await findDeliveriesByPhone(customer.phone).catch(() => []);
-    const byRef = new Map();
-    for (const d of deliveries) {
-      if (d.businessReference) byRef.set(String(d.businessReference).replace(/^#/, ''), d);
-      if (d.trackingNumber) byRef.set(d.trackingNumber, d);
-    }
-
     /**
-     * Each order gets its own delivery or none at all.
-     *
-     * The only trustworthy links are the AWB Shopify recorded on the
-     * fulfilment, and an exact businessReference match. Matching on the
-     * customer's phone would attach an arbitrary one of their deliveries to
-     * every one of their orders — with several orders in flight that is
-     * guaranteed to show the wrong shipment somewhere, which is worse than
-     * showing none.
+     * Each order's own delivery, looked up per order rather than pulled from
+     * one batch search under the account's phone number. A shipment's Bosta
+     * record can carry a different phone than the account does — the address
+     * form doesn't require typing the account's own number — so searching
+     * only by account phone silently missed those orders' deliveries
+     * entirely. An exact AWB (from the fulfilment) or businessReference match
+     * is what actually links the two systems; the phone is only a fallback
+     * signal within that per-order search, never the sole one.
      */
-    const orders = customer.orders.map((o) => {
-      const delivery =
-        (o.trackingNumber ? byRef.get(o.trackingNumber) : null) ??
-        byRef.get(String(o.name).replace(/^#/, '')) ??
-        null;
+    const orders = await Promise.all(customer.orders.map(async (o) => {
+      const delivery = o.trackingNumber
+        ? await findDeliveryByTracking(o.trackingNumber).catch(() => null)
+        : await findDeliveryByOrderName(o.name, { phone: o.shipTo?.phone ?? customer.phone }).catch(() => null);
       const code = delivery?.state?.code ?? null;
 
       // One chronological story from both systems, oldest first.
@@ -227,7 +218,7 @@ app.get('/customer/orders', async (req, res) => {
         actionNeeded: actionNeeded(delivery, lang),
         updates: merged,
       };
-    });
+    }));
 
     return res.json({
       customer: { name: customer.name, email: customer.email, phone: customer.phone,

@@ -88,6 +88,7 @@ export async function createOrder(payload) {
   const {
     items = [],
     customer = {},
+    customerId = null,
     shipping = 0,
     discountCode,
     paymentMethod = 'cod',
@@ -125,6 +126,11 @@ export async function createOrder(payload) {
     currency: 'EGP',
     shippingAddress: address,
     billingAddress: address,
+    // Without this, Shopify falls back to matching the order to a customer by
+    // email — which silently misses whenever the shipping form's email/phone
+    // isn't exactly what's on the account, and the order then never shows up
+    // under this customer's order history for the app to find again.
+    ...(customerId ? { customer: { toAssociate: { id: customerId } } } : {}),
     tags: ['oka-app', `lang:${lang}`, `payment:${paymentMethod}`],
     note: paymentMethod === 'cod' ? 'Cash on delivery — collected by courier' : undefined,
     // Every order the app creates is unpaid until the courier collects (COD) or

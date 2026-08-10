@@ -104,16 +104,6 @@ export async function findDeliveryByTracking(trackingNumber) {
   return list.find((d) => d.trackingNumber === trackingNumber) ?? null;
 }
 
-/** Every delivery for a customer's phone number — the staff order view. */
-export async function findDeliveriesByPhone(phone) {
-  if (!phone) return [];
-  const digits = String(phone).replace(/\D/g, '').slice(-10);
-  const list = await search(digits);
-  return list.filter((d) =>
-    String(d.receiver?.phone ?? '').replace(/\D/g, '').endsWith(digits),
-  );
-}
-
 /** Surfaces the real reason a Bosta call failed, for the /health check. */
 export async function pingBosta() {
   try {

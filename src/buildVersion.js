@@ -6,4 +6,4 @@
  * the app. Bump this string with every bundle shipped so it can be checked in
  * one glance on the Account screen instead of guessed at.
  */
-export const BUILD_VERSION = 'oka-v14 — address fix + build footer';
+export const BUILD_VERSION = 'oka-v15 — order-customer link + per-order Bosta lookup';

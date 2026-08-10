@@ -136,6 +136,10 @@ export default function CheckoutScreen() {
         shipping: shippingRaw,
         discount: quote?.discount ?? d.discountRaw,
         total: totalRaw,
+        // Links the order to the signed-in account directly — without this,
+        // Shopify's own email/phone matching can miss and the order never
+        // shows up back in this customer's order history.
+        customerId: state.customer?.id ?? null,
         customer: {
           name: buyer.name,
           email: buyer.email,
