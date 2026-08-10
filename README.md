@@ -133,7 +133,11 @@ npm start
 Then point the app at it with `EXPO_PUBLIC_OKA_SERVICE_URL`.
 
 Admin scopes required: `write_orders`, `read_orders`, `read_customers`,
-`write_customers` (for the redemption metafield), `read_fulfillments`.
+`write_customers`, `read_fulfillments`, and for the store-credit-backed loyalty
+balance: `read_store_credit_accounts`, `read_store_credit_account_transactions`,
+`write_store_credit_account_transactions`. Without the store-credit scopes,
+`/loyalty` and `/loyalty/redeem` fail and the app falls back to its demo
+balance rather than blocking the rest of the app.
 
 ---
 
