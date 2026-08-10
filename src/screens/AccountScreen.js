@@ -13,6 +13,7 @@ import { chevronFlip } from '../rtl';
 import { FadeIn } from '../components/anim';
 import { Press, Txt } from '../components/ui';
 import { ChevronRight } from '../components/Icons';
+import { BUILD_VERSION } from '../buildVersion';
 
 export default function AccountScreen() {
   const { state } = useStore();
@@ -95,6 +96,9 @@ export default function AccountScreen() {
             signOut
           />
         </View>
+        <Txt center style={styles.buildTag}>
+          {BUILD_VERSION}
+        </Txt>
         <View style={{ height: 26 }} />
       </ScrollView>
     </FadeIn>
@@ -179,6 +183,7 @@ const styles = StyleSheet.create({
   },
   rowLabel: { fontSize: 14, fontWeight: W.semibold },
   signOut: { fontWeight: W.bold, color: '#3a3a3c' },
+  buildTag: { fontSize: 11, color: 'rgba(110,110,115,0.55)', marginTop: 18 },
   langVal: { color: C.ink, fontSize: 14, fontWeight: W.semibold },
   track: { width: 46, height: 27, borderRadius: 14, justifyContent: 'center' },
   knob: {
