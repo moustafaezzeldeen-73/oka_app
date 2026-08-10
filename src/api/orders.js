@@ -105,6 +105,7 @@ export async function fetchOrderStatus({ orderNumber, trackingNumber, phone }) {
       courierPhone: json.courierPhone ?? null,
       actionNeeded: json.actionNeeded ?? null,
       updates: Array.isArray(json.updates) ? json.updates : [],
+      bostaError: json.bostaError ?? null,
     };
   } catch {
     return null;

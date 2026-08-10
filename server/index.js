@@ -19,9 +19,10 @@ import {
 } from './shopify.js';
 import {
   actionNeeded,
-  findDeliveriesByPhone,
+  findDeliveriesByOrderNames,
   findDeliveryByOrderName,
   findDeliveryByTracking,
+  getDelivery,
   pingBosta,
   stepFromState,
   toUpdates,
@@ -181,31 +182,47 @@ app.get('/customer/orders', async (req, res) => {
     if (!customer) return res.json({ customer: null, orders: [] });
 
     /**
-     * One cheap pre-fetch — every delivery Bosta has filed under the
-     * account's own phone — covers the common case where that's also the
-     * receiver phone on the shipment. It's a starting point, not the answer:
-     * an order whose shipping form used a different phone won't be in it, so
-     * anything that doesn't match here gets one targeted lookup of its own
-     * below rather than being silently reported as having no delivery.
+     * Bosta failures are reported, not swallowed.
+     *
+     * Every lookup here used to end in `.catch(() => null)`, so an outage, a
+     * bad key or a moved endpoint was indistinguishable from "this order has
+     * no shipment" — the app just showed a short timeline and no courier,
+     * with nothing anywhere saying why. Errors are collected and returned so
+     * the client can say the difference out loud.
      */
-    const batch = await findDeliveriesByPhone(customer.phone).catch(() => []);
-    const byTracking = new Map();
-    const byRef = new Map();
-    for (const d of batch) {
-      if (d.trackingNumber) byTracking.set(d.trackingNumber, d);
-      if (d.businessReference) byRef.set(String(d.businessReference).replace(/^#/, ''), d);
-    }
+    const bostaErrors = [];
+    const note = (err) => {
+      const msg = String(err?.message ?? err);
+      if (!bostaErrors.includes(msg)) bostaErrors.push(msg);
+      return null;
+    };
+
+    /**
+     * Orders with an AWB on their Shopify fulfilment resolve exactly, one
+     * request each. Everything else is matched by `businessReference` in a
+     * single scan of recent deliveries, shared across all of them, rather
+     * than re-walking those pages once per order.
+     */
+    const needRefLookup = customer.orders.filter((o) => !o.trackingNumber).map((o) => o.name);
+    const byRef = needRefLookup.length
+      ? await findDeliveriesByOrderNames(needRefLookup).catch((e) => {
+          note(e);
+          return new Map();
+        })
+      : new Map();
 
     const orders = await Promise.all(customer.orders.map(async (o) => {
-      let delivery =
-        (o.trackingNumber ? byTracking.get(o.trackingNumber) : null) ??
-        byRef.get(String(o.name).replace(/^#/, '')) ??
-        null;
+      let delivery = null;
 
-      if (!delivery) {
-        delivery = o.trackingNumber
-          ? await findDeliveryByTracking(o.trackingNumber).catch(() => null)
-          : await findDeliveryByOrderName(o.name, { phone: o.shipTo?.phone ?? customer.phone }).catch(() => null);
+      if (o.trackingNumber) {
+        delivery = await findDeliveryByTracking(o.trackingNumber).catch(note);
+      } else {
+        const summary = byRef.get(String(o.name).replace(/^#/, '')) ?? null;
+        // The scan returns summaries; the detail record is what carries the
+        // timeline, so it's re-fetched for the orders that actually matched.
+        if (summary?.trackingNumber) {
+          delivery = (await getDelivery(summary.trackingNumber).catch(note)) ?? summary;
+        }
       }
       const code = delivery?.state?.code ?? null;
 
@@ -239,6 +256,9 @@ app.get('/customer/orders', async (req, res) => {
                   address: customer.address },
       orders,
       staff: Boolean(s?.staff),
+      // Present only when a Bosta call actually failed — the app uses it to
+      // say "we couldn't reach the courier" instead of implying no shipment.
+      bostaError: bostaErrors.length ? bostaErrors.join('; ') : null,
     });
   } catch (err) {
     return fail(res, err);
@@ -411,10 +431,16 @@ app.get('/orders/status', async (req, res) => {
       shopifyOrder?.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.number ?? null;
     const knownAwb = tracking ?? awbFromShopify;
 
+    let bostaError = null;
+    const noteErr = (err) => {
+      bostaError = String(err?.message ?? err);
+      return null;
+    };
+
     const delivery = knownAwb
-      ? await findDeliveryByTracking(knownAwb).catch(() => null)
+      ? await findDeliveryByTracking(knownAwb).catch(noteErr)
       : orderName
-        ? await findDeliveryByOrderName(orderName, { phone: req.query.phone }).catch(() => null)
+        ? await findDeliveryByOrderName(orderName).catch(noteErr)
         : null;
 
     const awb = delivery?.trackingNumber ?? knownAwb ?? null;
@@ -433,9 +459,51 @@ app.get('/orders/status', async (req, res) => {
       attempts: delivery?.numberOfAttempts ?? 0,
       actionNeeded: actionNeeded(delivery, lang),
       updates: toUpdates(delivery, lang),
+      bostaError,
     });
   } catch (err) {
     return fail(res, err);
+  }
+});
+
+/**
+ * What Bosta actually returns for one AWB or order name.
+ *
+ * A silent lookup failure looked exactly like a shipment with no events, and
+ * cost several rounds of guessing to find. This answers the question directly:
+ * which endpoint answered, what the raw state was, and how many timeline rows
+ * came back. `?raw=1` returns Bosta's own record for the awkward cases.
+ */
+app.get('/debug/bosta', async (req, res) => {
+  const { tracking, order, raw } = req.query;
+  if (!tracking && !order) {
+    return res.status(400).json({ error: 'tracking or order is required' });
+  }
+  try {
+    const delivery = tracking
+      ? await getDelivery(tracking)
+      : await findDeliveryByOrderName(order);
+
+    if (!delivery) {
+      return res.json({ found: false, tracking: tracking ?? null, order: order ?? null });
+    }
+    return res.json({
+      found: true,
+      trackingNumber: delivery.trackingNumber ?? null,
+      businessReference: delivery.businessReference ?? null,
+      state: delivery.state?.value ?? null,
+      stateCode: delivery.state?.code ?? null,
+      waitingForBusinessAction: Boolean(delivery.state?.waitingForBusinessAction),
+      exceptionCount: (delivery.state?.exception ?? []).length,
+      timelineRows: (delivery.timeline ?? []).length,
+      courier: delivery.star?.name ?? null,
+      courierPhone: delivery.star?.phone ?? null,
+      updates: toUpdates(delivery, req.query.lang === 'en' ? 'en' : 'ar'),
+      actionNeeded: actionNeeded(delivery, req.query.lang === 'en' ? 'en' : 'ar'),
+      ...(raw ? { rawDelivery: delivery } : {}),
+    });
+  } catch (err) {
+    return res.status(502).json({ found: false, error: String(err.message ?? err) });
   }
 });
 

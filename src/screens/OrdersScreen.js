@@ -122,6 +122,10 @@ export default function OrdersScreen() {
                 courierPhone: shown.courierPhone ?? null,
                 actionNeeded: shown.actionNeeded ?? null,
                 updates: shown.updates ?? [],
+                // "We couldn't reach Bosta" and "this parcel has no events"
+                // look identical on screen unless the failure is carried
+                // through and said out loud.
+                bostaError: r.bostaError ?? null,
               }
             : null,
         );
@@ -432,6 +436,14 @@ export default function OrdersScreen() {
                 : 'No AWB has been issued for this order yet. Bosta updates will appear here once it is.'}
             </Txt>
           </View>
+        ) : live?.bostaError ? (
+          <View style={styles.awaiting}>
+            <Txt isRtl={d.isRtl} style={styles.awaitingTxt}>
+              {d.isRtl
+                ? 'ما قدرناش نوصل لبوسطة دلوقتي، فتحديثات الشحن مش ظاهرة. جرّب تسحب لتحديث الصفحة.'
+                : 'We could not reach Bosta just now, so shipping updates are missing. Pull down to retry.'}
+            </Txt>
+          </View>
         ) : updates.length === 0 ? (
           <View style={styles.awaiting}>
             <Txt isRtl={d.isRtl} style={styles.awaitingTxt}>
@@ -441,8 +453,8 @@ export default function OrdersScreen() {
             </Txt>
           </View>
         ) : (
-        /* `max-height:148px; overflow-y:auto` in the prototype — it has to be a
-           real scroller, and nestedScrollEnabled lets it scroll inside the page. */
+        /* `overflow-y:auto` in the prototype — it has to be a real scroller,
+           and nestedScrollEnabled lets it scroll inside the page. */
         <ScrollView
           style={styles.updates}
           nestedScrollEnabled
@@ -673,7 +685,10 @@ const styles = StyleSheet.create({
   updates: {
     marginHorizontal: 22,
     marginBottom: 4,
-    maxHeight: 148,
+    // The prototype capped this at 148px, which fit the two events it mocked
+    // up. A real Bosta timeline runs to five or six rows, several of them two
+    // lines deep, so that cap turned a full history into a peephole.
+    maxHeight: 300,
     overflow: 'hidden',
     borderRadius: 18,
     borderWidth: 1,
