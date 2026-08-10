@@ -101,6 +101,21 @@ export default function OrdersScreen() {
   const isLocalOnly = Boolean(order?.local || String(order?.number ?? '').startsWith('OKA-'));
 
   /**
+   * A fulfilled order has been handed to the courier — its AWB is printed and
+   * the parcel is moving, so changing its contents or destination would leave
+   * Shopify describing something different from what is actually in transit.
+   * Shopify itself would allow the edit, so the app has to be the one to stop.
+   *
+   * PARTIALLY_FULFILLED counts too: order edits apply to the whole order, so
+   * one shipped line is enough to make an edit rewrite something in transit.
+   * Kept in step with `isShipped` in server/shopify.js, which enforces it.
+   */
+  const isFulfilled = ['FULFILLED', 'PARTIALLY_FULFILLED'].includes(
+    selected?.fulfillmentStatus,
+  );
+  const canEdit = !isLocalOnly && signedIn && !isFulfilled && !order?.cancelled;
+
+  /**
    * Every line in the order, not just the hero item. A real order (`remote`)
    * already carries full line items from Shopify; a locally-placed order only
    * has {productId: qty}, resolved back to the catalogue here.
@@ -621,20 +636,36 @@ export default function OrdersScreen() {
 
         <Divider style={styles.ruleTop} />
 
+        {/* Says why the buttons are dead before they're pressed, rather than
+            leaving a dimmed control with no explanation. */}
+        {isFulfilled && !isLocalOnly ? (
+          <View style={[styles.awaiting, { marginTop: 20 }]}>
+            <Txt isRtl={d.isRtl} style={styles.awaitingTxt}>
+              {d.isRtl
+                ? 'الطلب اتشحن بالفعل وفي الطريق ليك، فمش ممكن تتعدّل عناصره أو عنوانه. لو محتاج تغيير كلّم المندوب أو خدمة العملاء.'
+                : 'This order has shipped and is on its way, so its items and address can no longer be changed. Contact the courier or support if you need a change.'}
+            </Txt>
+          </View>
+        ) : null}
+
         <View style={[styles.actions, rowDir]}>
           <Press
             onPress={() =>
-              isLocalOnly || !signedIn
-                ? Alert.alert(
+              canEdit
+                ? actions.editOrder(editSeed())
+                : Alert.alert(
                     d.isRtl ? 'غير متاح' : 'Not available',
-                    d.isRtl
-                      ? 'لازم تسجل دخولك وتفتح طلب حقيقي من شوبيفاي عشان تعدّله.'
-                      : 'Sign in and open a real Shopify order to edit it.',
+                    isFulfilled
+                      ? d.isRtl
+                        ? 'الطلب اتشحن بالفعل، فمش ممكن تتعدّل عناصره أو عنوانه.'
+                        : 'This order has already shipped, so its items and address can no longer be changed.'
+                      : d.isRtl
+                        ? 'لازم تسجل دخولك وتفتح طلب حقيقي من شوبيفاي عشان تعدّله.'
+                        : 'Sign in and open a real Shopify order to edit it.',
                   )
-                : actions.editOrder(editSeed())
             }
             activeBg="rgba(0,0,0,0.04)"
-            style={[styles.editBtn, (isLocalOnly || !signedIn) && styles.disabled]}
+            style={[styles.editBtn, !canEdit && styles.disabled]}
           >
             <Txt center style={styles.editTxt}>
               {d.isRtl ? 'تعديل' : 'Edit'}

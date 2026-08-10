@@ -66,6 +66,18 @@ export function editShopifyOrder(orderName, lines, token) {
   });
 }
 
+/**
+ * Redirects an order to another of the customer's saved addresses.
+ * `address` is the structured `raw` record from fetchCustomerAddresses.
+ */
+export function updateOrderAddress(orderName, address, token) {
+  return call(`/orders/${encodeURIComponent(orderName)}/address`, {
+    method: 'POST',
+    token,
+    body: { address },
+  });
+}
+
 /** Saves a new address onto the signed-in customer's Shopify record. */
 export function saveCustomerAddress(address, token) {
   return call('/customer/addresses', { method: 'POST', token, body: { address } });

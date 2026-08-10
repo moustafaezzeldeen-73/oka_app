@@ -515,8 +515,83 @@ export async function findCustomerAddresses(identifier) {
       city: a.province ? `${a.city}, ${a.province}` : a.city,
       phone: a.phone,
       isDefault: a.id === defaultId,
+      // The display strings above are lossy — "14 Al Nasr St, Apt 3" cannot be
+      // split back into address1/address2 reliably. Writing one of these onto
+      // an order needs the real components, so they travel alongside.
+      raw: {
+        firstName: a.firstName ?? null,
+        lastName: a.lastName ?? null,
+        address1: a.address1 ?? null,
+        address2: a.address2 ?? null,
+        city: a.city ?? null,
+        province: a.province ?? null,
+        zip: a.zip ?? null,
+        phone: a.phone ?? null,
+      },
     }))
     .sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
+}
+
+/**
+ * Fulfilment states that mean "a parcel is already out there".
+ *
+ * PARTIALLY_FULFILLED counts: some of the order has shipped, and Shopify's
+ * order-edit API works on the order as a whole, so an edit would rewrite
+ * lines that are already on a courier's van.
+ */
+const SHIPPED_STATUSES = new Set(['FULFILLED', 'PARTIALLY_FULFILLED']);
+
+export const isShipped = (order) =>
+  SHIPPED_STATUSES.has(order?.displayFulfillmentStatus ?? order?.fulfillmentStatus);
+
+const ORDER_UPDATE_ADDRESS = `
+  mutation OkaOrderAddress($input: OrderInput!) {
+    orderUpdate(input: $input) {
+      order {
+        id
+        name
+        shippingAddress { address1 address2 city province zip phone name }
+      }
+      userErrors { field message }
+    }
+  }
+`;
+
+/**
+ * Redirects an order to a different address.
+ *
+ * Refuses once the parcel has been handed to the courier: Shopify will happily
+ * rewrite the address on a fulfilled order, but the AWB is already printed and
+ * the parcel is physically moving, so the change would be invisible to Bosta
+ * and the two systems would disagree about where it is going.
+ */
+export async function updateOrderAddress(orderName, addr) {
+  const order = await findOrder(orderName);
+  if (!order) throw new Error(`order ${orderName} not found`);
+  if (isShipped(order)) {
+    throw new Error('this order has already been fulfilled, so its address can no longer be changed');
+  }
+
+  const phone = normalizePhone(addr.phone);
+  const data = await adminGraphql(ORDER_UPDATE_ADDRESS, {
+    input: {
+      id: order.id,
+      shippingAddress: {
+        firstName: addr.firstName || 'OKA',
+        lastName: addr.lastName || 'Customer',
+        address1: addr.address1 || '',
+        address2: addr.address2 || '',
+        city: addr.city || '',
+        ...(addr.zip ? { zip: addr.zip } : {}),
+        countryCode: 'EG',
+        ...(phone ? { phone } : {}),
+      },
+    },
+  });
+
+  const { order: updated, userErrors } = data.orderUpdate;
+  if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join('; '));
+  return { ok: true, shippingAddress: updated?.shippingAddress ?? null };
 }
 
 /* ── Catalogue (Admin API — server-side only) ────────────────────────────

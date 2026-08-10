@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActions, useDerived, useStore } from '../store';
@@ -7,7 +7,7 @@ import { FadeIn } from '../components/anim';
 import { Img, Press, Txt } from '../components/ui';
 import { QtyStepper, SumRow } from '../components/parts';
 import { Close } from '../components/Icons';
-import { editShopifyOrder } from '../api/auth';
+import { editShopifyOrder, fetchCustomerAddresses, updateOrderAddress } from '../api/auth';
 
 /** The "Edit Order" bottom sheet: scrim + panel, both fading in as in the web build. */
 export default function EditOrderSheet() {
@@ -17,27 +17,50 @@ export default function EditOrderSheet() {
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
   const editCart = state.editCart || {};
   const [saving, setSaving] = useState(false);
+  const orderName = state.selectedOrderName ?? state.order?.number;
+
+  /**
+   * The address this order is going to, and the ones it could go to instead.
+   *
+   * `pickedAddress` is null until the shopper actually chooses a different
+   * one — an unchanged address must not be rewritten onto the order, since
+   * that would overwrite whatever the store may have corrected by hand.
+   */
+  const addresses = state.addresses ?? [];
+  const [pickedAddress, setPickedAddress] = useState(null);
+
+  useEffect(() => {
+    if (!state.session?.token || state.addresses !== null) return;
+    fetchCustomerAddresses(state.session.token)
+      .then((r) => actions.setAddresses(r.addresses ?? []))
+      .catch(() => actions.setAddresses([]));
+  }, [state.session?.token, state.addresses, actions]);
 
   /**
    * Commits the edit to the real Shopify order. The desired end state is sent
    * as a list of variant/quantity pairs and Shopify recalculates the totals,
-   * restocks removed units and emails the customer.
+   * restocks removed units and emails the customer. A newly chosen address is
+   * written first — if that is refused there is no point reflowing the items.
    */
   const accept = async () => {
     if (saving) return;
-    const orderName = state.selectedOrderName ?? state.order?.number;
     const lines = d.editCartEntries
       .map((e) => ({ variantId: e.p.variantId, quantity: e.qty }))
       .filter((l) => l.variantId);
 
-    if (!orderName || !lines.length) {
+    if (!orderName || (!lines.length && !pickedAddress)) {
       actions.acceptEditOrder();
       return;
     }
 
     setSaving(true);
     try {
-      await editShopifyOrder(orderName, lines, state.session?.token);
+      if (pickedAddress?.raw) {
+        await updateOrderAddress(orderName, pickedAddress.raw, state.session?.token);
+      }
+      if (lines.length) {
+        await editShopifyOrder(orderName, lines, state.session?.token);
+      }
       actions.acceptEditOrder();
       // The edit landed on Shopify; pull the order back so the screen behind
       // this sheet reflects it instead of the pre-edit copy.
@@ -111,6 +134,62 @@ export default function EditOrderSheet() {
               </Txt>
             </View>
           )}
+
+          {/* Where it's going. Only offered when the customer actually has
+              saved addresses to switch between — a one-address account has
+              nothing to choose from, and an empty picker is just noise. */}
+          {addresses.length > 1 ? (
+            <>
+              <View style={styles.rule} />
+              <Txt isRtl={d.isRtl} style={styles.sectionLabel}>
+                {d.isRtl ? 'عنوان التوصيل' : 'DELIVERY ADDRESS'}
+              </Txt>
+              {addresses.map((a) => {
+                const active = pickedAddress
+                  ? pickedAddress.id === a.id
+                  : a.id === state.selectedAddress || (!state.selectedAddress && a.isDefault);
+                return (
+                  <Press
+                    key={a.id}
+                    onPress={() => setPickedAddress(a)}
+                    style={[
+                      styles.addrRow,
+                      {
+                        borderColor: active ? C.ink : 'rgba(0,0,0,0.1)',
+                        borderWidth: active ? 1.5 : 1,
+                        backgroundColor: active ? 'rgba(0,0,0,0.035)' : '#ffffff',
+                      },
+                    ]}
+                  >
+                    <View style={[styles.addrInner, rowDir]}>
+                      <View style={{ flex: 1, minWidth: 0 }}>
+                        <Txt isRtl={d.isRtl} style={styles.addrName}>
+                          {a.name || state.customer?.name || ''}
+                        </Txt>
+                        <Txt isRtl={d.isRtl} style={styles.addrLine}>{a.street}</Txt>
+                        <Txt isRtl={d.isRtl} style={styles.addrLine}>{a.city}</Txt>
+                      </View>
+                      <View style={styles.addrRadio}>
+                        <View
+                          style={[
+                            styles.addrDot,
+                            { backgroundColor: active ? C.accent : 'transparent' },
+                          ]}
+                        />
+                      </View>
+                    </View>
+                  </Press>
+                );
+              })}
+              {pickedAddress ? (
+                <Txt isRtl={d.isRtl} style={styles.addrNote}>
+                  {d.isRtl
+                    ? 'هيتم تحويل الطلب للعنوان ده لما تحفظ التعديلات.'
+                    : 'The order will be redirected here when you save.'}
+                </Txt>
+              ) : null}
+            </>
+          ) : null}
 
           <View style={styles.rule} />
           <Txt isRtl={d.isRtl} style={styles.sectionLabel}>
@@ -267,6 +346,30 @@ const styles = StyleSheet.create({
   emptyTxt: { fontSize: 13, color: 'rgba(110,110,115,0.9)' },
 
   rule: { height: 1, backgroundColor: C.cardBorder, marginHorizontal: 20, marginTop: 12, marginBottom: 4 },
+
+  addrRow: { marginHorizontal: 20, marginBottom: 9, padding: 13, borderRadius: 15 },
+  addrInner: { alignItems: 'center', justifyContent: 'space-between', gap: 12 },
+  addrName: { fontSize: 13.5, fontWeight: W.bold, lineHeight: 18 },
+  addrLine: { fontSize: 12.5, lineHeight: 18, color: 'rgba(110,110,115,0.95)', marginTop: 1 },
+  addrRadio: {
+    width: 19,
+    height: 19,
+    borderRadius: 10,
+    borderWidth: 1.6,
+    borderColor: 'rgba(0,0,0,0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addrDot: { width: 10, height: 10, borderRadius: 5 },
+  addrNote: {
+    marginHorizontal: 20,
+    marginBottom: 4,
+    fontSize: 11.5,
+    lineHeight: 17,
+    color: C.greenDeep,
+    fontWeight: W.semibold,
+  },
+
   groupLabel: { paddingTop: 10, paddingHorizontal: 20, paddingBottom: 6, fontSize: 15, fontWeight: W.heavy },
   catalogRow: {
     gap: 12,

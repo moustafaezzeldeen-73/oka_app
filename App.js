@@ -1,6 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
@@ -45,6 +50,17 @@ const TAB_BAR_SCREENS = [
   'addAddress',
   'loyalty',
 ];
+
+/**
+ * Interactive back-swipe, tuned the way iOS's own pop gesture is.
+ *
+ * EDGE keeps it to a strip along the leading edge: the app is full of
+ * horizontal rails (the collection feed, the product carousels) and a
+ * full-width pan would fight every one of them for the same drag.
+ * DISTANCE/VELOCITY are the two ways a swipe can count — a short flick and a
+ * slow deliberate drag should both work.
+ */
+const BACK_SWIPE = { EDGE: 36, ACTIVATE: 24, DISTANCE: 70, VELOCITY: 700 };
 
 const SCREENS = {
   home: HomeScreen,
@@ -123,6 +139,36 @@ function Shell() {
   const Screen = SCREENS[state.screen] ?? HomeScreen;
   const showTabBar = TAB_BAR_SCREENS.includes(state.screen);
 
+  /**
+   * Swipe right to go back.
+   *
+   * Enabled only when there is somewhere to go back to, and never while an
+   * overlay owns the screen — the AR viewer and the edit sheet have their own
+   * dismissals, and popping the stack underneath them would leave the overlay
+   * floating over a screen the shopper never navigated to.
+   */
+  const canSwipeBack =
+    state.stack.length > 0 && !state.editOrderOpen && !state.arProductId;
+
+  const backSwipe = useMemo(
+    () =>
+      Gesture.Pan()
+        .enabled(canSwipeBack)
+        // Rightward only, and only once it clearly isn't a vertical scroll.
+        .activeOffsetX(BACK_SWIPE.ACTIVATE)
+        .failOffsetY([-20, 20])
+        .onEnd((e) => {
+          'worklet';
+          // Where the finger landed, not where it ended up.
+          const startX = e.absoluteX - e.translationX;
+          if (startX > BACK_SWIPE.EDGE) return;
+          if (e.translationX > BACK_SWIPE.DISTANCE || e.velocityX > BACK_SWIPE.VELOCITY) {
+            runOnJS(actions.goBack)();
+          }
+        }),
+    [canSwipeBack, actions.goBack],
+  );
+
   return (
     <View style={styles.root}>
       <LinearGradient
@@ -147,11 +193,13 @@ function Shell() {
         <Circle cx={d.isRtl ? '-9%' : '109%'} cy="82%" r={100} fill="url(#bloomB)" />
       </Svg>
 
-      <View style={[styles.content, { paddingTop: topPad }]}>
-        {/* Keying on the screen name remounts on navigation, which is what makes
-            the okaFadeIn entrance fire — exactly as `sc-if` did on the web. */}
-        <Screen key={state.screen} />
-      </View>
+      <GestureDetector gesture={backSwipe}>
+        <View style={[styles.content, { paddingTop: topPad }]}>
+          {/* Keying on the screen name remounts on navigation, which is what makes
+              the okaFadeIn entrance fire — exactly as `sc-if` did on the web. */}
+          <Screen key={state.screen} />
+        </View>
+      </GestureDetector>
 
       {showTabBar && <TabBar bottomInset={bottomPad} />}
 

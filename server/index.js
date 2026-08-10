@@ -13,9 +13,11 @@ import {
   findCustomerOrders,
   findOrder,
   getWishlist,
+  isShipped,
   orderIdByName,
   setDefaultAddress,
   setWishlist,
+  updateOrderAddress,
 } from './shopify.js';
 import {
   actionNeeded,
@@ -376,16 +378,47 @@ app.post('/orders/:name/cancel', async (req, res) => {
 /**
  * Applies an edit to a real Shopify order. `lines` is the desired end state:
  * [{ variantId, quantity }].
+ *
+ * Refused once the order is fulfilled. The app hides the button in that case,
+ * but an order can be fulfilled between the screen loading and the request
+ * arriving, and Shopify would accept the edit — leaving the store's record
+ * disagreeing with the parcel already on a courier's van.
  */
 app.post('/orders/:name/edit', async (req, res) => {
   const lines = req.body?.lines;
   if (!Array.isArray(lines)) return res.status(400).json({ error: 'lines[] is required' });
   try {
-    const id = await orderIdByName(req.params.name);
-    if (!id) return res.status(404).json({ error: `order ${req.params.name} not found` });
-    const result = await editOrder(id, lines);
+    const order = await findOrder(req.params.name);
+    if (!order) return res.status(404).json({ error: `order ${req.params.name} not found` });
+    if (isShipped(order)) {
+      return res.status(409).json({
+        error: 'this order has already been fulfilled and can no longer be edited',
+      });
+    }
+    const result = await editOrder(order.id, lines);
     return res.json(result);
   } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/**
+ * Redirects an order to one of the customer's other saved addresses.
+ * `address` is the structured record from GET /customer/addresses.
+ */
+app.post('/orders/:name/address', async (req, res) => {
+  const s = session(req);
+  if (!s?.identifier) return res.status(401).json({ error: 'not signed in' });
+  const address = req.body?.address;
+  if (!address) return res.status(400).json({ error: 'address is required' });
+  try {
+    const result = await updateOrderAddress(req.params.name, address);
+    return res.json(result);
+  } catch (err) {
+    // A fulfilled order is a refusal, not a server fault — the app shows the
+    // reason rather than a generic failure.
+    const msg = String(err.message ?? err);
+    if (msg.includes('already been fulfilled')) return res.status(409).json({ error: msg });
     return fail(res, err);
   }
 });
