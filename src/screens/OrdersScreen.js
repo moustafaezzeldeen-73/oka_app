@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Linking, ScrollView, StyleSheet, View } from 'react-native';
 
 import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
@@ -11,7 +11,20 @@ import { chevronFlip } from '../rtl';
 import { FadeIn } from '../components/anim';
 import { Divider, Img, Press, Txt } from '../components/ui';
 import { ScreenHeader } from '../components/parts';
-import { ChevronRight } from '../components/Icons';
+import { ChevronRight, Phone, WhatsApp } from '../components/Icons';
+import { selectionTick } from '../haptics';
+
+/**
+ * wa.me wants a bare international number — no `+`, no spaces, no leading 0.
+ * Bosta returns the courier's number as +20…, but a locally-written 010… has
+ * to gain the country code or WhatsApp opens on nobody.
+ */
+function waNumber(raw) {
+  let digits = String(raw ?? '').replace(/\D/g, '');
+  if (!digits) return null;
+  if (digits.startsWith('0')) digits = `20${digits.replace(/^0+/, '')}`;
+  return digits;
+}
 
 export default function OrdersScreen() {
   const { state, products } = useStore();
@@ -202,6 +215,37 @@ export default function OrdersScreen() {
   }, [loadStatus]);
 
   const { control } = useRefresh(loadStatus);
+
+  /**
+   * Opens the dialler or WhatsApp for the courier.
+   *
+   * `https://wa.me/…` rather than the `whatsapp://` scheme on purpose: the
+   * custom scheme needs an LSApplicationQueriesSchemes entry to be openable
+   * from Expo Go, while the https link hands off to the app when it is
+   * installed and falls back to the web otherwise.
+   */
+  const contactCourier = useCallback(
+    async (kind) => {
+      const phone = live?.courierPhone;
+      if (!phone) return;
+      selectionTick();
+      const url =
+        kind === 'call'
+          ? `tel:${String(phone).replace(/\s/g, '')}`
+          : `https://wa.me/${waNumber(phone)}`;
+      try {
+        await Linking.openURL(url);
+      } catch {
+        Alert.alert(
+          d.isRtl ? 'تعذّر فتح التطبيق' : 'Could not open',
+          d.isRtl
+            ? `جرّب تتواصل مع المندوب على ${phone}`
+            : `Try reaching the courier on ${phone}`,
+        );
+      }
+    },
+    [live?.courierPhone, d.isRtl],
+  );
 
   /** No order open — the list is the entry point. */
   if (!order) {
@@ -482,6 +526,45 @@ export default function OrdersScreen() {
         </ScrollView>
         )}
 
+        {/* The courier carrying this parcel right now, and the two ways to
+            reach them. Only rendered once Bosta has actually assigned one —
+            there is no courier to call while an order is still at the hub. */}
+        {live?.courier ? (
+          <View style={styles.courier}>
+            <Txt isRtl={d.isRtl} style={styles.courierLabel}>
+              {d.isRtl ? 'مندوب التوصيل' : 'Delivery courier'}
+            </Txt>
+            <Txt isRtl={d.isRtl} style={styles.courierName}>
+              {live.courier}
+            </Txt>
+            {live.courierPhone ? (
+              <>
+                <Txt isRtl={d.isRtl} style={styles.courierPhone}>
+                  {`⁦${live.courierPhone}⁩`}
+                </Txt>
+                <View style={[styles.courierBtns, rowDir]}>
+                  <Press
+                    onPress={() => contactCourier('call')}
+                    activeScale={0.96}
+                    style={[styles.courierBtn, styles.callBtn, rowDir]}
+                  >
+                    <Phone size={14} color="#ffffff" />
+                    <Txt style={styles.courierBtnTxt}>{d.isRtl ? 'اتصال' : 'Call'}</Txt>
+                  </Press>
+                  <Press
+                    onPress={() => contactCourier('whatsapp')}
+                    activeScale={0.96}
+                    style={[styles.courierBtn, styles.waBtn, rowDir]}
+                  >
+                    <WhatsApp size={15} color="#ffffff" />
+                    <Txt style={styles.courierBtnTxt}>{d.isRtl ? 'واتساب' : 'WhatsApp'}</Txt>
+                  </Press>
+                </View>
+              </>
+            ) : null}
+          </View>
+        ) : null}
+
         {/* Bosta's own `waitingForBusinessAction` flag, with the reason from its
             most recent exception — a courier can't just retry a bad address or a
             failed WhatsApp verification, someone has to act on it. */}
@@ -521,13 +604,8 @@ export default function OrdersScreen() {
           <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
             {order.cityDays || (d.isRtl ? 'توصيل سريع' : 'Express Delivery')}
           </Txt>
-          {live?.courier ? (
-            <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
-              {(d.isRtl ? 'المندوب: ' : 'Courier: ') +
-                live.courier +
-                (live.courierPhone ? ` — ⁦${live.courierPhone}⁩` : '')}
-            </Txt>
-          ) : null}
+          {/* The courier used to be repeated here; the green box above now
+              carries the name, number and the buttons to reach them. */}
         </Field>
 
         <Divider style={styles.ruleTop} />
@@ -704,6 +782,43 @@ const styles = StyleSheet.create({
   updateDot: { width: 9, height: 9, borderRadius: 5, marginTop: 5 },
   updateTxt: { fontSize: 13, fontWeight: W.medium, lineHeight: 18 },
   updateTime: { fontSize: 11.5, color: 'rgba(110,110,115,0.95)', marginTop: 3 },
+
+  courier: {
+    marginHorizontal: 22,
+    marginTop: 14,
+    padding: 15,
+    borderRadius: 16,
+    backgroundColor: 'rgba(31,143,78,0.09)',
+    borderWidth: 1,
+    borderColor: 'rgba(31,143,78,0.3)',
+  },
+  courierLabel: {
+    fontSize: 11.5,
+    fontWeight: W.bold,
+    color: C.greenDeep,
+    opacity: 0.75,
+    marginBottom: 3,
+  },
+  courierName: { fontSize: 15, fontWeight: W.bold, color: C.greenDeep, lineHeight: 20 },
+  courierPhone: {
+    fontSize: 14,
+    letterSpacing: 0.5,
+    color: C.greenDeep,
+    marginTop: 3,
+    lineHeight: 20,
+  },
+  courierBtns: { gap: 10, marginTop: 13 },
+  courierBtn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
+    paddingVertical: 11,
+    borderRadius: 999,
+  },
+  callBtn: { backgroundColor: C.greenDeep },
+  waBtn: { backgroundColor: '#25D366' },
+  courierBtnTxt: { fontSize: 13.5, fontWeight: W.bold, color: '#ffffff' },
 
   actionNeeded: {
     marginHorizontal: 22,

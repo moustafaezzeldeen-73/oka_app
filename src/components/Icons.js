@@ -130,6 +130,33 @@ export const ArCross = ({ size = 12, color = '#ffffff' }) => (
   </Svg>
 );
 
+/** Handset, for the courier call button. */
+export const Phone = ({ size = 15, color = '#ffffff' }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M7.5 3.5h-2A2.5 2.5 0 003 6c0 8.28 6.72 15 15 15a2.5 2.5 0 002.5-2.5v-2a1 1 0 00-.76-.97l-3.6-.9a1 1 0 00-1 .32l-1.1 1.32a12.5 12.5 0 01-5.63-5.63l1.32-1.1a1 1 0 00.32-1l-.9-3.6a1 1 0 00-.97-.76z"
+      fill={color}
+    />
+  </Svg>
+);
+
+/**
+ * WhatsApp's handset-in-a-bubble. Drawn rather than imported so the button
+ * stays self-contained — no remote asset, no extra dependency.
+ */
+export const WhatsApp = ({ size = 15, color = '#ffffff' }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M12 2.5a9.5 9.5 0 00-8.2 14.28L2.5 21.5l4.85-1.26A9.5 9.5 0 1012 2.5zm0 1.9a7.6 7.6 0 016.45 11.6l-.23.37.62 2.26-2.33-.6-.36.21A7.6 7.6 0 1112 4.4z"
+      fill={color}
+    />
+    <Path
+      d="M9.3 7.6c-.18-.42-.37-.43-.55-.44h-.46a.9.9 0 00-.65.3 2.7 2.7 0 00-.84 2 4.7 4.7 0 001 2.5 10.6 10.6 0 004.05 3.56c2 .79 2.42.63 2.85.59a2.44 2.44 0 001.63-1.15 2 2 0 00.14-1.15c-.06-.1-.22-.16-.46-.28s-1.42-.7-1.64-.78-.38-.12-.55.12-.62.78-.76.94-.28.18-.52.06a6.5 6.5 0 01-1.9-1.18 7.2 7.2 0 01-1.33-1.65c-.14-.24 0-.37.1-.49s.24-.28.36-.42a1.6 1.6 0 00.24-.4.44.44 0 000-.42c-.06-.12-.54-1.32-.75-1.8z"
+      fill={color}
+    />
+  </Svg>
+);
+
 /** Mastercard's interlocking discs, drawn as in the checkout payment row. */
 export const MastercardMark = () => (
   <Svg width={28} height={20} viewBox="0 0 28 20">
