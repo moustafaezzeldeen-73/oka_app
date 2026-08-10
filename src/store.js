@@ -47,6 +47,8 @@ const INITIAL = {
   session: null,
   customer: null,
   remoteOrders: null,
+  /** The signed-in customer's real Shopify addresses; null until fetched. */
+  addresses: null,
   /** Which of `remoteOrders` the detail view is showing; null = the list. */
   selectedOrderName: null,
   /** Bumped after an edit or cancel so the order screen refetches. */
@@ -184,8 +186,10 @@ export function useActions() {
 
       signedIn: ({ token, customer, staff, via }) =>
         patch({ session: { token, staff, via }, customer, screen: 'orders', stack: [] }),
-      signOut: () => patch({ session: null, customer: null, remoteOrders: null, screen: 'account', stack: [] }),
+      signOut: () =>
+        patch({ session: null, customer: null, remoteOrders: null, addresses: null, screen: 'account', stack: [] }),
       setRemoteOrders: (remoteOrders) => patch({ remoteOrders }),
+      setAddresses: (addresses) => patch({ addresses }),
       openOrder: (selectedOrderName) => patch({ selectedOrderName }),
       backToOrderList: () => patch({ selectedOrderName: null }),
       /** Forces the order screen to pull fresh state after a mutation. */

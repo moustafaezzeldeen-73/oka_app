@@ -12,7 +12,7 @@ import { Divider, Img, Press, Txt } from '../components/ui';
 import { Cta, ScreenHeader } from '../components/parts';
 import { ChevronRight, MastercardMark } from '../components/Icons';
 import { submitOrder } from '../api/orders';
-import { calculateCheckout } from '../api/auth';
+import { calculateCheckout, fetchCustomerAddresses } from '../api/auth';
 
 export default function CheckoutScreen() {
   const { state } = useStore();
@@ -22,19 +22,40 @@ export default function CheckoutScreen() {
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
 
   /**
-   * The signed-in customer wins; the address they typed comes next; the
-   * prototype's placeholder person is only ever a last resort, and shipping
-   * every order under one name was exactly that resort firing every time.
+   * A shopper who jumps straight to checkout without visiting the Addresses
+   * screen first would otherwise ship under the account's stale default —
+   * this pulls the real list in as soon as one exists to resolve against.
    */
+  useEffect(() => {
+    if (!state.session?.token || state.addresses !== null) return;
+    fetchCustomerAddresses(state.session.token)
+      .then((r) => actions.setAddresses(r.addresses ?? []))
+      .catch(() => actions.setAddresses([]));
+  }, [state.session?.token, state.addresses, actions]);
+
+  /**
+   * The address the customer actually picked on the Addresses screen wins —
+   * that is what "ships to" is supposed to mean. Failing that, the account's
+   * own default, then whatever they just typed on the add-address form, then
+   * the prototype's placeholder person as a last resort. Checkout used to skip
+   * the real saved-address list entirely, so a selection there never reached
+   * the order Shopify received.
+   */
+  const selectedAddr =
+    (state.addresses ?? []).find((a) => a.id === state.selectedAddress) ??
+    (state.addresses ?? []).find((a) => a.isDefault) ??
+    null;
+
   const buyer = {
-    name: state.customer?.name || state.newAddr?.name || STR[d.lang].name,
+    name: selectedAddr?.name || state.customer?.name || state.newAddr?.name || STR[d.lang].name,
     email: state.customer?.email || null,
-    phone: state.customer?.phone || state.newAddr?.phone || STR[d.lang].phone,
+    phone: selectedAddr?.phone || state.customer?.phone || state.newAddr?.phone || STR[d.lang].phone,
     street:
+      selectedAddr?.street ||
       state.newAddr?.street ||
       state.customer?.address?.address1 ||
       STR[d.lang].street,
-    city: state.newAddr?.city || state.customer?.address?.city || d.t(state.city),
+    city: selectedAddr?.city || state.newAddr?.city || state.customer?.address?.city || d.t(state.city),
   };
 
   /**

@@ -144,7 +144,6 @@ const LABELS = {
   warehouse: ['Arrived at {hub}', 'وصلت إلى {hub}'],
   outForDelivery: ['Out for delivery', 'الطلب خارج للتوصيل'],
   delivered: ['Delivered', 'تم التسليم'],
-  attempt: ['Delivery attempted', 'تمت محاولة التوصيل'],
 };
 
 const pick = (key, ar, vars = {}) => {
@@ -166,13 +165,24 @@ const fmt = (t, ar) => {
   });
 };
 
+/** Bosta's own free-text reason, prefixed so it reads as an event, not a label. */
+const exceptionText = (ex, ar) => {
+  const label = ar ? 'مشكلة في التوصيل' : 'Delivery issue';
+  return ex?.reason ? `${label}: ${ex.reason}` : label;
+};
+
 /**
  * Builds the update rows the app displays from a delivery record.
  *
  * Only what has actually happened is listed — the current state and everything
- * before it, newest last. Listing future steps as "Pending" padded the
+ * before it, oldest first. Listing future steps as "Pending" padded the
  * timeline with events that had not occurred and made a Created shipment look
  * like it was already moving.
+ *
+ * Every milestone Bosta logs is included, not just the five headline ones —
+ * `state.exception[]` is Bosta's full log of failed attempts, address issues,
+ * reschedules and the like, and used to be dropped entirely except for a single
+ * synthetic "attempt" row.
  */
 export function toUpdates(delivery, lang = 'ar') {
   if (!delivery) return [];
@@ -186,20 +196,39 @@ export function toUpdates(delivery, lang = 'ar') {
     { key: 'warehouse', at: st.receivedAtWarehouse?.time, vars: { hub } },
     { key: 'outForDelivery', at: st.delivering?.time },
     { key: 'delivered', at: st.deliveryTime },
+    ...(st.exception ?? []).map((ex) => ({
+      key: 'exception',
+      at: ex.time,
+      text: exceptionText(ex, ar),
+    })),
   ];
-
-  // A failed attempt is worth surfacing — it usually means the courier could
-  // not reach the customer, which is the shopper's cue to act.
-  if ((delivery.numberOfAttempts ?? 0) > 0 && !st.deliveryTime) {
-    rows.push({ key: 'attempt', at: delivery.updatedAt });
-  }
 
   return rows
     .filter((r) => Boolean(r.at))
     .sort((a, b) => new Date(a.at) - new Date(b.at))
     .map((r) => ({
-      text: pick(r.key, ar, r.vars),
+      text: r.text ?? pick(r.key, ar, r.vars),
       time: fmt(r.at, ar),
       done: true,
+      // Kept so callers merging this with another system's timeline (Shopify's
+      // own milestones) can re-sort the combined list; the client itself only
+      // reads text/time/done.
+      at: r.at,
     }));
+}
+
+/**
+ * Whether this order needs the customer (or staff) to do something before it
+ * can move again — Bosta's own `waitingForBusinessAction` flag, with the most
+ * recent exception's reason attached so the app can say what, not just that.
+ */
+export function actionNeeded(delivery, lang = 'ar') {
+  if (!delivery?.state?.waitingForBusinessAction) return null;
+  const ar = lang === 'ar';
+  const exceptions = delivery.state.exception ?? [];
+  const latest = exceptions[exceptions.length - 1];
+  if (latest?.reason) {
+    return ar ? `الطلب محتاج تدخلك: ${latest.reason}` : `This order needs your attention: ${latest.reason}`;
+  }
+  return ar ? 'الطلب محتاج تدخلك — راجع حالة الشحنة.' : 'This order needs your attention — check the shipment.';
 }

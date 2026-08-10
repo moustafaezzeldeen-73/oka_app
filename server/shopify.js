@@ -127,6 +127,10 @@ export async function createOrder(payload) {
     billingAddress: address,
     tags: ['oka-app', `lang:${lang}`, `payment:${paymentMethod}`],
     note: paymentMethod === 'cod' ? 'Cash on delivery — collected by courier' : undefined,
+    // Every order the app creates is unpaid until the courier collects (COD) or
+    // a real payment gateway is wired up (card/wallet) — never silently marked
+    // paid just because Shopify defaults an order with no transactions to it.
+    financialStatus: 'PENDING',
     shippingLines: shipping > 0
       ? [{
           title: 'Delivery',
@@ -172,56 +176,78 @@ export async function findOrder(orderName) {
   return data.orders.edges[0]?.node ?? null;
 }
 
-/* ── Loyalty ───────────────────────────────────────────────────────────── */
+/* ── Loyalty ───────────────────────────────────────────────────────────────
+ * Live Shopify store credit is the loyalty balance — 1 EGP of store credit is
+ * worth 10 points, which is the app's own conversion rate. There is no
+ * separate points ledger: earning happens however credit gets onto the
+ * account (refunds, manual grants, a future automation), and redeeming a
+ * reward debits the equivalent EGP straight off it, so the balance shown is
+ * always what Shopify itself would honour at the register.
+ */
 
-const CUSTOMER_LOYALTY = `
-  query OkaLoyalty($q: String!) {
+const POINTS_PER_EGP = 10;
+
+const CUSTOMER_STORE_CREDIT = `
+  query OkaStoreCredit($q: String!) {
     customers(first: 1, query: $q) {
       edges {
         node {
           id
-          amountSpent { amount }
-          metafield(namespace: "oka", key: "loyalty_redeemed") { value }
+          storeCreditAccounts(first: 10) {
+            edges { node { id balance { amount currencyCode } } }
+          }
         }
       }
     }
   }
 `;
 
-export async function findCustomerLoyalty(phone) {
-  const data = await adminGraphql(CUSTOMER_LOYALTY, { q: `phone:${phone}` });
+/** The customer's live points balance, derived from their EGP store credit. */
+export async function findCustomerLoyalty(identifier) {
+  const isEmail = String(identifier).includes('@');
+  const data = await adminGraphql(CUSTOMER_STORE_CREDIT, {
+    q: isEmail ? `email:${identifier}` : `phone:${identifier}`,
+  });
   const node = data.customers.edges[0]?.node;
   if (!node) return null;
+
+  const accounts = node.storeCreditAccounts.edges.map((e) => e.node);
+  const egpAccount = accounts.find((a) => a.balance?.currencyCode === 'EGP') ?? null;
+  const creditAmount = Number(egpAccount?.balance?.amount ?? 0);
+
   return {
-    id: node.id,
-    earned: Math.round(Number(node.amountSpent?.amount ?? 0)),
-    redeemed: Number(node.metafield?.value ?? 0),
+    customerId: node.id,
+    balance: Math.round(creditAmount * POINTS_PER_EGP),
   };
 }
 
-const SET_REDEEMED = `
-  mutation OkaSetRedeemed($metafields: [MetafieldsSetInput!]!) {
-    metafieldsSet(metafields: $metafields) {
-      metafields { id }
-      userErrors { field message }
+const STORE_CREDIT_DEBIT = `
+  mutation OkaStoreCreditDebit($id: ID!, $debitInput: StoreCreditAccountDebitInput!) {
+    storeCreditAccountDebit(id: $id, debitInput: $debitInput) {
+      storeCreditAccountTransaction {
+        id
+        balanceAfterTransaction { amount currencyCode }
+      }
+      userErrors { field message code }
     }
   }
 `;
 
-export async function setRedeemed(customerId, total) {
-  const data = await adminGraphql(SET_REDEEMED, {
-    metafields: [
-      {
-        ownerId: customerId,
-        namespace: 'oka',
-        key: 'loyalty_redeemed',
-        type: 'number_integer',
-        value: String(total),
-      },
-    ],
+/**
+ * Redeems `points` by debiting the equivalent EGP off the customer's store
+ * credit. `customerId` is accepted directly — Shopify resolves it to the
+ * right store credit account without a separate lookup.
+ */
+export async function debitLoyaltyPoints(customerId, points) {
+  const amount = (points / POINTS_PER_EGP).toFixed(2);
+  const data = await adminGraphql(STORE_CREDIT_DEBIT, {
+    id: customerId,
+    debitInput: { debitAmount: { amount, currencyCode: 'EGP' } },
   });
-  const errs = data.metafieldsSet.userErrors;
-  if (errs?.length) throw new Error(errs.map((e) => e.message).join('; '));
+  const { storeCreditAccountTransaction, userErrors } = data.storeCreditAccountDebit;
+  if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join('; '));
+  const remaining = Number(storeCreditAccountTransaction?.balanceAfterTransaction?.amount ?? 0);
+  return { balance: Math.round(remaining * POINTS_PER_EGP) };
 }
 
 /* ── Customer lookup, order edit and cancel ────────────────────────────── */
@@ -663,15 +689,19 @@ export async function calculateTotals({ items = [], customer = {}, shipping, dis
 }
 
 const ADDRESS_CREATE = `
-  mutation OkaAddressCreate($customerId: ID!, $address: MailingAddressInput!) {
-    customerAddressCreate(customerId: $customerId, address: $address) {
+  mutation OkaAddressCreate($customerId: ID!, $address: MailingAddressInput!, $setAsDefault: Boolean) {
+    customerAddressCreate(customerId: $customerId, address: $address, setAsDefault: $setAsDefault) {
       customerAddress { id }
       userErrors { field message }
     }
   }
 `;
 
-/** Saves a new address onto the customer's Shopify record. */
+/**
+ * Saves a new address onto the customer's Shopify record, and makes it the
+ * default — the app has no separate "make default" step, so every address a
+ * shopper adds here is the one they mean to use next.
+ */
 export async function createCustomerAddress(identifier, addr) {
   const customer = await findCustomerOrders(identifier);
   if (!customer) throw new Error('customer not found');
@@ -679,6 +709,7 @@ export async function createCustomerAddress(identifier, addr) {
   const [firstName, ...rest] = String(addr.name || customer.name || '').trim().split(/\s+/);
   const data = await adminGraphql(ADDRESS_CREATE, {
     customerId: customer.id,
+    setAsDefault: true,
     address: {
       firstName: firstName || 'OKA',
       lastName: rest.join(' ') || 'Customer',
@@ -692,6 +723,26 @@ export async function createCustomerAddress(identifier, addr) {
   const { customerAddress, userErrors } = data.customerAddressCreate;
   if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join('; '));
   return { id: customerAddress?.id ?? null };
+}
+
+const ADDRESS_SET_DEFAULT = `
+  mutation OkaAddressSetDefault($customerId: ID!, $addressId: ID!) {
+    customerUpdateDefaultAddress(customerId: $customerId, addressId: $addressId) {
+      customer { id defaultAddress { id } }
+      userErrors { field message }
+    }
+  }
+`;
+
+/** Marks an already-saved address as the customer's default. */
+export async function setDefaultAddress(identifier, addressId) {
+  const customer = await findCustomerOrders(identifier);
+  if (!customer) throw new Error('customer not found');
+
+  const data = await adminGraphql(ADDRESS_SET_DEFAULT, { customerId: customer.id, addressId });
+  const errs = data.customerUpdateDefaultAddress.userErrors;
+  if (errs?.length) throw new Error(errs.map((e) => e.message).join('; '));
+  return { ok: true };
 }
 
 const CUSTOMER_METAFIELD = `
@@ -717,6 +768,15 @@ export async function getWishlist(identifier) {
   }
 }
 
+const METAFIELDS_SET = `
+  mutation OkaSetWishlist($metafields: [MetafieldsSetInput!]!) {
+    metafieldsSet(metafields: $metafields) {
+      metafields { id }
+      userErrors { field message }
+    }
+  }
+`;
+
 export async function setWishlist(identifier, ids) {
   const isEmail = String(identifier).includes('@');
   const data = await adminGraphql(CUSTOMER_METAFIELD, {
@@ -725,7 +785,7 @@ export async function setWishlist(identifier, ids) {
   const node = data.customers.edges[0]?.node;
   if (!node) throw new Error('customer not found');
 
-  const res = await adminGraphql(SET_REDEEMED.replace('OkaSetRedeemed', 'OkaSetWishlist'), {
+  const res = await adminGraphql(METAFIELDS_SET, {
     metafields: [
       {
         ownerId: node.id,

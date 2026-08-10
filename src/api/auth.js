@@ -71,6 +71,11 @@ export function saveCustomerAddress(address, token) {
   return call('/customer/addresses', { method: 'POST', token, body: { address } });
 }
 
+/** Marks one of the signed-in customer's saved addresses as their default. */
+export function setDefaultAddress(addressId, token) {
+  return call('/customer/addresses/default', { method: 'POST', token, body: { addressId } });
+}
+
 /** Wishlist, stored on the customer so it survives a reinstall. */
 export function fetchWishlist(token) {
   return call('/customer/wishlist', { token });

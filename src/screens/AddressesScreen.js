@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
 
 import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
-import { fetchCustomerAddresses } from '../api/auth';
+import { fetchCustomerAddresses, setDefaultAddress } from '../api/auth';
 import { useRefresh } from '../useRefresh';
 import { C, W } from '../theme';
 import { FadeIn } from '../components/anim';
@@ -16,6 +16,10 @@ import { Plus } from '../components/Icons';
  * ("Nourhan Adel", home/work) as a guest preview otherwise — same shape, so
  * the screen looks identical either way, but it stops lying about whose
  * address is on screen once someone actually signs in.
+ *
+ * The fetched list lives on the store, not local state — checkout reads the
+ * customer's selected address from the same place, so a choice made here is
+ * the one an order actually ships to.
  */
 export default function AddressesScreen() {
   const { state } = useStore();
@@ -23,7 +27,7 @@ export default function AddressesScreen() {
   const d = useDerived();
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
 
-  const [remote, setRemote] = useState(null);
+  const remote = state.addresses;
   const [loading, setLoading] = useState(false);
 
   const load = useCallback(async () => {
@@ -31,19 +35,33 @@ export default function AddressesScreen() {
     setLoading(true);
     try {
       const r = await fetchCustomerAddresses(state.session.token);
-      setRemote(r.addresses ?? []);
+      actions.setAddresses(r.addresses ?? []);
     } catch {
-      setRemote([]);
+      actions.setAddresses([]);
     } finally {
       setLoading(false);
     }
-  }, [state.session?.token]);
+  }, [state.session?.token, actions]);
 
   useEffect(() => {
     load();
   }, [load]);
 
   const { control } = useRefresh(load);
+
+  /** Selecting a real address also makes it the account's default on Shopify. */
+  const select = async (id) => {
+    actions.selectAddress(id);
+    if (!state.session?.token || !String(id).startsWith('gid://')) return;
+    try {
+      await setDefaultAddress(id, state.session.token);
+    } catch (err) {
+      Alert.alert(
+        d.isRtl ? 'تعذّر تحديث العنوان الافتراضي' : 'Could not update the default address',
+        String(err.message ?? err),
+      );
+    }
+  };
 
   const demo = d.isRtl
     ? [
@@ -84,7 +102,7 @@ export default function AddressesScreen() {
             return (
               <Press
                 key={a.id}
-                onPress={() => actions.selectAddress(a.id)}
+                onPress={() => select(a.id)}
                 style={[
                   styles.card,
                   {

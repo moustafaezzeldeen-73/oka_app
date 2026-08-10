@@ -5,6 +5,7 @@ import {
   cancelOrder,
   createCustomerAddress,
   createOrder,
+  debitLoyaltyPoints,
   editOrder,
   fetchAdminCatalogue,
   findCustomerAddresses,
@@ -13,10 +14,11 @@ import {
   findOrder,
   getWishlist,
   orderIdByName,
-  setRedeemed,
+  setDefaultAddress,
   setWishlist,
 } from './shopify.js';
 import {
+  actionNeeded,
   findDeliveriesByPhone,
   findDeliveryByOrderName,
   findDeliveryByTracking,
@@ -203,16 +205,7 @@ app.get('/customer/orders', async (req, res) => {
       const code = delivery?.state?.code ?? null;
 
       // One chronological story from both systems, oldest first.
-      const merged = [...shopifyEvents(o, lang), ...toUpdates(delivery, lang).map((u, i) => ({
-        ...u,
-        at: delivery ? [
-          delivery.createdAt,
-          delivery.collectedFromBusiness ?? delivery.state?.pickedUpTime,
-          delivery.state?.receivedAtWarehouse?.time,
-          delivery.state?.delivering?.time,
-          delivery.state?.deliveryTime,
-        ].filter(Boolean)[i] ?? null : null,
-      }))]
+      const merged = [...shopifyEvents(o, lang), ...toUpdates(delivery, lang)]
         .filter((r) => r.at)
         .sort((a, b) => new Date(a.at) - new Date(b.at))
         .map(({ at, ...row }) => row);
@@ -230,6 +223,8 @@ app.get('/customer/orders', async (req, res) => {
         stateLabel: delivery?.state?.value ?? null,
         step: o.cancelledAt ? 0 : stepFromState(code),
         courier: delivery?.star?.name ?? null,
+        courierPhone: delivery?.star?.phone ?? null,
+        actionNeeded: actionNeeded(delivery, lang),
         updates: merged,
       };
     });
@@ -297,6 +292,21 @@ app.post('/customer/addresses', async (req, res) => {
   if (!identifier) return res.status(401).json({ error: 'not signed in' });
   try {
     const result = await createCustomerAddress(identifier, req.body?.address ?? {});
+    return res.json(result);
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+/** Marks one of the signed-in customer's saved addresses as their default. */
+app.post('/customer/addresses/default', async (req, res) => {
+  const s = session(req);
+  const identifier = s?.identifier ?? req.body?.identifier;
+  if (!identifier) return res.status(401).json({ error: 'not signed in' });
+  const addressId = req.body?.addressId;
+  if (!addressId) return res.status(400).json({ error: 'addressId is required' });
+  try {
+    const result = await setDefaultAddress(identifier, addressId);
     return res.json(result);
   } catch (err) {
     return fail(res, err);
@@ -414,7 +424,9 @@ app.get('/orders/status', async (req, res) => {
       fulfillmentStatus: shopifyOrder?.displayFulfillmentStatus ?? null,
       financialStatus: shopifyOrder?.displayFinancialStatus ?? null,
       courier: delivery?.star?.name ?? null,
+      courierPhone: delivery?.star?.phone ?? null,
       attempts: delivery?.numberOfAttempts ?? 0,
+      actionNeeded: actionNeeded(delivery, lang),
       updates: toUpdates(delivery, lang),
     });
   } catch (err) {
@@ -423,40 +435,38 @@ app.get('/orders/status', async (req, res) => {
 });
 
 /**
- * Loyalty balance.
- *
- * The store runs no loyalty app, so the balance is derived the way the app's
- * own earn rules describe it — 1 point per EGP spent — less whatever has been
- * redeemed, which is kept in an `oka.loyalty_redeemed` customer metafield.
+ * Loyalty balance — live Shopify store credit, at 10 points per EGP. The
+ * store runs no separate loyalty app, so the credit balance itself is the
+ * points balance; there is nothing else to reconcile.
  */
 app.get('/loyalty', async (req, res) => {
   const phone = req.query.phone;
   if (!phone) return res.status(400).json({ error: 'phone is required' });
   try {
     const c = await findCustomerLoyalty(phone);
-    if (!c) return res.json({ balance: 0, earned: 0, redeemed: 0, known: false });
-    return res.json({
-      balance: Math.max(0, c.earned - c.redeemed),
-      earned: c.earned,
-      redeemed: c.redeemed,
-      known: true,
-    });
+    if (!c) return res.json({ balance: 0, known: false });
+    return res.json({ balance: c.balance, known: true });
   } catch (err) {
     return fail(res, err);
   }
 });
 
+/**
+ * Redeeming a reward debits the equivalent EGP straight off the customer's
+ * store credit — the balance shown afterwards is what Shopify itself now
+ * holds, not a locally-tracked deduction.
+ */
 app.post('/loyalty/redeem', async (req, res) => {
   const { phone, cost } = req.body ?? {};
   if (!phone || !cost) return res.status(400).json({ error: 'phone and cost are required' });
   try {
     const c = await findCustomerLoyalty(phone);
     if (!c) return res.status(404).json({ error: 'customer not found' });
-    if (c.earned - c.redeemed < Number(cost)) {
+    if (c.balance < Number(cost)) {
       return res.status(409).json({ error: 'insufficient points' });
     }
-    await setRedeemed(c.id, c.redeemed + Number(cost));
-    return res.json({ ok: true, balance: c.earned - c.redeemed - Number(cost) });
+    const result = await debitLoyaltyPoints(c.customerId, Number(cost));
+    return res.json({ ok: true, balance: result.balance });
   } catch (err) {
     return fail(res, err);
   }

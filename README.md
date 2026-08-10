@@ -111,7 +111,7 @@ generates local order numbers, so it stays demonstrable offline.
 | Discount codes | `cartDiscountCodesUpdate` |
 | Checkout (native) | app → `POST /orders` → Admin `orderCreate` |
 | Order status | app → `GET /orders/status` → Admin order + Bosta timeline |
-| Loyalty points | app → `GET /loyalty` → Admin `amountSpent` − `oka.loyalty_redeemed` |
+| Loyalty points | app → `GET /loyalty` → Admin store credit balance × 10 |
 
 Bosta deliveries carry the Shopify order name in `businessReference`
 (e.g. `#2599321`) — that is the join key between the two systems.

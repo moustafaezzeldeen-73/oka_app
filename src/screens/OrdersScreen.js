@@ -118,6 +118,9 @@ export default function OrdersScreen() {
                 step: shown.step,
                 stateLabel: shown.stateLabel,
                 trackingNumber: shown.trackingNumber,
+                courier: shown.courier ?? null,
+                courierPhone: shown.courierPhone ?? null,
+                actionNeeded: shown.actionNeeded ?? null,
                 updates: shown.updates ?? [],
               }
             : null,
@@ -467,6 +470,20 @@ export default function OrdersScreen() {
         </ScrollView>
         )}
 
+        {/* Bosta's own `waitingForBusinessAction` flag, with the reason from its
+            most recent exception — a courier can't just retry a bad address or a
+            failed WhatsApp verification, someone has to act on it. */}
+        {live?.actionNeeded ? (
+          <View style={styles.actionNeeded}>
+            <Txt isRtl={d.isRtl} style={styles.actionNeededTitle}>
+              {d.isRtl ? 'مطلوب إجراء' : 'Action needed'}
+            </Txt>
+            <Txt isRtl={d.isRtl} style={styles.actionNeededTxt}>
+              {live.actionNeeded}
+            </Txt>
+          </View>
+        ) : null}
+
         <Divider style={styles.ruleTop} />
 
         {/* The address this order actually shipped to — not the account's
@@ -494,7 +511,9 @@ export default function OrdersScreen() {
           </Txt>
           {live?.courier ? (
             <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
-              {(d.isRtl ? 'المندوب: ' : 'Courier: ') + live.courier}
+              {(d.isRtl ? 'المندوب: ' : 'Courier: ') +
+                live.courier +
+                (live.courierPhone ? ` — ⁦${live.courierPhone}⁩` : '')}
             </Txt>
           ) : null}
         </Field>
@@ -670,6 +689,18 @@ const styles = StyleSheet.create({
   updateDot: { width: 9, height: 9, borderRadius: 5, marginTop: 5 },
   updateTxt: { fontSize: 13, fontWeight: W.medium, lineHeight: 18 },
   updateTime: { fontSize: 11.5, color: 'rgba(110,110,115,0.95)', marginTop: 3 },
+
+  actionNeeded: {
+    marginHorizontal: 22,
+    marginTop: 14,
+    padding: 14,
+    borderRadius: 16,
+    backgroundColor: 'rgba(179,38,30,0.07)',
+    borderWidth: 1,
+    borderColor: 'rgba(179,38,30,0.25)',
+  },
+  actionNeededTitle: { fontSize: 12, fontWeight: W.heavy, color: '#8c1d18', marginBottom: 4 },
+  actionNeededTxt: { fontSize: 12.5, lineHeight: 19, color: '#8c1d18', fontWeight: W.semibold },
 
   field: { paddingHorizontal: 22, paddingTop: 20, gap: 16 },
   fieldLabel: { width: 88, fontSize: 14, color: 'rgba(110,110,115,0.95)' },

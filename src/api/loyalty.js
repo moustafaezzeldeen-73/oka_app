@@ -2,14 +2,9 @@ import { SERVICE_URL, hasService, withTimeout } from './config';
 import { LOYALTY_BASE } from '../data';
 
 /**
- * Loyalty points.
- *
- * The store has no loyalty app and no customer metafield definitions today, so
- * the service derives the balance the same way the prototype's earn rules
- * describe it — 1 point per EGP on delivered orders — minus whatever has been
- * redeemed (stored in an `oka.loyalty_redeemed` customer metafield).
- *
- * Until a customer is signed in, the prototype's demo balance is used.
+ * Loyalty points — a live read of the customer's Shopify store credit, at 10
+ * points per EGP. Until a customer is signed in, the prototype's demo balance
+ * is used instead.
  */
 export async function fetchLoyalty(customerPhone) {
   if (!hasService() || !customerPhone) return { balance: LOYALTY_BASE, demo: true };
@@ -19,12 +14,7 @@ export async function fetchLoyalty(customerPhone) {
     );
     if (!res.ok) throw new Error(`service-http-${res.status}`);
     const json = await res.json();
-    return {
-      balance: Number(json.balance ?? 0),
-      earned: Number(json.earned ?? 0),
-      redeemed: Number(json.redeemed ?? 0),
-      demo: false,
-    };
+    return { balance: Number(json.balance ?? 0), demo: false };
   } catch {
     return { balance: LOYALTY_BASE, demo: true };
   }
