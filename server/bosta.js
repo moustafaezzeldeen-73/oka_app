@@ -104,6 +104,26 @@ export async function findDeliveryByTracking(trackingNumber) {
   return list.find((d) => d.trackingNumber === trackingNumber) ?? null;
 }
 
+/**
+ * Every delivery Bosta has filed under a phone number.
+ *
+ * Used as a single cheap pre-fetch before resolving a customer's whole order
+ * list, so the common case — every one of their shipments filed under the
+ * account's own number — costs one Bosta call instead of one per order.
+ * It is a starting point, not the source of truth: a shipment's receiver
+ * phone doesn't have to match the account's, so callers must still fall back
+ * to `findDeliveryByOrderName` for anything this misses.
+ */
+export async function findDeliveriesByPhone(phone) {
+  if (!phone) return [];
+  const digits = String(phone).replace(/\D/g, '').slice(-10);
+  if (!digits) return [];
+  const list = await search(digits);
+  return list.filter((d) =>
+    String(d.receiver?.phone ?? '').replace(/\D/g, '').endsWith(digits),
+  );
+}
+
 /** Surfaces the real reason a Bosta call failed, for the /health check. */
 export async function pingBosta() {
   try {
@@ -155,10 +175,20 @@ const fmt = (t, ar) => {
   });
 };
 
-/** Bosta's own free-text reason, prefixed so it reads as an event, not a label. */
+/**
+ * Bosta's own free-text reason, prefixed so it reads as an event rather than
+ * a bare label — that reason string comes back in English regardless of the
+ * app's language, since Bosta doesn't localise it, so it's appended rather
+ * than woven into the Arabic sentence. `scheduledAt`, when Bosta sets it, is
+ * the next attempt date — worth a line of its own so "why" and "when next"
+ * aren't buried in one run-on sentence.
+ */
 const exceptionText = (ex, ar) => {
   const label = ar ? 'مشكلة في التوصيل' : 'Delivery issue';
-  return ex?.reason ? `${label}: ${ex.reason}` : label;
+  const lines = [ex?.reason ? `${label}: ${ex.reason}` : label];
+  const when = fmt(ex?.scheduledAt, ar);
+  if (when) lines.push(ar ? `المحاولة القادمة: ${when}` : `Next attempt: ${when}`);
+  return lines.join('\n');
 };
 
 /**
@@ -210,15 +240,24 @@ export function toUpdates(delivery, lang = 'ar') {
 /**
  * Whether this order needs the customer (or staff) to do something before it
  * can move again — Bosta's own `waitingForBusinessAction` flag, with the most
- * recent exception's reason attached so the app can say what, not just that.
+ * recent exception's reason (and next scheduled attempt, if Bosta has set
+ * one) attached so the app can say what and when, not just that.
  */
 export function actionNeeded(delivery, lang = 'ar') {
   if (!delivery?.state?.waitingForBusinessAction) return null;
   const ar = lang === 'ar';
   const exceptions = delivery.state.exception ?? [];
   const latest = exceptions[exceptions.length - 1];
-  if (latest?.reason) {
-    return ar ? `الطلب محتاج تدخلك: ${latest.reason}` : `This order needs your attention: ${latest.reason}`;
-  }
-  return ar ? 'الطلب محتاج تدخلك — راجع حالة الشحنة.' : 'This order needs your attention — check the shipment.';
+
+  const base = latest?.reason
+    ? ar
+      ? `الطلب محتاج تدخلك: ${latest.reason}`
+      : `This order needs your attention: ${latest.reason}`
+    : ar
+      ? 'الطلب محتاج تدخلك — راجع حالة الشحنة.'
+      : 'This order needs your attention — check the shipment.';
+
+  const when = fmt(latest?.scheduledAt, ar);
+  if (!when) return base;
+  return `${base}\n${ar ? 'المحاولة القادمة: ' : 'Next attempt: '}${when}`;
 }

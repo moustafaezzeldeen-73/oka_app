@@ -19,6 +19,7 @@ import {
 } from './shopify.js';
 import {
   actionNeeded,
+  findDeliveriesByPhone,
   findDeliveryByOrderName,
   findDeliveryByTracking,
   pingBosta,
@@ -180,19 +181,32 @@ app.get('/customer/orders', async (req, res) => {
     if (!customer) return res.json({ customer: null, orders: [] });
 
     /**
-     * Each order's own delivery, looked up per order rather than pulled from
-     * one batch search under the account's phone number. A shipment's Bosta
-     * record can carry a different phone than the account does — the address
-     * form doesn't require typing the account's own number — so searching
-     * only by account phone silently missed those orders' deliveries
-     * entirely. An exact AWB (from the fulfilment) or businessReference match
-     * is what actually links the two systems; the phone is only a fallback
-     * signal within that per-order search, never the sole one.
+     * One cheap pre-fetch — every delivery Bosta has filed under the
+     * account's own phone — covers the common case where that's also the
+     * receiver phone on the shipment. It's a starting point, not the answer:
+     * an order whose shipping form used a different phone won't be in it, so
+     * anything that doesn't match here gets one targeted lookup of its own
+     * below rather than being silently reported as having no delivery.
      */
+    const batch = await findDeliveriesByPhone(customer.phone).catch(() => []);
+    const byTracking = new Map();
+    const byRef = new Map();
+    for (const d of batch) {
+      if (d.trackingNumber) byTracking.set(d.trackingNumber, d);
+      if (d.businessReference) byRef.set(String(d.businessReference).replace(/^#/, ''), d);
+    }
+
     const orders = await Promise.all(customer.orders.map(async (o) => {
-      const delivery = o.trackingNumber
-        ? await findDeliveryByTracking(o.trackingNumber).catch(() => null)
-        : await findDeliveryByOrderName(o.name, { phone: o.shipTo?.phone ?? customer.phone }).catch(() => null);
+      let delivery =
+        (o.trackingNumber ? byTracking.get(o.trackingNumber) : null) ??
+        byRef.get(String(o.name).replace(/^#/, '')) ??
+        null;
+
+      if (!delivery) {
+        delivery = o.trackingNumber
+          ? await findDeliveryByTracking(o.trackingNumber).catch(() => null)
+          : await findDeliveryByOrderName(o.name, { phone: o.shipTo?.phone ?? customer.phone }).catch(() => null);
+      }
       const code = delivery?.state?.code ?? null;
 
       // One chronological story from both systems, oldest first.
