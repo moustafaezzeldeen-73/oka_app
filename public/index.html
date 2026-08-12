@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OKA Warehouse</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --ink: #16181d;
+    --muted: #6b7280;
+    --line: #e3e6ea;
+    --ok: #0f7b42;
+    --warn: #a86400;
+    --bad: #b3261e;
+    --accent: #1c4ed8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a; --panel: #1c1f25; --ink: #e8eaed; --muted: #9aa1ac;
+      --line: #2c3038; --ok: #4ade80; --warn: #fbbf24; --bad: #f87171; --accent: #7aa2f7;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  header {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    padding: 14px 20px; background: var(--panel); border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 5;
+  }
+  h1 { font-size: 17px; margin: 0; margin-right: auto; }
+  main { padding: 20px; max-width: 1200px; margin: 0 auto; }
+  button {
+    font: inherit; padding: 7px 14px; border-radius: 7px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .pill {
+    display: inline-block; padding: 2px 9px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; border: 1px solid currentColor;
+  }
+  .pill.ok { color: var(--ok); }
+  .pill.warn { color: var(--warn); }
+  .pill.bad { color: var(--bad); }
+  .pill.mute { color: var(--muted); }
+  .banner {
+    padding: 10px 14px; border-radius: 8px; margin-bottom: 16px;
+    border: 1px solid var(--line); background: var(--panel);
+  }
+  .banner.bad { border-color: var(--bad); color: var(--bad); }
+  .banner.warn { border-color: var(--warn); color: var(--warn); }
+  .cards { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+  .card {
+    flex: 1 1 130px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .card .n { font-size: 24px; font-weight: 700; }
+  .card .l { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .order {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px; margin-bottom: 12px;
+  }
+  .order.blocked { border-left: 4px solid var(--bad); }
+  .order.shipped { border-left: 4px solid var(--ok); }
+  .order-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; }
+  .order-head strong { font-size: 16px; }
+  .order-head .money { margin-left: auto; font-weight: 700; }
+  .meta { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  ul.findings { margin: 10px 0 0; padding-left: 18px; font-size: 13px; }
+  ul.findings li.error { color: var(--bad); }
+  ul.findings li.warning { color: var(--warn); }
+  .items { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .item {
+    display: flex; align-items: center; gap: 8px; font-size: 13px;
+    border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px 4px 4px;
+  }
+  .item img { width: 34px; height: 34px; object-fit: cover; border-radius: 5px; }
+  .wrapscroll { overflow-x: auto; }
+  pre {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+    padding: 12px; font-size: 12px; overflow-x: auto;
+  }
+  label.check { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>OKA Warehouse</h1>
+  <span id="mode" class="pill mute">checking…</span>
+  <label class="check"><input type="checkbox" id="live"> Live shipments</label>
+  <button id="refresh">Refresh orders</button>
+  <button id="audit">Audit &amp; fix</button>
+  <button id="ship" class="primary">Create AWBs</button>
+</header>
+
+<main>
+  <div id="status"></div>
+  <div class="cards" id="cards"></div>
+  <div id="dupes"></div>
+  <div id="orders"></div>
+  <div id="result"></div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const money = (n) => (n === null || n === undefined ? "—" : `${Number(n).toFixed(2)} EGP`);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+let state = { orders: [], health: null };
+
+async function api(path, options) {
+  const response = await fetch(`/api${path}`, {
+    headers: { "Content-Type": "application/json" },
+    ...options,
+    body: options?.body ? JSON.stringify(options.body) : undefined,
+  });
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error || `Request failed (${response.status})`);
+  return payload;
+}
+
+function note(message, kind = "") {
+  $("status").innerHTML = message ? `<div class="banner ${kind}">${esc(message)}</div>` : "";
+}
+
+async function loadHealth() {
+  const health = await api("/health");
+  state.health = health;
+  const { shopify, bosta } = health.credentials;
+
+  const missing = [
+    !shopify.configured && `Shopify (${shopify.missing.join(", ")})`,
+    !bosta.configured && `Bosta (${bosta.missing.join(", ")})`,
+  ].filter(Boolean);
+
+  $("mode").textContent = bosta.liveShipments ? "LIVE — real shipments" : "Dry run";
+  $("mode").className = `pill ${bosta.liveShipments ? "bad" : "ok"}`;
+  // The env switch is the authority; the checkbox can only narrow it.
+  $("live").disabled = !bosta.liveShipments;
+  if (!bosta.liveShipments) $("live").checked = false;
+
+  if (missing.length) note(`Not configured: ${missing.join(" · ")}. Fill these in .env and restart.`, "bad");
+  return health;
+}
+
+function renderCards(summary) {
+  const cards = [
+    ["Orders", summary.total],
+    ["Ready to ship", summary.shippable],
+    ["Blocked", summary.blocked],
+    ["Duplicate groups", summary.duplicateGroups],
+  ];
+  $("cards").innerHTML = cards
+    .map(([label, n]) => `<div class="card"><div class="n">${n}</div><div class="l">${label}</div></div>`)
+    .join("");
+}
+
+function renderDuplicates(groups) {
+  if (!groups.length) return ($("dupes").innerHTML = "");
+  $("dupes").innerHTML = `<div class="banner warn"><strong>${groups.length} duplicate group(s).</strong> ` +
+    groups.map((g) =>
+      `${esc(g.survivor.name)} (${money(g.survivor.total)}) vs ${g.duplicates.map((d) => esc(d.name)).join(", ")} — matched on ${esc(g.matchedOn)}`
+    ).join("<br>") + "</div>";
+}
+
+function renderOrders(orders) {
+  $("orders").innerHTML = orders.map((order) => {
+    const audit = order.audit || { findings: [], shippable: true };
+    const shipment = order.shipment;
+    const cls = shipment?.trackingNumber ? "shipped" : audit.shippable ? "" : "blocked";
+
+    const status = shipment?.trackingNumber
+      ? `<span class="pill ok">AWB ${esc(shipment.trackingNumber)}</span>`
+      : audit.shippable
+        ? `<span class="pill ok">ready</span>`
+        : `<span class="pill bad">blocked</span>`;
+
+    const risk = shipment?.risk
+      ? `<span class="pill ${shipment.risk === "no_risk" ? "ok" : "warn"}">${shipment.risk === "no_risk" ? "no risk" : "risk"}</span>`
+      : "";
+
+    const address = order.shippingAddress || {};
+
+    return `
+      <div class="order ${cls}">
+        <div class="order-head">
+          <strong>${esc(order.name)}</strong>
+          ${status} ${risk}
+          <span class="money">${money(order.total)}</span>
+        </div>
+        <div class="meta">
+          ${esc([order.customer?.firstName, order.customer?.lastName].filter(Boolean).join(" ") || "—")} ·
+          ${esc(address.phone || order.phone || "no phone")} ·
+          ${esc([address.address1, address.city, address.province].filter(Boolean).join(", "))}
+        </div>
+        <div class="meta">
+          Net ${money(order.netAmount)} · shipping ${money(order.shippingFee)} ·
+          ${new Date(order.createdAt).toLocaleString()}
+        </div>
+        <div class="items">
+          ${order.lineItems.map((item) => `
+            <span class="item">
+              ${item.imageUrl ? `<img src="${esc(item.imageUrl)}" alt="">` : ""}
+              ${esc(item.title)} ×${item.quantity}
+            </span>`).join("")}
+        </div>
+        ${audit.findings.length ? `<ul class="findings">${audit.findings
+          .map((f) => `<li class="${f.severity}">${esc(f.message)}</li>`).join("")}</ul>` : ""}
+      </div>`;
+  }).join("") || `<div class="banner">No unfulfilled orders in the window.</div>`;
+}
+
+async function refresh() {
+  note("Loading orders…");
+  try {
+    const data = await api("/orders?windowDays=2");
+    state.orders = data.orders;
+    renderCards(data.summary);
+    renderDuplicates(data.duplicateGroups);
+    renderOrders(data.orders);
+    note("");
+  } catch (error) {
+    note(error.message, "bad");
+  }
+}
+
+$("refresh").addEventListener("click", refresh);
+
+$("audit").addEventListener("click", async () => {
+  // apply=true computes the fixes; commit=true is what actually writes them.
+  const commit = confirm("Write the safe corrections (province, phone) back to Shopify?\n\nCancel = preview only.");
+  note("Auditing…");
+  try {
+    const data = await api(`/orders/audit?windowDays=2&apply=true&commit=${commit}`);
+    $("result").innerHTML = `<h3>Audit ${commit ? "applied" : "preview"}</h3><pre>${esc(JSON.stringify(data.fixes, null, 2))}</pre>`;
+    note(`${data.fixes.length} order(s) with correctable findings.`, "warn");
+    await refresh();
+  } catch (error) {
+    note(error.message, "bad");
+  }
+});
+
+$("ship").addEventListener("click", async () => {
+  const live = $("live").checked;
+  if (live && !confirm("This creates REAL, billable Bosta shipments for every ready order.\n\nContinue?")) return;
+
+  note(live ? "Creating real shipments…" : "Simulating shipments…");
+  try {
+    const data = await api("/shipments", { method: "POST", body: { dryRun: !live, windowDays: 2 } });
+    const { summary, batches } = data;
+    $("result").innerHTML = `
+      <h3>${summary.dryRun ? "Dry run" : "Shipments created"}</h3>
+      <p>${summary.created} created · ${summary.skipped} skipped · ${summary.blocked} blocked · ${summary.failed} failed</p>
+      <p><strong>${esc(batches.noRisk.name)}</strong> — ${batches.noRisk.trackingNumbers.length} AWBs<br>
+         <strong>${esc(batches.risk.name)}</strong> — ${batches.risk.trackingNumbers.length} AWBs</p>
+      ${summary.badAddresses.length ? `<div class="banner warn">Bosta flagged a bad address on: ${esc(summary.badAddresses.join(", "))} — check these even if they landed in No Risk.</div>` : ""}
+      <div class="wrapscroll"><pre>${esc(JSON.stringify(data.results, null, 2))}</pre></div>`;
+    note("");
+    await refresh();
+  } catch (error) {
+    note(error.message, "bad");
+  }
+});
+
+loadHealth().then(refresh);
+</script>
+</body>
+</html>
