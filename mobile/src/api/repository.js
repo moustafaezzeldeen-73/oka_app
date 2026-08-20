@@ -8,9 +8,8 @@
  *   Bosta    AWB / tracking number, delivery state (-> the 5-step timeline),
  *            assigned courier and their phone, customer ranking, address
  *            clarity score, and the bad-address flag.
- *   Local    contact history and attached photos — the mockup's call log is
- *            Salestrail's territory and is not wired here, so it stays local
- *            rather than being faked from either upstream.
+ *   Calls    contact history comes from the backend's call provider, not from
+ *            Shopify or Bosta; attached photos stay local.
  *
  * Live orders are adapted into the mockup's raw order format so data/shape.js
  * and every screen work identically for sample and live data.

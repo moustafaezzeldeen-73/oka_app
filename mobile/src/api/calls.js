@@ -1,5 +1,5 @@
 /**
- * Call history and recordings, read from the backend's Salestrail routes.
+ * Call history and recordings, read from the backend's call routes.
  *
  * The app never records audio itself — Android has blocked third-party call
  * recording since API 29, and Expo Go could not host a native recorder even if

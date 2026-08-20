@@ -237,7 +237,7 @@ export function OrderDetail({
                     {entry.dur}
                   </Txt>
                 ) : null}
-                {/* Only rows Salestrail actually captured audio for. */}
+                {/* Renders only for rows that actually have audio. */}
                 <RecordingButton call={entry} />
               </Card>
             ))}
