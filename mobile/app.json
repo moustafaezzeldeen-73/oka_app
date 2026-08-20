@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "OKA Warehouse",
+    "slug": "oka-warehouse",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#F3F5F4",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "co.oka.warehouse",
+      "supportsTablet": true,
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": [
+          "tel",
+          "whatsapp"
+        ]
+      }
+    },
+    "android": {
+      "package": "co.oka.warehouse",
+      "adaptiveIcon": {
+        "backgroundColor": "#1C2321"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "READ_CALL_LOG",
+        "READ_PHONE_STATE",
+        "CALL_PHONE",
+        "READ_MEDIA_AUDIO",
+        "READ_EXTERNAL_STORAGE"
+      ]
+    },
+    "extra": {
+      "note": "Runtime config comes from EXPO_PUBLIC_* env vars — see .env.example and src/api/config.js"
+    }
+  }
+}
