@@ -2,6 +2,7 @@ import express from "express";
 import * as shopify from "../lib/shopify.js";
 import * as bosta from "../lib/bosta.js";
 import * as callProvider from "../lib/callProvider.js";
+import { existingTranscript, transcribeAndAttach } from "../services/callTranscripts.js";
 import { readAll, shipmentsByOrderId } from "../lib/ledger.js";
 import { runAudit } from "../services/audit.js";
 import { shipBatch, shipOrder } from "../services/shipping.js";
@@ -173,8 +174,48 @@ router.get(
   }),
 );
 
+/**
+ * Upload a harvested recording, transcribe it, and attach it to the order.
+ *
+ * Body is the raw audio; everything else rides on the query string, so the
+ * phone can stream a file straight from disk without multipart encoding.
+ *
+ * Gemini bills per second of audio, so this is idempotent on callId: a repeat
+ * upload returns the stored transcript without re-transcribing.
+ */
+router.post(
+  "/calls/:callId/transcribe",
+  express.raw({ type: "*/*", limit: "40mb" }),
+  wrap(async (req, res) => {
+    const { callId } = req.params;
+    const { orderId, orderName, phone, mimeType, durationLabel, startTime } = req.query;
+
+    if (!req.body?.length) return res.status(400).json({ error: "Request body must be the audio file" });
+
+    res.json(
+      await transcribeAndAttach({
+        callId,
+        orderId: orderId ? decodeURIComponent(orderId) : null,
+        orderName,
+        phone,
+        audio: req.body,
+        mimeType: mimeType || req.get("content-type") || "audio/mp4",
+        durationLabel,
+        startTime,
+      }),
+    );
+  }),
+);
+
+/** The stored transcript for a call, or 404 if it has not been transcribed. */
+router.get("/calls/:callId/transcript", (req, res) => {
+  const record = existingTranscript(req.params.callId);
+  if (!record) return res.status(404).json({ error: "Not transcribed yet" });
+  res.json(record);
+});
+
 router.get("/ledger/:name", (req, res) => {
-  const allowed = ["shipments", "audit"];
+  const allowed = ["shipments", "audit", "transcripts"];
   if (!allowed.includes(req.params.name)) return res.status(404).json({ error: "Unknown ledger" });
   res.json({ entries: readAll(req.params.name) });
 });

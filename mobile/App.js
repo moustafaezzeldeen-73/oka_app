@@ -20,6 +20,7 @@ import { CATALOG, IMG } from "./src/data/sample.js";
 import { loadOrders, markReady as persistReady, refreshShipment } from "./src/api/repository.js";
 import { describeConfig } from "./src/api/config.js";
 import { callHistoryFor } from "./src/api/calls.js";
+import { transcribeHistory } from "./src/api/transcripts.js";
 
 import { BottomNav, Toast } from "./src/components/chrome.js";
 import { Txt } from "./src/components/primitives.js";
@@ -117,10 +118,29 @@ function Warehouse() {
   useEffect(() => {
     if (!rawOrder || !["detail", "shipdetail"].includes(screen)) return;
     let alive = true;
-    callHistoryFor(rawOrder.phone, { lang }).then((entries) => {
+    callHistoryFor(rawOrder.phone, { lang }).then(async (entries) => {
       if (!alive || !entries.length) return;
       setOrders((current) =>
         current.map((order) => (order.id === rawOrder.id ? { ...order, history: entries } : order)),
+      );
+
+      // Recorded calls get transcribed once and the summary replaces the
+      // generic "Answered" label — which is exactly what the mockup's own
+      // history rows showed ("Answered - order confirmed"). Gemini bills per
+      // second, so the backend is idempotent on call id.
+      const transcripts = await transcribeHistory(entries, { order: rawOrder });
+      if (!alive || !Object.keys(transcripts).length) return;
+
+      const enriched = entries.map((entry) => {
+        const record = transcripts[entry.callId];
+        if (!record) return entry;
+        const ar = record.summaryAr || entry.ar;
+        const en = record.summaryEn || entry.en;
+        return { ...entry, ar, en, note: lang === "ar" ? ar : en, transcript: record.transcript };
+      });
+
+      setOrders((current) =>
+        current.map((order) => (order.id === rawOrder.id ? { ...order, history: enriched } : order)),
       );
     });
     return () => {

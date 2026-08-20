@@ -247,3 +247,80 @@ Nothing here defeats the platform restriction. If a rep's handset has no
 built-in recorder, this app cannot record that call — not by trying harder,
 and not at any price short of moving the call onto VoIP (option A). Check the
 dialer settings on the actual warehouse phones before assuming coverage.
+
+
+---
+
+# Transcription -> Shopify
+
+Once a recording is harvested, the phone uploads it to the backend, which
+transcribes it with Gemini and attaches the result to the order.
+
+```
+handset dialer records
+   ↓
+app finds the file (MediaStore) and matches it to a call
+   ↓  POST /api/calls/:callId/transcribe   (raw audio body)
+backend → Gemini  → transcript + summary + outcome
+   ↓
+Shopify: order note (one line) + oka.call_transcripts metafield (full)
+   ↓
+history row's note becomes the call summary
+```
+
+Transcription runs server-side, not on the phone, for two reasons: the Gemini
+key would otherwise be inlined into the app bundle and extractable from the
+APK, and the Shopify write needs the admin token anyway.
+
+## Where it lands on the order — and the thing that surprised me
+
+**Shopify's Admin API cannot write an order timeline comment.** I checked the
+live schema rather than assuming: of 454 mutations, the only `comment*` ones
+(`commentApprove`, `commentDelete`, `commentSpam`, `commentNotSpam`) operate on
+**blog article comments**, and nothing else creates a timeline entry. Timeline
+comments are an admin-UI feature with no public write API.
+
+So the transcript goes to the two places that are writable and visible:
+
+| Destination | Content | Where it shows |
+|---|---|---|
+| Order **note** | one dated line: time, duration, summary, and any required action | the order page in Shopify admin |
+| Order **metafield** `oka.call_transcripts` (JSON array) | full transcript, both summaries, outcome, model, size | order metafields; appended to, so multiple calls accumulate |
+
+The note is the closest writable equivalent to a timeline comment, and it is
+appended to rather than overwritten — `note` is a full-overwrite field, so the
+existing value is read first.
+
+## Cost control
+
+Gemini bills per second of audio. Two guards:
+
+- Every transcription is written to the `transcripts` ledger keyed by call id
+  and **never repeated**. Re-uploading the same call returns the stored record
+  without calling Gemini.
+- The record is written to the ledger **before** the Shopify write. A
+  transcription that succeeded has already been paid for, and must not be
+  repeated just because attaching it failed.
+
+The app transcribes at most 3 recorded calls per order screen, sequentially, so
+a warehouse phone is never uploading several multi-megabyte files at once.
+
+## What the model is asked for
+
+Egyptian Arabic in, Egyptian Arabic out — the transcript keeps the words that
+were actually said rather than being flattened to MSA or translated. It returns
+JSON with a full transcript, a one-line summary in both languages, an
+`outcome` (confirmed / cancelled / address_changed / order_changed / no_answer
+/ callback_requested / other), and an `action_required` line when the warehouse
+must do something.
+
+The one-line summary is what replaces the generic “Answered” label in the
+app's history rows — which is exactly what the original mockup showed there
+(“Answered – order confirmed”). The design anticipated this; it just had no
+data behind it.
+
+## Audio size
+
+Files under 12MB go inline; larger ones are pushed through Gemini's Files API
+first, because a single request caps out around 20MB and base64 inflates the
+payload by roughly a third. The upload route accepts up to 40MB.

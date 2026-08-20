@@ -341,3 +341,54 @@ export async function fulfillOrder(orderId, { trackingNumber, trackingUrl, notif
 
   return assertNoUserErrors(result.fulfillmentCreateV2, "fulfillmentCreateV2").fulfillment;
 }
+
+/**
+ * Order metafields.
+ *
+ * Used for call transcripts: the Admin API has no mutation that writes an
+ * order **timeline comment** — the `comment*` mutations in the schema are for
+ * blog article comments, and nothing else creates a timeline entry. Confirmed
+ * against the live schema (454 mutations, none applicable). So the durable
+ * record lives in a metafield, and a one-line summary is appended to the
+ * order note, which the admin shows on the order page itself.
+ */
+export async function setOrderMetafield(orderId, { namespace, key, value, type = "json" }) {
+  const data = await graphql(
+    `mutation SetMetafield($metafields: [MetafieldsSetInput!]!) {
+       metafieldsSet(metafields: $metafields) {
+         metafields { id namespace key }
+         userErrors { field message }
+       }
+     }`,
+    {
+      metafields: [
+        {
+          ownerId: orderId,
+          namespace,
+          key,
+          type,
+          value: typeof value === "string" ? value : JSON.stringify(value),
+        },
+      ],
+    },
+  );
+
+  return assertNoUserErrors(data.metafieldsSet, "metafieldsSet").metafields[0];
+}
+
+/** Reads one order metafield, or null when it has never been set. */
+export async function getOrderMetafield(orderId, namespace, key) {
+  const data = await graphql(
+    `query GetMetafield($id: ID!, $namespace: String!, $key: String!) {
+       order(id: $id) { metafield(namespace: $namespace, key: $key) { id value } }
+     }`,
+    { id: orderId, namespace, key },
+  );
+  return data.order?.metafield || null;
+}
+
+/** The order's current note, needed before appending so nothing is clobbered. */
+export async function getOrderNote(orderId) {
+  const data = await graphql(`query GetNote($id: ID!) { order(id: $id) { id note } }`, { id: orderId });
+  return data.order?.note || "";
+}

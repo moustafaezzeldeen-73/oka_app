@@ -48,6 +48,13 @@ export const config = {
     liveShipments: bool(process.env.BOSTA_LIVE_SHIPMENTS, false),
   },
 
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY || "",
+    // Flash handles Egyptian Arabic audio well and is the cheap tier; audio is
+    // billed per second, so the model choice matters at warehouse volume.
+    model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+  },
+
   calls: {
     // Which call-history/recording backend to use. See src/lib/callProvider.js.
     // Salestrail is being retired — this selector is how it gets replaced
@@ -67,9 +74,10 @@ export const config = {
 };
 
 /**
- * Which integrations are actually usable with the credentials present.
- * The UI calls this so a missing key shows up as a disabled panel with a
- * clear reason, rather than as a request that fails halfway through.
+ * Which integrations are usable with the credentials present.
+ *
+ * Reports presence only — never a secret's value. /api/health is
+ * unauthenticated, so anything returned here is public.
  */
 export function credentialStatus() {
   return {
@@ -89,17 +97,21 @@ export function credentialStatus() {
       pickupLocationId: config.bosta.pickupLocationId || null,
       missing: [!config.bosta.apiKey && "BOSTA_API_KEY"].filter(Boolean),
     },
+    gemini: {
+      configured: Boolean(config.gemini.apiKey),
+      model: config.gemini.model,
+      missing: [!config.gemini.apiKey && "GEMINI_API_KEY"].filter(Boolean),
+    },
     calls: {
-    // Which call-history/recording backend to use. See src/lib/callProvider.js.
-    // Salestrail is being retired — this selector is how it gets replaced
-    // without touching routes or the mobile app.
-    provider: (process.env.CALL_PROVIDER || "salestrail").toLowerCase(),
-  },
-
-  salestrail: {
-      configured: Boolean(config.salestrail.apiKey),
-      baseUrl: config.salestrail.baseUrl,
-      missing: [!config.salestrail.apiKey && "SALESTRAIL_API_KEY"].filter(Boolean),
+      provider: config.calls.provider,
+      configured:
+        config.calls.provider === "salestrail"
+          ? Boolean(config.salestrail.apiKey)
+          : config.calls.provider === "none",
+      missing:
+        config.calls.provider === "salestrail" && !config.salestrail.apiKey
+          ? ["SALESTRAIL_API_KEY"]
+          : [],
     },
   };
 }
