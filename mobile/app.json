@@ -11,6 +11,13 @@
       "resizeMode": "contain"
     },
     "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "bundleIdentifier": "co.oka.warehouse",
+      "supportsTablet": true,
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": ["tel", "whatsapp"]
+      }
+    },
     "android": {
       "package": "co.oka.warehouse",
       "adaptiveIcon": {
