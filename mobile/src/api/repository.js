@@ -26,6 +26,18 @@ import { normalizeForBosta } from "../domain/phone.js";
 const num = (value) => (value === null || value === undefined ? "0" : String(Math.round(Number(value))));
 
 /**
+ * A stable numeric id from the Shopify gid ("gid://shopify/Order/12345" ->
+ * 12345). The screens' selection, scan and cancel bookkeeping all key off this,
+ * so a positional index would silently re-point them at a different order the
+ * moment the list shifts — a fulfilled order dropping out is enough. Falls back
+ * to the position only when there is no gid to read.
+ */
+function stableId(order, index) {
+  const digits = String(order?.id || "").match(/(\d+)\s*$/);
+  return digits ? Number(digits[1]) : index + 1;
+}
+
+/**
  * Bosta's clarity score is the design's "address clarity" tile. When Bosta has
  * no opinion (no shipment yet), fall back to a crude local signal so the tile
  * still means something rather than showing a confident zero.
@@ -61,8 +73,8 @@ export function adaptOrder(order, signals, index) {
   const clarity = signals?.clarity ?? localClarity(address);
 
   return {
-    // Numeric id keeps the mockup's selection/scan bookkeeping working.
-    id: index + 1,
+    // Numeric and stable across reloads — see stableId().
+    id: stableId(order, index),
     shopifyId: order.id,
     sh: order.name,
     awb: signals?.trackingNumber || order.trackingNumber || "—",

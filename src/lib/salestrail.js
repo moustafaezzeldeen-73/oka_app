@@ -49,6 +49,30 @@ async function call(pathname, query = {}) {
   });
 }
 
+/**
+ * Per-day response cache.
+ *
+ * `callsForPhone` pulls the whole log then filters, and the log is fetched one
+ * day at a time — so a 14-day lookup was 14 HTTP round trips, repeated for
+ * every order a rep opened. Past days are immutable once they're over, so they
+ * are cached indefinitely; today's is re-fetched after a short TTL because
+ * calls are still being added to it.
+ */
+const dayCache = new Map();
+const TODAY_TTL_MS = 120000;
+
+function cacheGet(day, isToday) {
+  const hit = dayCache.get(day);
+  if (!hit) return null;
+  if (isToday && Date.now() - hit.at > TODAY_TTL_MS) return null;
+  return hit.rows;
+}
+
+/** Exposed for tests and for a manual refresh after a known sync. */
+export function clearCallCache() {
+  dayCache.clear();
+}
+
 /** YYYY-MM-DD for a Date, in Cairo time. */
 function cairoDay(date) {
   return new Date(date.getTime() + config.orderWindowTzOffsetHours * 3600 * 1000)
@@ -60,17 +84,27 @@ function cairoDay(date) {
  * The call log for a span of days, fetched one day at a time and concatenated
  * — see the truncation note above.
  */
-export async function listCalls({ days = 14, endDate = new Date() } = {}) {
+export async function listCalls({ days = 7, endDate = new Date() } = {}) {
   const calls = [];
+  const today = cairoDay(new Date());
 
   for (let offset = 0; offset < days; offset++) {
     const day = cairoDay(new Date(endDate.getTime() - offset * 86400000));
+    const isToday = day === today;
+
+    const cached = cacheGet(day, isToday);
+    if (cached) {
+      calls.push(...cached);
+      continue;
+    }
+
     const payload = await call("/export/calls/json", {
       from: `${day}T00:00:00Z`,
       to: `${day}T23:59:59Z`,
     });
 
     const rows = Array.isArray(payload) ? payload : payload?.calls || payload?.data || [];
+    dayCache.set(day, { rows, at: Date.now() });
     calls.push(...rows);
   }
 
@@ -121,7 +155,7 @@ export function formatDuration(seconds) {
  * Matching is on the normalized phone number, so a Shopify record storing
  * "+201110727746" still matches a call logged as "01110727746".
  */
-export async function callsForPhone(phone, { days = 14 } = {}) {
+export async function callsForPhone(phone, { days = 7 } = {}) {
   const target = normalizeForBosta(phone);
   if (!target) return [];
 

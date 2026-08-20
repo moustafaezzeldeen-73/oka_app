@@ -39,7 +39,7 @@ export function isConfigured() {
   return Boolean(config.bosta.apiKey);
 }
 
-async function call(pathname, { method = "GET", body, query } = {}) {
+async function call(pathname, { method = "GET", body, query, retries } = {}) {
   if (!isConfigured()) {
     throw new UpstreamError("Bosta is not configured — set BOSTA_API_KEY", {
       service: "bosta",
@@ -60,6 +60,12 @@ async function call(pathname, { method = "GET", body, query } = {}) {
       Authorization: config.bosta.apiKey,
     },
     body,
+    // None of Bosta's writes are idempotent. A retried POST /deliveries that
+    // actually succeeded the first time — the response merely timed out or
+    // came back 5xx — creates a SECOND real, billable shipment, which is
+    // exactly the duplicate this app's ledger exists to prevent. Reads retry
+    // freely; writes get one attempt and surface the failure.
+    retries: retries ?? (method === "GET" ? 3 : 0),
   });
 
   // Bosta wraps everything in { success, message, data }, and can report a

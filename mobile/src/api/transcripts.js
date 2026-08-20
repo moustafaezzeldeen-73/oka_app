@@ -10,7 +10,10 @@
  * this module never re-uploads a call it has already sent in this session.
  */
 
-import * as FileSystem from "expo-file-system";
+// SDK 54 promoted the new File/Directory API to the package root and moved
+// the classic helpers to /legacy. `uploadAsync` exists ONLY in legacy — a
+// root import silently yields undefined and every upload throws.
+import * as FileSystem from "expo-file-system/legacy";
 import { requestJson } from "./client.js";
 import * as config from "./config.js";
 

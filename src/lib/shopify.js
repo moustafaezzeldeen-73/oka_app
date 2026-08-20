@@ -27,6 +27,9 @@ const ORDER_FIELDS = `
   currentSubtotalPriceSet { shopMoney { amount currencyCode } }
   currentTotalPriceSet { shopMoney { amount currencyCode } }
   shippingLine { title originalPriceSet { shopMoney { amount } } }
+  fulfillments(first: 5) {
+    trackingInfo { number url company }
+  }
   lineItems(first: 50) {
     edges {
       node {
@@ -137,6 +140,14 @@ function normalizeOrder(node) {
         }
       : null,
     shippingAddress: node.shippingAddress || null,
+    // The Bosta AWB, as recorded on the order's fulfillment. Without this the
+    // whole Bosta half of direct mode is dead: no tracking, no courier, no
+    // ranking, no clarity — every order shows "—" for its AWB.
+    trackingNumber:
+      (node.fulfillments || [])
+        .flatMap((f) => f.trackingInfo || [])
+        .map((info) => info.number)
+        .find(Boolean) || null,
     currency: node.currentTotalPriceSet?.shopMoney?.currencyCode || "EGP",
     subtotal,
     total,
