@@ -48,6 +48,21 @@ export const config = {
     liveShipments: bool(process.env.BOSTA_LIVE_SHIPMENTS, false),
   },
 
+  calls: {
+    // Which call-history/recording backend to use. See src/lib/callProvider.js.
+    // Salestrail is being retired — this selector is how it gets replaced
+    // without touching routes or the mobile app.
+    provider: (process.env.CALL_PROVIDER || "salestrail").toLowerCase(),
+  },
+
+  salestrail: {
+    apiKey: process.env.SALESTRAIL_API_KEY || "",
+    baseUrl: (process.env.SALESTRAIL_BASE_URL || "https://api.salestrail.io").replace(/\/+$/, ""),
+    // Header name differs between Salestrail deployments; keep it configurable
+    // rather than guessing and failing with an opaque 401.
+    authHeader: process.env.SALESTRAIL_AUTH_HEADER || "x-api-key",
+  },
+
   orderWindowTzOffsetHours: Number(process.env.ORDER_WINDOW_TZ_OFFSET_HOURS || 2),
 };
 
@@ -73,6 +88,18 @@ export function credentialStatus() {
       liveShipments: config.bosta.liveShipments,
       pickupLocationId: config.bosta.pickupLocationId || null,
       missing: [!config.bosta.apiKey && "BOSTA_API_KEY"].filter(Boolean),
+    },
+    calls: {
+    // Which call-history/recording backend to use. See src/lib/callProvider.js.
+    // Salestrail is being retired — this selector is how it gets replaced
+    // without touching routes or the mobile app.
+    provider: (process.env.CALL_PROVIDER || "salestrail").toLowerCase(),
+  },
+
+  salestrail: {
+      configured: Boolean(config.salestrail.apiKey),
+      baseUrl: config.salestrail.baseUrl,
+      missing: [!config.salestrail.apiKey && "SALESTRAIL_API_KEY"].filter(Boolean),
     },
   };
 }

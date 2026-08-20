@@ -117,5 +117,10 @@ export function shapeHistory(order, lang) {
     dur: entry.dur || "",
     note: ar ? entry.ar : entry.en,
     iconBg: entry.type === "call" ? colors.greenDeep : colors.ink,
+    // Carried through so the row can offer playback. Only set on live
+    // Salestrail entries — the sample fixtures have no audio.
+    callId: entry.callId || null,
+    hasRecording: Boolean(entry.hasRecording),
+    recordingUrl: entry.recordingUrl || null,
   }));
 }

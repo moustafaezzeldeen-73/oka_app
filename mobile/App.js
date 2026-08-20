@@ -19,6 +19,7 @@ import { shapeHistory, shapeItems, shapeOrder, shapeTrackSteps } from "./src/dat
 import { CATALOG, IMG } from "./src/data/sample.js";
 import { loadOrders, markReady as persistReady, refreshShipment } from "./src/api/repository.js";
 import { describeConfig } from "./src/api/config.js";
+import { callHistoryFor } from "./src/api/calls.js";
 
 import { BottomNav, Toast } from "./src/components/chrome.js";
 import { Txt } from "./src/components/primitives.js";
@@ -106,6 +107,26 @@ function Warehouse() {
   const history = rawOrder ? shapeHistory(rawOrder, lang) : [];
   const trackSteps = selShaped ? shapeTrackSteps(selShaped, lang) : [];
   const photos = Array.from({ length: photoCount }, (_, i) => ({ time: `14:0${i + 2}` }));
+
+  /**
+   * Pull the real call history from Salestrail when an order is opened.
+   * The app never records calls itself — Android blocks that for third-party
+   * apps; Salestrail's Android app is what captures them. See
+   * docs/call-recording.md.
+   */
+  useEffect(() => {
+    if (!rawOrder || !["detail", "shipdetail"].includes(screen)) return;
+    let alive = true;
+    callHistoryFor(rawOrder.phone, { lang }).then((entries) => {
+      if (!alive || !entries.length) return;
+      setOrders((current) =>
+        current.map((order) => (order.id === rawOrder.id ? { ...order, history: entries } : order)),
+      );
+    });
+    return () => {
+      alive = false;
+    };
+  }, [screen, rawOrder?.id, lang]);
 
   /** Pull fresh Bosta state whenever an order's detail or tracking is opened. */
   useEffect(() => {

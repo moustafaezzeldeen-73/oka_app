@@ -1,6 +1,7 @@
 import express from "express";
 import * as shopify from "../lib/shopify.js";
 import * as bosta from "../lib/bosta.js";
+import * as callProvider from "../lib/callProvider.js";
 import { readAll, shipmentsByOrderId } from "../lib/ledger.js";
 import { runAudit } from "../services/audit.js";
 import { shipBatch, shipOrder } from "../services/shipping.js";
@@ -132,6 +133,43 @@ router.get(
   "/risk/:trackingNumber",
   wrap(async (req, res) => {
     res.json(await bosta.orderRisk(req.params.trackingNumber));
+  }),
+);
+
+/**
+ * Call history for one customer, from Salestrail.
+ *
+ * This is what fills the app's contact-history rows. The app itself does not
+ * record calls — Android has blocked third-party call recording since API 29
+ * (see docs/call-recording.md).
+ *
+ * The source is whichever CALL_PROVIDER is selected, so retiring Salestrail
+ * does not change this route or anything above it.
+ */
+router.get(
+  "/calls",
+  wrap(async (req, res) => {
+    const { phone } = req.query;
+    if (!phone) return res.status(400).json({ error: "phone is required" });
+
+    const days = Math.min(intParam(req.query.days, 14), 60);
+
+    res.json({
+      phone,
+      days,
+      provider: callProvider.providerName(),
+      // hasRecording is false for an answered call the provider did not
+      // capture audio for — answered and recorded are different things.
+      calls: await callProvider.callsForPhone(phone, { days }),
+    });
+  }),
+);
+
+/** The playable recording reference for one call. */
+router.get(
+  "/calls/:callId/recording",
+  wrap(async (req, res) => {
+    res.json(await callProvider.getRecording(req.params.callId));
   }),
 );
 

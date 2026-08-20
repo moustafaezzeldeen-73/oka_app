@@ -4,6 +4,7 @@ import { colors, ink, s } from "../theme.js";
 import { Avatar, Barcode, Card, Chip, EmptyNote, Press, SectionLabel, Thumb, Txt } from "../components/primitives.js";
 import { BackButton } from "../components/chrome.js";
 import { CameraIcon, CancelIcon, CheckBigIcon, PencilIcon, PhoneIcon, WhatsAppIcon } from "../components/Icons.js";
+import { RecordingButton } from "../components/RecordingButton.js";
 
 /** One of the four square action buttons under the stat tiles. */
 function ActionTile({ bg, border, label, labelColor, opacity = 1, onPress, children }) {
@@ -236,6 +237,8 @@ export function OrderDetail({
                     {entry.dur}
                   </Txt>
                 ) : null}
+                {/* Only rows Salestrail actually captured audio for. */}
+                <RecordingButton call={entry} />
               </Card>
             ))}
             {history.length === 0 ? <EmptyNote>{L.noHistory}</EmptyNote> : null}

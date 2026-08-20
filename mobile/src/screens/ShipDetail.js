@@ -4,6 +4,7 @@ import { colors, ink, s } from "../theme.js";
 import { Card, EmptyNote, Thumb, Txt } from "../components/primitives.js";
 import { BackButton } from "../components/chrome.js";
 import { PhoneIcon, WhatsAppIcon } from "../components/Icons.js";
+import { RecordingButton } from "../components/RecordingButton.js";
 import { CourierCard, Timeline } from "./Track.js";
 
 /**
@@ -131,6 +132,7 @@ export function ShipDetail({ L, sel, items, steps, history, backGlyph, onBack, o
                   {entry.dur}
                 </Txt>
               ) : null}
+              <RecordingButton call={entry} />
             </Card>
           ))}
           {history.length === 0 ? <EmptyNote>{L.noHistory}</EmptyNote> : null}
