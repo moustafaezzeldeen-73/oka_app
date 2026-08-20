@@ -10,12 +10,17 @@
       "backgroundColor": "#F3F5F4",
       "resizeMode": "contain"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "co.oka.warehouse",
       "supportsTablet": true,
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["tel", "whatsapp"]
+        "LSApplicationQueriesSchemes": [
+          "tel",
+          "whatsapp"
+        ]
       }
     },
     "android": {
@@ -23,7 +28,14 @@
       "adaptiveIcon": {
         "backgroundColor": "#1C2321"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "READ_CALL_LOG",
+        "READ_PHONE_STATE",
+        "CALL_PHONE",
+        "READ_MEDIA_AUDIO",
+        "READ_EXTERNAL_STORAGE"
+      ]
     },
     "extra": {
       "note": "Runtime config comes from EXPO_PUBLIC_* env vars — see .env.example and src/api/config.js"

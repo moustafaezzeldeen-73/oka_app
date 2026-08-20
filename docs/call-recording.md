@@ -167,6 +167,83 @@ completeness, not recommended.
 ## The honest summary
 
 If recordings matter — and the design puts a recording indicator on the call
-screen, so they clearly do — **option A is the only one that actually
-delivers them** on current Android and on iOS at all. Options B and C replace
-the call log and leave the audio worse than it is today.
+screen, so they clearly do — **option A is the only one that guarantees them**
+on current Android and the only one that works on iOS at all. Option B gets
+real recordings on handsets whose own dialer records, which in the Egyptian
+market is most of them.
+
+---
+
+# Chosen path: option B, device-native
+
+Decision (Mustafa): record natively on the handset, no per-minute cost, and
+keep the in-app "call in progress" window.
+
+## How it works
+
+```
+Rep taps Call in the app
+   ↓  CALL_PHONE places the call, the in-app call window stays up
+Phone's own system dialer records it   ← the only thing allowed to
+   ↓  writes an audio file to shared storage
+App reads READ_CALL_LOG + MediaStore audio
+   ↓  matches file → call
+History row shows a play button
+```
+
+The app never captures audio. The handset's dialer does, because it holds the
+privileged permission this app cannot have. This app finds the file afterwards
+and matches it to the right call.
+
+## What it costs
+
+Nothing recurring. No telephony account, no per-minute charges, no number
+rental. Calls stay on GSM exactly as they are today.
+
+## What it requires
+
+1. **A development build.** `npm run android:dev` (`expo run:android`), or an
+   EAS build. Expo Go is a fixed binary and can never hold `READ_CALL_LOG`.
+   Local builds are free. Everything degrades to an empty history inside Expo
+   Go rather than crashing, so QR testing of the rest of the app still works.
+2. **Call recording switched on in the phone's own dialer.** Settings differ
+   per OEM — usually Phone app → Settings → Call recording → record all calls.
+3. **Sideload rather than Play Store.** `READ_CALL_LOG` needs a Play Console
+   declaration and review. Installing the APK directly on warehouse-owned
+   phones skips that process entirely, which is the right distribution model
+   for an internal tool anyway.
+
+## Handset support
+
+Built-in call recording exists on most phones sold in Egypt: Xiaomi / Redmi /
+POCO, Realme, Oppo, Vivo, Infinix, Tecno, and Samsung in this region. Notably
+**absent on Google Pixel** and on some international Samsung firmware.
+
+On a handset with no recorder, the call log still populates and the app works
+— those rows simply never show a play button. Nothing breaks; there is just no
+audio, because none was made.
+
+## How files are found
+
+`src/api/callProviders/device.js` reads audio assets through MediaStore
+(`expo-media-library`) rather than scanning the filesystem. That deliberately
+avoids `MANAGE_EXTERNAL_STORAGE`, which would drag the Play declaration back
+in. Assets are kept only when their path sits under a known call-recording
+directory — `RECORDING_DIRECTORIES` lists the OEM paths; add to it when a new
+handset appears, no logic changes needed.
+
+Matching a file to a call uses two signals, because OEM filename conventions
+vary: a filename containing the customer's number is decisive, otherwise the
+file's modification time has to fall inside the call window with two minutes
+of slack for the dialer finishing the write after hang-up.
+
+Phone numbers are compared on their **last nine digits**, so `01110727746`,
+`+201110727746` and `201110727746` all match across the call log, Shopify and
+Bosta without normalizing every source.
+
+## The limit that remains
+
+Nothing here defeats the platform restriction. If a rep's handset has no
+built-in recorder, this app cannot record that call — not by trying harder,
+and not at any price short of moving the call onto VoIP (option A). Check the
+dialer settings on the actual warehouse phones before assuming coverage.

@@ -119,3 +119,24 @@ the backend's audited path, not fire-and-forget from a warehouse phone.
 
 Scanning uses the mockup's tap-to-advance stub. `expo-camera` is in Expo Go and
 drops into `onScan` in `src/screens/Scan.js` without touching the layout.
+
+## Call history and recordings
+
+Contact-history rows are real calls, and rows with audio get a play button.
+
+The app **never records** — no third-party Android app can capture the other
+side of a call since API 29. The handset's own system dialer records (most
+phones sold in Egypt do this), and the app matches those files back to the call
+log. Zero recurring cost.
+
+This needs a development build, because Expo Go cannot hold `READ_CALL_LOG`:
+
+```bash
+npm run android:dev     # expo run:android
+```
+
+Inside Expo Go the history falls back to the backend's call provider, or
+renders empty — the rest of the app is unaffected, so QR testing still works.
+
+Full detail, including handset support and why the Play Store is skipped:
+`docs/call-recording.md`.
