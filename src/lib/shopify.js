@@ -9,6 +9,13 @@
  *     variant image is never "no photo", always "check the product level".
  *  2. `orderCancel` is blocked on this store's connector. Duplicate handling
  *     empties the smaller order instead of cancelling it.
+ *
+ * Deprecated fields still in use, flagged by schema validation. All four
+ * currently work; replace them at the next API-version bump:
+ *   Customer.email          -> defaultEmailAddress.emailAddress
+ *   Customer.phone          -> defaultPhoneNumber.phoneNumber
+ *   ProductVariant.image    -> media
+ *   Product.featuredImage   -> featuredMedia
  */
 
 import { config } from "../config.js";
