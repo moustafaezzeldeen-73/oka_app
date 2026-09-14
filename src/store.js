@@ -53,6 +53,11 @@ const INITIAL = {
   selectedOrderName: null,
   /** Bumped after an edit or cancel so the order screen refetches. */
   ordersVersion: 0,
+
+  /** The signed-in customer's subscriptions; null until fetched. */
+  subscriptions: null,
+  /** Set by the Subscriptions screen before navigating to Subscribe to edit one. */
+  editingSubscription: null,
 };
 
 const StoreContext = createContext(null);
@@ -187,9 +192,18 @@ export function useActions() {
       signedIn: ({ token, customer, staff, via }) =>
         patch({ session: { token, staff, via }, customer, screen: 'orders', stack: [] }),
       signOut: () =>
-        patch({ session: null, customer: null, remoteOrders: null, addresses: null, screen: 'account', stack: [] }),
+        patch({
+          session: null,
+          customer: null,
+          remoteOrders: null,
+          addresses: null,
+          subscriptions: null,
+          screen: 'account',
+          stack: [],
+        }),
       setRemoteOrders: (remoteOrders) => patch({ remoteOrders }),
       setAddresses: (addresses) => patch({ addresses }),
+      setSubscriptions: (subscriptions) => patch({ subscriptions }),
       openOrder: (selectedOrderName) => patch({ selectedOrderName }),
       backToOrderList: () => patch({ selectedOrderName: null }),
       /** Forces the order screen to pull fresh state after a mutation. */

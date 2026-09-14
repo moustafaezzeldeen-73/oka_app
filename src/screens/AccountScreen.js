@@ -64,6 +64,13 @@ export default function AccountScreen() {
             rowDir={rowDir}
           />
           <Row
+            label={d.isRtl ? 'اشتراكاتي' : 'My Subscriptions'}
+            onPress={() => actions.goTo('subscriptions')}
+            chevron
+            d={d}
+            rowDir={rowDir}
+          />
+          <Row
             label={d.t('notifRow')}
             d={d}
             rowDir={rowDir}

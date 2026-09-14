@@ -93,16 +93,35 @@ export async function createOrder(payload) {
     discountCode,
     paymentMethod = 'cod',
     lang = 'ar',
+    // Additive hooks for callers other than checkout — the subscription
+    // scheduler is the only one that currently sets either. Checkout never
+    // does, so its orders keep pricing straight from the live variant.
+    extraTags = [],
+    noteExtra,
   } = payload;
 
   const lineItems = items.map((it) => {
     // A real variant id is always preferred; falling back to a title-only line
     // keeps a checkout from failing when the app is running on bundled data.
-    if (it.variantId) return { variantId: it.variantId, quantity: it.quantity };
+    if (it.variantId) {
+      return {
+        variantId: it.variantId,
+        quantity: it.quantity,
+        // Only set when a caller explicitly wants to override Shopify's live
+        // variant price — a subscription cycle applying its discount, for
+        // instance. Omitted here, Shopify prices the line at the variant's
+        // current price, which is what every normal checkout order does.
+        ...(it.priceOverride != null
+          ? { priceSet: { shopMoney: { amount: String(it.priceOverride), currencyCode: 'EGP' } } }
+          : {}),
+      };
+    }
     return {
       title: it.title || it.id,
       quantity: it.quantity,
-      priceSet: { shopMoney: { amount: String(it.price), currencyCode: 'EGP' } },
+      priceSet: {
+        shopMoney: { amount: String(it.priceOverride ?? it.price), currencyCode: 'EGP' },
+      },
     };
   });
 
@@ -131,8 +150,13 @@ export async function createOrder(payload) {
     // isn't exactly what's on the account, and the order then never shows up
     // under this customer's order history for the app to find again.
     ...(customerId ? { customer: { toAssociate: { id: customerId } } } : {}),
-    tags: ['oka-app', `lang:${lang}`, `payment:${paymentMethod}`],
-    note: paymentMethod === 'cod' ? 'Cash on delivery — collected by courier' : undefined,
+    tags: ['oka-app', `lang:${lang}`, `payment:${paymentMethod}`, ...extraTags],
+    note: [
+      paymentMethod === 'cod' ? 'Cash on delivery — collected by courier' : null,
+      noteExtra,
+    ]
+      .filter(Boolean)
+      .join(' — ') || undefined,
     // Every order the app creates is unpaid until the courier collects (COD) or
     // a real payment gateway is wired up (card/wallet) — never silently marked
     // paid just because Shopify defaults an order with no transactions to it.

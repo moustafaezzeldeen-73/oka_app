@@ -13,3 +13,7 @@ web-build/
 # macOS / editors
 .DS_Store
 *.tsbuildinfo
+
+# Subscription records — real customer data generated at runtime, not
+# something to ship in the repo. See server/subscriptions.js.
+server/data/

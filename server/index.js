@@ -30,6 +30,14 @@ import {
   toUpdates,
 } from './bosta.js';
 import { authenticate, issueToken, verifyToken } from './auth.js';
+import { startSubscriptionScheduler } from './scheduler.js';
+import {
+  FREQUENCIES,
+  createSubscription,
+  listSubscriptions,
+  setStatus as setSubscriptionStatus,
+  updateSubscription,
+} from './subscriptions.js';
 
 /**
  * Shopify's own milestones, merged into the Bosta timeline so the order screen
@@ -578,7 +586,92 @@ app.post('/loyalty/redeem', async (req, res) => {
   }
 });
 
+/**
+ * Subscriptions — "subscribe & save".
+ *
+ * A standalone order mode: pick a delivery frequency and a basket, and the
+ * scheduler (scheduler.js) turns that into a real COD Shopify order on each
+ * due date automatically, at a discount that climbs with frequency. There is
+ * no payment gateway behind this — it is a standing instruction, not a
+ * billing contract — which is exactly what makes it possible to build on top
+ * of the same cash-on-delivery order creation checkout already uses.
+ */
+
+/** The frequency tiers and their discounts. Public — no sign-in needed to browse. */
+app.get('/subscription-frequencies', (_req, res) => {
+  res.json({
+    frequencies: FREQUENCIES.map(({ id, en, ar, intervalDays, discountPct }) => ({
+      id,
+      en,
+      ar,
+      intervalDays,
+      discountPct,
+    })),
+  });
+});
+
+app.get('/subscriptions', async (req, res) => {
+  const s = session(req);
+  const identifier = s?.identifier ?? req.query.identifier;
+  if (!identifier) return res.status(401).json({ error: 'not signed in' });
+  try {
+    return res.json({ subscriptions: await listSubscriptions(identifier) });
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
+app.post('/subscriptions', async (req, res) => {
+  const s = session(req);
+  const identifier = s?.identifier ?? req.body?.identifier;
+  if (!identifier) return res.status(401).json({ error: 'not signed in' });
+  try {
+    // The account's real Shopify id, so each cycle's order links back to it
+    // the same way a native checkout order does — without it, Shopify's own
+    // email/phone matching can silently miss.
+    const customer = await findCustomerOrders(identifier).catch(() => null);
+    const sub = await createSubscription({
+      identifier,
+      customerId: customer?.id ?? null,
+      customerName: req.body?.customerName ?? customer?.name ?? null,
+      email: req.body?.email ?? customer?.email ?? null,
+      frequencyId: req.body?.frequencyId,
+      items: req.body?.items ?? [],
+      address: req.body?.address ?? {},
+      shippingFee: req.body?.shippingFee,
+    });
+    return res.json({ subscription: sub });
+  } catch (err) {
+    return fail(res, err, 400);
+  }
+});
+
+app.post('/subscriptions/:id/update', async (req, res) => {
+  const s = session(req);
+  if (!s?.identifier) return res.status(401).json({ error: 'not signed in' });
+  try {
+    const sub = await updateSubscription(req.params.id, s.identifier, req.body ?? {});
+    return res.json({ subscription: sub });
+  } catch (err) {
+    return fail(res, err, 400);
+  }
+});
+
+/** `status` is one of pause | resume | cancel. */
+app.post('/subscriptions/:id/:status(pause|resume|cancel)', async (req, res) => {
+  const s = session(req);
+  if (!s?.identifier) return res.status(401).json({ error: 'not signed in' });
+  const target = { pause: 'paused', resume: 'active', cancel: 'cancelled' }[req.params.status];
+  try {
+    const sub = await setSubscriptionStatus(req.params.id, s.identifier, target);
+    return res.json({ subscription: sub });
+  } catch (err) {
+    return fail(res, err, 400);
+  }
+});
+
 const port = Number(process.env.PORT ?? 8787);
 app.listen(port, () => {
+  startSubscriptionScheduler();
   console.log(`OKA order service listening on :${port}`);
 });

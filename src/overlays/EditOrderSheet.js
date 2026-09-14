@@ -6,6 +6,7 @@ import { C, D, W } from '../theme';
 import { FadeIn } from '../components/anim';
 import { Img, Press, Txt } from '../components/ui';
 import { QtyStepper, SumRow } from '../components/parts';
+import AddressPicker from '../components/AddressPicker';
 import { Close } from '../components/Icons';
 import { editShopifyOrder, fetchCustomerAddresses, updateOrderAddress } from '../api/auth';
 
@@ -144,43 +145,17 @@ export default function EditOrderSheet() {
               <Txt isRtl={d.isRtl} style={styles.sectionLabel}>
                 {d.isRtl ? 'عنوان التوصيل' : 'DELIVERY ADDRESS'}
               </Txt>
-              {addresses.map((a) => {
-                const active = pickedAddress
-                  ? pickedAddress.id === a.id
-                  : a.id === state.selectedAddress || (!state.selectedAddress && a.isDefault);
-                return (
-                  <Press
-                    key={a.id}
-                    onPress={() => setPickedAddress(a)}
-                    style={[
-                      styles.addrRow,
-                      {
-                        borderColor: active ? C.ink : 'rgba(0,0,0,0.1)',
-                        borderWidth: active ? 1.5 : 1,
-                        backgroundColor: active ? 'rgba(0,0,0,0.035)' : '#ffffff',
-                      },
-                    ]}
-                  >
-                    <View style={[styles.addrInner, rowDir]}>
-                      <View style={{ flex: 1, minWidth: 0 }}>
-                        <Txt isRtl={d.isRtl} style={styles.addrName}>
-                          {a.name || state.customer?.name || ''}
-                        </Txt>
-                        <Txt isRtl={d.isRtl} style={styles.addrLine}>{a.street}</Txt>
-                        <Txt isRtl={d.isRtl} style={styles.addrLine}>{a.city}</Txt>
-                      </View>
-                      <View style={styles.addrRadio}>
-                        <View
-                          style={[
-                            styles.addrDot,
-                            { backgroundColor: active ? C.accent : 'transparent' },
-                          ]}
-                        />
-                      </View>
-                    </View>
-                  </Press>
-                );
-              })}
+              <AddressPicker
+                addresses={addresses}
+                activeId={
+                  pickedAddress
+                    ? pickedAddress.id
+                    : (state.selectedAddress ?? addresses.find((a) => a.isDefault)?.id)
+                }
+                onPick={setPickedAddress}
+                isRtl={d.isRtl}
+                fallbackName={state.customer?.name}
+              />
               {pickedAddress ? (
                 <Txt isRtl={d.isRtl} style={styles.addrNote}>
                   {d.isRtl
@@ -347,20 +322,6 @@ const styles = StyleSheet.create({
 
   rule: { height: 1, backgroundColor: C.cardBorder, marginHorizontal: 20, marginTop: 12, marginBottom: 4 },
 
-  addrRow: { marginHorizontal: 20, marginBottom: 9, padding: 13, borderRadius: 15 },
-  addrInner: { alignItems: 'center', justifyContent: 'space-between', gap: 12 },
-  addrName: { fontSize: 13.5, fontWeight: W.bold, lineHeight: 18 },
-  addrLine: { fontSize: 12.5, lineHeight: 18, color: 'rgba(110,110,115,0.95)', marginTop: 1 },
-  addrRadio: {
-    width: 19,
-    height: 19,
-    borderRadius: 10,
-    borderWidth: 1.6,
-    borderColor: 'rgba(0,0,0,0.25)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addrDot: { width: 10, height: 10, borderRadius: 5 },
   addrNote: {
     marginHorizontal: 20,
     marginBottom: 4,

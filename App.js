@@ -35,6 +35,8 @@ import AddAddressScreen from './src/screens/AddAddressScreen';
 import LoyaltyScreen from './src/screens/LoyaltyScreen';
 import AccountScreen from './src/screens/AccountScreen';
 import SignInScreen from './src/screens/SignInScreen';
+import SubscribeScreen from './src/screens/SubscribeScreen';
+import SubscriptionsScreen from './src/screens/SubscriptionsScreen';
 import ArOverlay from './src/overlays/ArOverlay';
 import ArViewer from './src/overlays/ArViewer';
 import EditOrderSheet from './src/overlays/EditOrderSheet';
@@ -49,6 +51,8 @@ const TAB_BAR_SCREENS = [
   'addresses',
   'addAddress',
   'loyalty',
+  'subscribe',
+  'subscriptions',
 ];
 
 /**
@@ -76,6 +80,8 @@ const SCREENS = {
   loyalty: LoyaltyScreen,
   account: AccountScreen,
   signIn: SignInScreen,
+  subscribe: SubscribeScreen,
+  subscriptions: SubscriptionsScreen,
 };
 
 export default function App() {
