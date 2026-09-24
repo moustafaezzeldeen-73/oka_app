@@ -87,7 +87,9 @@ async function call(path, biz) {
   }
   // J&T answers HTTP 200 for everything; the verdict is in `code`.
   if (String(json.code) !== '1') {
-    throw new Error(`J&T ${path}: ${json.msg ?? 'request failed'} (code ${json.code})`);
+    const err = new Error(`J&T ${path}: ${json.msg ?? 'request failed'} (code ${json.code})`);
+    err.code = String(json.code);
+    throw err;
   }
   return json.data;
 }
@@ -117,7 +119,15 @@ export async function trace(billCodes = []) {
   return found;
 }
 
-/** Raw J&T order records by our own reference (SHOPIFY…), for debugging. */
+/**
+ * J&T's answer when none of the references exist: instead of an empty list,
+ * getOrders fails validating an internal, empty `waybillNos`. It means "no
+ * shipments", not a fault — a customer whose orders aren't on J&T yet must
+ * not be told the courier is unreachable.
+ */
+const isNoMatch = (err) => err?.code === '999001030' && /waybillNos/.test(err.message);
+
+/** J&T order records by our own reference (SHOPIFY…). */
 export async function getOrders(refs = []) {
   const code = process.env.JT_CUSTOMER_CODE;
   const password = process.env.JT_CUSTOMER_PASSWORD;
@@ -127,7 +137,12 @@ export async function getOrders(refs = []) {
   const digest = customerDigest(code, password, config().privateKey);
   const pages = await Promise.all(
     chunk(refs, BATCH).map((part) =>
-      call('order/getOrders', { customerCode: code, digest, command: 1, serialNumber: part }),
+      call('order/getOrders', { customerCode: code, digest, command: 1, serialNumber: part }).catch(
+        (err) => {
+          if (isNoMatch(err)) return [];
+          throw err;
+        },
+      ),
     ),
   );
   return pages.flatMap(rowsOf);
@@ -172,7 +187,11 @@ export async function findShipmentsByOrderNames(names = []) {
   return byName;
 }
 
-/** Confirms both the platform signature and the customer password. */
+/**
+ * Confirms both the platform signature and the customer password: a bad key
+ * or password fails before the lookup runs (145003030 / 145003031), so an
+ * empty answer for a reference that can't exist means both were accepted.
+ */
 export async function pingJT() {
   if (!hasJT()) return { ok: false, error: 'J&T is not configured' };
   try {
@@ -221,21 +240,23 @@ const CONTACT_RE = /contact the J&T courier\s*:\s*(\+?\d[\d\s-]{7,})/i;
 
 const place = (s) => s.scanNetworkName || s.scanNetworkCity || s.scanNetworkProvince || '';
 
+/**
+ * Where a scan happened, for the reader: J&T's branch code ("AS-Asyut DC")
+ * in English, its Arabic city ("مدينة أسيوط") in Arabic. The next stop only
+ * ever comes as a branch code, so the Arabic row leaves it out.
+ */
+const placeFor = (s, ar) => (ar && s.scanNetworkCity) || place(s);
+
 /** One scan → the row text the order screen shows. */
 function rowText(s, ar) {
   const code = Number(s.scanTypeCode);
-  const at = place(s);
+  const at = placeFor(s, ar);
   switch (code) {
     case 10:
       return ar ? 'تم استلام الشحنة من أوكا' : 'Collected from OKA';
     case 50:
-      return s.nextStopName
-        ? ar
-          ? `غادرت ${at} متجهة إلى ${s.nextStopName}`
-          : `Left ${at} for ${s.nextStopName}`
-        : ar
-          ? `غادرت ${at}`
-          : `Left ${at}`;
+      if (ar) return `غادرت ${at}`;
+      return s.nextStopName ? `Left ${at} for ${s.nextStopName}` : `Left ${at}`;
     case 92:
       return ar ? `وصلت إلى ${at}` : `Arrived at ${at}`;
     case 94: {
