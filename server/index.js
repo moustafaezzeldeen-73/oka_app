@@ -11,8 +11,10 @@ import {
   findCustomerAddresses,
   findCustomerLoyalty,
   findCustomerOrders,
+  findCustomerProfile,
   findOrder,
   getWishlist,
+  hasShopify,
   isShipped,
   orderIdByName,
   setDefaultAddress,
@@ -21,14 +23,15 @@ import {
 } from './shopify.js';
 import {
   actionNeeded,
-  findDeliveriesByOrderNames,
   findDeliveryByOrderName,
-  findDeliveryByTracking,
   getDelivery,
+  hasBosta,
   pingBosta,
-  stepFromState,
   toUpdates,
 } from './bosta.js';
+import { findShipmentsByOrderNames, getOrders, hasJT, pingJT, toTracking, trace } from './jt.js';
+import { trackOrders } from './shipping.js';
+import { fmtCairo } from './timefmt.js';
 import { authenticate, issueToken, verifyToken } from './auth.js';
 import { startSubscriptionScheduler } from './scheduler.js';
 import {
@@ -40,19 +43,13 @@ import {
 } from './subscriptions.js';
 
 /**
- * Shopify's own milestones, merged into the Bosta timeline so the order screen
- * shows one story rather than only the courier's half of it. Same shape as
- * Bosta's rows, and only events that have actually happened.
+ * Shopify's own milestones, merged into the courier's timeline so the order
+ * screen shows one story rather than only the courier's half of it. Same
+ * shape as the courier rows, and only events that have actually happened.
  */
 function shopifyEvents(order, lang) {
   const ar = lang === 'ar';
-  const fmt = (t) =>
-    t
-      ? new Date(t).toLocaleString(ar ? 'ar-EG' : 'en-GB', {
-          day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
-          timeZone: 'Africa/Cairo',
-        })
-      : '';
+  const fmt = (t) => fmtCairo(t, ar);
 
   const rows = [];
   if (order.createdAt) {
@@ -81,20 +78,28 @@ function shopifyEvents(order, lang) {
   }
   return rows;
 }
+
+/** Shopify events and courier scans as one chronological story, oldest first. */
+const mergeTimeline = (order, tracking, lang) =>
+  [...shopifyEvents(order, lang), ...(tracking?.updates ?? [])]
+    .filter((r) => r.at)
+    .sort((a, b) => new Date(a.at) - new Date(b.at))
+    .map(({ at, ...row }) => row);
+
 /**
  * OKA order service.
  *
  * The mobile app is a public client: anything bundled into it can be read by
- * anyone who downloads it. So the app holds only the Storefront API public
- * token (catalogue + cart), and everything that needs real authority — creating
- * orders, reading a customer's history, talking to Bosta — happens here.
+ * anyone who downloads it. So the app holds no credentials at all, and
+ * everything that needs real authority — the catalogue, creating orders,
+ * reading a customer's history, talking to J&T and Bosta — happens here.
  *
- * Required environment:
- *   SHOPIFY_SHOP_DOMAIN   e.g. okaegypt.myshopify.com
- *   SHOPIFY_ADMIN_TOKEN   shpat_… (Admin API access token)
- *   BOSTA_API_KEY         Bosta business API key
+ * Required environment (see .env.example):
+ *   SHOPIFY_STORE_DOMAIN, SHOPIFY_ADMIN_ACCESS_TOKEN
+ *   JT_API_ACCOUNT, JT_PRIVATE_KEY, JT_CUSTOMER_CODE, JT_CUSTOMER_PASSWORD
  * Optional:
- *   PORT (default 8787), SHOPIFY_API_VERSION, ALLOWED_ORIGIN
+ *   BOSTA_API_KEY (history of pre-J&T orders), PORT (default 8787),
+ *   SHOPIFY_API_VERSION, JT_API_BASE_URL, ALLOWED_ORIGIN
  */
 
 const app = express();
@@ -126,19 +131,24 @@ const withDeadline = (promise, ms, label) =>
 
 app.get('/health', async (_req, res) => {
   const env = {
-    SHOPIFY_SHOP_DOMAIN: Boolean(process.env.SHOPIFY_SHOP_DOMAIN),
-    SHOPIFY_ADMIN_TOKEN: Boolean(process.env.SHOPIFY_ADMIN_TOKEN),
-    BOSTA_API_KEY: Boolean(process.env.BOSTA_API_KEY),
+    shopify: hasShopify(),
+    jt: hasJT(),
+    jtCustomer: Boolean(process.env.JT_CUSTOMER_CODE && process.env.JT_CUSTOMER_PASSWORD),
+    bosta: hasBosta(),
   };
 
-  const shopify = await withDeadline(
-    findOrder('#1').then(() => ({ ok: true })).catch((e) => ({ ok: false, error: e.message })),
-    16000,
-    'shopify',
-  );
-  const bosta = await withDeadline(pingBosta(), 10000, 'bosta');
+  // Checked side by side — one slow dependency no longer delays the others.
+  const [shopify, jt, bosta] = await Promise.all([
+    withDeadline(
+      findOrder('#1').then(() => ({ ok: true })).catch((e) => ({ ok: false, error: e.message })),
+      16000,
+      'shopify',
+    ),
+    withDeadline(pingJT(), 12000, 'jt'),
+    hasBosta() ? withDeadline(pingBosta(), 10000, 'bosta') : { ok: false, error: 'not configured' },
+  ]);
 
-  res.json({ ok: true, env, shopify, bosta });
+  res.json({ ok: true, env, shopify, jt, bosta });
 });
 
 /** Reads the session a request is acting under, if any. */
@@ -160,7 +170,7 @@ app.post('/auth/login', async (req, res) => {
   if (!auth.ok) return res.status(401).json({ error: auth.error });
 
   try {
-    const customer = await findCustomerOrders(auth.identifier).catch(() => null);
+    const customer = await findCustomerProfile(auth.identifier).catch(() => null);
     return res.json({
       token: issueToken({ identifier: auth.identifier, via: auth.via, staff: !!auth.staff }),
       via: auth.via,
@@ -178,8 +188,8 @@ app.post('/auth/login', async (req, res) => {
 });
 
 /**
- * A signed-in customer's real orders, each joined to its Bosta delivery so the
- * app can show live shipment state per order.
+ * A signed-in customer's real orders, each joined to its shipment — J&T for
+ * current orders, Bosta for older ones — so the app can show live state.
  */
 app.get('/customer/orders', async (req, res) => {
   const s = session(req);
@@ -191,84 +201,36 @@ app.get('/customer/orders', async (req, res) => {
     const customer = await findCustomerOrders(identifier);
     if (!customer) return res.json({ customer: null, orders: [] });
 
-    /**
-     * Bosta failures are reported, not swallowed.
-     *
-     * Every lookup here used to end in `.catch(() => null)`, so an outage, a
-     * bad key or a moved endpoint was indistinguishable from "this order has
-     * no shipment" — the app just showed a short timeline and no courier,
-     * with nothing anywhere saying why. Errors are collected and returned so
-     * the client can say the difference out loud.
-     */
-    const bostaErrors = [];
-    const note = (err) => {
-      const msg = String(err?.message ?? err);
-      if (!bostaErrors.includes(msg)) bostaErrors.push(msg);
-      return null;
-    };
+    const { byName, error } = await trackOrders(customer.orders, lang);
 
-    /**
-     * Orders with an AWB on their Shopify fulfilment resolve exactly, one
-     * request each. Everything else is matched by `businessReference` in a
-     * single scan of recent deliveries, shared across all of them, rather
-     * than re-walking those pages once per order.
-     */
-    const needRefLookup = customer.orders.filter((o) => !o.trackingNumber).map((o) => o.name);
-    const byRef = needRefLookup.length
-      ? await findDeliveriesByOrderNames(needRefLookup).catch((e) => {
-          note(e);
-          return new Map();
-        })
-      : new Map();
-
-    const orders = await Promise.all(customer.orders.map(async (o) => {
-      let delivery = null;
-
-      if (o.trackingNumber) {
-        delivery = await findDeliveryByTracking(o.trackingNumber).catch(note);
-      } else {
-        const summary = byRef.get(String(o.name).replace(/^#/, '')) ?? null;
-        // The scan returns summaries; the detail record is what carries the
-        // timeline, so it's re-fetched for the orders that actually matched.
-        if (summary?.trackingNumber) {
-          delivery = (await getDelivery(summary.trackingNumber).catch(note)) ?? summary;
-        }
-      }
-      const code = delivery?.state?.code ?? null;
-
-      // One chronological story from both systems, oldest first.
-      const merged = [...shopifyEvents(o, lang), ...toUpdates(delivery, lang)]
-        .filter((r) => r.at)
-        .sort((a, b) => new Date(a.at) - new Date(b.at))
-        .map(({ at, ...row }) => row);
-
-      const awb = delivery?.trackingNumber ?? o.trackingNumber ?? null;
-
+    const orders = customer.orders.map((o) => {
+      const t = byName.get(o.name) ?? null;
+      const awb = t?.trackingNumber ?? o.trackingNumber ?? null;
       return {
         ...o,
         trackingNumber: awb,
+        carrier: t?.carrier ?? null,
         // Distinguishes "no shipment yet" from "shipment exists, no events" —
         // the app says different things for each.
         hasAwb: Boolean(awb),
-        hasDelivery: Boolean(delivery),
-        bostaStateCode: code,
-        stateLabel: delivery?.state?.value ?? null,
-        step: o.cancelledAt ? 0 : stepFromState(code),
-        courier: delivery?.star?.name ?? null,
-        courierPhone: delivery?.star?.phone ?? null,
-        actionNeeded: actionNeeded(delivery, lang),
-        updates: merged,
+        hasDelivery: Boolean(t),
+        stateCode: t?.stateCode ?? null,
+        stateLabel: t?.stateLabel ?? null,
+        step: o.cancelledAt ? 0 : t?.step ?? 0,
+        courier: t?.courier ?? null,
+        courierPhone: t?.courierPhone ?? null,
+        actionNeeded: o.cancelledAt ? null : t?.actionNeeded ?? null,
+        updates: mergeTimeline(o, t, lang),
       };
-    }));
+    });
 
     return res.json({
       customer: { name: customer.name, email: customer.email, phone: customer.phone,
                   address: customer.address },
       orders,
       staff: Boolean(s?.staff),
-      // Present only when a Bosta call actually failed — the app uses it to
-      // say "we couldn't reach the courier" instead of implying no shipment.
-      bostaError: bostaErrors.length ? bostaErrors.join('; ') : null,
+      // Present only when a courier call actually failed.
+      shippingError: error,
     });
   } catch (err) {
     return fail(res, err);
@@ -284,11 +246,27 @@ const DEFAULT_CATALOGUE_IDS = [
   'hookahs', 'tobacco', 'accessories', 'oka-parts', 'hoses', 'coal', 'dark-tobacco', 'bowls',
 ];
 
+/**
+ * The catalogue is the same for every shopper and changes rarely, but it is
+ * the heaviest query the app makes and every launch asks for it. A short
+ * cache — shared by concurrent requests while one is in flight — keeps a
+ * burst of app opens from becoming a burst of Admin API calls.
+ */
+const CATALOGUE_TTL_MS = Number(process.env.CATALOGUE_TTL_MS ?? 60000);
+const catalogueCache = new Map(); // key → { at, promise }
+
 app.get('/catalogue', async (req, res) => {
   const ids = req.query.ids ? String(req.query.ids).split(',').filter(Boolean) : DEFAULT_CATALOGUE_IDS;
+  const key = ids.join(',');
+  let hit = catalogueCache.get(key);
+  if (!hit || Date.now() - hit.at > CATALOGUE_TTL_MS) {
+    hit = { at: Date.now(), promise: fetchAdminCatalogue(ids) };
+    catalogueCache.set(key, hit);
+    // A failure is never cached — the next request tries again.
+    hit.promise.catch(() => catalogueCache.delete(key));
+  }
   try {
-    const result = await fetchAdminCatalogue(ids);
-    return res.json(result);
+    return res.json(await hit.promise);
   } catch (err) {
     return fail(res, err);
   }
@@ -435,25 +413,21 @@ app.post('/orders/:name/address', async (req, res) => {
 app.post('/orders', async (req, res) => {
   try {
     const order = await createOrder(req.body ?? {});
-    let trackingNumber = null;
-    try {
-      const delivery = await findDeliveryByOrderName(order.name);
-      trackingNumber = delivery?.trackingNumber ?? null;
-    } catch {
-      // An AWB usually doesn't exist yet at order time; the status endpoint
-      // picks it up on the next poll.
-    }
+    // No courier lookup here: the AWB is issued later, when the order is
+    // packed, so asking now only made every checkout wait on a courier API
+    // for an answer that was always "not yet". The order screen picks the
+    // shipment up as soon as it exists.
     res.json({
       orderNumber: order.name,
       shopifyOrderId: order.id,
-      trackingNumber,
+      trackingNumber: null,
     });
   } catch (err) {
     fail(res, err);
   }
 });
 
-/** Merged Shopify fulfilment + Bosta timeline for one order. */
+/** Merged Shopify + courier timeline for one order. */
 app.get('/orders/status', async (req, res) => {
   const orderName = req.query.order;
   const tracking = req.query.tracking;
@@ -465,45 +439,77 @@ app.get('/orders/status', async (req, res) => {
 
   try {
     const shopifyOrder = orderName ? await findOrder(orderName) : null;
-
-    // Prefer an explicit AWB, then Shopify's own tracking number, then a
-    // lookup by order name — Bosta records carry it as `businessReference`.
-    const awbFromShopify =
-      shopifyOrder?.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.number ?? null;
-    const knownAwb = tracking ?? awbFromShopify;
-
-    let bostaError = null;
-    const noteErr = (err) => {
-      bostaError = String(err?.message ?? err);
-      return null;
+    const info = shopifyOrder?.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0] ?? null;
+    const order = {
+      name: shopifyOrder?.name ?? orderName ?? tracking,
+      trackingNumber: tracking ?? info?.number ?? null,
+      trackingCompany: info?.company ?? null,
+      createdAt: shopifyOrder?.createdAt ?? null,
+      cancelledAt: shopifyOrder?.cancelledAt ?? null,
+      fulfilledAt: shopifyOrder?.fulfillments?.[0]?.createdAt ?? null,
     };
 
-    const delivery = knownAwb
-      ? await findDeliveryByTracking(knownAwb).catch(noteErr)
-      : orderName
-        ? await findDeliveryByOrderName(orderName).catch(noteErr)
-        : null;
-
-    const awb = delivery?.trackingNumber ?? knownAwb ?? null;
-    const stateCode = delivery?.state?.code ?? null;
+    const { byName, error } = await trackOrders([order], lang);
+    const t = byName.get(order.name) ?? null;
 
     return res.json({
       orderNumber: shopifyOrder?.name ?? orderName ?? null,
-      trackingNumber: awb,
-      bostaStateCode: stateCode,
-      stateLabel: delivery?.state?.value ?? null,
-      step: stepFromState(stateCode),
+      trackingNumber: t?.trackingNumber ?? order.trackingNumber,
+      carrier: t?.carrier ?? null,
+      stateCode: t?.stateCode ?? null,
+      stateLabel: t?.stateLabel ?? null,
+      step: order.cancelledAt ? 0 : t?.step ?? 0,
       fulfillmentStatus: shopifyOrder?.displayFulfillmentStatus ?? null,
       financialStatus: shopifyOrder?.displayFinancialStatus ?? null,
-      courier: delivery?.star?.name ?? null,
-      courierPhone: delivery?.star?.phone ?? null,
-      attempts: delivery?.numberOfAttempts ?? 0,
-      actionNeeded: actionNeeded(delivery, lang),
-      updates: toUpdates(delivery, lang),
-      bostaError,
+      courier: t?.courier ?? null,
+      courierPhone: t?.courierPhone ?? null,
+      actionNeeded: order.cancelledAt ? null : t?.actionNeeded ?? null,
+      updates: mergeTimeline(order, t, lang),
+      shippingError: error,
     });
   } catch (err) {
     return fail(res, err);
+  }
+});
+
+/**
+ * What J&T actually returns for one order or AWB.
+ *
+ * `?order=#2745921` shows every J&T shipment filed under that order (including
+ * cancelled attempts) and which one the app picked; `?tracking=JEG…` traces
+ * one AWB. `?raw=1` adds J&T's own records.
+ */
+app.get('/debug/jt', async (req, res) => {
+  const { tracking, order, raw } = req.query;
+  const lang = req.query.lang === 'en' ? 'en' : 'ar';
+  if (!tracking && !order) {
+    return res.status(400).json({ error: 'tracking or order is required' });
+  }
+  try {
+    let shipments = [];
+    let picked = null;
+    if (order) {
+      const n = String(order).replace(/^#/, '');
+      shipments = await getOrders([`SHOPIFY${n}`, `SHOPIFY${n}V2`, `SHOPIFY${n}V3`]);
+      picked = (await findShipmentsByOrderNames([order])).get(order) ?? null;
+    }
+    const awb = tracking ?? picked?.billCode ?? null;
+    const scans = awb ? (await trace([awb])).get(awb) ?? [] : [];
+    return res.json({
+      found: Boolean(awb),
+      shipments: shipments.map((r) => ({
+        txlogisticId: r.txlogisticId ?? null,
+        billCode: r.billCode ?? null,
+        orderStatus: r.orderStatus ?? null,
+        createOrderTime: r.createOrderTime ?? null,
+      })),
+      picked: picked?.billCode ?? null,
+      scanCount: scans.length,
+      tracking: awb ? toTracking(awb, scans, lang) : null,
+      ...(raw ? { rawShipments: shipments, rawScans: scans } : {}),
+    });
+  } catch (err) {
+    return res.status(502).json({ found: false, error: String(err.message ?? err) });
   }
 });
 
@@ -629,7 +635,7 @@ app.post('/subscriptions', async (req, res) => {
     // The account's real Shopify id, so each cycle's order links back to it
     // the same way a native checkout order does — without it, Shopify's own
     // email/phone matching can silently miss.
-    const customer = await findCustomerOrders(identifier).catch(() => null);
+    const customer = await findCustomerProfile(identifier).catch(() => null);
     const sub = await createSubscription({
       identifier,
       customerId: customer?.id ?? null,

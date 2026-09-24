@@ -17,8 +17,10 @@ import crypto from 'node:crypto';
 // Both paths accept unverified identities. Neither may survive to production.
 export const REPLACE_BEFORE_RELEASE = ['master-password', 'social-placeholder'];
 
-const MASTER = process.env.STAFF_MASTER_PASSWORD ?? '0000';
-const SECRET = process.env.SESSION_SECRET ?? 'oka-dev-session-secret';
+// `||`, not `??`: a blank `STAFF_MASTER_PASSWORD=` line in .env must not turn
+// the empty string into a password that opens every account.
+const MASTER = process.env.STAFF_MASTER_PASSWORD || '0000';
+const SECRET = process.env.SESSION_SECRET || 'oka-dev-session-secret';
 
 /** Constant-time compare, so the master password can't be probed by timing. */
 function matches(given) {

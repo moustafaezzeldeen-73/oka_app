@@ -16,8 +16,8 @@ import { selectionTick } from '../haptics';
 
 /**
  * wa.me wants a bare international number — no `+`, no spaces, no leading 0.
- * Bosta returns the courier's number as +20…, but a locally-written 010… has
- * to gain the country code or WhatsApp opens on nobody.
+ * Bosta returns the courier's number as +20…, but J&T's local 010… has to
+ * gain the country code or WhatsApp opens on nobody.
  */
 function waNumber(raw) {
   let digits = String(raw ?? '').replace(/\D/g, '');
@@ -128,11 +128,11 @@ export default function OrdersScreen() {
     img: it.image ? { uri: it.image } : it.localImg ?? null,
   }));
 
-  /** Live Bosta/Shopify status, when the order service is reachable. */
+  /** Live courier/Shopify status, when the order service is reachable. */
   const [live, setLive] = useState(null);
 
   const loadStatus = useCallback(async () => {
-    // Signed in: pull the customer's real orders, each already joined to Bosta.
+    // Signed in: pull the customer's real orders, each already joined to its shipment.
     if (state.session?.token) {
       try {
         const r = await fetchCustomerOrders({ token: state.session.token, lang: d.lang });
@@ -150,10 +150,11 @@ export default function OrdersScreen() {
                 courierPhone: shown.courierPhone ?? null,
                 actionNeeded: shown.actionNeeded ?? null,
                 updates: shown.updates ?? [],
-                // "We couldn't reach Bosta" and "this parcel has no events"
-                // look identical on screen unless the failure is carried
-                // through and said out loud.
-                bostaError: r.bostaError ?? null,
+                carrier: shown.carrier ?? null,
+                // "We couldn't reach the courier" and "this parcel has no
+                // events" look identical on screen unless the failure is
+                // carried through and said out loud.
+                shippingError: r.shippingError ?? r.bostaError ?? null,
               }
             : null,
         );
@@ -162,15 +163,17 @@ export default function OrdersScreen() {
         // fall through to the single-order path
       }
     }
-    // A local-only order has nothing on Shopify or Bosta to ask about.
+    // A local-only order has nothing on Shopify or the courier to ask about.
     if (!order || order.local) {
       setLive(null);
       return;
     }
+    // No phone is sent: the service finds the shipment by order number, and
+    // the old fallback posted the demo placeholder number for signed-out
+    // shoppers.
     const r = await fetchOrderStatus({
       orderNumber: order.number,
       trackingNumber: order.trackingNumber,
-      phone: state.customer?.phone || STR[d.lang].phone,
     });
     setLive(r);
   }, [
@@ -178,7 +181,6 @@ export default function OrdersScreen() {
     d.lang,
     order?.number,
     order?.trackingNumber,
-    state.customer?.phone,
     state.selectedOrderName,
     state.ordersVersion,
   ]);
@@ -491,16 +493,16 @@ export default function OrdersScreen() {
           <View style={styles.awaiting}>
             <Txt isRtl={d.isRtl} style={styles.awaitingTxt}>
               {d.isRtl
-                ? 'لسه ما اتعملش بوليصة شحن للطلب ده. هتظهر تحديثات بوسطة هنا أول ما تتصدر.'
-                : 'No AWB has been issued for this order yet. Bosta updates will appear here once it is.'}
+                ? 'لسه ما اتعملش بوليصة شحن للطلب ده. هتظهر تحديثات J&T هنا أول ما تتصدر.'
+                : 'No AWB has been issued for this order yet. J&T updates will appear here once it is.'}
             </Txt>
           </View>
-        ) : live?.bostaError ? (
+        ) : live?.shippingError && updates.length === 0 ? (
           <View style={styles.awaiting}>
             <Txt isRtl={d.isRtl} style={styles.awaitingTxt}>
               {d.isRtl
-                ? 'ما قدرناش نوصل لبوسطة دلوقتي، فتحديثات الشحن مش ظاهرة. جرّب تسحب لتحديث الصفحة.'
-                : 'We could not reach Bosta just now, so shipping updates are missing. Pull down to retry.'}
+                ? 'ما قدرناش نوصل لشركة الشحن دلوقتي، فتحديثات الشحن مش ظاهرة. جرّب تسحب لتحديث الصفحة.'
+                : 'We could not reach the courier just now, so shipping updates are missing. Pull down to retry.'}
             </Txt>
           </View>
         ) : updates.length === 0 ? (
@@ -541,13 +543,25 @@ export default function OrdersScreen() {
         </ScrollView>
         )}
 
+        {/* The store's own events still show when the courier can't be
+            reached — but the gap is said out loud rather than implied. */}
+        {live?.shippingError && updates.length > 0 ? (
+          <Txt isRtl={d.isRtl} style={styles.shippingErr}>
+            {d.isRtl
+              ? 'تعذّر الوصول لشركة الشحن — تحديثات الشحنة ممكن تكون ناقصة. اسحب للتحديث.'
+              : 'Couldn’t reach the courier — shipment updates may be missing. Pull to refresh.'}
+          </Txt>
+        ) : null}
+
         {/* The courier carrying this parcel right now, and the two ways to
-            reach them. Only rendered once Bosta has actually assigned one —
+            reach them. Only rendered once the courier company has assigned one —
             there is no courier to call while an order is still at the hub. */}
         {live?.courier ? (
           <View style={styles.courier}>
             <Txt isRtl={d.isRtl} style={styles.courierLabel}>
-              {d.isRtl ? 'مندوب التوصيل' : 'Delivery courier'}
+              {live.carrier === 'jt'
+                ? d.isRtl ? 'مندوب J&T' : 'J&T courier'
+                : d.isRtl ? 'مندوب التوصيل' : 'Delivery courier'}
             </Txt>
             <Txt isRtl={d.isRtl} style={styles.courierName}>
               {live.courier}
@@ -580,8 +594,8 @@ export default function OrdersScreen() {
           </View>
         ) : null}
 
-        {/* Bosta's own `waitingForBusinessAction` flag, with the reason from its
-            most recent exception — a courier can't just retry a bad address or a
+        {/* A failed delivery attempt the shopper can fix (J&T's problem code, or
+            Bosta's `waitingForBusinessAction` on older orders), with its reason — a courier can't just retry a bad address or a
             failed WhatsApp verification, someone has to act on it. */}
         {live?.actionNeeded ? (
           <View style={styles.actionNeeded}>
@@ -786,6 +800,7 @@ const styles = StyleSheet.create({
   arrivesTitle: { fontSize: 19, fontWeight: W.bold },
   arrivesNote: { fontSize: 14, lineHeight: 21, marginTop: 8 },
 
+  shippingErr: { marginHorizontal: 22, marginTop: 8, fontSize: 11.5, color: '#b3261e' },
   steps: { paddingHorizontal: 22, paddingTop: 22, paddingBottom: 24, gap: 10 },
   stepCol: { flex: 1, gap: 9 },
   stepBar: { height: 4, borderRadius: 2 },
@@ -795,7 +810,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 22,
     marginBottom: 4,
     // The prototype capped this at 148px, which fit the two events it mocked
-    // up. A real Bosta timeline runs to five or six rows, several of them two
+    // up. A real courier timeline runs to five or six rows, several of them two
     // lines deep, so that cap turned a full history into a peephole.
     maxHeight: 300,
     overflow: 'hidden',

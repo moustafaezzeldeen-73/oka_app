@@ -5,9 +5,9 @@ import { SERVICE_URL, hasService, withTimeout } from './config';
  *
  * Checkout is native: the app posts the basket here and the order service
  * creates the real Shopify order with the Admin API, then returns the order
- * name and (once an AWB exists) the Bosta tracking number. Detailed shipment
- * status also comes back through the service, which is the only place the
- * Admin and Bosta credentials live.
+ * name. Detailed shipment status — J&T for current orders, Bosta for older
+ * ones — also comes back through the service, which is the only place the
+ * Shopify Admin and courier credentials live.
  */
 
 async function post(path, body) {
@@ -71,41 +71,26 @@ export async function submitOrder(payload) {
 }
 
 /**
- * Bosta delivery states, collapsed onto the four steps the order screen shows.
- * Codes come from Bosta's `state.code`.
- */
-export function stepFromBostaState(code) {
-  if (code == null) return 0;
-  if (code >= 45) return 3; // Delivered / returned-to-business terminal states
-  if (code >= 41) return 2; // Out for delivery
-  if (code >= 20) return 2; // Picked up / in transit
-  return code >= 15 ? 1 : 0; // Received at warehouse → preparing, else processing
-}
-
-/**
- * Live shipment status for one order: Shopify fulfilment plus the Bosta
+ * Live shipment status for one order: Shopify's own events plus the courier's
  * timeline, already merged by the service.
  */
-export async function fetchOrderStatus({ orderNumber, trackingNumber, phone }) {
+export async function fetchOrderStatus({ orderNumber, trackingNumber }) {
   if (!hasService() || (!orderNumber && !trackingNumber)) return null;
   const qs = new URLSearchParams();
   if (orderNumber) qs.set('order', orderNumber);
   if (trackingNumber) qs.set('tracking', trackingNumber);
-  // Bosta's own reference does not equal the Shopify order name on this
-  // store, so the phone is what actually finds the right delivery — see
-  // findDeliveryByOrderName in server/bosta.js.
-  if (phone) qs.set('phone', phone);
   try {
     const json = await get(`/orders/status?${qs.toString()}`);
     return {
-      step: json.step ?? stepFromBostaState(json.bostaStateCode),
+      step: json.step ?? 0,
+      carrier: json.carrier ?? null,
       stateLabel: json.stateLabel ?? null,
       trackingNumber: json.trackingNumber ?? trackingNumber ?? null,
       courier: json.courier ?? null,
       courierPhone: json.courierPhone ?? null,
       actionNeeded: json.actionNeeded ?? null,
       updates: Array.isArray(json.updates) ? json.updates : [],
-      bostaError: json.bostaError ?? null,
+      shippingError: json.shippingError ?? json.bostaError ?? null,
     };
   } catch {
     return null;

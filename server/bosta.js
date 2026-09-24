@@ -20,7 +20,13 @@
  *        recorded on the Shopify fulfilment yet.
  */
 
-const BASE = process.env.BOSTA_API_URL || 'https://app.bosta.co/api/v2';
+import { fmtCairo as fmt } from './timefmt.js';
+
+const BASE = (
+  process.env.BOSTA_BASE_URL || process.env.BOSTA_API_URL || 'https://app.bosta.co/api/v2'
+).replace(/\/+$/, '');
+
+export const hasBosta = () => Boolean(process.env.BOSTA_API_KEY);
 
 /** Bosta occasionally stalls; an unbounded fetch would hang the whole route. */
 const TIMEOUT_MS = Number(process.env.BOSTA_TIMEOUT_MS ?? 8000);
@@ -265,19 +271,6 @@ const labelFor = (value, ar) => {
   return entry ? entry[ar ? 1 : 0] : humanise(value);
 };
 
-const fmt = (t, ar) => {
-  if (!t) return '';
-  const d = new Date(t);
-  if (Number.isNaN(d.getTime())) return '';
-  return d.toLocaleString(ar ? 'ar-EG' : 'en-GB', {
-    day: 'numeric',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZone: 'Africa/Cairo',
-  });
-};
-
 /**
  * Builds the app's update rows from Bosta's own `timeline`.
  *
@@ -372,4 +365,21 @@ export function actionNeeded(delivery, lang = 'ar') {
   const when = fmt(latest?.scheduledAt ?? delivery.scheduledAt, ar);
   if (!when) return base;
   return `${base}\n${ar ? 'المحاولة القادمة: ' : 'Next attempt: '}${when}`;
+}
+
+/** One Bosta delivery → the same tracking shape jt.js produces. */
+export function bostaTracking(delivery, lang = 'ar') {
+  if (!delivery) return null;
+  const code = delivery.state?.code ?? null;
+  return {
+    carrier: 'bosta',
+    trackingNumber: delivery.trackingNumber ?? null,
+    stateCode: code,
+    stateLabel: delivery.state?.value ?? null,
+    step: stepFromState(code),
+    courier: delivery.star?.name ?? null,
+    courierPhone: delivery.star?.phone ?? null,
+    actionNeeded: actionNeeded(delivery, lang),
+    updates: toUpdates(delivery, lang),
+  };
 }

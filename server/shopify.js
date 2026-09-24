@@ -5,7 +5,17 @@
  * a server the app talks to over HTTPS. The token is never sent to a device.
  */
 
-const API_VERSION = process.env.SHOPIFY_API_VERSION || '2025-07';
+const API_VERSION = process.env.SHOPIFY_API_VERSION || '2026-07';
+
+/**
+ * Both spellings are accepted: the service's original names and the ones the
+ * store's app credentials are issued under.
+ */
+export const shopDomain = () =>
+  process.env.SHOPIFY_STORE_DOMAIN || process.env.SHOPIFY_SHOP_DOMAIN || null;
+const adminToken = () =>
+  process.env.SHOPIFY_ADMIN_ACCESS_TOKEN || process.env.SHOPIFY_ADMIN_TOKEN || null;
+export const hasShopify = () => Boolean(shopDomain() && adminToken());
 
 /**
  * Shopify rejects anything that is not E.164, and the app was sending the
@@ -32,15 +42,18 @@ export function normalizePhone(raw, countryCode = '20') {
   return `+${countryCode}${digits}`;
 }
 
-function requireEnv(name) {
-  const v = process.env[name];
-  if (!v) throw new Error(`Missing required environment variable: ${name}`);
-  return v;
-}
+/** Customer search syntax for an email or a phone number. */
+const customerQuery = (identifier) =>
+  String(identifier).includes('@') ? `email:${identifier}` : `phone:${identifier}`;
 
 export async function adminGraphql(query, variables = {}) {
-  const shop = requireEnv('SHOPIFY_SHOP_DOMAIN');
-  const token = requireEnv('SHOPIFY_ADMIN_TOKEN');
+  const shop = shopDomain();
+  const token = adminToken();
+  if (!shop || !token) {
+    throw new Error(
+      'Missing required environment variables: SHOPIFY_STORE_DOMAIN / SHOPIFY_ADMIN_ACCESS_TOKEN',
+    );
+  }
 
   const res = await fetch(`https://${shop}/admin/api/${API_VERSION}/graphql.json`, {
     method: 'POST',
@@ -190,7 +203,9 @@ const ORDER_STATUS = `
           displayFulfillmentStatus
           displayFinancialStatus
           createdAt
+          cancelledAt
           fulfillments(first: 5) {
+            createdAt
             trackingInfo { number url company }
           }
         }
@@ -234,10 +249,7 @@ const CUSTOMER_STORE_CREDIT = `
 
 /** The customer's live points balance, derived from their EGP store credit. */
 export async function findCustomerLoyalty(identifier) {
-  const isEmail = String(identifier).includes('@');
-  const data = await adminGraphql(CUSTOMER_STORE_CREDIT, {
-    q: isEmail ? `email:${identifier}` : `phone:${identifier}`,
-  });
+  const data = await adminGraphql(CUSTOMER_STORE_CREDIT, { q: customerQuery(identifier) });
   const node = data.customers.edges[0]?.node;
   if (!node) return null;
 
@@ -288,10 +300,10 @@ const CUSTOMER_ORDERS = `
       edges {
         node {
           id
-          email
           firstName
           lastName
-          phone
+          defaultEmailAddress { emailAddress }
+          defaultPhoneNumber { phoneNumber }
           defaultAddress { address1 address2 city province zip phone }
           orders(first: 20, sortKey: CREATED_AT, reverse: true) {
             edges {
@@ -329,20 +341,51 @@ const CUSTOMER_ORDERS = `
   }
 `;
 
+/** The account fields every customer query shares. */
+const profileOf = (node) => ({
+  id: node.id,
+  email: node.defaultEmailAddress?.emailAddress ?? null,
+  name: [node.firstName, node.lastName].filter(Boolean).join(' '),
+  phone: node.defaultPhoneNumber?.phoneNumber ?? node.defaultAddress?.phone ?? null,
+  address: node.defaultAddress ?? null,
+});
+
+const CUSTOMER_PROFILE = `
+  query OkaCustomerProfile($q: String!) {
+    customers(first: 1, query: $q) {
+      edges {
+        node {
+          id
+          firstName
+          lastName
+          defaultEmailAddress { emailAddress }
+          defaultPhoneNumber { phoneNumber }
+          defaultAddress { address1 address2 city province zip phone }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * Just the account — no orders. Sign-in, saving an address and starting a
+ * subscription only need the id and name, and were each pulling twenty
+ * orders with every line item to get them.
+ */
+export async function findCustomerProfile(identifier) {
+  const data = await adminGraphql(CUSTOMER_PROFILE, { q: customerQuery(identifier) });
+  const node = data.customers.edges[0]?.node;
+  return node ? profileOf(node) : null;
+}
+
 /** Finds a customer by email or phone and returns their recent orders. */
 export async function findCustomerOrders(identifier) {
-  const isEmail = String(identifier).includes('@');
-  const q = isEmail ? `email:${identifier}` : `phone:${identifier}`;
-  const data = await adminGraphql(CUSTOMER_ORDERS, { q });
+  const data = await adminGraphql(CUSTOMER_ORDERS, { q: customerQuery(identifier) });
   const node = data.customers.edges[0]?.node;
   if (!node) return null;
 
   return {
-    id: node.id,
-    email: node.email,
-    name: [node.firstName, node.lastName].filter(Boolean).join(' '),
-    phone: node.phone ?? node.defaultAddress?.phone ?? null,
-    address: node.defaultAddress ?? null,
+    ...profileOf(node),
     orders: node.orders.edges.map(({ node: o }) => ({
       id: o.id,
       name: o.name,
@@ -371,6 +414,7 @@ export async function findCustomerOrders(identifier) {
           }
         : null,
       trackingNumber: o.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.number ?? null,
+      trackingCompany: o.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.company ?? null,
       fulfilledAt: o.fulfillments?.[0]?.createdAt ?? null,
       cancelledAt: o.cancelledAt ?? null,
       items: o.lineItems.edges.map(({ node: li }) => ({
@@ -505,16 +549,10 @@ const CUSTOMER_ADDRESSES = `
         node {
           id
           defaultAddress { id }
-          addresses(first: 10) {
-            id
-            firstName
-            lastName
-            address1
-            address2
-            city
-            province
-            zip
-            phone
+          addressesV2(first: 10) {
+            edges {
+              node { id firstName lastName address1 address2 city province zip phone }
+            }
           }
         }
       }
@@ -524,15 +562,13 @@ const CUSTOMER_ADDRESSES = `
 
 /** A customer's saved addresses, default first. */
 export async function findCustomerAddresses(identifier) {
-  const isEmail = String(identifier).includes('@');
-  const q = isEmail ? `email:${identifier}` : `phone:${identifier}`;
-  const data = await adminGraphql(CUSTOMER_ADDRESSES, { q });
+  const data = await adminGraphql(CUSTOMER_ADDRESSES, { q: customerQuery(identifier) });
   const node = data.customers.edges[0]?.node;
   if (!node) return [];
 
   const defaultId = node.defaultAddress?.id ?? null;
-  return (node.addresses ?? [])
-    .map((a) => ({
+  return (node.addressesV2?.edges ?? [])
+    .map(({ node: a }) => ({
       id: a.id,
       name: [a.firstName, a.lastName].filter(Boolean).join(' '),
       street: [a.address1, a.address2].filter(Boolean).join(', '),
@@ -586,7 +622,7 @@ const ORDER_UPDATE_ADDRESS = `
  *
  * Refuses once the parcel has been handed to the courier: Shopify will happily
  * rewrite the address on a fulfilled order, but the AWB is already printed and
- * the parcel is physically moving, so the change would be invisible to Bosta
+ * the parcel is physically moving, so the change would be invisible to the courier
  * and the two systems would disagree about where it is going.
  */
 export async function updateOrderAddress(orderName, addr) {
@@ -635,7 +671,7 @@ const CATALOGUE_PRODUCT_FIELDS = `
   handle
   title
   description
-  featuredImage { url }
+  featuredMedia { preview { image { url } } }
   titleAr: metafield(namespace: "oka", key: "title_ar") { value }
   descriptionAr: metafield(namespace: "oka", key: "description_ar") { value }
   variants(first: 1) {
@@ -662,7 +698,7 @@ function toCatalogueProduct(node, catId) {
     titleAr: node.titleAr?.value || node.title,
     descEn: node.description ?? '',
     descAr: node.descriptionAr?.value || node.description || '',
-    img: node.featuredImage?.url ?? null,
+    img: node.featuredMedia?.preview?.image?.url ?? null,
     usdzUrl: sourceUrl('usdz'),
     glbUrl: sourceUrl('glb'),
     available: variant?.availableForSale ?? true,
@@ -682,7 +718,7 @@ export async function fetchAdminCatalogue(localIds) {
       ${localIds
         .map(
           (id, i) => `
-        c${i}: collectionByHandle(handle: ${JSON.stringify(handleFor(id))}) {
+        c${i}: collectionByIdentifier(identifier: { handle: ${JSON.stringify(handleFor(id))} }) {
           id
           handle
           title
@@ -808,10 +844,11 @@ const ADDRESS_CREATE = `
  * shopper adds here is the one they mean to use next.
  */
 export async function createCustomerAddress(identifier, addr) {
-  const customer = await findCustomerOrders(identifier);
+  const customer = await findCustomerProfile(identifier);
   if (!customer) throw new Error('customer not found');
 
   const [firstName, ...rest] = String(addr.name || customer.name || '').trim().split(/\s+/);
+  const phone = normalizePhone(addr.phone);
   const data = await adminGraphql(ADDRESS_CREATE, {
     customerId: customer.id,
     setAsDefault: true,
@@ -822,7 +859,7 @@ export async function createCustomerAddress(identifier, addr) {
       address2: addr.building || '',
       city: addr.city || '',
       countryCode: 'EG',
-      ...(normalizePhone(addr.phone) ? { phone: normalizePhone(addr.phone) } : {}),
+      ...(phone ? { phone } : {}),
     },
   });
   const { address: created, userErrors } = data.customerAddressCreate;
@@ -841,7 +878,7 @@ const ADDRESS_SET_DEFAULT = `
 
 /** Marks an already-saved address as the customer's default. */
 export async function setDefaultAddress(identifier, addressId) {
-  const customer = await findCustomerOrders(identifier);
+  const customer = await findCustomerProfile(identifier);
   if (!customer) throw new Error('customer not found');
 
   const data = await adminGraphql(ADDRESS_SET_DEFAULT, { customerId: customer.id, addressId });
@@ -860,10 +897,7 @@ const CUSTOMER_METAFIELD = `
 
 /** The wishlist, kept on the customer so it survives a reinstall. */
 export async function getWishlist(identifier) {
-  const isEmail = String(identifier).includes('@');
-  const data = await adminGraphql(CUSTOMER_METAFIELD, {
-    q: isEmail ? `email:${identifier}` : `phone:${identifier}`,
-  });
+  const data = await adminGraphql(CUSTOMER_METAFIELD, { q: customerQuery(identifier) });
   const node = data.customers.edges[0]?.node;
   if (!node) return { ids: [] };
   try {
@@ -883,10 +917,7 @@ const METAFIELDS_SET = `
 `;
 
 export async function setWishlist(identifier, ids) {
-  const isEmail = String(identifier).includes('@');
-  const data = await adminGraphql(CUSTOMER_METAFIELD, {
-    q: isEmail ? `email:${identifier}` : `phone:${identifier}`,
-  });
+  const data = await adminGraphql(CUSTOMER_METAFIELD, { q: customerQuery(identifier) });
   const node = data.customers.edges[0]?.node;
   if (!node) throw new Error('customer not found');
 

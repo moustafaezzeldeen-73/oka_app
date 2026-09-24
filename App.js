@@ -87,7 +87,7 @@ const SCREENS = {
 export default function App() {
   /**
    * The live catalogue replaces the bundled one as soon as Shopify answers.
-   * Until then — and forever, if no Storefront token is configured — the app
+   * Until then — and forever, if the order service is unreachable — the app
    * runs on the photography and copy that shipped with the design.
    */
   const [catalogue, setCatalogue] = useState(null);

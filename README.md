@@ -23,9 +23,9 @@ src/haptics.js          snap feedback for the collection feed
 src/components/         ui primitives, animation primitives, icons, tab bar
 src/screens/            the 12 screens
 src/overlays/           AR placement view, edit-order sheet
-src/api/                Storefront client, order service client, loyalty
+src/api/                order service client, Storefront cart, loyalty
 assets/                 the prototype's product photography
-server/                 order service — holds the Admin + Bosta credentials
+server/                 order service — holds the Admin, J&T and Bosta credentials
 ```
 
 ---
@@ -78,43 +78,46 @@ which reproduces those exact numbers on a 16 Pro and stays correct elsewhere.
 
 ---
 
-## Shopify integration
+## Shopify and courier integration
 
-Two credentials with very different blast radii, kept strictly apart:
+Two kinds of credential with very different blast radii, kept strictly apart:
 
-**Storefront API (public, bundled).** Reads published collections/products,
-full-text search, and owns the cart. This token is *designed* to ship in a
-client. Create it in Shopify admin → Settings → Apps and sales channels →
-Develop apps → your app → **API credentials → Storefront API access token**,
-then set `EXPO_PUBLIC_SHOPIFY_STOREFRONT_TOKEN`. Scopes needed:
-`unauthenticated_read_product_listings`, `unauthenticated_read_collection_listings`,
-`unauthenticated_write_checkouts`.
+**Storefront API (public, optional).** Only the live cart uses it
+(`src/useShopifyCart.js`). This token is *designed* to ship in a client; set
+`EXPO_PUBLIC_SHOPIFY_STOREFRONT_TOKEN` to enable it. Without it the cart stays
+local and checkout still works through the service.
 
-**Admin API + Bosta (secret, server-only).** Creating orders, reading a
-customer's history, and pulling delivery status all happen in `server/`. An
-Admin token grants full control of the store, and **anything bundled into a
-React Native app is readable by anyone who downloads it** — the JS bundle can be
-extracted from the `.ipa`, and `app.json` `extra` / `EXPO_PUBLIC_*` values are
-plain text. There is no way to hide it client-side, which is why checkout posts
-to the service instead.
+**Admin API, J&T and Bosta (secret, server-only).** The catalogue, checkout,
+order history, addresses, loyalty and shipment tracking all run through
+`server/`. An Admin token grants full control of the store, and **anything
+bundled into a React Native app is readable by anyone who downloads it** — the
+JS bundle can be extracted from the `.ipa`, and `app.json` `extra` /
+`EXPO_PUBLIC_*` values are plain text. These keys live only in `server/.env`
+(gitignored).
 
-Without either configured the app runs entirely on its bundled catalogue and
-generates local order numbers, so it stays demonstrable offline.
+Without the service configured the app runs entirely on its bundled catalogue
+and generates local order numbers, so it stays demonstrable offline.
 
 ### Data flow
 
 | Feature | Path |
 | --- | --- |
-| Collections, products | Storefront API → `fetchCatalogue()` (falls back to bundled data) |
-| Search | Storefront API `products(query:)` |
-| Cart | Storefront Cart API (`cartCreate` / `cartLinesAdd`) |
-| Discount codes | `cartDiscountCodesUpdate` |
+| Collections, products | app → `GET /catalogue` → Admin `collectionByIdentifier` (60 s cache; falls back to bundled data) |
+| Cart | Storefront Cart API when a token is set, otherwise local |
 | Checkout (native) | app → `POST /orders` → Admin `orderCreate` |
-| Order status | app → `GET /orders/status` → Admin order + Bosta timeline |
+| Order history + tracking | app → `GET /customer/orders` → Admin orders + J&T (Bosta for older orders) |
+| Single order status | app → `GET /orders/status` → same, for one order |
 | Loyalty points | app → `GET /loyalty` → Admin store credit balance × 10 |
+| Subscribe & Save | app → `/subscriptions` → hourly scheduler → Admin `orderCreate` |
 
-Bosta deliveries carry the Shopify order name in `businessReference`
-(e.g. `#2599321`) — that is the join key between the two systems.
+**J&T Express** is the current courier. Shipments are created with
+`txlogisticId = SHOPIFY<order number>` (a re-created one gets `V2`/`V3`), which
+is the join key: the service looks up every order's shipment in one batched
+`order/getOrders` call, then traces all AWBs (`JEG…`) in one `logistics/trace`
+call. Scans become bilingual timeline rows; failed-attempt codes (no answer,
+wrong address, refused) become an "Action needed" notice with the courier's
+number. **Bosta** is kept as a fallback so orders shipped before the switch keep
+their history — its deliveries carry the order number in `businessReference`.
 
 Arabic product titles and descriptions are read from the `oka.title_ar` and
 `oka.description_ar` metafields, falling back to the English values when unset.
@@ -124,17 +127,23 @@ Arabic product titles and descriptions are read from the `oka.title_ar` and
 ```bash
 cd server
 npm install
-SHOPIFY_SHOP_DOMAIN=okaegypt.myshopify.com \
-SHOPIFY_ADMIN_TOKEN=shpat_… \
-BOSTA_API_KEY=… \
+cp ../.env.example .env   # then fill in the server section
 npm start
 ```
 
-Then point the app at it with `EXPO_PUBLIC_OKA_SERVICE_URL`.
+Then point the app at it with `EXPO_PUBLIC_OKA_SERVICE_URL`. Check the wiring:
 
-Admin scopes required: `write_orders`, `read_orders`, `read_customers`,
-`write_customers`, `read_fulfillments`, and for the store-credit-backed loyalty
-balance: `read_store_credit_accounts`, `read_store_credit_account_transactions`,
+- `GET /health` — which credentials are set, and whether Shopify, J&T and Bosta
+  each answer (J&T's check verifies both the API key and the customer password)
+- `GET /debug/jt?order=%232745921` — every J&T shipment filed under an order,
+  which one the app picked, and the timeline it builds (`&raw=1` for J&T's own
+  records)
+- `GET /debug/bosta?tracking=…` — the same for a legacy Bosta AWB
+
+Admin API version defaults to `2026-07`. Admin scopes required: `write_orders`,
+`read_orders`, `read_customers`, `write_customers`, `read_products`,
+`read_fulfillments`, and for the store-credit-backed loyalty balance:
+`read_store_credit_accounts`, `read_store_credit_account_transactions`,
 `write_store_credit_account_transactions`. Without the store-credit scopes,
 `/loyalty` and `/loyalty/redeem` fail and the app falls back to its demo
 balance rather than blocking the rest of the app.
@@ -146,5 +155,5 @@ balance rather than blocking the rest of the app.
 - No custom native modules: everything used (Reanimated, Gesture Handler, SVG,
   Blur, Linear Gradient, Haptics, Image) ships inside Expo Go for SDK 54.
 - The bundled catalogue is the prototype's 22 products; the live store has 38
-  active products across 15 collections, so the Storefront path shows more.
+  active products across 15 collections, so the live catalogue shows more.
 - The Categories screen has no tab of its own, matching the prototype.
