@@ -1,52 +1,60 @@
-import { createOrder } from './shopify.js';
+import { creditDeliveredOrders } from './loyalty.js';
+import { notifyShipmentUpdates } from './notify.js';
+import { POLICY, shippingFor } from './policy.js';
+import { createOrder, fetchVariants } from './shopify.js';
 import { dueSubscriptions, markCycleResult } from './subscriptions.js';
 
 /**
- * Turns due subscriptions into real Shopify orders.
+ * Background jobs, run in this process on plain intervals:
  *
- * Runs on a plain hourly interval rather than a cron expression: nothing here
- * is time-sensitive to the minute, and hourly is coarse enough that a bare
- * `setInterval` covers it without adding a cron dependency for one job.
- * `start()` also runs one pass immediately, so a subscription that came due
- * while the server was down or restarting doesn't sit waiting for up to an
- * hour before the app notices.
+ *   subscriptions  hourly     — turn due subscriptions into COD orders
+ *   notifications  30 min     — push shipment progress to customers' phones
+ *   loyalty        6 hours    — credit points for delivered orders
  *
- * This is an in-process scheduler: it only runs while this server process is
- * running. That is fine for a real, always-on host; a dev server in a
- * Codespace that sleeps or restarts will miss cycles while it's down, same as
- * everything else in server/ that depends on the process staying up.
+ * Run exactly ONE server instance with JOBS_ENABLED unset (or "true"); set
+ * JOBS_ENABLED=false on any others, or two schedulers would place every
+ * subscription order twice.
  */
-const CHECK_INTERVAL_MS = 60 * 60 * 1000;
+const HOUR = 60 * 60 * 1000;
 
-/** The discounted price a subscription line should bill at this cycle. */
-function discountedPrice(item, discountPct) {
-  return Math.round(Number(item.price) * (1 - discountPct / 100));
-}
+/** A subscription line billed at this cycle's discounted live price. */
+const discounted = (price) => Math.round(price * (1 - POLICY.subscriptionDiscountPct / 100));
 
 async function runDueSubscriptions() {
   const due = await dueSubscriptions();
-  if (!due.length) return;
-
   for (const sub of due) {
     try {
+      const variants = await fetchVariants(sub.items.map((it) => it.variantId));
+      const lines = sub.items
+        .map((it) => ({ ...it, v: variants.get(it.variantId) }))
+        .filter((it) => it.v?.active && it.v.available);
+      if (!lines.length) throw new Error('none of the subscribed items are available');
+
+      const merchandise = lines.reduce((a, it) => a + discounted(it.v.price) * it.quantity, 0);
+      if (merchandise < POLICY.minOrder) {
+        throw new Error(`basket is below the ${POLICY.minOrder} EGP minimum`);
+      }
+      const skipped = sub.items.length - lines.length;
+
       const order = await createOrder({
-        items: sub.items.map((it) => ({
-          ...it,
-          priceOverride: discountedPrice(it, sub.discountPct),
+        lines: lines.map((it) => ({
+          variantId: it.variantId,
+          quantity: it.quantity,
+          unitPrice: discounted(it.v.price),
         })),
-        customer: {
-          name: sub.customerName,
-          email: sub.email,
-          phone: sub.address?.phone,
-          street: [sub.address?.address1, sub.address?.address2].filter(Boolean).join(', '),
-          city: sub.address?.city,
-        },
+        address: sub.address,
+        customer: { name: sub.customerName, email: sub.email, phone: sub.address?.phone },
         customerId: sub.customerId,
-        shipping: sub.shippingFee,
+        shipping: shippingFor(merchandise, 'cod'),
         paymentMethod: 'cod',
         lang: 'ar',
         extraTags: ['oka-subscription', `sub-frequency:${sub.frequencyId}`],
-        noteExtra: `Subscription ${sub.id} — cycle #${sub.ordersCreated + 1}, ${sub.discountPct}% off`,
+        noteExtra: [
+          `Subscription ${sub.id} — cycle #${sub.ordersCreated + 1}, ${POLICY.subscriptionDiscountPct}% off`,
+          skipped ? `${skipped} unavailable item(s) skipped` : null,
+        ]
+          .filter(Boolean)
+          .join(' — '),
       });
       await markCycleResult(sub.id, { ok: true, orderName: order.name });
       console.log(`[subscriptions] created ${order.name} for ${sub.id}`);
@@ -57,7 +65,31 @@ async function runDueSubscriptions() {
   }
 }
 
-export function startSubscriptionScheduler() {
-  runDueSubscriptions();
-  setInterval(runDueSubscriptions, CHECK_INTERVAL_MS);
+/** Runs `job` now and every `ms`, never overlapping itself. */
+function every(ms, label, job) {
+  let running = false;
+  const tick = async () => {
+    if (running) return;
+    running = true;
+    try {
+      const result = await job();
+      if (result && Object.keys(result).length) console.log(`[jobs] ${label}:`, JSON.stringify(result));
+    } catch (err) {
+      console.error(`[jobs] ${label} failed:`, err.message ?? err);
+    } finally {
+      running = false;
+    }
+  };
+  tick();
+  setInterval(tick, ms);
+}
+
+export function startJobs() {
+  if (process.env.JOBS_ENABLED === 'false') {
+    console.log('[jobs] disabled on this instance (JOBS_ENABLED=false)');
+    return;
+  }
+  every(HOUR, 'subscriptions', runDueSubscriptions);
+  every(HOUR / 2, 'notifications', notifyShipmentUpdates);
+  every(6 * HOUR, 'loyalty', creditDeliveredOrders);
 }
