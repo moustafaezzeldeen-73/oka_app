@@ -140,7 +140,7 @@ export default function PdpScreen() {
             <View style={[styles.spread, rowDir, { marginTop: 6 }]}>
               <Txt style={styles.feeTxt}>{d.t('shippingFee')}</Txt>
               <Txt style={styles.feeTxt}>
-                {d.pdpRemaining === 0 ? d.t('freeShipReached') : d.fmtPrice(d.shippingFee)}
+                {d.fmtPrice(d.shippingFor(d.pdpSubtotal))}
               </Txt>
             </View>
             <Txt isRtl={d.isRtl} style={styles.payTxt}>
@@ -159,7 +159,7 @@ export default function PdpScreen() {
 
           <View style={styles.pointsBox}>
             <Txt isRtl={d.isRtl} style={styles.pointsTxt}>
-              {d.t('pointsNote', { n: Math.floor(p.price * (state.config.loyalty?.earnPointsPerEgp ?? 0.1)) })}
+              {d.t('pointsNote', { n: Math.floor(p.price * (state.config.loyalty?.earnPointsPerEgp ?? 1)) })}
             </Txt>
           </View>
         </View>

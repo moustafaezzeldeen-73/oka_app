@@ -16,10 +16,15 @@ const VARIANTS = {
 };
 let sent;
 let discountAmount;
+let shippingRates;
 
 beforeEach(() => {
   sent = [];
   discountAmount = 0;
+  shippingRates = [
+    { handle: 'express', title: 'Express', price: { amount: '90.0' } },
+    { handle: 'standard', title: 'Standard', price: { amount: '36.0' } },
+  ];
   globalThis.fetch = async (url, init) => {
     const { query, variables } = JSON.parse(init.body);
     sent.push({ query, variables });
@@ -45,8 +50,9 @@ beforeEach(() => {
       data = {
         draftOrderCalculate: {
           calculatedDraftOrder: {
-            discountCodes: discountAmount ? variables.input.discountCodes : [],
+            discountCodes: discountAmount ? variables.input.discountCodes ?? [] : [],
             totalDiscountsSet: { shopMoney: { amount: String(discountAmount) } },
+            availableShippingRates: variables.input.shippingAddress ? shippingRates : [],
             warnings: discountAmount ? [] : [{ message: 'Discount code is not valid' }],
           },
           userErrors: [],
@@ -74,8 +80,29 @@ test('prices come from the variant, not from anything the app sends', async () =
     lines: [{ variantId: 'gid://shopify/ProductVariant/1', quantity: 2, price: 1, priceOverride: 1 }],
   });
   assert.equal(q.subtotal, 240);
+  // No address yet: the store's fee-table estimate (metro, under 300).
+  assert.equal(q.shipping, 60);
+  assert.equal(q.shippingSource, 'estimate');
+  assert.equal(q.total, 300);
+});
+
+test('with an address, shipping is the cheapest rate Shopify offers', async () => {
+  const q = await quote({ lines: [{ variantId: 'gid://shopify/ProductVariant/1', quantity: 3 }], address });
+  assert.equal(q.shipping, 36);
+  assert.equal(q.shippingTitle, 'Standard');
+  assert.equal(q.shippingSource, 'shopify');
+  const calc = sent.find((x) => x.query.includes('OkaCalculate')).variables.input;
+  assert.equal(calc.shippingAddress.provinceCode, 'C');
+});
+
+test('if Shopify offers no rate, the fee table is used', async () => {
+  shippingRates = [];
+  const q = await quote({
+    lines: [{ variantId: 'gid://shopify/ProductVariant/1', quantity: 2 }],
+    address: { ...address, provinceCode: 'ASN' },
+  });
   assert.equal(q.shipping, 80);
-  assert.equal(q.total, 320);
+  assert.equal(q.shippingSource, 'table');
 });
 
 test('lines without a variant are dropped; an empty basket is refused', async () => {
@@ -121,7 +148,8 @@ test('the order carries server prices, server shipping, and the discount amount'
   assert.equal(r.orderNumber, '#1009');
   const create = sent.find((x) => x.query.includes('OkaOrderCreate')).variables.order;
   assert.equal(create.lineItems[0].priceSet, undefined, 'no price override on a checkout line');
-  assert.equal(create.shippingLines[0].priceSet.shopMoney.amount, '80');
+  assert.equal(create.shippingLines[0].priceSet.shopMoney.amount, '36');
+  assert.equal(create.shippingLines[0].title, 'Standard');
   assert.equal(create.discountCode.itemFixedDiscountCode.code, 'SAVE30');
   assert.equal(create.discountCode.itemFixedDiscountCode.amountSet.shopMoney.amount, '30');
   assert.equal(create.customer.toAssociate.id, customer.id);

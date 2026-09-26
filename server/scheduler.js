@@ -1,7 +1,8 @@
 import { creditDeliveredOrders } from './loyalty.js';
 import { notifyShipmentUpdates } from './notify.js';
-import { POLICY, shippingFor } from './policy.js';
-import { createOrder, fetchVariants } from './shopify.js';
+import { pickShipping } from './checkout.js';
+import { POLICY } from './policy.js';
+import { calculateWithShopify, createOrder, fetchVariants } from './shopify.js';
 import { dueSubscriptions, markCycleResult } from './subscriptions.js';
 
 /**
@@ -36,6 +37,17 @@ async function runDueSubscriptions() {
       }
       const skipped = sub.items.length - lines.length;
 
+      // The store's own shipping rate for this address, as the website would
+      // charge it. Shopify sees full prices here, so a basket that only drops
+      // under the fee tier because of the subscription discount keeps the
+      // lower fee — the difference favours the subscriber.
+      const { shippingRates } = await calculateWithShopify({
+        lines: lines.map((it) => ({ variantId: it.variantId, quantity: it.quantity })),
+        customerId: sub.customerId,
+        address: sub.address,
+      });
+      const ship = pickShipping({ shippingRates, merchandise, address: sub.address });
+
       const order = await createOrder({
         lines: lines.map((it) => ({
           variantId: it.variantId,
@@ -45,7 +57,8 @@ async function runDueSubscriptions() {
         address: sub.address,
         customer: { name: sub.customerName, email: sub.email, phone: sub.address?.phone },
         customerId: sub.customerId,
-        shipping: shippingFor(merchandise, 'cod'),
+        shipping: ship.fee,
+        shippingTitle: ship.title,
         paymentMethod: 'cod',
         lang: 'ar',
         extraTags: ['oka-subscription', `sub-frequency:${sub.frequencyId}`],

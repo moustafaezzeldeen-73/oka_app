@@ -212,7 +212,7 @@ export const STR = {
     categoriesTitle: 'Categories', productsCount: 'products',
     sortBestSelling: 'Best selling', filters: 'Filters', noMatch: 'No products in this category',
     inStock: 'In stock', onlyLeft: 'Only {n} left', outOfStock: 'Out of stock',
-    freeShipProgress: 'Add {n} EGP more for free shipping', freeShipReached: 'This order ships free',
+    freeShipProgress: 'Add {n} EGP more for a lower delivery fee', freeShipReached: 'Lower delivery fee unlocked',
     qty: 'Quantity', customize: 'Customize', addToCart: 'Add to Cart', buyNow: 'Add to Cart',
     deliverTo: 'Deliver to', estDelivery: 'Estimated delivery', shippingFee: 'Shipping fee',
     payMethods: 'Cash on delivery', description: 'Description',
@@ -249,7 +249,7 @@ export const STR = {
     categoriesTitle: 'الفئات', productsCount: 'منتج',
     sortBestSelling: 'الأكثر مبيعاً', filters: 'فلاتر', noMatch: 'لا توجد منتجات في هذه الفئة',
     inStock: 'متوفر', onlyLeft: 'باقي {n} فقط', outOfStock: 'غير متوفر',
-    freeShipProgress: 'أضف {n} ج.م للحصول على شحن مجاني', freeShipReached: 'هذا الطلب يشحن مجاناً',
+    freeShipProgress: 'أضف {n} ج.م عشان رسوم التوصيل تقل', freeShipReached: 'رسوم التوصيل الأقل مفعّلة',
     qty: 'الكمية', customize: 'تخصيص', addToCart: 'أضف إلى السلة', buyNow: 'أضف إلى السلة',
     deliverTo: 'التوصيل إلى', estDelivery: 'موعد التوصيل المتوقع', shippingFee: 'رسوم الشحن',
     payMethods: 'الدفع عند الاستلام', description: 'الوصف',
@@ -287,13 +287,17 @@ export const STR = {
  */
 export const DEFAULT_CONFIG = {
   currency: 'EGP',
-  shippingFee: 80,
-  freeShippingMin: 1000,
+  // The store's fee table (mirrors server/zones.js): `under` below the tier
+  // threshold, `over` at or above it. Checkout uses Shopify's own rate.
+  shipping: {
+    tierThreshold: 300,
+    zones: { metro: { under: 60, over: 36 }, delta: { under: 70, over: 46 }, far: { under: 80, over: 56 } },
+  },
   minOrder: 150,
   prepaidShippingDiscount: 10,
   paymentMethods: ['cod'],
   provinces: [],
-  loyalty: { pointsPerEgp: 10, earnPointsPerEgp: 0.1, rewards: [] },
+  loyalty: { pointsPerEgp: 10, earnPointsPerEgp: 1, rewards: [] },
   subscriptionDiscountPct: 5,
   signIn: { otp: false, testLogin: false },
   support: { whatsapp: null, policiesBaseUrl: 'https://www.okaegypt.com/policies' },

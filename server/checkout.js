@@ -1,15 +1,16 @@
-import { POLICY, isPrepaid, paymentMethods, shippingFor } from './policy.js';
-import { createOrder, evaluateDiscount, fetchVariants, retireVoucher } from './shopify.js';
-import { etaFor } from './zones.js';
+import { POLICY, applyPaymentPerk, isPrepaid, paymentMethods } from './policy.js';
+import { calculateWithShopify, createOrder, fetchVariants, retireVoucher } from './shopify.js';
+import { FEE_TIER_THRESHOLD, etaFor, tableFee } from './zones.js';
 
 /**
  * Checkout, priced entirely on the server.
  *
  * The app sends only what the shopper chose — variant ids, quantities, a
  * discount code, a saved address and a payment method. Prices come from the
- * live variants, the discount from Shopify's own rules, and shipping from
- * policy.js. The quote the shopper agrees to and the order that is created
- * are computed by the same function, so they cannot drift apart.
+ * live variants, and the discount and shipping from Shopify itself — the
+ * same rules and rates the website's checkout uses. The quote the shopper
+ * agrees to and the order that is created are computed by the same
+ * function, so they cannot drift apart.
  */
 
 export class CheckoutError extends Error {
@@ -33,6 +34,22 @@ function cleanLines(raw) {
   }
   if (!merged.size) throw new CheckoutError('your basket is empty', { code: 'empty' });
   return [...merged].map(([variantId, quantity]) => ({ variantId, quantity }));
+}
+
+/**
+ * The store's shipping for this basket. With an address it is the cheapest
+ * rate Shopify offers for it (what the website would charge); without one,
+ * an estimate from the store's fee table.
+ */
+export function pickShipping({ shippingRates, merchandise, address }) {
+  if (address && shippingRates.length) {
+    const best = shippingRates.reduce((a, r) => (r.price < a.price ? r : a));
+    return { fee: best.price, title: best.title, source: 'shopify' };
+  }
+  if (address) {
+    console.warn('[oka][checkout] Shopify offered no shipping rate for this address; using the fee table');
+  }
+  return { fee: tableFee(merchandise, address), title: 'Delivery', source: address ? 'table' : 'estimate' };
 }
 
 /**
@@ -67,11 +84,10 @@ export async function quote({ lines: rawLines, discountCode, customerId, address
   }
 
   const subtotal = priced.reduce((a, l) => a + l.lineTotal, 0);
-  const discount = discountCode
-    ? await evaluateDiscount({ lines, discountCode, customerId })
-    : { code: null, amount: 0, applied: false, message: null };
+  const { discount, shippingRates } = await calculateWithShopify({ lines, discountCode, customerId, address });
   const merchandise = Math.max(0, subtotal - discount.amount);
-  const shipping = shippingFor(merchandise, paymentMethod);
+  const ship = pickShipping({ shippingRates, merchandise, address });
+  const shipping = applyPaymentPerk(ship.fee, paymentMethod);
 
   return {
     lines: priced,
@@ -84,8 +100,11 @@ export async function quote({ lines: rawLines, discountCode, customerId, address
     prepaid: isPrepaid(paymentMethod),
     minOrder: POLICY.minOrder,
     belowMinimum: merchandise < POLICY.minOrder,
-    freeShippingMin: POLICY.freeShippingMin,
-    remainingForFreeShipping: Math.max(0, POLICY.freeShippingMin - merchandise),
+    shippingTitle: ship.title,
+    // 'shopify' = the store's own rate for this address; otherwise an estimate.
+    shippingSource: ship.source,
+    feeTierThreshold: FEE_TIER_THRESHOLD,
+    remainingForLowerFee: Math.max(0, FEE_TIER_THRESHOLD - merchandise),
     eta: etaFor(address ?? {}),
   };
 }
@@ -125,6 +144,7 @@ export function placeOrder({ idempotencyKey, customer, address, lang, ...input }
       customer,
       customerId: customer.id,
       shipping: q.shipping,
+      shippingTitle: q.shippingTitle,
       discount: q.discount.applied ? { code: q.discount.code, amount: q.discount.amount } : null,
       paymentMethod: q.paymentMethod,
       lang,

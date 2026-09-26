@@ -7,34 +7,29 @@
  * creates can never disagree. Each value can be overridden from the
  * environment without a code change.
  *
- * The defaults are derived from the store's economics:
+ * Shipping fees are NOT decided here. The app charges exactly what the
+ * website does: for every quote and order with an address, the fee is the
+ * store's own Shopify shipping rate (checkout.js). zones.js holds a snapshot
+ * of those rates for estimates before an address is known.
  *
- *   margin on product            10%
- *   courier cost per attempt     80 EGP (charged whether or not it delivers)
- *   COD orders that fail         15%
- *
- * Shipping. The courier charges 80 EGP per attempt, so the fee is 80 EGP.
- * The old tiers (36–60 EGP, free above 300) lost 20–44 EGP on every order,
- * and at a 10% margin a 300 EGP basket earns only 30 EGP to absorb that.
- *
- * Free shipping. Waiving 80 EGP only pays for itself when 10% of the basket
- * covers the fee plus the share of failed attempts a delivered order has to
- * carry (15/85 × 80 ≈ 14 EGP): 0.10 × B ≥ 94 → B ≈ 940. Rounded to 1,000.
+ * The other defaults come from the store's economics (10% margin on product,
+ * about 15% of COD orders failing, and a courier cost of about 80 EGP per
+ * attempt that the customer's fee doesn't fully cover):
  *
  * Minimum order. A COD order earns 10% of the basket on the 85% that are
- * delivered and loses the 80 EGP attempt on the 15% that aren't:
- * 0.85 × 0.10 × B − 0.15 × 80 ≥ 0 → B ≥ 141. Rounded to 150.
+ * delivered and loses the attempt on the 15% that aren't:
+ * 0.85 × 0.10 × B − 0.15 × 80 ≥ 0 → B ≥ 141. Rounded to 150. The website has
+ * no minimum; set MIN_ORDER_EGP=0 to match it.
  *
  * Prepaid perk. A prepaid order removes the failed-attempt risk, worth about
- * 0.15 × 80 = 12 EGP per order, but a card gateway costs roughly
- * 2.75% + 3 EGP. That leaves room for a small, fixed perk, not a percentage:
- * 10 EGP off shipping. It only applies once a gateway is connected.
+ * 0.15 × 80 = 12 EGP, but a card gateway costs roughly 2.75% + 3 EGP. That
+ * leaves room for a small fixed perk: 10 EGP off shipping, only once a
+ * gateway is connected.
  *
- * Loyalty. 10 points = 1 EGP. Customers earn 1 point per 10 EGP of delivered
- * product (1% back, a tenth of the margin), credited only after delivery so
- * refused parcels earn nothing. Points are redeemed for single-use vouchers
- * that each need a minimum basket, so a voucher never turns an order into a
- * loss.
+ * Loyalty. 10 points = 1 EGP, and customers earn 1 point per EGP of delivered
+ * product — 10% back, as the store chose. Points are credited only after
+ * delivery, so refused parcels earn nothing, and are spent as single-use
+ * vouchers that each need a minimum basket.
  *
  * Subscriptions. A flat 5%. The old 15% weekly tier gave away more than the
  * whole margin on every delivery.
@@ -49,15 +44,13 @@ const num = (key, fallback) => {
 
 export const POLICY = Object.freeze({
   currency: 'EGP',
-  shippingFee: num('SHIPPING_FEE_EGP', 80),
-  freeShippingMin: num('FREE_SHIPPING_MIN_EGP', 1000),
   minOrder: num('MIN_ORDER_EGP', 150),
   prepaidShippingDiscount: num('PREPAID_SHIPPING_DISCOUNT_EGP', 10),
   subscriptionDiscountPct: num('SUBSCRIPTION_DISCOUNT_PCT', 5),
   loyalty: Object.freeze({
     pointsPerEgp: 10,
-    /** Points earned per EGP of delivered product (after discounts). 0.1 = 1 pt / 10 EGP. */
-    earnPointsPerEgp: num('LOYALTY_EARN_POINTS_PER_EGP', 0.1),
+    /** Points earned per EGP of delivered product (after discounts). 1 = 10% back. */
+    earnPointsPerEgp: num('LOYALTY_EARN_POINTS_PER_EGP', 1),
     voucherDays: num('LOYALTY_VOUCHER_DAYS', 90),
   }),
 });
@@ -89,12 +82,11 @@ export function paymentMethods() {
 export const isPrepaid = (method) => method === 'card' || method === 'wallet';
 
 /**
- * Shipping for a basket. `merchandise` is the product total after discounts.
+ * The prepaid perk taken off a shipping fee — the only change the app makes
+ * to the store's own rate, and only once a gateway is connected.
  */
-export function shippingFor(merchandise, paymentMethod = 'cod') {
-  if (merchandise >= POLICY.freeShippingMin) return 0;
-  const perk = isPrepaid(paymentMethod) ? POLICY.prepaidShippingDiscount : 0;
-  return Math.max(0, POLICY.shippingFee - perk);
+export function applyPaymentPerk(fee, paymentMethod = 'cod') {
+  return isPrepaid(paymentMethod) ? Math.max(0, fee - POLICY.prepaidShippingDiscount) : fee;
 }
 
 /** Points a delivered order earns, from its product total after discounts. */

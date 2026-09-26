@@ -141,6 +141,7 @@ export async function createOrder({
   customer = {},
   customerId = null,
   shipping = 0,
+  shippingTitle = 'Delivery',
   discount = null, // { code, amount }
   paymentMethod = 'cod',
   lang = 'ar',
@@ -181,9 +182,10 @@ export async function createOrder({
       .filter(Boolean)
       .join(' — ') || undefined,
     financialStatus: 'PENDING',
+    // Named as the store's own rate is, so app orders read like website ones.
     shippingLines: shipping > 0
       ? [{
-          title: 'Delivery',
+          title: shippingTitle,
           priceSet: { shopMoney: { amount: String(shipping), currencyCode: 'EGP' } },
         }]
       : undefined,
@@ -904,6 +906,7 @@ const DRAFT_CALCULATE = `
       calculatedDraftOrder {
         discountCodes
         totalDiscountsSet { shopMoney { amount } }
+        availableShippingRates { handle title price { amount } }
         warnings { message }
       }
       userErrors { field message }
@@ -912,39 +915,55 @@ const DRAFT_CALCULATE = `
 `;
 
 /**
- * What a discount code is worth on this basket, according to Shopify's own
- * discount rules (eligibility, minimums, customer restrictions, usage).
+ * Asks Shopify what the website would charge for this basket: the discount a
+ * code is worth under the store's own rules (eligibility, minimums, customer
+ * restrictions, usage), and — when an address is given — the shipping rates
+ * the store's delivery profiles offer for it.
  *
- * Returns { code, amount, applied, message }. `amount` is what the order will
- * be charged off; a code Shopify won't apply comes back with applied: false
- * and its reason, so the app can say why instead of showing "Applied".
+ * Returns {
+ *   discount: { code, amount, applied, message },
+ *   shippingRates: [{ handle, title, price }]   // empty without an address
+ * }
  */
-export async function evaluateDiscount({ lines, discountCode, customerId }) {
+export async function calculateWithShopify({ lines, discountCode, customerId, address }) {
   const code = String(discountCode ?? '').trim();
-  if (!code) return { code: null, amount: 0, applied: false, message: null };
+  const noDiscount = { code: code || null, amount: 0, applied: false, message: null };
+  if (!code && !address) return { discount: noDiscount, shippingRates: [] };
 
   const input = {
     lineItems: lines.map((l) => ({ variantId: l.variantId, quantity: l.quantity })),
-    discountCodes: [code],
+    ...(code ? { discountCodes: [code] } : {}),
     // Automatic discounts are left out: orders are created with orderCreate,
     // which doesn't apply them, so quoting them would promise a price the
     // order won't carry.
     acceptAutomaticDiscounts: false,
     ...(customerId ? { purchasingEntity: { customerId } } : {}),
+    ...(address ? { shippingAddress: toMailingAddress(address) } : {}),
   };
 
   const data = await adminGraphql(DRAFT_CALCULATE, { input });
   const { calculatedDraftOrder: c, userErrors } = data.draftOrderCalculate;
   if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join('; '));
 
+  const shippingRates = (c?.availableShippingRates ?? []).map((r) => ({
+    handle: r.handle,
+    title: r.title,
+    price: Number(r.price?.amount ?? 0),
+  }));
+
+  if (!code) return { discount: noDiscount, shippingRates };
+
   const amount = Math.round(Number(c?.totalDiscountsSet?.shopMoney?.amount ?? 0) * 100) / 100;
   const applied =
     amount > 0 && (c?.discountCodes ?? []).some((d) => d.toLowerCase() === code.toLowerCase());
   return {
-    code,
-    amount: applied ? amount : 0,
-    applied,
-    message: applied ? null : c?.warnings?.[0]?.message ?? 'this code does not apply to your basket',
+    discount: {
+      code,
+      amount: applied ? amount : 0,
+      applied,
+      message: applied ? null : c?.warnings?.[0]?.message ?? 'this code does not apply to your basket',
+    },
+    shippingRates,
   };
 }
 

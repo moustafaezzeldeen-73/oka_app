@@ -1,39 +1,41 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { POLICY, REWARDS, pointsEarned, pointsToEgp, shippingFor } from '../policy.js';
-import { etaFor, provinceFor } from '../zones.js';
+import { POLICY, REWARDS, applyPaymentPerk, pointsEarned, pointsToEgp } from '../policy.js';
+import { FEE_TIER_THRESHOLD, etaFor, provinceFor, tableFee } from '../zones.js';
 
-test('shipping is the courier cost, free only from the threshold', () => {
-  assert.equal(POLICY.shippingFee, 80);
-  assert.equal(shippingFor(150), 80);
-  assert.equal(shippingFor(999), 80);
-  assert.equal(shippingFor(1000), 0);
+test('the fee table mirrors the store: zone fee, lower from the 300 EGP tier', () => {
+  assert.equal(FEE_TIER_THRESHOLD, 300);
+  assert.equal(tableFee(299, { provinceCode: 'C' }), 60);
+  assert.equal(tableFee(300, { provinceCode: 'C' }), 36);
+  assert.equal(tableFee(200, { provinceCode: 'DK' }), 70);
+  assert.equal(tableFee(500, { provinceCode: 'DK' }), 46);
+  assert.equal(tableFee(200, { provinceCode: 'ASN' }), 80);
+  assert.equal(tableFee(500, { provinceCode: 'ASN' }), 56);
+  // Unknown governorate: the cheapest zone, so an estimate never overstates.
+  assert.equal(tableFee(200, {}), 60);
 });
 
-test('prepaid orders get the fixed shipping perk, COD does not', () => {
-  assert.equal(shippingFor(400, 'cod'), 80);
-  assert.equal(shippingFor(400, 'card'), 70);
-  assert.equal(shippingFor(400, 'wallet'), 70);
-  assert.equal(shippingFor(1200, 'card'), 0);
+test('prepaid orders get the fixed perk off the store rate, COD does not', () => {
+  assert.equal(applyPaymentPerk(60, 'cod'), 60);
+  assert.equal(applyPaymentPerk(60, 'card'), 50);
+  assert.equal(applyPaymentPerk(5, 'wallet'), 0);
 });
 
-test('free shipping and minimum order both cover the failed-delivery load', () => {
+test('the minimum order covers the failed-delivery load', () => {
   const margin = 0.1;
   const failRate = 0.15;
-  const fee = POLICY.shippingFee;
-  // Expected profit per placed COD order at the minimum must not be negative.
-  assert.ok((1 - failRate) * margin * POLICY.minOrder - failRate * fee >= 0);
-  // Waiving the fee at the threshold must be covered by the margin.
-  const failLoad = (failRate / (1 - failRate)) * fee;
-  assert.ok(margin * POLICY.freeShippingMin >= fee + failLoad);
+  const attemptCost = 80;
+  assert.ok((1 - failRate) * margin * POLICY.minOrder - failRate * attemptCost >= 0);
 });
 
-test('points: 1 per 10 EGP, 10 points per EGP of credit', () => {
+test('points: 1 per EGP (10% back), 10 points per EGP of credit', () => {
   assert.equal(pointsEarned(0), 0);
-  assert.equal(pointsEarned(99), 9);
-  assert.equal(pointsEarned(1000), 100);
-  assert.equal(pointsToEgp(500), 50);
+  assert.equal(pointsEarned(99.5), 99);
+  assert.equal(pointsEarned(1000), 1000);
+  assert.equal(pointsToEgp(1000), 100);
+  // 10% back: the credit earned is a tenth of what was spent.
+  assert.equal(pointsToEgp(pointsEarned(500)), 50);
 });
 
 test('no reward is worth more than ~10% of its minimum basket', () => {

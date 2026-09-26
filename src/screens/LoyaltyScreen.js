@@ -102,15 +102,21 @@ export default function LoyaltyScreen() {
       ],
     );
 
-  const pointsPer = Math.round(1 / (state.config.loyalty?.earnPointsPerEgp || 0.1));
+  const earnRate = state.config.loyalty?.earnPointsPerEgp || 1;
   const earnRules = d.isRtl
     ? [
-        { label: `كل ${arDigits(pointsPer)} ج.م منتجات بتوصلك`, value: 'نقطة واحدة' },
+        {
+          label: earnRate >= 1 ? 'كل ١ ج.م منتجات بتوصلك' : `كل ${arDigits(Math.round(1 / earnRate))} ج.م منتجات بتوصلك`,
+          value: earnRate >= 1 ? `${arDigits(Math.round(earnRate))} نقطة` : 'نقطة واحدة',
+        },
         { label: 'النقاط بتنزل', value: 'بعد التسليم' },
         { label: '١٠ نقاط', value: 'تساوي ١ ج.م' },
       ]
     : [
-        { label: `Every EGP ${pointsPer} of products delivered`, value: '1 point' },
+        {
+          label: earnRate >= 1 ? 'Every EGP 1 of products delivered' : `Every EGP ${Math.round(1 / earnRate)} of products delivered`,
+          value: earnRate >= 1 ? `${Math.round(earnRate)} point${earnRate > 1 ? 's' : ''}` : '1 point',
+        },
         { label: 'Points arrive', value: 'after delivery' },
         { label: '10 points', value: 'worth EGP 1' },
       ];

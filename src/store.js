@@ -303,16 +303,25 @@ export function useDerived() {
     // Only a code the server has accepted counts; typing one changes nothing.
     const discountRaw = state.discount?.applied ? state.discount.amount : 0;
 
-    /** Policy shipping for a product total — an estimate; the server decides. */
-    const shippingFor = (merch) =>
-      merch >= cfg.freeShippingMin
-        ? 0
-        : Math.max(0, cfg.shippingFee - (state.paymentMethod === 'cod' ? 0 : cfg.prepaidShippingDiscount));
+    /**
+     * The store's fee for a product total — an estimate from its fee table,
+     * for the chosen (or default) address's zone. Checkout shows Shopify's
+     * own rate, which is what the order is charged.
+     */
+    const chosenAddr =
+      (state.addresses ?? []).find((a) => a.id === state.selectedAddress) ??
+      (state.addresses ?? []).find((a) => a.isDefault) ??
+      null;
+    const zone = cfg.provinces.find((x) => x.code === chosenAddr?.provinceCode)?.zone ?? 'metro';
+    const zoneFees = cfg.shipping.zones[zone] ?? cfg.shipping.zones.metro;
+    const tier = cfg.shipping.tierThreshold;
+    const perk = state.paymentMethod === 'cod' ? 0 : cfg.prepaidShippingDiscount;
+    const shippingFor = (merch) => Math.max(0, (merch >= tier ? zoneFees.over : zoneFees.under) - perk);
 
     const shippingRaw = shippingFor(subtotalRaw - discountRaw);
     const totalRaw = subtotalRaw - discountRaw + shippingRaw;
     const pointsEarn = Math.floor(Math.max(0, subtotalRaw - discountRaw) * cfg.loyalty.earnPointsPerEgp);
-    const remainingForFree = Math.max(0, cfg.freeShippingMin - (subtotalRaw - discountRaw));
+    const remainingForTier = Math.max(0, tier - (subtotalRaw - discountRaw));
     const belowMinimum = subtotalRaw - discountRaw < cfg.minOrder;
 
     /** "1–2 days" for a delivery window. */
@@ -339,7 +348,7 @@ export function useDerived() {
     const pdpSubtotal = selectedProduct
       ? subtotalRaw + selectedProduct.price * (state.pdpQty || 1)
       : subtotalRaw;
-    const pdpRemaining = Math.max(0, cfg.freeShippingMin - pdpSubtotal);
+    const pdpRemaining = Math.max(0, tier - pdpSubtotal);
 
     return {
       lang,
@@ -359,12 +368,12 @@ export function useDerived() {
       shippingRaw,
       totalRaw,
       pointsEarn,
-      remainingForFree,
+      remainingForTier,
       shippingFor,
       belowMinimum,
       minOrder: cfg.minOrder,
-      freeShippingMin: cfg.freeShippingMin,
-      shippingFee: cfg.shippingFee,
+      feeTierThreshold: tier,
+      zoneFees,
       etaFor,
       provinceName,
       editCartEntries,
@@ -373,8 +382,8 @@ export function useDerived() {
       selectedProduct,
       pdpSubtotal,
       pdpRemaining,
-      pdpProgressPct: Math.min(100, Math.round((pdpSubtotal / cfg.freeShippingMin) * 100)),
-      cartProgressPct: Math.min(100, Math.round((subtotalRaw / cfg.freeShippingMin) * 100)),
+      pdpProgressPct: Math.min(100, Math.round((pdpSubtotal / tier) * 100)),
+      cartProgressPct: Math.min(100, Math.round(((subtotalRaw - discountRaw) / tier) * 100)),
       langLabel: isRtl ? 'EN' : 'ع',
     };
   }, [state, lang, isRtl, products]);

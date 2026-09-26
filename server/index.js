@@ -38,7 +38,7 @@ import { otpProvider, startOtp, verifyOtp } from './otp.js';
 import { rateLimit } from './rateLimit.js';
 import { CheckoutError, placeOrder, quote } from './checkout.js';
 import { POLICY, REWARDS, paymentMethods } from './policy.js';
-import { PROVINCES } from './zones.js';
+import { FEE_TIER_THRESHOLD, PROVINCES, ZONE_FEES } from './zones.js';
 import { loyaltySummary, redeem } from './loyalty.js';
 import { registerPushToken, unregisterPushToken } from './notify.js';
 import { startJobs } from './scheduler.js';
@@ -206,8 +206,9 @@ app.get('/health', async (_req, res) => {
 app.get('/storefront-config', (_req, res) => {
   res.json({
     currency: POLICY.currency,
-    shippingFee: POLICY.shippingFee,
-    freeShippingMin: POLICY.freeShippingMin,
+    // The store's fee table, for estimates before an address is chosen.
+    // Quotes with an address use Shopify's own rate.
+    shipping: { tierThreshold: FEE_TIER_THRESHOLD, zones: ZONE_FEES },
     minOrder: POLICY.minOrder,
     prepaidShippingDiscount: POLICY.prepaidShippingDiscount,
     paymentMethods: paymentMethods(),

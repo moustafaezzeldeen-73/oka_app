@@ -63,6 +63,24 @@ export default function ConfirmScreen() {
           />
         </View>
 
+        {/* The moment a shopper most wants updates: offer them here rather
+            than only behind a toggle in Account. */}
+        {!state.notifEnabled && state.session?.token ? (
+          <Press onPress={() => actions.setNotif(true)} activeScale={0.98} style={styles.notify}>
+            <Txt isRtl={d.isRtl} style={styles.notifyTitle}>
+              {d.isRtl ? 'عايز نبلغك لما طلبك يخرج للتوصيل؟' : 'Want a heads-up when it’s out for delivery?'}
+            </Txt>
+            <Txt isRtl={d.isRtl} style={styles.notifyBody}>
+              {d.isRtl
+                ? 'هنبعتلك إشعار بالمبلغ اللي تجهّزه للمندوب، ولو المندوب ما قدرش يوصلك.'
+                : 'We’ll tell you how much cash to have ready, and if the courier can’t reach you.'}
+            </Txt>
+            <Txt isRtl={d.isRtl} style={styles.notifyCta}>
+              {d.isRtl ? 'فعّل الإشعارات' : 'Turn on notifications'}
+            </Txt>
+          </Press>
+        ) : null}
+
         <View style={[styles.timeline, { flexDirection: d.isRtl ? 'row-reverse' : 'row' }]}>
           {steps.map((label, i) => (
             <View key={label} style={styles.step}>
@@ -105,6 +123,19 @@ export default function ConfirmScreen() {
 }
 
 const styles = StyleSheet.create({
+  notify: {
+    marginHorizontal: 22,
+    marginTop: 14,
+    padding: 16,
+    borderRadius: 18,
+    backgroundColor: 'rgba(31,143,78,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(31,143,78,0.25)',
+    gap: 6,
+  },
+  notifyTitle: { fontSize: 14.5, fontWeight: W.bold, color: C.ink },
+  notifyBody: { fontSize: 13, lineHeight: 19, color: C.inkSoft },
+  notifyCta: { fontSize: 13.5, fontWeight: W.bold, color: C.greenDeep, marginTop: 4 },
   root: { flex: 1 },
   head: { paddingTop: 36, paddingHorizontal: 24, paddingBottom: 10, alignItems: 'center' },
   tick: { marginBottom: 18 },

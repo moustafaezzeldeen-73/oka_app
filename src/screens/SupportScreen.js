@@ -19,8 +19,8 @@ const FAQ = [
     ar: ['التوصيل بياخد قد إيه؟', 'القاهرة والجيزة والإسكندرية: ١-٢ يوم. الدلتا والقناة: ٢-٣ أيام. الصعيد وسيناء والبحر الأحمر ومطروح: ٣-٥ أيام.'],
   },
   {
-    en: ['How much is delivery?', 'A flat {fee} anywhere in Egypt, and free on orders of {free} or more. The minimum order is {min}.'],
-    ar: ['التوصيل بكام؟', '{fee} لأي مكان في مصر، ومجاني للطلبات من {free}. أقل طلب {min}.'],
+    en: ['How much is delivery?', 'The same as our website: Cairo, Giza and Alexandria {metro}; Delta and Canal {delta}; everywhere else {far}. The lower fee applies to orders of {tier} or more. The minimum order is {min}.'],
+    ar: ['التوصيل بكام؟', 'نفس أسعار موقعنا: القاهرة والجيزة والإسكندرية {metro}، الدلتا والقناة {delta}، وباقي المحافظات {far}. الرسوم الأقل للطلبات من {tier}. أقل طلب {min}.'],
   },
   {
     en: ['How do I pay?', 'Cash on delivery. Please have the exact amount ready for the courier.'],
@@ -31,8 +31,8 @@ const FAQ = [
     ar: ['أقدر أعدّل أو ألغي طلبي؟', 'أيوه، من تبويب الطلبات، لحد ما يتسلم للمندوب.'],
   },
   {
-    en: ['How do loyalty points work?', 'You earn 1 point for every 10 EGP of products once your order is delivered. Redeem points for discount codes from the Loyalty screen.'],
-    ar: ['نقاط الولاء بتشتغل إزاي؟', 'بتكسب نقطة لكل ١٠ ج.م منتجات بعد ما طلبك يوصل. استبدل النقاط بأكواد خصم من صفحة الولاء.'],
+    en: ['How do loyalty points work?', 'You earn 1 point for every EGP of products once your order is delivered (10 points = 1 EGP). Redeem points for discount codes from the Loyalty screen.'],
+    ar: ['نقاط الولاء بتشتغل إزاي؟', 'بتكسب نقطة لكل ١ ج.م منتجات بعد ما طلبك يوصل (١٠ نقاط = ١ ج.م). استبدل النقاط بأكواد خصم من صفحة الولاء.'],
   },
   {
     en: ['What if something arrives damaged?', 'Message us on WhatsApp within 48 hours with a photo and your order number and we’ll replace it.'],
@@ -53,6 +53,12 @@ export default function SupportScreen() {
   const d = useDerived();
   const whatsapp = state.config.support?.whatsapp;
   const base = state.config.support?.policiesBaseUrl ?? 'https://www.okaegypt.com/policies';
+  /** "60 EGP (36 over 300)" for a zone, from the store's fee table. */
+  const zoneText = (zone) => {
+    const f = state.config.shipping?.zones?.[zone];
+    if (!f) return '';
+    return `${d.fmtPrice(f.under)} / ${d.fmtPrice(f.over)}`;
+  };
 
   const open = async (url) => {
     try {
@@ -86,8 +92,10 @@ export default function SupportScreen() {
         {FAQ.map((f, i) => {
           const [q, raw] = d.isRtl ? f.ar : f.en;
           const a = raw
-            .replace('{fee}', d.fmtPrice(d.shippingFee))
-            .replace('{free}', d.fmtPrice(d.freeShippingMin))
+            .replace('{metro}', zoneText('metro'))
+            .replace('{delta}', zoneText('delta'))
+            .replace('{far}', zoneText('far'))
+            .replace('{tier}', d.fmtPrice(d.feeTierThreshold))
             .replace('{min}', d.fmtPrice(d.minOrder));
           return (
             <View key={i} style={styles.qa}>

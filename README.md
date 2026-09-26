@@ -108,7 +108,7 @@ inventing an order number.
 | Store policy | app → `GET /storefront-config` → `server/policy.js` (shipping, minimum, payment methods, governorates, rewards) |
 | Collections, products | app → `GET /catalogue` → Admin `collectionByIdentifier` (60 s cache; falls back to bundled data) |
 | Sign-in | app → `/auth/otp/start` + `/auth/otp/verify` → one-time code, find-or-create the Shopify customer |
-| Cart totals, discount codes | app → `POST /checkout/quote` → live variant prices + Shopify `draftOrderCalculate` |
+| Cart totals, discount codes, shipping | app → `POST /checkout/quote` → live variant prices + Shopify `draftOrderCalculate` (discounts and the store's shipping rates) |
 | Checkout | app → `POST /orders` (signed in) → server re-prices → Admin `orderCreate` |
 | Order history + tracking | app → `GET /customer/orders` → Admin orders + J&T (Bosta for older orders) |
 | Edit / cancel / redirect | app → `/orders/:name/…` → only the session customer's own, unfulfilled orders |
@@ -147,19 +147,31 @@ Arabic product titles and descriptions are read from the `oka.title_ar` and
 
 ## Commercial policy
 
-All of these live in `server/policy.js` and can be overridden from the
-environment. They are derived from a 10% product margin, an 80 EGP courier
-cost per attempt, and 15% of COD orders failing.
+**Shipping matches the website.** For every quote and order with an address,
+the fee is the store's own Shopify rate for that address and basket
+(`draftOrderCalculate` → available shipping rates, cheapest one), and the
+order's shipping line carries that rate's name. Before an address is chosen,
+the app estimates from a copy of the store's fee table in `server/zones.js`:
+
+| Zone | Under 300 EGP | 300 EGP and over |
+| --- | --- | --- |
+| Cairo, Giza, 6th of October, Helwan, Alexandria | 60 | 36 |
+| Delta and Canal | 70 | 46 |
+| Upper Egypt, Sinai, Red Sea, Matrouh, New Valley | 80 | 56 |
+
+Update that table if the store's delivery profiles change; orders themselves
+always follow Shopify.
+
+The rest lives in `server/policy.js` and can be overridden from the
+environment:
 
 | | Default | Why |
 | --- | --- | --- |
-| Shipping fee | 80 EGP flat | The courier's cost per attempt. The old 36–60 EGP tiers lost money on every order |
-| Free shipping | from 1,000 EGP | Where 10% of the basket covers the 80 EGP fee plus the ~14 EGP share of failed attempts |
-| Minimum order | 150 EGP | Below ~141 EGP a COD order loses money once failed deliveries are counted |
-| Prepaid perk | 10 EGP off shipping | Prepaid removes ~12 EGP of expected failure cost; gateway fees take most of it. Only applies once `PAYMENT_GATEWAY` is set |
-| Payment methods | Cash on delivery | Card and wallet appear only once a gateway is connected |
-| Loyalty earn | 1 point per 10 EGP of delivered product (1%) | A tenth of the margin, credited only after delivery so refused parcels earn nothing |
-| Loyalty redeem | 200 pts → 20 off 300+, 500 → 50 off 600+, 800 → 80 off 800+, 1500 → 150 off 1,500+ | Each is a single-use voucher code worth at most 10% of its minimum basket |
+| Minimum order | 150 EGP | Below ~141 EGP a COD order loses money once failed deliveries (15%, ~80 EGP courier cost each) are counted. The website has none; `MIN_ORDER_EGP=0` matches it |
+| Payment methods | Cash on delivery | Card and wallet appear only once a gateway is connected (`PAYMENT_GATEWAY`) |
+| Prepaid perk | 10 EGP off the store's shipping rate | Prepaid removes ~12 EGP of expected failure cost; gateway fees take most of it. Off until a gateway is connected |
+| Loyalty earn | 1 point per EGP of delivered product — 10% back | The store's choice. Credited only after delivery, so refused parcels earn nothing |
+| Loyalty redeem | 200 pts → 20 off 300+, 500 → 50 off 600+, 800 → 80 off 800+, 1500 → 150 off 1,500+ | 10 points = 1 EGP. Each reward is a single-use voucher code worth at most 10% of its minimum basket |
 | Subscribe & Save | 5% off, every frequency | The old 15% weekly tier gave away more than the whole margin |
 
 Points earning starts only when `LOYALTY_START_DATE` is set, and only for
@@ -230,7 +242,7 @@ Admin API version defaults to `2026-07`. Admin scopes required:
 | `read_customers`, `write_customers` | sign-in (find or create), addresses, wishlist, push tokens |
 | `read_products` | catalogue and live prices |
 | `read_fulfillments` | tracking numbers |
-| `write_draft_orders` | `draftOrderCalculate` to evaluate discount codes |
+| `write_draft_orders` | `draftOrderCalculate`: discount codes and the store's shipping rates |
 | `read_discounts`, `write_discounts` | loyalty voucher codes |
 | `read_store_credit_accounts`, `read_store_credit_account_transactions`, `write_store_credit_account_transactions` | loyalty balance, earning and redeeming |
 
@@ -238,8 +250,31 @@ Run background jobs (subscriptions, notifications, loyalty earning) on exactly
 one instance: set `JOBS_ENABLED=false` on the others. Point
 `SUBSCRIPTIONS_DATA_DIR` at a persistent disk.
 
-Push notifications need an EAS project id in `app.json` (`eas init`) and a real
-device.
+### Notifications
+
+`server/notify.js` checks orders placed in the app every 30 minutes and
+pushes, in the language the order was placed in:
+
+| When | Message |
+| --- | --- |
+| The courier collects the parcel | "Your order has shipped" |
+| Out for delivery (J&T scan 94, Bosta state 41) | "Out for delivery today — have EGP … ready", with the COD amount |
+| A delivery attempt fails | "The courier couldn't reach you" (at most once a day) |
+| Delivered | "Delivered" |
+
+Each notice is tagged on the order (`notified:…`) so it goes out once, and
+events older than a day are tagged without being sent. Tapping a notice opens
+that order. Tokens Expo reports as dead are dropped, and signing out
+unregisters the device. The app offers notifications on the order
+confirmation screen, and in Account.
+
+To make it work:
+
+- Run `eas init` so `app.json` has `extra.eas.projectId`.
+- Test on a real phone. Expo Go works on iOS; on Android use a development
+  build, since Expo Go on Android has no remote notifications since SDK 53.
+- For Android builds, add FCM credentials to the EAS project
+  (`eas credentials`).
 
 ---
 

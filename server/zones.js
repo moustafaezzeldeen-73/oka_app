@@ -17,6 +17,24 @@ const ZONE_ETA = {
   far: { minDays: 3, maxDays: 5 },
 };
 
+/**
+ * The store's shipping fees per zone, as Shopify charges them on the website:
+ * `under` below FEE_TIER_THRESHOLD of products (after discounts), `over` at
+ * or above it.
+ *
+ * Orders and quotes with an address get their fee from Shopify itself
+ * (draftOrderCalculate's available shipping rates), so the app always charges
+ * what the website does. This snapshot is only the estimate shown before an
+ * address is known, and the fallback if Shopify returns no rate — update it
+ * if the store's delivery profiles change.
+ */
+export const FEE_TIER_THRESHOLD = 300;
+export const ZONE_FEES = {
+  metro: { under: 60, over: 36 },
+  delta: { under: 70, over: 46 },
+  far: { under: 80, over: 56 },
+};
+
 export const PROVINCES = [
   { code: 'C', en: 'Cairo', ar: 'القاهرة', zone: 'metro' },
   { code: 'GZ', en: 'Giza', ar: 'الجيزة', zone: 'metro' },
@@ -47,7 +65,7 @@ export const PROVINCES = [
   { code: 'SIN', en: 'North Sinai', ar: 'شمال سيناء', zone: 'far' },
   { code: 'JS', en: 'South Sinai', ar: 'جنوب سيناء', zone: 'far' },
   { code: 'BA', en: 'Red Sea', ar: 'البحر الأحمر', zone: 'far' },
-].map((p) => ({ ...p, ...ZONE_ETA[p.zone] }));
+].map((p) => ({ ...p, ...ZONE_ETA[p.zone], fees: ZONE_FEES[p.zone] }));
 
 const BY_CODE = new Map(PROVINCES.map((p) => [p.code, p]));
 
@@ -73,4 +91,14 @@ export function provinceFor({ provinceCode, province, city } = {}) {
 export function etaFor(address) {
   const p = provinceFor(address);
   return p ? { minDays: p.minDays, maxDays: p.maxDays } : { ...ZONE_ETA.far };
+}
+
+/**
+ * The store's fee for a basket going to an address, from the snapshot above.
+ * An unknown governorate is quoted at the metro fee — the cheapest zone, so
+ * an estimate never overstates.
+ */
+export function tableFee(merchandise, address) {
+  const fees = provinceFor(address ?? {})?.fees ?? ZONE_FEES.metro;
+  return merchandise >= FEE_TIER_THRESHOLD ? fees.over : fees.under;
 }
