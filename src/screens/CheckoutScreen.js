@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
 import { success } from '../haptics';
 import { C, W } from '../theme';
@@ -11,8 +10,8 @@ import { FadeIn } from '../components/anim';
 import { Divider, Img, Press, Txt } from '../components/ui';
 import { Cta, ScreenHeader } from '../components/parts';
 import { ChevronRight, MastercardMark } from '../components/Icons';
-import { submitOrder } from '../api/orders';
-import { calculateCheckout, fetchCustomerAddresses } from '../api/auth';
+import { fetchCustomerAddresses, fetchQuote, placeOrder as submitOrder } from '../api/auth';
+import { hasService } from '../api/config';
 
 export default function CheckoutScreen() {
   const { state } = useStore();
@@ -20,77 +19,57 @@ export default function CheckoutScreen() {
   const d = useDerived();
   const [placing, setPlacing] = useState(false);
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
+  const token = state.session?.token ?? null;
 
   /**
-   * A shopper who jumps straight to checkout without visiting the Addresses
-   * screen first would otherwise ship under the account's stale default —
-   * this pulls the real list in as soon as one exists to resolve against.
+   * One key per visit to checkout: a double tap, or a retry after the network
+   * dropped mid-request, returns the order already placed instead of a second.
    */
+  const idempotencyKey = useRef(`${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`);
+
   useEffect(() => {
-    if (!state.session?.token || state.addresses !== null) return;
-    fetchCustomerAddresses(state.session.token)
+    if (!token || state.addresses !== null) return;
+    fetchCustomerAddresses(token)
       .then((r) => actions.setAddresses(r.addresses ?? []))
       .catch(() => actions.setAddresses([]));
-  }, [state.session?.token, state.addresses, actions]);
+  }, [token, state.addresses, actions]);
 
-  /**
-   * The address the customer actually picked on the Addresses screen wins —
-   * that is what "ships to" is supposed to mean. Failing that, the account's
-   * own default, then whatever they just typed on the add-address form, then
-   * the prototype's placeholder person as a last resort. Checkout used to skip
-   * the real saved-address list entirely, so a selection there never reached
-   * the order Shopify received.
-   */
+  /** The address picked on the Addresses screen, else the account default. */
   const selectedAddr =
     (state.addresses ?? []).find((a) => a.id === state.selectedAddress) ??
     (state.addresses ?? []).find((a) => a.isDefault) ??
+    (state.addresses ?? [])[0] ??
     null;
 
-  const buyer = {
-    name: selectedAddr?.name || state.customer?.name || state.newAddr?.name || STR[d.lang].name,
-    email: state.customer?.email || null,
-    phone: selectedAddr?.phone || state.customer?.phone || state.newAddr?.phone || STR[d.lang].phone,
-    street:
-      selectedAddr?.street ||
-      state.newAddr?.street ||
-      state.customer?.address?.address1 ||
-      STR[d.lang].street,
-    city: selectedAddr?.city || state.newAddr?.city || state.customer?.address?.city || d.t(state.city),
-  };
+  const payOptions = [
+    { id: 'cod', label: d.t('cod') },
+    { id: 'card', label: d.t('card') },
+    { id: 'wallet', label: d.t('wallet') },
+  ].filter((po) => state.config.paymentMethods.includes(po.id));
 
-  /**
-   * Shipping tiers and discount codes were computed from hardcoded tables, so
-   * the total a shopper agreed to could differ from what Shopify charged.
-   * Shopify is asked for the real figures; the local estimate is only a
-   * placeholder until they arrive, and the fallback if the call fails.
-   */
+  // A method the server stopped offering can't stay selected.
+  useEffect(() => {
+    if (!state.config.paymentMethods.includes(state.paymentMethod)) actions.setPaymentMethod('cod');
+  }, [state.config.paymentMethods, state.paymentMethod, actions]);
+
+  /** The server's price for exactly this basket, address and payment method. */
   const [quote, setQuote] = useState(null);
-  const [quoteError, setQuoteError] = useState(false);
-
-  const lineItems = d.cartEntries.map((ce) => ({
-    id: ce.id,
-    variantId: ce.product.variantId,
-    quantity: ce.qty,
-    price: ce.product.price,
-    title: ce.product.titleEn,
-  }));
-
-  const quoteKey = JSON.stringify([lineItems, state.city, state.discountApplied, state.discountCode]);
+  const [quoteError, setQuoteError] = useState(null);
+  const discountCode = state.discount?.applied ? state.discount.code : null;
+  const quoteKey = JSON.stringify([d.cartLines, selectedAddr?.id, discountCode, state.paymentMethod]);
 
   const loadQuote = useCallback(async () => {
-    if (!lineItems.length) return;
+    if (!d.cartLines.length || !selectedAddr) return;
     try {
-      const q = await calculateCheckout({
-        items: lineItems,
-        customer: { street: buyer.street, city: buyer.city, phone: buyer.phone, email: buyer.email },
-        shipping: d.shippingRaw,
-        discountCode: state.discountApplied ? state.discountCode : null,
-      });
+      const q = await fetchQuote(
+        { lines: d.cartLines, discountCode, addressId: selectedAddr.id, paymentMethod: state.paymentMethod },
+        token,
+      );
       setQuote(q);
-      setQuoteError(false);
-    } catch {
+      setQuoteError(null);
+    } catch (err) {
       setQuote(null);
-      setQuoteError(true);
+      setQuoteError(err);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quoteKey]);
@@ -99,72 +78,77 @@ export default function CheckoutScreen() {
     loadQuote();
   }, [loadQuote]);
 
-  /** Shopify's number when we have it, the local estimate until then. */
-  const totalRaw = quote?.total ?? d.totalRaw;
-  const shippingRaw = quote?.shipping ?? d.shippingRaw;
-  const totalLabel = d.fmtPrice(totalRaw);
-
+  const totalLabel = quote ? d.fmtPrice(quote.total) : '…';
+  const eta = d.etaFor(selectedAddr);
   const hero = d.cartEntries[0];
-  const payOptions = [
-    { id: 'cod', label: d.t('cod') },
-    { id: 'card', label: d.t('card') },
-    { id: 'wallet', label: d.t('wallet') },
-  ];
 
-  /**
-   * Native checkout: the cart is posted to the OKA order service, which creates
-   * the real Shopify order server-side. If the service isn't configured the
-   * prototype's local order number is used instead, so the flow never dead-ends.
-   */
   const placeOrder = async () => {
-    if (placing) return;
+    if (placing || !quote || !selectedAddr) return;
+    if (quote.belowMinimum) return;
     setPlacing(true);
     try {
-      const result = await submitOrder({
-        lang: d.lang,
-        items: d.cartEntries.map((ce) => ({
-          id: ce.id,
-          variantId: ce.product.variantId,
-          quantity: ce.qty,
-          price: ce.product.price,
-          title: ce.product.titleEn,
-        })),
-        city: state.city,
-        paymentMethod: state.paymentMethod,
-        discountCode: state.discountApplied ? state.discountCode : null,
-        subtotal: quote?.subtotal ?? d.subtotalRaw,
-        shipping: shippingRaw,
-        discount: quote?.discount ?? d.discountRaw,
-        total: totalRaw,
-        // Links the order to the signed-in account directly — without this,
-        // Shopify's own email/phone matching can miss and the order never
-        // shows up back in this customer's order history.
-        customerId: state.customer?.id ?? null,
-        customer: {
-          name: buyer.name,
-          email: buyer.email,
-          phone: buyer.phone,
-          street: buyer.street,
-          city: buyer.city,
+      const result = await submitOrder(
+        {
+          idempotencyKey: idempotencyKey.current,
+          lang: d.lang,
+          lines: d.cartLines,
+          addressId: selectedAddr.id,
+          discountCode,
+          paymentMethod: state.paymentMethod,
         },
-      });
-
+        token,
+      );
       success();
       actions.placeOrder({
         number: result.orderNumber,
         shopifyOrderId: result.shopifyOrderId ?? null,
-        trackingNumber: result.trackingNumber ?? null,
-        total: totalLabel,
-        cityDays: d.cityDays[state.city],
+        trackingNumber: null,
+        total: d.fmtPrice(result.total),
+        cityDays: eta,
         itemCount: d.cartCount,
         heroImg: hero ? hero.product.img : null,
         heroTitle: hero ? d.title(hero.product) : '',
         heroProductId: hero ? hero.id : null,
       });
+    } catch (err) {
+      // The cart stays as it is: nothing was ordered, and the shopper is told
+      // so. (A failure used to show a made-up order number and empty the cart.)
+      Alert.alert(
+        d.isRtl ? 'ما اتسجلش الطلب' : 'Your order was not placed',
+        String(err.message ?? err),
+        [{ text: d.isRtl ? 'حسناً' : 'OK' }],
+      );
+      if (err.code === 'stock' || err.code === 'discount') loadQuote();
     } finally {
       setPlacing(false);
     }
   };
+
+  /* Signed out, or no service: checkout can't go further. */
+  if (!token || !hasService()) {
+    return (
+      <FadeIn style={styles.root}>
+        <ScreenHeader title={d.t('checkout')} onBack={actions.goBack} isRtl={d.isRtl} />
+        <View style={styles.gate}>
+          <Txt isRtl={d.isRtl} style={styles.arrivesTitle}>
+            {!hasService()
+              ? d.isRtl ? 'الطلب غير متاح في النسخة دي' : 'Ordering is not available in this build'
+              : d.isRtl ? 'سجّل دخولك برقم موبايلك' : 'Sign in with your phone to order'}
+          </Txt>
+          <Txt isRtl={d.isRtl} style={styles.arrivesNote}>
+            {d.isRtl
+              ? 'بنأكد رقمك مرة واحدة عشان المندوب يقدر يوصلك.'
+              : 'We confirm your number once so the courier can reach you.'}
+          </Txt>
+          {hasService() ? (
+            <Cta label={d.isRtl ? 'تسجيل الدخول' : 'Sign in'} onPress={() => actions.requireSignIn('checkout')} style={{ marginTop: 18 }} />
+          ) : null}
+        </View>
+      </FadeIn>
+    );
+  }
+
+  const noAddress = state.addresses !== null && !selectedAddr;
 
   return (
     <FadeIn style={styles.root}>
@@ -178,23 +162,22 @@ export default function CheckoutScreen() {
           <View style={styles.heroMeta}>
             <Txt isRtl={d.isRtl} style={styles.heroTitle}>
               {hero ? d.title(hero.product) : ''}
+              {d.cartCount > 1 ? (d.isRtl ? ` + ${d.num(d.cartCount - 1)}` : ` + ${d.cartCount - 1} more`) : ''}
             </Txt>
             <Txt isRtl={d.isRtl} style={styles.heroTotal}>
               {totalLabel}
             </Txt>
           </View>
-          <View style={chevronFlip(d.isRtl)}>
+          <Press onPress={() => actions.goTab('cart')} style={chevronFlip(d.isRtl)} hitSlop={10}>
             <ChevronRight />
-          </View>
+          </Press>
         </View>
 
         <Divider style={styles.rule} />
 
         <View style={styles.arrivesBlock}>
           <Txt isRtl={d.isRtl} style={styles.arrivesTitle}>
-            {d.isRtl
-              ? `يوصل ${d.cityDays[state.city]}`
-              : `Arrives in ${d.cityDays[state.city]}`}
+            {d.isRtl ? `يوصل خلال ${eta}` : `Arrives in ${eta}`}
           </Txt>
           <Txt isRtl={d.isRtl} style={styles.arrivesNote}>
             {d.isRtl
@@ -206,21 +189,23 @@ export default function CheckoutScreen() {
         <Divider style={styles.rule} />
 
         <Field label={d.isRtl ? 'الشحن إلى' : 'Ships to'} isRtl={d.isRtl}>
-          <Txt isRtl={d.isRtl} style={styles.fieldStrong}>{buyer.name}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{buyer.street}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{buyer.city}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldPhone}>{`⁦${buyer.phone}⁩`}</Txt>
-        </Field>
-
-        <Divider style={styles.ruleTop} />
-
-        <Field label={d.isRtl ? 'التوصيل' : 'Delivers'} isRtl={d.isRtl}>
-          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{d.cityDays[state.city]}</Txt>
-          <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
-            {d.isRtl
-              ? `خلال ${d.cityDays[state.city]} من التأكيد`
-              : `Within ${d.cityDays[state.city]} of confirmation`}
-          </Txt>
+          {state.addresses === null ? (
+            <ActivityIndicator color={C.ink} style={{ alignSelf: d.isRtl ? 'flex-end' : 'flex-start' }} />
+          ) : noAddress ? (
+            <Press onPress={() => actions.goTo('addAddress')}>
+              <Txt isRtl={d.isRtl} style={[styles.fieldStrong, { color: C.accent }]}>
+                {d.isRtl ? '+ ضيف عنوان التوصيل' : '+ Add a delivery address'}
+              </Txt>
+            </Press>
+          ) : (
+            <Press onPress={() => actions.goTo('addresses')}>
+              <Txt isRtl={d.isRtl} style={styles.fieldStrong}>{selectedAddr.name}</Txt>
+              <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{selectedAddr.street}</Txt>
+              <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{selectedAddr.city}</Txt>
+              <Txt isRtl={d.isRtl} style={styles.fieldPhone}>{`⁦${selectedAddr.phone ?? ''}⁩`}</Txt>
+              <Txt isRtl={d.isRtl} style={[styles.fieldTxt, { color: C.accent }]}>{d.t('change')}</Txt>
+            </Press>
+          )}
         </Field>
 
         <Divider style={styles.ruleTop} />
@@ -249,36 +234,63 @@ export default function CheckoutScreen() {
                     </View>
                     <MastercardMark />
                     <View style={styles.markBox}>
-                      <Txt style={styles.fawry}>fawry</Txt>
-                    </View>
-                    <View style={styles.markBox}>
                       <Txt style={styles.meeza}>meeza</Txt>
                     </View>
                   </View>
                 )}
               </Press>
             ))}
-            {state.paymentMethod === 'cod' && (
+            {state.paymentMethod === 'cod' && quote ? (
               <Txt isRtl={d.isRtl} style={styles.codNote}>
                 {`${d.t('codNote')}: ${totalLabel}`}
               </Txt>
-            )}
+            ) : null}
           </View>
         </Field>
 
         <Divider style={styles.ruleTop} />
 
         <Field label={d.t('total')} isRtl={d.isRtl} style={{ paddingBottom: 110 }}>
-          <Txt isRtl={d.isRtl} style={styles.arrivesTitle}>
-            {totalLabel}
-          </Txt>
-          {quoteError ? (
-            <Txt isRtl={d.isRtl} style={styles.quoteWarn}>
-              {d.isRtl
-                ? 'ده تقدير مبدئي — ما قدرناش نتأكد من الإجمالي مع شوبيفاي.'
-                : 'Estimated — we could not confirm this total with Shopify.'}
+          {quote ? (
+            <View style={{ gap: 4 }}>
+              <SumLine d={d} label={d.t('subtotal')} value={d.fmtPrice(quote.subtotal)} />
+              {quote.discount.applied ? (
+                <SumLine d={d} label={`${d.t('discount')} (${quote.discount.code})`} value={`-${d.fmtPrice(quote.discount.amount)}`} />
+              ) : null}
+              <SumLine
+                d={d}
+                label={d.t('shipping')}
+                value={quote.shipping === 0 ? d.t('freeShipReached') : d.fmtPrice(quote.shipping)}
+              />
+              <Txt isRtl={d.isRtl} style={[styles.arrivesTitle, { marginTop: 6 }]}>
+                {totalLabel}
+              </Txt>
+              {quote.belowMinimum ? (
+                <Txt isRtl={d.isRtl} style={styles.quoteWarn}>
+                  {d.isRtl
+                    ? `أقل طلب ${d.fmtPrice(quote.minOrder)}.`
+                    : `The minimum order is ${d.fmtPrice(quote.minOrder)}.`}
+                </Txt>
+              ) : null}
+            </View>
+          ) : quoteError ? (
+            <View>
+              <Txt isRtl={d.isRtl} style={styles.quoteWarn}>
+                {String(quoteError.message ?? quoteError)}
+              </Txt>
+              <Press onPress={loadQuote}>
+                <Txt isRtl={d.isRtl} style={[styles.fieldTxt, { color: C.accent }]}>
+                  {d.isRtl ? 'حاول تاني' : 'Try again'}
+                </Txt>
+              </Press>
+            </View>
+          ) : noAddress ? (
+            <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
+              {d.isRtl ? 'ضيف عنوان عشان نحسب الإجمالي.' : 'Add an address to see your total.'}
             </Txt>
-          ) : null}
+          ) : (
+            <ActivityIndicator color={C.ink} style={{ alignSelf: d.isRtl ? 'flex-end' : 'flex-start' }} />
+          )}
         </Field>
       </ScrollView>
 
@@ -291,11 +303,21 @@ export default function CheckoutScreen() {
           label={placing ? '' : d.t('placeOrder')}
           onPress={placeOrder}
           textStyle={{ fontWeight: W.bold }}
+          style={!quote || quote.belowMinimum ? { opacity: 0.45 } : null}
         >
           {placing ? <ActivityIndicator color="#ffffff" /> : undefined}
         </Cta>
       </LinearGradient>
     </FadeIn>
+  );
+}
+
+function SumLine({ d, label, value }) {
+  return (
+    <View style={{ flexDirection: d.isRtl ? 'row-reverse' : 'row', justifyContent: 'space-between' }}>
+      <Txt isRtl={d.isRtl} style={styles.fieldTxt}>{label}</Txt>
+      <Txt style={styles.fieldTxt}>{value}</Txt>
+    </View>
   );
 }
 
@@ -319,6 +341,7 @@ function Field({ label, children, isRtl, style }) {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
+  gate: { paddingHorizontal: 22, paddingTop: 30 },
   fill: { width: '100%', height: '100%' },
   rule: { marginHorizontal: 22 },
   ruleTop: { marginHorizontal: 22, marginTop: 20 },
@@ -363,7 +386,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   visa: { fontSize: 9, fontWeight: W.heavy, fontStyle: 'italic', letterSpacing: 0.3, color: '#1a1f71' },
-  fawry: { fontSize: 8.5, fontWeight: W.heavy, color: '#e8b100' },
   meeza: { fontSize: 8.5, fontWeight: W.heavy, color: '#0a7a3c' },
   codNote: { fontSize: 12.5, color: C.ink, lineHeight: 19 },
   quoteWarn: { fontSize: 11.5, color: '#8c1d18', lineHeight: 17, marginTop: 6 },

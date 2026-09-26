@@ -116,9 +116,10 @@ const mergeTimeline = (order, tracking, lang) =>
 assertAuthConfig();
 
 const app = express();
-// Behind a proxy (Render, Fly, a load balancer) the client IP is in
-// X-Forwarded-For; rate limits key on it.
-app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS ?? 1));
+// Behind a proxy (Render, Fly, a load balancer) set TRUST_PROXY_HOPS=1 so rate
+// limits key on the real client IP. Unset, X-Forwarded-For is ignored — a
+// client could otherwise send a fake one to dodge the limits.
+app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS ?? 0));
 app.use(express.json({ limit: '256kb' }));
 
 app.use((req, res, next) => {

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActions, useDerived, useStore } from '../store';
@@ -8,7 +8,7 @@ import { FadeIn } from '../components/anim';
 import { Divider, Img, Press, Txt } from '../components/ui';
 import { Cta, QtyStepper, ScreenHeader, SumRow } from '../components/parts';
 import AddressPicker from '../components/AddressPicker';
-import { calculateCheckout, fetchCustomerAddresses } from '../api/auth';
+import { fetchCustomerAddresses } from '../api/auth';
 import {
   createSubscription,
   fetchSubscriptionFrequencies,
@@ -23,15 +23,16 @@ import {
  */
 const LOCAL_FREQUENCIES = [
   { id: 'monthly', en: 'Every month', ar: 'كل شهر', intervalDays: 30, discountPct: 5 },
-  { id: 'biweekly', en: 'Every 2 weeks', ar: 'كل أسبوعين', intervalDays: 14, discountPct: 10 },
-  { id: 'weekly', en: 'Every week', ar: 'كل أسبوع', intervalDays: 7, discountPct: 15 },
+  { id: 'biweekly', en: 'Every 2 weeks', ar: 'كل أسبوعين', intervalDays: 14, discountPct: 5 },
+  { id: 'weekly', en: 'Every week', ar: 'كل أسبوع', intervalDays: 7, discountPct: 5 },
 ];
 
 /**
  * The subscription builder — a standalone order mode, not a variant of the
  * regular cart. A shopper picks how often deliveries arrive, a basket to
- * repeat, and where it goes; the discount climbs with frequency, and the
- * server's scheduler turns each due cycle into a real COD Shopify order.
+ * repeat, and where it goes, at the store's subscription discount. The
+ * server's scheduler re-prices the basket from the live catalogue on each due
+ * date and turns it into a real COD Shopify order.
  *
  * Doubles as the edit flow: `state.editingSubscription`, set by the
  * Subscriptions screen before navigating here, pre-fills everything below
@@ -112,82 +113,35 @@ export default function SubscribeScreen() {
   const activeAddress =
     pickedAddress ?? addresses.find((a) => a.id === state.selectedAddress) ?? addresses.find((a) => a.isDefault) ?? null;
 
-  /**
-   * The delivery fee for this address, asked of Shopify the same way checkout
-   * does — a per-city table guessed client-side is exactly what caused the
-   * checkout total to disagree with the store before that was fixed.
-   */
-  const [shippingFee, setShippingFee] = useState(editing?.shippingFee ?? 0);
-
-  const quoteKey = JSON.stringify([
-    cartEntries.map((e) => [e.product.variantId, e.qty]),
-    activeAddress?.id,
-  ]);
-
-  const loadShipping = useCallback(async () => {
-    if (!cartEntries.length || !activeAddress) return;
-    try {
-      const q = await calculateCheckout({
-        items: cartEntries.map((e) => ({
-          variantId: e.product.variantId,
-          quantity: e.qty,
-          price: e.product.price,
-          title: e.product.titleEn,
-        })),
-        customer: { street: activeAddress.street, city: activeAddress.city, phone: activeAddress.phone },
-      });
-      setShippingFee(q.shipping ?? 0);
-    } catch {
-      // Keep whatever figure was already showing — an unreachable quote
-      // should not block building the subscription.
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quoteKey]);
-
-  useEffect(() => {
-    loadShipping();
-  }, [loadShipping]);
-
   const freq = useMemo(() => frequencies.find((f) => f.id === frequencyId) ?? null, [frequencies, frequencyId]);
   const subtotalRaw = cartEntries.reduce((a, e) => a + e.product.price * e.qty, 0);
   const discountRaw = freq ? Math.round(subtotalRaw * (freq.discountPct / 100)) : 0;
+  // Same policy the scheduler charges each cycle; today's prices, so an estimate.
+  const shippingFee = d.shippingFor(subtotalRaw - discountRaw);
   const totalRaw = subtotalRaw - discountRaw + shippingFee;
+  const belowMinimum = cartEntries.length > 0 && subtotalRaw - discountRaw < d.minOrder;
 
-  const canSubmit = signedIn && Boolean(freq) && cartEntries.length > 0 && Boolean(activeAddress);
+  const canSubmit =
+    signedIn && Boolean(freq) && cartEntries.length > 0 && Boolean(activeAddress) && !belowMinimum;
 
   const submit = async () => {
     if (submitting || !canSubmit) return;
     setSubmitting(true);
     try {
-      const items = cartEntries.map((e) => ({
-        variantId: e.product.variantId,
-        title: e.product.titleEn,
-        price: e.product.price,
-        quantity: e.qty,
-      }));
-      const address = activeAddress.raw ?? {
-        address1: activeAddress.street,
-        city: activeAddress.city,
-        phone: activeAddress.phone,
-        firstName: state.customer?.name?.split(' ')?.[0],
-      };
+      // Variants and quantities only — the server looks prices up each cycle.
+      const items = cartEntries
+        .filter((e) => e.product.variantId)
+        .map((e) => ({ variantId: e.product.variantId, title: e.product.titleEn, quantity: e.qty }));
 
       if (editing) {
         await updateSubscription(
           editing.id,
-          { items, frequencyId: freq.id, address, shippingFee },
+          { items, frequencyId: freq.id, addressId: activeAddress.id },
           state.session.token,
         );
       } else {
         await createSubscription(
-          {
-            frequencyId: freq.id,
-            items,
-            address,
-            shippingFee,
-            customerName: state.customer?.name,
-            email: state.customer?.email,
-          },
+          { frequencyId: freq.id, items, addressId: activeAddress.id },
           state.session.token,
         );
       }
@@ -382,6 +336,10 @@ export default function SubscribeScreen() {
                   ? d.isRtl
                     ? 'ضيف منتج واحد على الأقل.'
                     : 'Add at least one product.'
+                  : belowMinimum
+                    ? d.isRtl
+                      ? `أقل طلب ${d.fmtPrice(d.minOrder)} بعد الخصم.`
+                      : `Each delivery needs at least ${d.fmtPrice(d.minOrder)} after the discount.`
                   : d.isRtl
                     ? 'محتاج عنوان توصيل.'
                     : 'A delivery address is needed.'}

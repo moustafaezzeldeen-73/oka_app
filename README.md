@@ -21,9 +21,11 @@ src/data.js             bundled catalogue, copy, loyalty rules
 src/store.js            state + actions + derived values (cart maths, tiers)
 src/haptics.js          snap feedback for the collection feed
 src/components/         ui primitives, animation primitives, icons, tab bar
-src/screens/            the 12 screens
+src/screens/            the screens (shop, cart, checkout, orders, account, search, wishlist, support…)
 src/overlays/           AR placement view, edit-order sheet
-src/api/                order service client, Storefront cart, loyalty
+src/api/                order service client, Storefront cart
+src/persist.js          what survives closing the app (cart, language, session)
+src/push.js             shipment notifications
 assets/                 the prototype's product photography
 server/                 order service — holds the Admin, J&T and Bosta credentials
 ```
@@ -95,20 +97,24 @@ JS bundle can be extracted from the `.ipa`, and `app.json` `extra` /
 `EXPO_PUBLIC_*` values are plain text. These keys live only in `server/.env`
 (gitignored).
 
-Without the service configured the app runs entirely on its bundled catalogue
-and generates local order numbers, so it stays demonstrable offline.
+Without the service configured the app runs on its bundled catalogue for
+browsing; ordering needs the service, and the app says so instead of
+inventing an order number.
 
 ### Data flow
 
 | Feature | Path |
 | --- | --- |
+| Store policy | app → `GET /storefront-config` → `server/policy.js` (shipping, minimum, payment methods, governorates, rewards) |
 | Collections, products | app → `GET /catalogue` → Admin `collectionByIdentifier` (60 s cache; falls back to bundled data) |
-| Cart | Storefront Cart API when a token is set, otherwise local |
-| Checkout (native) | app → `POST /orders` → Admin `orderCreate` |
+| Sign-in | app → `/auth/otp/start` + `/auth/otp/verify` → one-time code, find-or-create the Shopify customer |
+| Cart totals, discount codes | app → `POST /checkout/quote` → live variant prices + Shopify `draftOrderCalculate` |
+| Checkout | app → `POST /orders` (signed in) → server re-prices → Admin `orderCreate` |
 | Order history + tracking | app → `GET /customer/orders` → Admin orders + J&T (Bosta for older orders) |
-| Single order status | app → `GET /orders/status` → same, for one order |
-| Loyalty points | app → `GET /loyalty` → Admin store credit balance × 10 |
-| Subscribe & Save | app → `/subscriptions` → hourly scheduler → Admin `orderCreate` |
+| Edit / cancel / redirect | app → `/orders/:name/…` → only the session customer's own, unfulfilled orders |
+| Loyalty | app → `/loyalty`, `/loyalty/redeem` → store credit balance; redeeming returns a voucher code |
+| Subscribe & Save | app → `/subscriptions` → hourly job → Admin `orderCreate`, re-priced every cycle |
+| Notifications | app → `/customer/push-token`; a job pushes "on its way", "delivered", "courier couldn't reach you" |
 
 **J&T Express** is the current courier. Shipments are created with
 `txlogisticId = SHOPIFY<order number>` (a re-created one gets `V2`/`V3`), which
@@ -122,6 +128,81 @@ their history — its deliveries carry the order number in `businessReference`.
 Arabic product titles and descriptions are read from the `oka.title_ar` and
 `oka.description_ar` metafields, falling back to the English values when unset.
 
+---
+
+## Security model
+
+- The app holds no secrets. Every route that reads or changes a customer's
+  data needs a signed session (`server/auth.js`) and acts only on that
+  session's Shopify customer id. Order routes also check that the order
+  belongs to that customer.
+- Prices, shipping and discounts are computed on the server
+  (`server/checkout.js`). The app sends only variant ids, quantities, a code,
+  a saved-address id and a payment method.
+- Sessions expire after 30 days. `SESSION_SECRET` is required in production.
+- Sign-in, one-time codes, quotes, orders and redemptions are rate-limited.
+- `/debug/*` answers 404 unless the request carries `x-staff-key: $STAFF_DEBUG_KEY`.
+
+---
+
+## Commercial policy
+
+All of these live in `server/policy.js` and can be overridden from the
+environment. They are derived from a 10% product margin, an 80 EGP courier
+cost per attempt, and 15% of COD orders failing.
+
+| | Default | Why |
+| --- | --- | --- |
+| Shipping fee | 80 EGP flat | The courier's cost per attempt. The old 36–60 EGP tiers lost money on every order |
+| Free shipping | from 1,000 EGP | Where 10% of the basket covers the 80 EGP fee plus the ~14 EGP share of failed attempts |
+| Minimum order | 150 EGP | Below ~141 EGP a COD order loses money once failed deliveries are counted |
+| Prepaid perk | 10 EGP off shipping | Prepaid removes ~12 EGP of expected failure cost; gateway fees take most of it. Only applies once `PAYMENT_GATEWAY` is set |
+| Payment methods | Cash on delivery | Card and wallet appear only once a gateway is connected |
+| Loyalty earn | 1 point per 10 EGP of delivered product (1%) | A tenth of the margin, credited only after delivery so refused parcels earn nothing |
+| Loyalty redeem | 200 pts → 20 off 300+, 500 → 50 off 600+, 800 → 80 off 800+, 1500 → 150 off 1,500+ | Each is a single-use voucher code worth at most 10% of its minimum basket |
+| Subscribe & Save | 5% off, every frequency | The old 15% weekly tier gave away more than the whole margin |
+
+Points earning starts only when `LOYALTY_START_DATE` is set, and only for
+orders created on or after it, so switching it on doesn't credit the whole
+order history at once.
+
+---
+
+## Sign-in
+
+Customers sign in with their mobile number and a one-time code
+(`server/otp.js`). The first sign-in creates the Shopify customer. Checkout
+requires sign-in, so every COD order comes from a number that has received a
+message.
+
+Set `OTP_PROVIDER=whatsapp` with a WhatsApp Cloud API token, phone number id
+and an approved **authentication** template (`WHATSAPP_OTP_TEMPLATE`). During
+development `OTP_PROVIDER=console` prints each code in the server log; it is
+refused when `NODE_ENV=production`.
+
+### Testing: sign in as any customer (remove before launch)
+
+To test as a real customer without their phone:
+
+1. Set `TEST_LOGIN_KEY` (16+ characters) in `server/.env`, and leave
+   `NODE_ENV` unset or `development`.
+2. Build the app with `EXPO_PUBLIC_TEST_LOGIN=1`.
+3. On the sign-in screen, the red dashed **TESTING** panel takes a phone or
+   email and the key, and opens that customer's real account. Every use is
+   logged on the server, and the Account screen shows "Test sign-in".
+
+It is contained in two files. To remove it before launch:
+
+1. Delete `server/testLogin.js`, then the `mountTestLogin(app)` line and its
+   import in `server/index.js`.
+2. Delete `src/components/TestLoginPanel.js`, then its import and
+   `<TestLoginPanel />` in `src/screens/SignInScreen.js`.
+3. Remove `TEST_LOGIN_KEY` and `EXPO_PUBLIC_TEST_LOGIN` from your env files.
+
+Even if it is forgotten, the route refuses to mount when `NODE_ENV=production`.
+
+---
+
 ### Running the service
 
 ```bash
@@ -129,24 +210,36 @@ cd server
 npm install
 cp ../.env.example .env   # then fill in the server section
 npm start
+npm test                  # pricing, sessions, test-login gating, checkout
 ```
 
 Then point the app at it with `EXPO_PUBLIC_OKA_SERVICE_URL`. Check the wiring:
 
 - `GET /health` — which credentials are set, and whether Shopify, J&T and Bosta
   each answer (J&T's check verifies both the API key and the customer password)
-- `GET /debug/jt?order=%232745921` — every J&T shipment filed under an order,
-  which one the app picked, and the timeline it builds (`&raw=1` for J&T's own
-  records)
-- `GET /debug/bosta?tracking=…` — the same for a legacy Bosta AWB
+- `GET /debug/jt?order=%232745921` with `x-staff-key` — every J&T shipment
+  filed under an order, which one the app picked, and the timeline it builds
+  (`&raw=1` for J&T's own records)
+- `GET /debug/bosta?tracking=…` with `x-staff-key` — the same for a legacy Bosta AWB
 
-Admin API version defaults to `2026-07`. Admin scopes required: `write_orders`,
-`read_orders`, `read_customers`, `write_customers`, `read_products`,
-`read_fulfillments`, and for the store-credit-backed loyalty balance:
-`read_store_credit_accounts`, `read_store_credit_account_transactions`,
-`write_store_credit_account_transactions`. Without the store-credit scopes,
-`/loyalty` and `/loyalty/redeem` fail and the app falls back to its demo
-balance rather than blocking the rest of the app.
+Admin API version defaults to `2026-07`. Admin scopes required:
+
+| Scope | Used for |
+| --- | --- |
+| `read_orders`, `write_orders` | order history, creating orders, edits, cancels, tags |
+| `read_customers`, `write_customers` | sign-in (find or create), addresses, wishlist, push tokens |
+| `read_products` | catalogue and live prices |
+| `read_fulfillments` | tracking numbers |
+| `write_draft_orders` | `draftOrderCalculate` to evaluate discount codes |
+| `read_discounts`, `write_discounts` | loyalty voucher codes |
+| `read_store_credit_accounts`, `read_store_credit_account_transactions`, `write_store_credit_account_transactions` | loyalty balance, earning and redeeming |
+
+Run background jobs (subscriptions, notifications, loyalty earning) on exactly
+one instance: set `JOBS_ENABLED=false` on the others. Point
+`SUBSCRIPTIONS_DATA_DIR` at a persistent disk.
+
+Push notifications need an EAS project id in `app.json` (`eas init`) and a real
+device.
 
 ---
 

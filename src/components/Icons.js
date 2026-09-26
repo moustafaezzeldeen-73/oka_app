@@ -165,3 +165,10 @@ export const MastercardMark = () => (
     <Circle cx={16} cy={10} r={5.5} fill="#f79e1b" fillOpacity={0.9} />
   </Svg>
 );
+
+export const Search = ({ size = 16, color = '#1d1d1f', width = 2.2 }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Circle cx={10.5} cy={10.5} r={6.5} stroke={color} strokeWidth={width} />
+    <Path d="M15.5 15.5L20 20" stroke={color} strokeWidth={width} strokeLinecap="round" />
+  </Svg>
+);

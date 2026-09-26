@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import { useActions, useDerived, useStore } from '../store';
 import { useRefresh } from '../useRefresh';
@@ -9,6 +9,7 @@ import { textDir } from '../rtl';
 import { FadeIn } from '../components/anim';
 import { DarkFill, Img, Press, Progress, Txt } from '../components/ui';
 import { Cta, QtyStepper, SumRow } from '../components/parts';
+import { fetchQuote } from '../api/auth';
 
 export default function CartScreen() {
   const { state, products, reloadCatalogue } = useStore();
@@ -16,6 +17,37 @@ export default function CartScreen() {
   const d = useDerived();
   const { control } = useRefresh(reloadCatalogue);
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
+  const [checking, setChecking] = useState(false);
+
+  /**
+   * A code only counts once the server — Shopify's own discount rules — has
+   * accepted it for this basket. The cart used to take 10% off for any text.
+   */
+  const applyCode = async () => {
+    const code = state.discountCode.trim();
+    if (!code || checking) return;
+    if (!d.cartLines.length) {
+      actions.setDiscount({ code, applied: false, amount: 0, message: d.isRtl ? 'السلة فاضية' : 'Your basket is empty' });
+      return;
+    }
+    setChecking(true);
+    try {
+      const q = await fetchQuote({ lines: d.cartLines, discountCode: code }, state.session?.token);
+      actions.setDiscount(q.discount);
+      if (q.discount.applied) success();
+    } catch (err) {
+      actions.setDiscount({ code, applied: false, amount: 0, message: String(err.message ?? err) });
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  /** Checkout needs an account (a verified phone) — sign in first, then continue. */
+  const goCheckout = () => {
+    if (d.belowMinimum) return;
+    if (!state.session?.token) actions.requireSignIn('checkout');
+    else actions.goTo('checkout');
+  };
 
   const bestSellers = useMemo(
     () => [products[0], products[1], products[7], products[3]].filter(Boolean),
@@ -62,7 +94,7 @@ export default function CartScreen() {
                       gap={8}
                       qty={d.num(ce.qty)}
                       onDec={() => actions.setQty(ce.id, ce.qty - 1)}
-                      onInc={() => actions.setQty(ce.id, ce.qty + 1)}
+                      onInc={() => actions.setQty(ce.id, Math.min(ce.product.stock || 50, ce.qty + 1))}
                     />
                     <Txt style={styles.lineTotal}>{d.fmtPrice(ce.lineTotalRaw)}</Txt>
                   </View>
@@ -90,12 +122,21 @@ export default function CartScreen() {
                 placeholderTextColor="rgba(110,110,115,0.6)"
                 style={[styles.input, textDir(d.isRtl)]}
               />
-              <Press onPress={actions.applyDiscount} activeScale={0.95} style={styles.applyBtn}>
-                <Txt style={styles.applyTxt}>
-                  {state.discountApplied ? d.t('applied') : d.t('apply')}
-                </Txt>
+              <Press onPress={applyCode} activeScale={0.95} style={styles.applyBtn}>
+                {checking ? (
+                  <ActivityIndicator color="#ffffff" size="small" />
+                ) : (
+                  <Txt style={styles.applyTxt}>
+                    {state.discount?.applied ? d.t('applied') : d.t('apply')}
+                  </Txt>
+                )}
               </Press>
             </View>
+            {state.discount && !state.discount.applied && state.discount.message ? (
+              <Txt isRtl={d.isRtl} style={styles.codeError}>
+                {state.discount.message}
+              </Txt>
+            ) : null}
 
             <View style={styles.totals}>
               <SumRow
@@ -105,7 +146,7 @@ export default function CartScreen() {
                 labelStyle={styles.sumTxt}
                 valueStyle={styles.sumTxt}
               />
-              {state.discountApplied && (
+              {state.discount?.applied && (
                 <SumRow
                   isRtl={d.isRtl}
                   label={d.t('discount')}
@@ -175,7 +216,19 @@ export default function CartScreen() {
             </ScrollView>
 
             <View style={styles.checkoutWrap}>
-              <Cta glow label={d.t('checkout')} onPress={() => actions.goTo('checkout')} />
+              {d.belowMinimum ? (
+                <Txt isRtl={d.isRtl} style={styles.minNote}>
+                  {d.isRtl
+                    ? `أقل طلب ${d.fmtPrice(d.minOrder)} — ضيف ${d.fmtPrice(d.minOrder - (d.subtotalRaw - d.discountRaw))} كمان`
+                    : `Minimum order is ${d.fmtPrice(d.minOrder)} — add ${d.fmtPrice(d.minOrder - (d.subtotalRaw - d.discountRaw))} more`}
+                </Txt>
+              ) : null}
+              <Cta
+                glow={!d.belowMinimum}
+                label={d.t('checkout')}
+                onPress={goCheckout}
+                style={d.belowMinimum ? { opacity: 0.45 } : null}
+              />
             </View>
           </>
         ) : (
@@ -232,6 +285,8 @@ export default function CartScreen() {
 }
 
 const styles = StyleSheet.create({
+  codeError: { fontSize: 12, color: '#8c1d18', paddingHorizontal: 22, marginTop: -6, marginBottom: 8 },
+  minNote: { fontSize: 13, color: '#8c1d18', textAlign: 'center', marginBottom: 10, fontWeight: W.semibold },
   root: { flex: 1 },
   fill: { width: '100%', height: '100%' },
   title: { paddingHorizontal: 22, paddingVertical: 18, fontWeight: W.heavy, fontSize: 26 },

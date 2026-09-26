@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -14,12 +14,44 @@ import { FadeIn } from '../components/anim';
 import { Press, Txt } from '../components/ui';
 import { ChevronRight } from '../components/Icons';
 import { BUILD_VERSION } from '../buildVersion';
+import { requestAccountDeletion } from '../api/auth';
 
 export default function AccountScreen() {
   const { state } = useStore();
   const actions = useActions();
   const d = useDerived();
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
+
+  /** Rows that only make sense for an account send a guest to sign in first. */
+  const needsAccount = (screen) => () =>
+    state.session?.token ? actions.goTo(screen) : actions.requireSignIn(screen);
+
+  /**
+   * The App Store requires account deletion to be requestable in the app.
+   * Shopify keeps order records, so the team anonymises the account.
+   */
+  const askDelete = () =>
+    Alert.alert(
+      d.isRtl ? 'حذف الحساب' : 'Delete account',
+      d.isRtl
+        ? 'هنحذف بياناتك الشخصية خلال ٧ أيام. سجلات الطلبات بتفضل للحسابات والضرائب.'
+        : 'We’ll remove your personal data within 7 days. Order records are kept for accounting and tax.',
+      [
+        { text: d.isRtl ? 'رجوع' : 'Back', style: 'cancel' },
+        {
+          text: d.isRtl ? 'احذف حسابي' : 'Delete my account',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await requestAccountDeletion(state.session.token);
+              actions.signOut();
+            } catch (err) {
+              Alert.alert(d.isRtl ? 'تعذّر الطلب' : 'Could not send the request', String(err.message ?? err));
+            }
+          },
+        },
+      ],
+    );
 
   return (
     <FadeIn style={styles.root}>
@@ -33,9 +65,9 @@ export default function AccountScreen() {
             <Txt isRtl={d.isRtl} style={styles.guestTxt}>
               {state.customer.name || state.customer.email || state.customer.phone}
             </Txt>
-            {state.session?.staff ? (
+            {state.session?.test ? (
               <Txt isRtl={d.isRtl} style={styles.staffTag}>
-                {d.isRtl ? 'وضع الموظفين — بيانات عميل حقيقية' : 'Staff mode — real customer data'}
+                {d.isRtl ? 'وضع الاختبار — بيانات عميل حقيقية' : 'Test sign-in — real customer data'}
               </Txt>
             ) : null}
           </View>
@@ -50,22 +82,22 @@ export default function AccountScreen() {
         <View style={styles.list}>
           <Row
             label={d.t('myAddresses')}
-            onPress={() => actions.goTo('addresses')}
+            onPress={needsAccount('addresses')}
             chevron
             d={d}
             rowDir={rowDir}
           />
-          <Row label={d.t('myWishlist')} d={d} rowDir={rowDir} />
+          <Row label={d.t('myWishlist')} onPress={() => actions.goTo('wishlist')} chevron d={d} rowDir={rowDir} />
           <Row
             label={d.t('loyaltyRow')}
-            onPress={() => actions.goTo('loyalty')}
+            onPress={needsAccount('loyalty')}
             chevron
             d={d}
             rowDir={rowDir}
           />
           <Row
             label={d.isRtl ? 'اشتراكاتي' : 'My Subscriptions'}
-            onPress={() => actions.goTo('subscriptions')}
+            onPress={needsAccount('subscriptions')}
             chevron
             d={d}
             rowDir={rowDir}
@@ -80,7 +112,11 @@ export default function AccountScreen() {
                 isRtl={d.isRtl}
                 onPress={() => {
                   selectionTick();
-                  actions.toggleNotif();
+                  if (!state.session?.token) {
+                    actions.requireSignIn('account');
+                    return;
+                  }
+                  actions.setNotif(!state.notifEnabled);
                 }}
               />
             }
@@ -92,8 +128,11 @@ export default function AccountScreen() {
             rowDir={rowDir}
             right={<Txt style={styles.langVal}>{d.langLabel}</Txt>}
           />
-          <Row label={d.t('faq')} d={d} rowDir={rowDir} />
-          <Row label={d.t('legal')} d={d} rowDir={rowDir} />
+          <Row label={d.t('faq')} onPress={() => actions.goTo('support')} chevron d={d} rowDir={rowDir} />
+          <Row label={d.t('legal')} onPress={() => actions.goTo('support', { supportSection: 'legal' })} chevron d={d} rowDir={rowDir} />
+          {state.customer ? (
+            <Row label={d.isRtl ? 'حذف الحساب' : 'Delete account'} onPress={askDelete} d={d} rowDir={rowDir} />
+          ) : null}
           <Row
             label={state.customer ? d.t('signOut') : d.isRtl ? 'تسجيل الدخول' : 'Sign in'}
             onPress={state.customer ? actions.signOut : () => actions.goTo('signIn')}

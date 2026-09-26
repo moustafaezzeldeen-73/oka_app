@@ -3,12 +3,13 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActions, useDerived, useStore } from '../store';
 import { useRefresh } from '../useRefresh';
-import { success } from '../haptics';
+import { selectionTick } from '../haptics';
 import { C, W } from '../theme';
 import { chevronFlip } from '../rtl';
 import { FadeIn } from '../components/anim';
 import { DarkFill, Press, Txt } from '../components/ui';
-import { GridCard } from '../components/parts';
+import ProductGrid from '../components/ProductGrid';
+import { SORTS, filterProducts, sortProducts } from '../catalogueQuery';
 import { ChevronLeft } from '../components/Icons';
 
 export default function CollectionScreen() {
@@ -18,20 +19,26 @@ export default function CollectionScreen() {
   const { control } = useRefresh(reloadCatalogue);
 
   const cat = cats.find((c) => c.id === state.collectionCategory);
-  const list = useMemo(
-    () =>
+  const list = useMemo(() => {
+    const inCat =
       state.collectionCategory === 'all'
         ? products
-        : products.filter((p) => p.cat === state.collectionCategory),
-    [products, state.collectionCategory],
-  );
+        : products.filter((p) => p.cat === state.collectionCategory);
+    return sortProducts(filterProducts(inCat, state.filters), state.sortBy);
+  }, [products, state.collectionCategory, state.filters, state.sortBy]);
 
-  /** The 2-up grid, chunked into rows so the gap logic stays simple. */
-  const rows = useMemo(() => {
-    const out = [];
-    for (let i = 0; i < list.length; i += 2) out.push(list.slice(i, i + 2));
-    return out;
-  }, [list]);
+  const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
+  /** Cycles through the sort orders with one chip. */
+  const nextSort = () => {
+    selectionTick();
+    const i = SORTS.findIndex((x) => x.id === state.sortBy);
+    actions.setSortBy(SORTS[(i + 1) % SORTS.length].id);
+  };
+  const sort = SORTS.find((x) => x.id === state.sortBy) ?? SORTS[0];
+  const toggles = [
+    { key: 'inStock', en: 'In stock', ar: 'المتوفر' },
+    { key: 'onSale', en: 'On sale', ar: 'عليه خصم' },
+  ];
 
   return (
     <FadeIn style={styles.root}>
@@ -49,38 +56,31 @@ export default function CollectionScreen() {
           {`${d.num(list.length)} ${d.t('productsCount')}`}
         </Txt>
 
-        <View style={[styles.chips, { flexDirection: d.isRtl ? 'row-reverse' : 'row' }]}>
-          <DarkFill borderRadius={999} style={styles.chipDark}>
-            <Txt style={styles.chipDarkTxt}>{d.t('sortBestSelling')}</Txt>
-          </DarkFill>
-          <View style={styles.chip}>
-            <Txt style={styles.chipTxt}>{d.t('filters')}</Txt>
-          </View>
+        <View style={[styles.chips, rowDir]}>
+          <Press onPress={nextSort}>
+            <DarkFill borderRadius={999} style={styles.chipDark}>
+              <Txt style={styles.chipDarkTxt}>{`${d.isRtl ? sort.ar : sort.en} ⇅`}</Txt>
+            </DarkFill>
+          </Press>
+          {toggles.map((f) => {
+            const on = Boolean(state.filters[f.key]);
+            return (
+              <Press
+                key={f.key}
+                onPress={() => {
+                  selectionTick();
+                  actions.setFilters({ [f.key]: !on });
+                }}
+                style={[styles.chip, on && styles.chipOn]}
+              >
+                <Txt style={[styles.chipTxt, on && { color: '#ffffff' }]}>{d.isRtl ? f.ar : f.en}</Txt>
+              </Press>
+            );
+          })}
         </View>
 
-        {rows.length > 0 ? (
-          <View style={styles.grid}>
-            {rows.map((pair, i) => (
-              <View
-                key={i}
-                style={[styles.gridRow, { flexDirection: d.isRtl ? 'row-reverse' : 'row' }]}
-              >
-                {pair.map((p) => (
-                  <GridCard
-                    key={p.id}
-                    product={p}
-                    d={d}
-                    onOpen={() => actions.goTo('pdp', { selectedProductId: p.id, pdpQty: 1 })}
-                    onAdd={() => {
-                      actions.addToCart(p.id, 1);
-                      success();
-                    }}
-                  />
-                ))}
-                {pair.length === 1 && <View style={{ flex: 1 }} />}
-              </View>
-            ))}
-          </View>
+        {list.length > 0 ? (
+          <ProductGrid products={list} d={d} />
         ) : (
           <Txt center style={styles.empty}>
             {d.t('noMatch')}
@@ -128,7 +128,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.1)',
   },
   chipTxt: { fontSize: 12, fontWeight: W.bold },
-  grid: { paddingHorizontal: 22, gap: 14 },
-  gridRow: { gap: 14 },
+  chipOn: { backgroundColor: C.ink, borderColor: C.ink },
   empty: { paddingVertical: 40, color: C.ink, fontSize: 13.5 },
 });

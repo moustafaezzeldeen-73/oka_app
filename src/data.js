@@ -215,15 +215,14 @@ export const STR = {
     freeShipProgress: 'Add {n} EGP more for free shipping', freeShipReached: 'This order ships free',
     qty: 'Quantity', customize: 'Customize', addToCart: 'Add to Cart', buyNow: 'Add to Cart',
     deliverTo: 'Deliver to', estDelivery: 'Estimated delivery', shippingFee: 'Shipping fee',
-    payMethods: 'COD · Card · Wallet accepted', description: 'Description',
+    payMethods: 'Cash on delivery', description: 'Description',
     pointsNote: 'Earn ~{n} points when delivered',
     related: 'You may also like', share: 'Share',
     cartTitle: 'Cart', emptyCart: 'Your cart is empty', browse: 'Browse best sellers',
     subtotal: 'Subtotal', discount: 'Discount', shipping: 'Shipping', total: 'Total',
     earnOnDelivery: "You'll earn {n} points on delivery",
     discountPlaceholder: 'Discount code', apply: 'Apply', applied: 'Applied', checkout: 'Checkout',
-    remove: 'Remove', addressTitle: 'Delivery details', name: 'Nourhan Adel', phone: '+20 100 123 4567',
-    street: '14 Al Nasr St, Nasr City', change: 'Change', paymentTitle: 'Payment method',
+    remove: 'Remove', addressTitle: 'Delivery details', change: 'Change', paymentTitle: 'Payment method',
     cod: 'Cash on Delivery', card: 'Card', wallet: 'Mobile Wallet',
     codNote: 'Have this amount ready for the courier',
     reviewTitle: 'Review & place order', items: 'Items', placeOrder: 'Place Order',
@@ -234,8 +233,8 @@ export const STR = {
     ordersTitle: 'Orders', noOrders: 'No orders yet', active: 'Active', accountTitle: 'Account',
     guestPrompt: 'Sign in to see orders, points & saved addresses', language: 'Language',
     signOut: 'Sign out',
-    faq: 'FAQ & Support', legal: 'Legal', myAddresses: 'My addresses', myWishlist: 'Wishlist',
-    loyaltyRow: 'Loyalty & referrals', notifRow: 'Notification settings', cityCairo: 'Cairo',
+    faq: 'Help & support', legal: 'Policies', myAddresses: 'My addresses', myWishlist: 'Wishlist',
+    loyaltyRow: 'Loyalty points', notifRow: 'Notification settings', cityCairo: 'Cairo',
     cityGiza: 'Giza',
     cityAlex: 'Alexandria', cityOther: 'Other governorate', days12: '1–2 days', days23: '2–3 days',
     days35: '3–5 days',
@@ -253,15 +252,14 @@ export const STR = {
     freeShipProgress: 'أضف {n} ج.م للحصول على شحن مجاني', freeShipReached: 'هذا الطلب يشحن مجاناً',
     qty: 'الكمية', customize: 'تخصيص', addToCart: 'أضف إلى السلة', buyNow: 'أضف إلى السلة',
     deliverTo: 'التوصيل إلى', estDelivery: 'موعد التوصيل المتوقع', shippingFee: 'رسوم الشحن',
-    payMethods: 'الدفع عند الاستلام · بطاقة · محفظة', description: 'الوصف',
+    payMethods: 'الدفع عند الاستلام', description: 'الوصف',
     pointsNote: 'اكسب ~{n} نقطة عند التوصيل',
     related: 'قد يعجبك أيضاً', share: 'مشاركة',
     cartTitle: 'السلة', emptyCart: 'سلتك فارغة', browse: 'تصفح الأكثر مبيعاً',
     subtotal: 'الإجمالي الفرعي', discount: 'الخصم', shipping: 'الشحن', total: 'الإجمالي',
     earnOnDelivery: 'ستكسب {n} نقطة عند التوصيل',
     discountPlaceholder: 'كود الخصم', apply: 'تطبيق', applied: 'مُطبّق', checkout: 'الدفع',
-    remove: 'إزالة', addressTitle: 'تفاصيل التوصيل', name: 'نورهان عادل', phone: '+20 100 123 4567',
-    street: '١٤ شارع النصر، مدينة نصر', change: 'تغيير', paymentTitle: 'طريقة الدفع',
+    remove: 'إزالة', addressTitle: 'تفاصيل التوصيل', change: 'تغيير', paymentTitle: 'طريقة الدفع',
     cod: 'الدفع عند الاستلام', card: 'بطاقة', wallet: 'محفظة إلكترونية',
     codNote: 'جهّز هذا المبلغ للمندوب',
     reviewTitle: 'مراجعة وتأكيد الطلب', items: 'العناصر', placeOrder: 'تأكيد الطلب',
@@ -272,8 +270,8 @@ export const STR = {
     ordersTitle: 'الطلبات', noOrders: 'لا توجد طلبات بعد', active: 'نشط', accountTitle: 'حسابي',
     guestPrompt: 'سجّل دخولك لرؤية الطلبات والنقاط والعناوين المحفوظة', language: 'اللغة',
     signOut: 'تسجيل الخروج',
-    faq: 'الأسئلة الشائعة والدعم', legal: 'قانوني', myAddresses: 'عناويني', myWishlist: 'المفضلة',
-    loyaltyRow: 'الولاء والإحالات', notifRow: 'إعدادات الإشعارات', cityCairo: 'القاهرة',
+    faq: 'المساعدة والدعم', legal: 'السياسات', myAddresses: 'عناويني', myWishlist: 'المفضلة',
+    loyaltyRow: 'نقاط الولاء', notifRow: 'إعدادات الإشعارات', cityCairo: 'القاهرة',
     cityGiza: 'الجيزة',
     cityAlex: 'الإسكندرية', cityOther: 'محافظة أخرى', days12: '١-٢ يوم', days23: '٢-٣ أيام',
     days35: '٣-٥ أيام',
@@ -281,15 +279,22 @@ export const STR = {
   },
 };
 
-export const CITY_FEES = { cityCairo: 50, cityGiza: 50, cityAlex: 70, cityOther: 90 };
-export const FREE_SHIPPING_THRESHOLD = 300;
-export const REWARD_COSTS = { ship: 500, off50: 750, coal: 1200, hose: 2000 };
-export const LOYALTY_BASE = 1240;
-export const GOLD_TIER = 2000;
-
-export const LOYALTY_REWARDS = [
-  { id: 'ship', pts: 500, en: 'Free shipping on next order', ar: 'شحن مجاني على الطلب القادم' },
-  { id: 'off50', pts: 750, en: 'EGP 50 off', ar: 'خصم ٥٠ ج.م' },
-  { id: 'coal', pts: 1200, en: 'Free coconut coal', ar: 'فحم جوز هند مجاناً' },
-  { id: 'hose', pts: 2000, en: 'Free OKA hose', ar: 'خرطوم أوكا مجاناً' },
-];
+/**
+ * The store's commercial policy as the server last described it
+ * (GET /storefront-config). This bundled copy mirrors server/policy.js and is
+ * only used until the server answers, or when running without one; every
+ * figure that ends up on an order is computed by the server.
+ */
+export const DEFAULT_CONFIG = {
+  currency: 'EGP',
+  shippingFee: 80,
+  freeShippingMin: 1000,
+  minOrder: 150,
+  prepaidShippingDiscount: 10,
+  paymentMethods: ['cod'],
+  provinces: [],
+  loyalty: { pointsPerEgp: 10, earnPointsPerEgp: 0.1, rewards: [] },
+  subscriptionDiscountPct: 5,
+  signIn: { otp: false, testLogin: false },
+  support: { whatsapp: null, policiesBaseUrl: 'https://www.okaegypt.com/policies' },
+};

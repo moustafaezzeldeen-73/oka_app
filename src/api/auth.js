@@ -1,106 +1,87 @@
-import { SERVICE_URL, hasService, withTimeout } from './config';
+import { call } from './client';
 
 /**
- * Sign-in and the signed-in customer's real orders.
- *
- * TESTING STAGE — the master password and the Google/Apple buttons are
- * placeholders. The password itself lives in the server environment, never
- * here, so the app only ever forwards what the tester typed.
+ * The signed-in customer: sign-in, orders, addresses, wishlist, checkout.
+ * Every call that touches a customer's data sends the session token; the
+ * server works out whose data it is from the token alone.
  */
 
-async function call(path, { method = 'GET', body, token } = {}) {
-  if (!hasService()) throw new Error('service-not-configured');
-  const res = await withTimeout((signal) =>
-    fetch(`${SERVICE_URL}${path}`, {
-      method,
-      signal,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: body ? JSON.stringify(body) : undefined,
-    }),
-  );
-  const text = await res.text();
-  let json;
-  try {
-    json = JSON.parse(text);
-  } catch {
-    throw new Error(`service returned non-JSON (is the port public?): ${text.slice(0, 120)}`);
-  }
-  if (!res.ok) throw new Error(json.error ?? `service HTTP ${res.status}`);
-  return json;
-}
+/* ── Sign-in ── */
 
-/**
- * `provider` is 'password' for the master-password path, or 'google'/'apple'
- * for the placeholder buttons.
- */
-export function signIn({ identifier, password, provider = 'password' }) {
-  return call('/auth/login', { method: 'POST', body: { identifier, password, provider } });
-}
+export const startOtp = (phone) => call('/auth/otp/start', { method: 'POST', body: { phone } });
 
-export function fetchCustomerOrders({ token, lang }) {
-  return call(`/customer/orders?lang=${lang}`, { token });
-}
+export const verifyOtp = ({ phone, code, name }) =>
+  call('/auth/otp/verify', { method: 'POST', body: { phone, code, name } });
 
-export function fetchCustomerAddresses(token) {
-  return call('/customer/addresses', { token });
-}
+/** Restores a saved session: the customer, or a 401 if the token is no longer valid. */
+export const fetchMe = (token) => call('/auth/me', { token });
 
-export function cancelShopifyOrder(orderName, token) {
-  return call(`/orders/${encodeURIComponent(orderName)}/cancel`, {
-    method: 'POST',
-    token,
-    body: { reason: 'CUSTOMER' },
-  });
-}
+/** TESTING ONLY — see server/testLogin.js. Delete before launch. */
+export const testLogin = ({ identifier, key }) =>
+  call('/auth/test-login', { method: 'POST', body: { identifier, key } });
+
+/* ── Store policy ── */
+
+export const fetchStorefrontConfig = () => call('/storefront-config');
+
+/* ── Orders ── */
+
+export const fetchCustomerOrders = ({ token, lang }) => call(`/customer/orders?lang=${lang}`, { token });
+
+export const fetchOrderStatus = ({ orderNumber, lang, token }) =>
+  call(`/orders/status?order=${encodeURIComponent(orderNumber)}&lang=${lang}`, { token });
+
+export const cancelShopifyOrder = (orderName, token) =>
+  call(`/orders/${encodeURIComponent(orderName)}/cancel`, { method: 'POST', token, body: {} });
 
 /** `lines` is the desired end state: [{ variantId, quantity }]. */
-export function editShopifyOrder(orderName, lines, token) {
-  return call(`/orders/${encodeURIComponent(orderName)}/edit`, {
-    method: 'POST',
-    token,
-    body: { lines },
-  });
-}
+export const editShopifyOrder = (orderName, lines, token) =>
+  call(`/orders/${encodeURIComponent(orderName)}/edit`, { method: 'POST', token, body: { lines } });
+
+/** Redirects an order to another of the customer's saved addresses. */
+export const updateOrderAddress = (orderName, addressId, token) =>
+  call(`/orders/${encodeURIComponent(orderName)}/address`, { method: 'POST', token, body: { addressId } });
+
+/* ── Checkout ── */
 
 /**
- * Redirects an order to another of the customer's saved addresses.
- * `address` is the structured `raw` record from fetchCustomerAddresses.
+ * The server's price for a basket. `lines` is [{ variantId, quantity }];
+ * the token is optional (the cart quotes before sign-in).
  */
-export function updateOrderAddress(orderName, address, token) {
-  return call(`/orders/${encodeURIComponent(orderName)}/address`, {
-    method: 'POST',
-    token,
-    body: { address },
-  });
-}
+export const fetchQuote = ({ lines, discountCode, addressId, paymentMethod }, token) =>
+  call('/checkout/quote', { method: 'POST', token, body: { lines, discountCode, addressId, paymentMethod } });
 
-/** Saves a new address onto the signed-in customer's Shopify record. */
-export function saveCustomerAddress(address, token) {
-  return call('/customer/addresses', { method: 'POST', token, body: { address } });
-}
+/** Places the order. Retrying with the same idempotencyKey can't create a second one. */
+export const placeOrder = (payload, token) => call('/orders', { method: 'POST', token, body: payload });
 
-/** Marks one of the signed-in customer's saved addresses as their default. */
-export function setDefaultAddress(addressId, token) {
-  return call('/customer/addresses/default', { method: 'POST', token, body: { addressId } });
-}
+/* ── Addresses ── */
 
-/** Wishlist, stored on the customer so it survives a reinstall. */
-export function fetchWishlist(token) {
-  return call('/customer/wishlist', { token });
-}
+export const fetchCustomerAddresses = (token) => call('/customer/addresses', { token });
 
-export function saveWishlist(ids, token) {
-  return call('/customer/wishlist', { method: 'POST', token, body: { ids } });
-}
+/** `address` is { name, phone, street, building, city, provinceCode }. */
+export const saveCustomerAddress = (address, token, { setAsDefault = false } = {}) =>
+  call('/customer/addresses', { method: 'POST', token, body: { address, setAsDefault } });
 
-/**
- * What the basket actually costs, according to Shopify — shipping tiers and
- * discount codes included, rather than the app's local estimate.
- */
-export function calculateCheckout(payload) {
-  return call('/checkout/calculate', { method: 'POST', body: payload });
-}
+export const setDefaultAddress = (addressId, token) =>
+  call('/customer/addresses/default', { method: 'POST', token, body: { addressId } });
+
+export const deleteAddress = (addressId, token) =>
+  call('/customer/addresses/delete', { method: 'POST', token, body: { addressId } });
+
+/* ── Wishlist, notifications, account ── */
+
+export const fetchWishlist = (token) => call('/customer/wishlist', { token });
+
+export const saveWishlist = (ids, token) => call('/customer/wishlist', { method: 'POST', token, body: { ids } });
+
+export const registerPushToken = (pushToken, token, remove = false) =>
+  call('/customer/push-token', { method: 'POST', token, body: { token: pushToken, remove } });
+
+export const requestAccountDeletion = (token) => call('/customer/delete-request', { method: 'POST', token, body: {} });
+
+/* ── Loyalty ── */
+
+export const fetchLoyalty = (token) => call('/loyalty', { token });
+
+/** Returns { voucher: { code, endsAt, reward }, balance }. */
+export const redeemReward = (rewardId, token) => call('/loyalty/redeem', { method: 'POST', token, body: { rewardId } });

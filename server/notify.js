@@ -54,7 +54,8 @@ const message = (o, t, kind) => {
 
 export async function notifyShipmentUpdates() {
   const since = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-  const orders = (await findShippedOrders(`created_at:>=${since}`, 200)).filter((o) => o.customerId);
+  // Only orders placed in the app: their customers are the ones with devices.
+  const orders = (await findShippedOrders(`created_at:>=${since} tag:oka-app`, 200)).filter((o) => o.customerId);
   if (!orders.length) return { sent: 0 };
 
   const { byName } = await trackOrders(orders, 'ar');

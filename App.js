@@ -15,6 +15,8 @@ import { CANVAS_GRAD, CANVAS_LOCS } from './src/theme';
 import { StoreProvider, useActions, useDerived, useStore } from './src/store';
 import { useShopifyCart } from './src/useShopifyCart';
 import { useWishlistSync } from './src/useWishlistSync';
+import { usePersistence } from './src/persist';
+import { usePushRegistration } from './src/push';
 import { insetEnd, insetStart } from './src/rtl';
 import { fetchServerCatalogue } from './src/api/catalogue';
 import { hasService } from './src/api/config';
@@ -37,6 +39,10 @@ import AccountScreen from './src/screens/AccountScreen';
 import SignInScreen from './src/screens/SignInScreen';
 import SubscribeScreen from './src/screens/SubscribeScreen';
 import SubscriptionsScreen from './src/screens/SubscriptionsScreen';
+import SearchScreen from './src/screens/SearchScreen';
+import WishlistScreen from './src/screens/WishlistScreen';
+import SupportScreen from './src/screens/SupportScreen';
+import AgeGate from './src/overlays/AgeGate';
 import ArOverlay from './src/overlays/ArOverlay';
 import ArViewer from './src/overlays/ArViewer';
 import EditOrderSheet from './src/overlays/EditOrderSheet';
@@ -53,6 +59,9 @@ const TAB_BAR_SCREENS = [
   'loyalty',
   'subscribe',
   'subscriptions',
+  'search',
+  'wishlist',
+  'support',
 ];
 
 /**
@@ -82,6 +91,9 @@ const SCREENS = {
   signIn: SignInScreen,
   subscribe: SubscribeScreen,
   subscriptions: SubscriptionsScreen,
+  search: SearchScreen,
+  wishlist: WishlistScreen,
+  support: SupportScreen,
 };
 
 export default function App() {
@@ -128,6 +140,10 @@ function Shell() {
   const d = useDerived();
   const insets = useSafeAreaInsets();
 
+  // Cart, language and session survive closing the app.
+  usePersistence();
+  // Registers this device for shipment notifications when switched on.
+  usePushRegistration();
   // Keeps a real Shopify cart in step with the local one, when configured.
   useShopifyCart();
   // Persists the wishlist against the customer rather than the app process.
@@ -225,6 +241,7 @@ function Shell() {
         )
       ) : null}
       {state.editOrderOpen && <EditOrderSheet />}
+      {state.hydrated && !state.ageConfirmed && <AgeGate />}
 
       <StatusBar style="dark" />
     </View>

@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Linking, ScrollView, StyleSheet, View } from 'react-native';
 
-import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
-import { fetchOrderStatus } from '../api/orders';
 import { cancelShopifyOrder, fetchCustomerOrders } from '../api/auth';
 import { useRefresh } from '../useRefresh';
 import { C, W } from '../theme';
@@ -12,7 +10,7 @@ import { FadeIn } from '../components/anim';
 import { Divider, Img, Press, Txt } from '../components/ui';
 import { ScreenHeader } from '../components/parts';
 import { ChevronRight, Phone, WhatsApp } from '../components/Icons';
-import { selectionTick } from '../haptics';
+import { selectionTick, success } from '../haptics';
 
 /**
  * wa.me wants a bare international number — no `+`, no spaces, no leading 0.
@@ -160,22 +158,12 @@ export default function OrdersScreen() {
         );
         return;
       } catch {
-        // fall through to the single-order path
+        // Keep whatever was shown; pull-to-refresh tries again.
+        return;
       }
     }
-    // A local-only order has nothing on Shopify or the courier to ask about.
-    if (!order || order.local) {
-      setLive(null);
-      return;
-    }
-    // No phone is sent: the service finds the shipment by order number, and
-    // the old fallback posted the demo placeholder number for signed-out
-    // shoppers.
-    const r = await fetchOrderStatus({
-      orderNumber: order.number,
-      trackingNumber: order.trackingNumber,
-    });
-    setLive(r);
+    // Signed out: orders need an account, so there is nothing to look up.
+    setLive(null);
   }, [
     state.session?.token,
     d.lang,
@@ -199,6 +187,39 @@ export default function OrdersScreen() {
     }
     return seed;
   }, [remote, products]);
+
+  /**
+   * "Order again": puts this order's items back in the cart, matched to
+   * today's catalogue by variant. Coal, foil and bowls are bought over and
+   * over, so this is the shortest path to a repeat order.
+   */
+  const reorder = useCallback(() => {
+    const items = {};
+    let missing = 0;
+    for (const it of selected?.items ?? []) {
+      const p =
+        products.find((pp) => pp.variantId && pp.variantId === it.variantId) ??
+        (it.localImg !== undefined ? d.byId(it.id) : null);
+      if (p && p.stock !== 0) items[p.id] = (items[p.id] ?? 0) + it.quantity;
+      else missing += 1;
+    }
+    if (!Object.keys(items).length) {
+      Alert.alert(
+        d.isRtl ? 'غير متاح' : 'Not available',
+        d.isRtl ? 'المنتجات دي مش متوفرة دلوقتي.' : 'These items aren’t available right now.',
+      );
+      return;
+    }
+    actions.addManyToCart(items);
+    success();
+    if (missing) {
+      Alert.alert(
+        d.isRtl ? 'أضفنا المتاح' : 'Added what’s available',
+        d.isRtl ? `${d.num(missing)} منتج مش متوفر حالياً.` : `${missing} item(s) aren’t available right now.`,
+      );
+    }
+    actions.goTab('cart');
+  }, [selected, products, d, actions]);
 
   /** Cancels the real Shopify order, not just the local copy. */
   const doCancel = useCallback(() => {
@@ -614,16 +635,16 @@ export default function OrdersScreen() {
             current default, which may since have changed. */}
         <Field label={d.isRtl ? 'الشحن إلى' : 'Ships to'} isRtl={d.isRtl}>
           <Txt isRtl={d.isRtl} style={styles.fieldStrong}>
-            {order.shipTo?.name || state.customer?.name || STR[d.lang].name}
+            {order.shipTo?.name || state.customer?.name || ''}
           </Txt>
           <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
-            {order.shipTo?.street || STR[d.lang].street}
+            {order.shipTo?.street || ''}
           </Txt>
           <Txt isRtl={d.isRtl} style={styles.fieldTxt}>
-            {order.shipTo?.city || d.t(state.city)}
+            {order.shipTo?.city || ''}
           </Txt>
           <Txt isRtl={d.isRtl} style={styles.fieldPhone}>
-            {`⁦${order.shipTo?.phone || state.customer?.phone || STR[d.lang].phone}⁩`}
+            {`⁦${order.shipTo?.phone || state.customer?.phone || ''}⁩`}
           </Txt>
         </Field>
 
@@ -703,6 +724,13 @@ export default function OrdersScreen() {
             </Txt>
           </Press>
         </View>
+        {(selected?.items ?? []).length ? (
+          <Press onPress={reorder} activeScale={0.98} style={styles.reorderBtn}>
+            <Txt center style={styles.reorderTxt}>
+              {d.isRtl ? 'اطلب تاني' : 'Order again'}
+            </Txt>
+          </Press>
+        ) : null}
         <View style={{ height: 30 }} />
       </ScrollView>
     </FadeIn>
@@ -721,6 +749,14 @@ function Field({ label, children, isRtl }) {
 }
 
 const styles = StyleSheet.create({
+  reorderBtn: {
+    marginHorizontal: 22,
+    marginTop: 12,
+    paddingVertical: 14,
+    borderRadius: 999,
+    backgroundColor: C.ink,
+  },
+  reorderTxt: { color: '#ffffff', fontSize: 15, fontWeight: W.bold },
   root: { flex: 1 },
   fill: { width: '100%', height: '100%' },
   rule: { marginHorizontal: 22 },

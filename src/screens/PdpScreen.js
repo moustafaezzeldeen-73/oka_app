@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { Dimensions, ScrollView, Share, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useActions, useDerived, useStore } from '../store';
+import { SHOP_DOMAIN } from '../api/config';
 import { success } from '../haptics';
 import { C, W } from '../theme';
 import { chevronFlip } from '../rtl';
@@ -22,7 +23,19 @@ export default function PdpScreen() {
     [products, p],
   );
 
+  const [imgIndex, setImgIndex] = useState(0);
+
   if (!p) return null;
+
+  const soldOut = p.stock === 0 || p.available === false;
+  /** Every photo Shopify has for the product; the bundled catalogue has one. */
+  const gallery = p.images?.length ? p.images.map((uri) => ({ uri })) : [p.img];
+  const width = Dimensions.get('window').width;
+
+  const share = () =>
+    Share.share({
+      message: `${d.title(p)} — ${d.fmtPrice(p.price)}\nhttps://${SHOP_DOMAIN}/products/${p.id}`,
+    }).catch(() => {});
 
   const stockText =
     p.stock === 0
@@ -38,7 +51,25 @@ export default function PdpScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* hero */}
         <View style={styles.hero}>
-          <Img source={p.img} contentFit="cover" style={styles.fill} />
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onMomentumScrollEnd={(e) => setImgIndex(Math.round(e.nativeEvent.contentOffset.x / width))}
+          >
+            {gallery.map((src, i) => (
+              <View key={i} style={{ width, height: '100%' }}>
+                <Img source={src} contentFit="cover" style={styles.fill} />
+              </View>
+            ))}
+          </ScrollView>
+          {gallery.length > 1 ? (
+            <View style={styles.dots} pointerEvents="none">
+              {gallery.map((_, i) => (
+                <View key={i} style={[styles.dot, i === imgIndex && styles.dotOn]} />
+              ))}
+            </View>
+          ) : null}
           <LinearGradient
             colors={['rgba(255,255,255,0)', '#ffffff']}
             locations={[0.55, 0.98]}
@@ -49,9 +80,14 @@ export default function PdpScreen() {
             <Press onPress={actions.goBack} style={[styles.circleBtn, chevronFlip(d.isRtl)]}>
               <ChevronLeft />
             </Press>
-            <Press onPress={() => actions.toggleWishlist(p.id)} style={styles.circleBtn}>
-              <Heart fill={state.wishlist[p.id] ? C.accent : 'none'} />
-            </Press>
+            <View style={[rowDir, { gap: 10 }]}>
+              <Press onPress={share} style={styles.circleBtn}>
+                <Txt style={styles.shareGlyph}>↗</Txt>
+              </Press>
+              <Press onPress={() => actions.toggleWishlist(p.id)} style={styles.circleBtn}>
+                <Heart fill={state.wishlist[p.id] ? C.accent : 'none'} />
+              </Press>
+            </View>
           </View>
         </View>
 
@@ -61,7 +97,12 @@ export default function PdpScreen() {
             <Txt isRtl={d.isRtl} style={styles.title}>
               {d.title(p)}
             </Txt>
-            <Txt style={styles.price}>{d.fmtPrice(p.price)}</Txt>
+            <View style={{ alignItems: d.isRtl ? 'flex-start' : 'flex-end' }}>
+              <Txt style={styles.price}>{d.fmtPrice(p.price)}</Txt>
+              {p.compareAtPrice ? (
+                <Txt style={styles.compareAt}>{d.fmtPrice(p.compareAtPrice)}</Txt>
+              ) : null}
+            </View>
           </View>
           <Txt isRtl={d.isRtl} style={styles.stock}>
             {stockText}
@@ -91,13 +132,15 @@ export default function PdpScreen() {
 
           <View style={styles.block}>
             <View style={[styles.spread, rowDir]}>
-              <Txt style={styles.deliverTxt}>{`${d.t('deliverTo')}: ${d.t(state.city)}`}</Txt>
-              <Txt style={styles.deliverMuted}>{d.cityDays[state.city]}</Txt>
+              <Txt style={styles.deliverTxt}>{d.t('estDelivery')}</Txt>
+              <Txt style={styles.deliverMuted}>
+                {d.etaFor((state.addresses ?? []).find((a) => a.id === state.selectedAddress) ?? (state.addresses ?? []).find((a) => a.isDefault))}
+              </Txt>
             </View>
             <View style={[styles.spread, rowDir, { marginTop: 6 }]}>
               <Txt style={styles.feeTxt}>{d.t('shippingFee')}</Txt>
               <Txt style={styles.feeTxt}>
-                {d.subtotalRaw >= 300 ? d.t('freeShipReached') : d.fmtPrice(d.cityFee)}
+                {d.pdpRemaining === 0 ? d.t('freeShipReached') : d.fmtPrice(d.shippingFee)}
               </Txt>
             </View>
             <Txt isRtl={d.isRtl} style={styles.payTxt}>
@@ -116,7 +159,7 @@ export default function PdpScreen() {
 
           <View style={styles.pointsBox}>
             <Txt isRtl={d.isRtl} style={styles.pointsTxt}>
-              {d.t('pointsNote', { n: Math.round(p.price) })}
+              {d.t('pointsNote', { n: Math.floor(p.price * (state.config.loyalty?.earnPointsPerEgp ?? 0.1)) })}
             </Txt>
           </View>
         </View>
@@ -170,19 +213,30 @@ export default function PdpScreen() {
             </DarkFill>
           )}
         </Press>
-        <Cta
-          glow
-          style={styles.buyCta}
-          onPress={() => {
-            actions.addToCart(p.id, state.pdpQty);
-            success();
-          }}
-        >
-          <View style={[styles.buyInner, rowDir]}>
-            <Txt style={styles.buyTxt}>{d.t('buyNow')}</Txt>
-            <Txt style={styles.buyTxt}>{d.fmtPrice(p.price)}</Txt>
+        {soldOut ? (
+          <View style={[styles.buyCta, styles.soldOut]}>
+            <Txt center style={styles.soldOutTxt}>{d.t('outOfStock')}</Txt>
           </View>
-        </Cta>
+        ) : (
+          <Cta
+            glow
+            style={styles.buyCta}
+            onPress={() => {
+              // Never more than is in stock, counting what's already in the cart.
+              const room = Math.max(0, (p.stock || 50) - (state.cart[p.id] || 0));
+              const qty = Math.min(state.pdpQty, room);
+              if (qty > 0) {
+                actions.addToCart(p.id, qty);
+                success();
+              }
+            }}
+          >
+            <View style={[styles.buyInner, rowDir]}>
+              <Txt style={styles.buyTxt}>{d.t('addToCart')}</Txt>
+              <Txt style={styles.buyTxt}>{d.fmtPrice(p.price * state.pdpQty)}</Txt>
+            </View>
+          </Cta>
+        )}
       </LinearGradient>
     </FadeIn>
   );
@@ -190,6 +244,13 @@ export default function PdpScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
+  dots: { position: 'absolute', bottom: 40, left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: 6 },
+  dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: 'rgba(0,0,0,0.2)' },
+  dotOn: { backgroundColor: C.ink, width: 16 },
+  shareGlyph: { fontSize: 17, fontWeight: W.bold, color: C.ink },
+  compareAt: { fontSize: 13, color: C.inkSofter, textDecorationLine: 'line-through', marginTop: 2 },
+  soldOut: { borderRadius: 999, backgroundColor: 'rgba(0,0,0,0.08)', paddingVertical: 17, justifyContent: 'center' },
+  soldOutTxt: { fontSize: 15, fontWeight: W.bold, color: C.inkSoft },
   fill: { width: '100%', height: '100%' },
 
   hero: { height: 300 },

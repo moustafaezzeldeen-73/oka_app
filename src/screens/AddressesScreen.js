@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
 
-import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
-import { fetchCustomerAddresses, setDefaultAddress } from '../api/auth';
+import { deleteAddress, fetchCustomerAddresses, setDefaultAddress } from '../api/auth';
 import { useRefresh } from '../useRefresh';
 import { C, W } from '../theme';
 import { FadeIn } from '../components/anim';
@@ -12,10 +11,9 @@ import { ScreenHeader } from '../components/parts';
 import { Plus } from '../components/Icons';
 
 /**
- * Real addresses for a signed-in customer; the prototype's two-address demo
- * ("Nourhan Adel", home/work) as a guest preview otherwise — same shape, so
- * the screen looks identical either way, but it stops lying about whose
- * address is on screen once someone actually signs in.
+ * The signed-in customer's saved addresses. Tapping one chooses where the
+ * next order ships; making it the default and deleting it are separate,
+ * explicit actions.
  *
  * The fetched list lives on the store, not local state — checkout reads the
  * customer's selected address from the same place, so a choice made here is
@@ -49,12 +47,13 @@ export default function AddressesScreen() {
 
   const { control } = useRefresh(load);
 
-  /** Selecting a real address also makes it the account's default on Shopify. */
-  const select = async (id) => {
-    actions.selectAddress(id);
-    if (!state.session?.token || !String(id).startsWith('gid://')) return;
+  /** Chooses where the next order ships — nothing changes on the account. */
+  const select = (id) => actions.selectAddress(id);
+
+  const makeDefault = async (id) => {
     try {
       await setDefaultAddress(id, state.session.token);
+      load();
     } catch (err) {
       Alert.alert(
         d.isRtl ? 'تعذّر تحديث العنوان الافتراضي' : 'Could not update the default address',
@@ -63,27 +62,34 @@ export default function AddressesScreen() {
     }
   };
 
-  const demo = d.isRtl
-    ? [
-        { id: 'home', label: 'المنزل', name: 'نورهان عادل', street: '١٤ شارع النصر، مدينة نصر', city: 'القاهرة', isDefault: true },
-        { id: 'work', label: 'العمل', name: 'نورهان عادل', street: '٢٧ شارع جامعة الدول، المهندسين', city: 'الجيزة', isDefault: false },
-      ]
-    : [
-        { id: 'home', label: 'Home', name: 'Nourhan Adel', street: '14 Al Nasr St, Nasr City', city: 'Cairo', isDefault: true },
-        { id: 'work', label: 'Work', name: 'Nourhan Adel', street: '27 Gameat Al Dowal St, Mohandessin', city: 'Giza', isDefault: false },
-      ];
+  const remove = (id) =>
+    Alert.alert(d.isRtl ? 'حذف العنوان' : 'Delete address', d.isRtl ? 'متأكد؟' : 'Are you sure?', [
+      { text: d.isRtl ? 'رجوع' : 'Back', style: 'cancel' },
+      {
+        text: d.isRtl ? 'حذف' : 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await deleteAddress(id, state.session.token);
+            if (state.selectedAddress === id) actions.selectAddress(null);
+            load();
+          } catch (err) {
+            Alert.alert(d.isRtl ? 'تعذّر الحذف' : 'Could not delete', String(err.message ?? err));
+          }
+        },
+      },
+    ]);
 
-  const list = state.session?.token
-    ? (remote ?? []).map((a, i) => ({
-        id: a.id,
-        label: a.isDefault ? (d.isRtl ? 'الافتراضي' : 'Default') : d.isRtl ? `عنوان ${i + 1}` : `Address ${i + 1}`,
-        name: a.name || state.customer?.name || '',
-        street: a.street,
-        city: a.city,
-        phone: a.phone || state.customer?.phone,
-        isDefault: a.isDefault,
-      }))
-    : demo;
+  const list = (remote ?? []).map((a, i) => ({
+    id: a.id,
+    label: d.provinceName(a.provinceCode) || (d.isRtl ? `عنوان ${i + 1}` : `Address ${i + 1}`),
+    name: a.name || state.customer?.name || '',
+    street: a.street,
+    city: a.city,
+    phone: a.phone || state.customer?.phone,
+    isDefault: a.isDefault,
+    eta: d.etaFor(a),
+  }));
 
   return (
     <FadeIn style={styles.root}>
@@ -98,7 +104,8 @@ export default function AddressesScreen() {
           </Txt>
         ) : (
           list.map((a) => {
-            const active = (state.selectedAddress || list[0]?.id) === a.id;
+            const active =
+              (state.selectedAddress ?? list.find((x) => x.isDefault)?.id ?? list[0]?.id) === a.id;
             return (
               <Press
                 key={a.id}
@@ -128,6 +135,19 @@ export default function AddressesScreen() {
                     {a.phone ? (
                       <Txt isRtl={d.isRtl} style={styles.phone}>{`⁦${a.phone}⁩`}</Txt>
                     ) : null}
+                    <Txt isRtl={d.isRtl} style={styles.eta}>
+                      {d.isRtl ? `التوصيل خلال ${a.eta}` : `Delivery in ${a.eta}`}
+                    </Txt>
+                    <View style={[styles.cardActions, rowDir]}>
+                      {!a.isDefault ? (
+                        <Press onPress={() => makeDefault(a.id)} hitSlop={8}>
+                          <Txt style={styles.cardAction}>{d.isRtl ? 'اجعله الافتراضي' : 'Make default'}</Txt>
+                        </Press>
+                      ) : null}
+                      <Press onPress={() => remove(a.id)} hitSlop={8}>
+                        <Txt style={[styles.cardAction, { color: '#b3261e' }]}>{d.isRtl ? 'حذف' : 'Delete'}</Txt>
+                      </Press>
+                    </View>
                   </View>
                   <View style={styles.radio}>
                     <View
@@ -169,6 +189,9 @@ const styles = StyleSheet.create({
   badgeTxt: { fontSize: 10, fontWeight: W.bold, color: '#ffffff' },
   line: { fontSize: 13.5, lineHeight: 21, marginTop: 2 },
   phone: { fontSize: 13.5, lineHeight: 21, letterSpacing: 0.5 },
+  eta: { fontSize: 12, color: C.inkSoft, marginTop: 4 },
+  cardActions: { gap: 18, marginTop: 10 },
+  cardAction: { fontSize: 12.5, fontWeight: W.bold, color: C.accent },
   radio: {
     width: 20,
     height: 20,

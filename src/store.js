@@ -1,15 +1,6 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
-import {
-  CATS as LOCAL_CATS,
-  CITY_FEES,
-  FREE_SHIPPING_THRESHOLD,
-  GOLD_TIER,
-  LOYALTY_BASE,
-  PRODUCTS as LOCAL_PRODUCTS,
-  REWARD_COSTS,
-  STR,
-} from './data';
+import { CATS as LOCAL_CATS, DEFAULT_CONFIG, PRODUCTS as LOCAL_PRODUCTS, STR } from './data';
 import { arDigits } from './rtl';
 
 /**
@@ -21,7 +12,11 @@ const INITIAL = {
   lang: 'ar',
   screen: 'home',
   stack: [],
-  notifEnabled: true,
+  /** True once saved state (cart, language, session) has been read back. */
+  hydrated: false,
+  /** Shown once: the store sells tobacco products. */
+  ageConfirmed: false,
+  notifEnabled: false,
   editOrderOpen: false,
   editCart: null,
   collectionCategory: 'all',
@@ -30,20 +25,28 @@ const INITIAL = {
   cart: {},
   wishlist: {},
   discountCode: '',
-  discountApplied: false,
-  city: 'cityCairo',
+  /** The server's verdict on `discountCode`: { code, applied, amount, message }. */
+  discount: null,
   paymentMethod: 'cod',
+  /** Loyalty vouchers redeemed on this device, so their codes aren't lost. */
+  vouchers: [],
   order: null,
   activeCollectionIndex: 0,
   activeProductIndex: {},
   arProductId: null,
-  redeemedRewards: {},
-  selectedAddress: 'home',
+  selectedAddress: null,
   newAddr: null,
   newAddrType: 'home',
   locationFound: false,
+  /** Search and the collection screen's sort/filter. */
+  searchQuery: '',
+  sortBy: 'featured',
+  filters: { inStock: false, onSale: false, maxPrice: null },
 
-  /** Sign-in session. `customer` is whatever the service could resolve. */
+  /** The store's policy (shipping, minimum order, rewards…), from the server. */
+  config: DEFAULT_CONFIG,
+
+  /** Sign-in session: { token, via, test }. `customer` is the Shopify profile. */
   session: null,
   customer: null,
   remoteOrders: null,
@@ -53,6 +56,8 @@ const INITIAL = {
   selectedOrderName: null,
   /** Bumped after an edit or cancel so the order screen refetches. */
   ordersVersion: 0,
+  /** Where to go after signing in (e.g. back to checkout). */
+  afterSignIn: null,
 
   /** The signed-in customer's subscriptions; null until fetched. */
   subscriptions: null,
@@ -121,13 +126,23 @@ export function useActions() {
           return { ...prev, stack: s.stack.slice(0, -1) };
         }),
 
-      goTab: (screen) => patch({ screen, stack: [] }),
+      goTab: (screen) => patch({ screen, stack: [], afterSignIn: null }),
 
       toggleLang: () => patch((s) => ({ lang: s.lang === 'ar' ? 'en' : 'ar' })),
-      toggleNotif: () => patch((s) => ({ notifEnabled: !s.notifEnabled })),
+      setNotif: (notifEnabled) => patch({ notifEnabled }),
+      confirmAge: () => patch({ ageConfirmed: true }),
+      setConfig: (config) => patch({ config: { ...DEFAULT_CONFIG, ...config } }),
 
       addToCart: (id, qty = 1) =>
         patch((s) => ({ cart: { ...s.cart, [id]: (s.cart[id] || 0) + qty } })),
+
+      /** Adds several products at once — "order again". `items` is {productId: qty}. */
+      addManyToCart: (items) =>
+        patch((s) => {
+          const cart = { ...s.cart };
+          Object.keys(items).forEach((id) => { cart[id] = (cart[id] || 0) + items[id]; });
+          return { cart, discount: null };
+        }),
 
       setQty: (id, qty) =>
         patch((s) => {
@@ -140,11 +155,13 @@ export function useActions() {
       toggleWishlist: (id) =>
         patch((s) => ({ wishlist: { ...s.wishlist, [id]: !s.wishlist[id] } })),
 
-      setCity: (city) => patch({ city }),
       setPaymentMethod: (paymentMethod) => patch({ paymentMethod }),
-      setDiscountCode: (discountCode) => patch({ discountCode }),
-      applyDiscount: () =>
-        patch((s) => (s.discountCode.trim() ? { discountApplied: true } : {})),
+      /** Editing the code clears the server's verdict on the old one. */
+      setDiscountCode: (discountCode) => patch({ discountCode, discount: null }),
+      setDiscount: (discount) => patch({ discount }),
+      setSearchQuery: (searchQuery) => patch({ searchQuery }),
+      setSortBy: (sortBy) => patch({ sortBy }),
+      setFilters: (f) => patch((s) => ({ filters: { ...s.filters, ...f } })),
 
       setPdpQty: (pdpQty) => patch({ pdpQty }),
 
@@ -159,8 +176,11 @@ export function useActions() {
         patch((s) => ({
           order: { ...order, items: { ...s.cart } },
           cart: {},
+          discountCode: '',
+          discount: null,
           screen: 'confirm',
           stack: [],
+          ordersVersion: s.ordersVersion + 1,
         })),
 
       cancelOrder: () =>
@@ -172,11 +192,11 @@ export function useActions() {
        * products first — the sheet itself only ever speaks product ids.
        */
       editOrder: (seed) =>
-        patch((s) => ({
-          editOrderOpen: true,
-          editCart: seed ? { ...seed } : { ...((s.order && s.order.items) || {}) },
-        })),
-      closeEditOrder: () => patch({ editOrderOpen: false, editCart: null }),
+        patch((s) => {
+          const start = seed ? { ...seed } : { ...((s.order && s.order.items) || {}) };
+          return { editOrderOpen: true, editCart: start, editOriginal: { ...start } };
+        }),
+      closeEditOrder: () => patch({ editOrderOpen: false, editCart: null, editOriginal: null }),
       acceptEditOrder: () => patch({ editOrderOpen: false }),
       editSetQty: (id, qty) =>
         patch((s) => {
@@ -186,11 +206,30 @@ export function useActions() {
           return { editCart };
         }),
 
-      redeemReward: (id) =>
-        patch((s) => ({ redeemedRewards: { ...s.redeemedRewards, [id]: true } })),
-
-      signedIn: ({ token, customer, staff, via }) =>
-        patch({ session: { token, staff, via }, customer, screen: 'orders', stack: [] }),
+      /**
+       * After sign-in the shopper goes back to where they were headed —
+       * checkout, usually — rather than always landing on the orders list.
+       */
+      signedIn: ({ token, customer, via, test }) =>
+        patch((s) => ({
+          session: { token, via, test: Boolean(test) },
+          customer,
+          addresses: null,
+          remoteOrders: null,
+          subscriptions: null,
+          screen: s.afterSignIn ?? 'orders',
+          // requireSignIn pushed the screen the shopper came from, so "back"
+          // from where they land returns there.
+          stack: s.afterSignIn ? s.stack : [],
+          afterSignIn: null,
+        })),
+      /** Sends a signed-out shopper to sign in, then on to `next`. */
+      requireSignIn: (next) =>
+        patch((s) => ({
+          afterSignIn: next,
+          stack: [...s.stack, { screen: s.screen }],
+          screen: 'signIn',
+        })),
       signOut: () =>
         patch({
           session: null,
@@ -198,6 +237,8 @@ export function useActions() {
           remoteOrders: null,
           addresses: null,
           subscriptions: null,
+          selectedAddress: null,
+          wishlist: {},
           screen: 'account',
           stack: [],
         }),
@@ -250,45 +291,55 @@ export function useDerived() {
       })
       .filter(Boolean);
 
+    /** The cart as the server prices it. Bundled demo products have no variant. */
+    const cartLines = cartEntries
+      .filter((c) => c.product.variantId)
+      .map((c) => ({ variantId: c.product.variantId, quantity: c.qty }));
+    const cartHasDemoItems = cartEntries.some((c) => !c.product.variantId);
+
+    const cfg = state.config ?? DEFAULT_CONFIG;
     const cartCount = cartEntries.reduce((a, c) => a + c.qty, 0);
     const subtotalRaw = cartEntries.reduce((a, c) => a + c.lineTotalRaw, 0);
-    const discountRaw = state.discountApplied ? Math.round(subtotalRaw * 0.1) : 0;
+    // Only a code the server has accepted counts; typing one changes nothing.
+    const discountRaw = state.discount?.applied ? state.discount.amount : 0;
 
-    const cityDays = {
-      cityCairo: t('days12'),
-      cityGiza: t('days12'),
-      cityAlex: t('days23'),
-      cityOther: t('days35'),
-    };
-    const shippingRaw =
-      subtotalRaw - discountRaw >= FREE_SHIPPING_THRESHOLD ? 0 : CITY_FEES[state.city] || 50;
+    /** Policy shipping for a product total — an estimate; the server decides. */
+    const shippingFor = (merch) =>
+      merch >= cfg.freeShippingMin
+        ? 0
+        : Math.max(0, cfg.shippingFee - (state.paymentMethod === 'cod' ? 0 : cfg.prepaidShippingDiscount));
+
+    const shippingRaw = shippingFor(subtotalRaw - discountRaw);
     const totalRaw = subtotalRaw - discountRaw + shippingRaw;
-    const pointsEarn = Math.round(totalRaw);
-    const remainingForFree = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotalRaw);
+    const pointsEarn = Math.floor(Math.max(0, subtotalRaw - discountRaw) * cfg.loyalty.earnPointsPerEgp);
+    const remainingForFree = Math.max(0, cfg.freeShippingMin - (subtotalRaw - discountRaw));
+    const belowMinimum = subtotalRaw - discountRaw < cfg.minOrder;
+
+    /** "1–2 days" for a delivery window. */
+    const days = (min, max) =>
+      isRtl ? `${arDigits(min)}-${arDigits(max)} ${max > 2 ? 'أيام' : 'يوم'}` : `${min}–${max} days`;
+    /** The delivery window for a saved address's governorate. */
+    const etaFor = (addr) => {
+      const p = cfg.provinces.find((x) => x.code === (addr?.provinceCode ?? addr?.raw?.provinceCode));
+      return p ? days(p.minDays, p.maxDays) : days(1, 5);
+    };
+    const provinceName = (code) => {
+      const p = cfg.provinces.find((x) => x.code === code);
+      return p ? (isRtl ? p.ar : p.en) : '';
+    };
 
     const editCart = state.editCart || {};
     const editCartEntries = Object.keys(editCart)
       .map((id) => ({ id, p: byId(id), qty: editCart[id] }))
       .filter((e) => e.p);
     const editSubtotalRaw = editCartEntries.reduce((a, e) => a + e.p.price * e.qty, 0);
-    const editDiscountRaw = state.discountApplied ? Math.round(editSubtotalRaw * 0.1) : 0;
-    const editShippingRaw =
-      editSubtotalRaw - editDiscountRaw >= FREE_SHIPPING_THRESHOLD
-        ? 0
-        : CITY_FEES[state.city] || 50;
-    const editTotalRaw = editSubtotalRaw - editDiscountRaw + editShippingRaw;
-
-    const redeemed = Object.keys(state.redeemedRewards || {}).reduce(
-      (sum, k) => sum + (REWARD_COSTS[k] || 0),
-      0,
-    );
-    const loyaltyBalance = LOYALTY_BASE - redeemed;
+    const editTotalRaw = editSubtotalRaw + shippingFor(editSubtotalRaw);
 
     const selectedProduct = byId(state.selectedProductId);
     const pdpSubtotal = selectedProduct
       ? subtotalRaw + selectedProduct.price * (state.pdpQty || 1)
       : subtotalRaw;
-    const pdpRemaining = Math.max(0, FREE_SHIPPING_THRESHOLD - pdpSubtotal);
+    const pdpRemaining = Math.max(0, cfg.freeShippingMin - pdpSubtotal);
 
     return {
       lang,
@@ -300,6 +351,8 @@ export function useDerived() {
       desc,
       byId,
       cartEntries,
+      cartLines,
+      cartHasDemoItems,
       cartCount,
       subtotalRaw,
       discountRaw,
@@ -307,18 +360,21 @@ export function useDerived() {
       totalRaw,
       pointsEarn,
       remainingForFree,
-      cityDays,
-      cityFee: CITY_FEES[state.city] || 50,
+      shippingFor,
+      belowMinimum,
+      minOrder: cfg.minOrder,
+      freeShippingMin: cfg.freeShippingMin,
+      shippingFee: cfg.shippingFee,
+      etaFor,
+      provinceName,
       editCartEntries,
       editSubtotalRaw,
       editTotalRaw,
-      loyaltyBalance,
-      loyaltyProgressPct: Math.min(100, Math.round((loyaltyBalance / GOLD_TIER) * 100)),
       selectedProduct,
       pdpSubtotal,
       pdpRemaining,
-      pdpProgressPct: Math.min(100, Math.round((pdpSubtotal / FREE_SHIPPING_THRESHOLD) * 100)),
-      cartProgressPct: Math.min(100, Math.round((subtotalRaw / FREE_SHIPPING_THRESHOLD) * 100)),
+      pdpProgressPct: Math.min(100, Math.round((pdpSubtotal / cfg.freeShippingMin) * 100)),
+      cartProgressPct: Math.min(100, Math.round((subtotalRaw / cfg.freeShippingMin) * 100)),
       langLabel: isRtl ? 'EN' : 'ع',
     };
   }, [state, lang, isRtl, products]);

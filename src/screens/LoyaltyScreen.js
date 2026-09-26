@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { GOLD_TIER, LOYALTY_REWARDS, REWARD_COSTS } from '../data';
+import * as Clipboard from 'expo-clipboard';
+
 import { useActions, useDerived, useStore } from '../store';
 import { useRefresh } from '../useRefresh';
 import { success } from '../haptics';
@@ -11,30 +12,35 @@ import { arDigits } from '../rtl';
 import { FadeIn } from '../components/anim';
 import { Press, Progress, Txt } from '../components/ui';
 import { ScreenHeader } from '../components/parts';
-import { fetchLoyalty, redeemReward as redeemOnShopify } from '../api/loyalty';
+import { fetchLoyalty, redeemReward } from '../api/auth';
 
+/**
+ * Loyalty points: the customer's live balance (their Shopify store credit,
+ * 10 points = 1 EGP), and rewards that turn points into a single-use voucher
+ * code. Points are earned after delivery — 1 per 10 EGP of product.
+ */
 export default function LoyaltyScreen() {
   const { state, reloadCatalogue } = useStore();
   const actions = useActions();
   const d = useDerived();
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
+  const token = state.session?.token ?? null;
+  const rewards = state.config.loyalty?.rewards ?? [];
 
-  /**
-   * The real balance, derived by the service from what this customer has
-   * actually spent minus what they have redeemed. The 1,240-point demo figure
-   * only stands in when nobody is signed in.
-   */
-  const [remote, setRemote] = useState(null);
-  const phone = state.customer?.phone ?? null;
+  const [balance, setBalance] = useState(null);
+  const [error, setError] = useState(null);
+  const [busyId, setBusyId] = useState(null);
 
   const load = useCallback(async () => {
-    if (!phone) {
-      setRemote(null);
-      return;
+    if (!token) return;
+    try {
+      const r = await fetchLoyalty(token);
+      setBalance(r.balance ?? 0);
+      setError(null);
+    } catch (err) {
+      setError(String(err.message ?? err));
     }
-    const r = await fetchLoyalty(phone);
-    setRemote(r?.demo ? null : r);
-  }, [phone]);
+  }, [token]);
 
   useEffect(() => {
     load();
@@ -44,51 +50,78 @@ export default function LoyaltyScreen() {
     await Promise.all([reloadCatalogue?.(), load()]);
   });
 
-  const balance = remote ? remote.balance : d.loyaltyBalance;
-  const isDemo = !remote;
+  const fmtPts = (n) => (d.isRtl ? arDigits(n) : Number(n).toLocaleString('en-US'));
+  const next = rewards.find((r) => (balance ?? 0) < r.points) ?? null;
+  const progressPct = next ? Math.min(100, Math.round(((balance ?? 0) / next.points) * 100)) : 100;
+  const worthEgp = Math.floor((balance ?? 0) / (state.config.loyalty?.pointsPerEgp ?? 10));
 
-  const redeem = async (r) => {
-    if (!phone) {
-      Alert.alert(
-        d.isRtl ? 'سجّل دخولك الأول' : 'Sign in first',
-        d.isRtl
-          ? 'لازم تسجل دخولك عشان نقدر نخصم النقاط من حسابك.'
-          : 'Sign in so the points can be deducted from your account.',
-      );
-      return;
-    }
-    try {
-      const res = await redeemOnShopify(phone, r.id, r.pts);
-      if (!res.ok) throw new Error('the service refused the redemption');
-      actions.redeemReward(r.id);
-      success();
-      load();
-    } catch (err) {
-      Alert.alert(
-        d.isRtl ? 'تعذّر الاستبدال' : 'Could not redeem',
-        String(err.message ?? err),
-      );
-    }
-  };
+  const showVoucher = (v) =>
+    Alert.alert(
+      d.isRtl ? 'كود الخصم بتاعك' : 'Your voucher code',
+      `${v.code}\n\n${d.isRtl ? v.reward.ar : v.reward.en}`,
+      [
+        {
+          text: d.isRtl ? 'نسخ' : 'Copy',
+          onPress: () => Clipboard.setStringAsync(v.code).catch(() => {}),
+        },
+        {
+          text: d.isRtl ? 'استخدمه في السلة' : 'Use in cart',
+          onPress: () => {
+            actions.setDiscountCode(v.code);
+            actions.goTab('cart');
+          },
+        },
+      ],
+    );
 
+  const redeem = (r) =>
+    Alert.alert(
+      d.isRtl ? 'استبدال النقاط' : 'Redeem points',
+      d.isRtl
+        ? `هنخصم ${fmtPts(r.points)} نقطة ونديك كود: ${r.ar}. صالح ${fmtPts(90)} يوم ولمرة واحدة.`
+        : `${fmtPts(r.points)} points for a one-time code: ${r.en}. Valid for 90 days.`,
+      [
+        { text: d.isRtl ? 'رجوع' : 'Back', style: 'cancel' },
+        {
+          text: d.isRtl ? 'استبدال' : 'Redeem',
+          onPress: async () => {
+            setBusyId(r.id);
+            try {
+              const res = await redeemReward(r.id, token);
+              success();
+              setBalance(res.balance);
+              actions.patch((s) => ({ vouchers: [res.voucher, ...(s.vouchers ?? [])].slice(0, 10) }));
+              showVoucher(res.voucher);
+            } catch (err) {
+              Alert.alert(d.isRtl ? 'تعذّر الاستبدال' : 'Could not redeem', String(err.message ?? err));
+            } finally {
+              setBusyId(null);
+            }
+          },
+        },
+      ],
+    );
+
+  const pointsPer = Math.round(1 / (state.config.loyalty?.earnPointsPerEgp || 0.1));
   const earnRules = d.isRtl
     ? [
-        { label: 'كل ١ ج.م تشتريه', value: 'نقطة واحدة' },
-        { label: 'تقييم منتج بصورة', value: '٥٠ نقطة' },
-        { label: 'دعوة صديق يطلب', value: '٢٠٠ نقطة' },
+        { label: `كل ${arDigits(pointsPer)} ج.م منتجات بتوصلك`, value: 'نقطة واحدة' },
+        { label: 'النقاط بتنزل', value: 'بعد التسليم' },
+        { label: '١٠ نقاط', value: 'تساوي ١ ج.م' },
       ]
     : [
-        { label: 'Every EGP 1 spent', value: '1 point' },
-        { label: 'Review with a photo', value: '50 points' },
-        { label: 'Refer a friend who orders', value: '200 points' },
+        { label: `Every EGP ${pointsPer} of products delivered`, value: '1 point' },
+        { label: 'Points arrive', value: 'after delivery' },
+        { label: '10 points', value: 'worth EGP 1' },
       ];
+
+  const vouchers = (state.vouchers ?? []).filter((v) => new Date(v.endsAt) > new Date());
 
   return (
     <FadeIn style={styles.root}>
       <ScrollView showsVerticalScrollIndicator={false} refreshControl={control}>
         <ScreenHeader title={d.t('loyaltyRow')} onBack={actions.goBack} isRtl={d.isRtl} />
 
-        {/* tier card */}
         <View style={styles.card}>
           <LinearGradient
             colors={['#0e0e10', '#2b2b30', '#55555e', '#1a1a1d']}
@@ -105,50 +138,60 @@ export default function LoyaltyScreen() {
             pointerEvents="none"
           />
           <Txt isRtl={d.isRtl} style={styles.tier}>
-            {d.isRtl ? 'مستوى فضي' : 'SILVER TIER'}
+            {d.isRtl ? 'رصيد نقاطك' : 'YOUR POINTS'}
           </Txt>
           <View style={[styles.pointsRow, rowDir]}>
-            <Txt style={styles.points}>
-              {d.isRtl ? arDigits(balance) : balance.toLocaleString('en-US')}
-            </Txt>
+            {balance == null ? (
+              <ActivityIndicator color="#ffffff" />
+            ) : (
+              <Txt style={styles.points}>{fmtPts(balance)}</Txt>
+            )}
             <Txt style={styles.pointsUnit}>{d.isRtl ? 'نقطة' : 'points'}</Txt>
           </View>
           <Progress
-            pct={d.loyaltyProgressPct}
+            pct={progressPct}
             isRtl={d.isRtl}
             duration={D.progressSlow}
             track="rgba(255,255,255,0.22)"
             fill={['#ffffff', '#d8d8dd']}
             style={{ marginTop: 18 }}
           />
-          {isDemo ? (
-            <Txt isRtl={d.isRtl} style={styles.demoTag}>
-              {d.isRtl
-                ? 'رصيد تجريبي — سجّل دخولك عشان تشوف نقاطك الحقيقية'
-                : 'Demo balance — sign in to see your real points'}
-            </Txt>
-          ) : null}
+          {error ? <Txt isRtl={d.isRtl} style={styles.demoTag}>{error}</Txt> : null}
           <Txt isRtl={d.isRtl} style={styles.nextTier}>
-            {balance >= GOLD_TIER
+            {next
               ? d.isRtl
-                ? 'وصلت للمستوى الذهبي'
-                : 'Gold tier reached'
+                ? `${fmtPts(next.points - (balance ?? 0))} نقطة للمكافأة الجاية · قيمتها ${fmtPts(worthEgp)} ج.م`
+                : `${fmtPts(next.points - (balance ?? 0))} points to your next reward · worth EGP ${worthEgp}`
               : d.isRtl
-                ? arDigits(`${GOLD_TIER - balance} نقطة للوصول للمستوى الذهبي`)
-                : `${(GOLD_TIER - balance).toLocaleString('en-US')} points to Gold tier`}
+                ? 'تقدر تستبدل أي مكافأة'
+                : 'Every reward is unlocked'}
           </Txt>
         </View>
+
+        {vouchers.length ? (
+          <>
+            <Txt isRtl={d.isRtl} style={styles.sectionTitle}>
+              {d.isRtl ? 'أكوادك' : 'Your codes'}
+            </Txt>
+            <View style={styles.rewards}>
+              {vouchers.map((v) => (
+                <Press key={v.code} onPress={() => showVoucher(v)} style={[styles.rewardRow, rowDir]}>
+                  <View style={{ flex: 1, minWidth: 0 }}>
+                    <Txt isRtl={d.isRtl} style={styles.rewardTitle}>{v.code}</Txt>
+                    <Txt isRtl={d.isRtl} style={styles.rewardCost}>{d.isRtl ? v.reward.ar : v.reward.en}</Txt>
+                  </View>
+                </Press>
+              ))}
+            </View>
+          </>
+        ) : null}
 
         <Txt isRtl={d.isRtl} style={styles.sectionTitle}>
           {d.isRtl ? 'المكافآت' : 'Rewards'}
         </Txt>
         <View style={styles.rewards}>
-          {LOYALTY_REWARDS.map((r) => {
-            const redeemed = !!state.redeemedRewards[r.id];
-            const affordable = balance >= r.pts;
-            const costStr = d.isRtl
-              ? `${arDigits(r.pts)} نقطة`
-              : `${r.pts.toLocaleString('en-US')} points`;
+          {rewards.map((r) => {
+            const affordable = balance != null && balance >= r.points;
             return (
               <View key={r.id} style={[styles.rewardRow, rowDir]}>
                 <View style={{ flex: 1, minWidth: 0 }}>
@@ -156,55 +199,27 @@ export default function LoyaltyScreen() {
                     {d.isRtl ? r.ar : r.en}
                   </Txt>
                   <Txt isRtl={d.isRtl} style={styles.rewardCost}>
-                    {redeemed ? (d.isRtl ? 'تم الاستبدال' : 'Redeemed') : costStr}
+                    {d.isRtl ? `${fmtPts(r.points)} نقطة` : `${fmtPts(r.points)} points`}
                   </Txt>
                 </View>
                 <Press
-                  onPress={() => {
-                    if (redeemed || !affordable) return;
-                    redeem(r);
-                  }}
-                  activeScale={!redeemed && affordable ? 0.95 : 1}
+                  onPress={() => affordable && !busyId && redeem(r)}
+                  activeScale={affordable ? 0.95 : 1}
                   style={[
                     styles.rewardBtn,
                     {
-                      backgroundColor: redeemed
-                        ? 'rgba(31,143,78,0.12)'
-                        : affordable
-                          ? C.ink
-                          : 'transparent',
-                      borderColor: redeemed
-                        ? 'rgba(31,143,78,0.35)'
-                        : affordable
-                          ? C.ink
-                          : 'rgba(0,0,0,0.14)',
+                      backgroundColor: affordable ? C.ink : 'transparent',
+                      borderColor: affordable ? C.ink : 'rgba(0,0,0,0.14)',
                     },
                   ]}
                 >
-                  <Txt
-                    style={[
-                      styles.rewardBtnTxt,
-                      {
-                        color: redeemed
-                          ? C.greenDeep
-                          : affordable
-                            ? '#ffffff'
-                            : 'rgba(110,110,115,0.95)',
-                      },
-                    ]}
-                  >
-                    {redeemed
-                      ? d.isRtl
-                        ? 'مُستبدل'
-                        : 'Redeemed'
-                      : affordable
-                        ? d.isRtl
-                          ? 'استبدال'
-                          : 'Redeem'
-                        : d.isRtl
-                          ? 'مقفول'
-                          : 'Locked'}
-                  </Txt>
+                  {busyId === r.id ? (
+                    <ActivityIndicator color="#ffffff" size="small" />
+                  ) : (
+                    <Txt style={[styles.rewardBtnTxt, { color: affordable ? '#ffffff' : 'rgba(110,110,115,0.95)' }]}>
+                      {affordable ? (d.isRtl ? 'استبدال' : 'Redeem') : d.isRtl ? 'مقفول' : 'Locked'}
+                    </Txt>
+                  )}
                 </Press>
               </View>
             );

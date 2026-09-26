@@ -36,7 +36,7 @@ export default function ArOverlay() {
 
   const facts = [
     { label: d.isRtl ? 'السعر' : 'Price', value: d.fmtPrice(p.price) },
-    { label: d.isRtl ? 'التوصيل' : 'Delivery', value: d.cityDays[state.city] },
+    { label: d.isRtl ? 'التوصيل' : 'Delivery', value: d.etaFor((state.addresses ?? []).find((a) => a.isDefault)) },
     {
       label: d.isRtl ? 'التوفر' : 'Availability',
       value: p.stock <= 5 ? d.t('onlyLeft', { n: p.stock }) : d.t('inStock'),

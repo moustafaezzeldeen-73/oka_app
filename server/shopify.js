@@ -592,7 +592,7 @@ const EDIT_BEGIN = `
     orderEditBegin(id: $id) {
       calculatedOrder {
         id
-        lineItems(first: 50) { edges { node { id quantity } } }
+        lineItems(first: 50) { edges { node { id quantity variant { id } } } }
       }
       userErrors { field message }
     }
@@ -635,37 +635,46 @@ const bail = (result, key) => {
 /**
  * Applies an edit to a real Shopify order.
  *
- * `lines` is the desired end state: [{ variantId, quantity }]. Existing lines
- * are matched by the calculated order's own line ids; anything the order does
- * not already have is added as a new variant.
+ * `lines` is [{ variantId, quantity }]: each mentioned variant ends at that
+ * quantity (0 removes it), variants the order lacks are added, and lines not
+ * mentioned are left alone.
  */
 export async function editOrder(orderId, lines) {
+  // The desired end state, by variant. Lines used to be matched to the
+  // order's lines by position, so a basket listed in a different order than
+  // Shopify's set each product's quantity on another product.
+  const want = new Map();
+  for (const l of lines) {
+    if (!l?.variantId) continue;
+    want.set(l.variantId, (want.get(l.variantId) ?? 0) + Math.max(0, Math.floor(Number(l.quantity) || 0)));
+  }
+
   const begun = bail(await adminGraphql(EDIT_BEGIN, { id: orderId }), 'orderEditBegin');
   const calcId = begun.calculatedOrder.id;
   const existing = begun.calculatedOrder.lineItems.edges.map((e) => e.node);
 
   // Quantity changes first, then additions — Shopify recalculates as it goes.
-  for (let i = 0; i < existing.length; i += 1) {
-    const want = lines[i];
-    const quantity = want ? want.quantity : 0;
-    if (quantity !== existing[i].quantity) {
+  const seen = new Set();
+  for (const line of existing) {
+    const variantId = line.variant?.id ?? null;
+    // A line with no variant (a custom item) isn't in the app's basket; leave it.
+    if (!variantId) continue;
+    // Lines the app didn't mention stay as they are — only an explicit
+    // quantity (0 to remove) changes a line.
+    if (!want.has(variantId)) continue;
+    const quantity = seen.has(variantId) ? 0 : want.get(variantId);
+    seen.add(variantId);
+    if (quantity !== line.quantity) {
       bail(
-        await adminGraphql(EDIT_QTY, { id: calcId, lineItemId: existing[i].id, quantity }),
+        await adminGraphql(EDIT_QTY, { id: calcId, lineItemId: line.id, quantity }),
         'orderEditSetQuantity',
       );
     }
   }
 
-  for (const line of lines.slice(existing.length)) {
-    if (!line.variantId || line.quantity <= 0) continue;
-    bail(
-      await adminGraphql(EDIT_ADD, {
-        id: calcId,
-        variantId: line.variantId,
-        quantity: line.quantity,
-      }),
-      'orderEditAddVariant',
-    );
+  for (const [variantId, quantity] of want) {
+    if (seen.has(variantId) || quantity <= 0) continue;
+    bail(await adminGraphql(EDIT_ADD, { id: calcId, variantId, quantity }), 'orderEditAddVariant');
   }
 
   const committed = bail(await adminGraphql(EDIT_COMMIT, { id: calcId }), 'orderEditCommit');

@@ -45,9 +45,15 @@ export default function EditOrderSheet() {
    */
   const accept = async () => {
     if (saving) return;
-    const lines = d.editCartEntries
-      .map((e) => ({ variantId: e.p.variantId, quantity: e.qty }))
-      .filter((l) => l.variantId);
+    // Items the shopper removed are sent as 0; anything the sheet never
+    // showed isn't sent at all, so the server leaves it alone.
+    const removed = Object.keys(state.editOriginal ?? {})
+      .filter((id) => !(state.editCart ?? {})[id])
+      .map((id) => ({ variantId: d.byId(id)?.variantId, quantity: 0 }));
+    const lines = [
+      ...d.editCartEntries.map((e) => ({ variantId: e.p.variantId, quantity: e.qty })),
+      ...removed,
+    ].filter((l) => l.variantId);
 
     if (!orderName || (!lines.length && !pickedAddress)) {
       actions.acceptEditOrder();
@@ -56,8 +62,8 @@ export default function EditOrderSheet() {
 
     setSaving(true);
     try {
-      if (pickedAddress?.raw) {
-        await updateOrderAddress(orderName, pickedAddress.raw, state.session?.token);
+      if (pickedAddress?.id) {
+        await updateOrderAddress(orderName, pickedAddress.id, state.session?.token);
       }
       if (lines.length) {
         await editShopifyOrder(orderName, lines, state.session?.token);

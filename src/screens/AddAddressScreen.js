@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { STR } from '../data';
 import { useActions, useDerived, useStore } from '../store';
 import { selectionTick } from '../haptics';
 import { C, W } from '../theme';
@@ -20,6 +19,16 @@ export default function AddAddressScreen() {
   const rowDir = { flexDirection: d.isRtl ? 'row-reverse' : 'row' };
   const [locating, setLocating] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [makeDefault, setMakeDefault] = useState(!(state.addresses ?? []).length);
+  const provinces = state.config.provinces ?? [];
+
+  /** Loose match of a geocoded region onto a governorate. */
+  const fold = (v) =>
+    String(v ?? '').toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
+  const matchProvince = (region) => {
+    const r = fold(region);
+    return provinces.find((p) => r && (r.includes(fold(p.en)) || r.includes(fold(p.ar))))?.code ?? null;
+  };
 
   /**
    * Real GPS. This used to fill in a hardcoded Dokki address regardless of
@@ -55,11 +64,14 @@ export default function AddAddressScreen() {
       );
 
       actions.findMyLocation({
+        ...(state.newAddr ?? {}),
         street: streetParts.join(' ') || place.district || '',
-        building: '',
-        city: [place.city ?? place.subregion, place.region].filter(Boolean).join(', '),
-        landmark: place.district ?? '',
-        phone: state.customer?.phone ?? state.newAddr?.phone ?? '',
+        building: state.newAddr?.building ?? '',
+        city: place.district || place.city || place.subregion || '',
+        provinceCode:
+          matchProvince(place.region) ?? matchProvince(place.city) ?? state.newAddr?.provinceCode ?? null,
+        landmark: state.newAddr?.landmark ?? '',
+        phone: state.newAddr?.phone ?? state.customer?.phone ?? '',
       });
     } catch (err) {
       Alert.alert(
@@ -71,34 +83,51 @@ export default function AddAddressScreen() {
     }
   };
 
-  /** Saves onto the customer's Shopify record; the form used to go nowhere. */
+  /**
+   * Saves onto the customer's Shopify record. The governorate is required —
+   * it sets the courier zone and the delivery estimate.
+   */
   const save = async () => {
     if (saving) return;
     const addr = state.newAddr ?? {};
-    if (!addr.street || !addr.city) {
+    const missing = [];
+    if (!addr.street) missing.push(d.isRtl ? 'الشارع' : 'street');
+    if (!addr.city) missing.push(d.isRtl ? 'المنطقة' : 'area');
+    if (!addr.provinceCode) missing.push(d.isRtl ? 'المحافظة' : 'governorate');
+    if (!/^(\+?20|0)?1[0125]\d{8}$/.test(String(addr.phone ?? '').replace(/[\s-]/g, ''))) {
+      missing.push(d.isRtl ? 'رقم موبايل صحيح' : 'a valid mobile number');
+    }
+    if (missing.length) {
       Alert.alert(
         d.isRtl ? 'ناقص بيانات' : 'Missing details',
-        d.isRtl ? 'اكتب الشارع والمدينة على الأقل.' : 'Street and city are required.',
+        (d.isRtl ? 'محتاجين: ' : 'Please add: ') + missing.join(d.isRtl ? '، ' : ', '),
       );
       return;
     }
     if (!state.session?.token) {
-      Alert.alert(
-        d.isRtl ? 'سجّل دخولك الأول' : 'Sign in first',
-        d.isRtl
-          ? 'لازم تسجل دخولك عشان يتحفظ العنوان على حسابك.'
-          : 'Sign in so the address can be saved to your account.',
-      );
+      actions.requireSignIn('addAddress');
       return;
     }
 
     setSaving(true);
     try {
-      await saveCustomerAddress(
-        { ...addr, name: addr.name || state.customer?.name },
+      const building = [addr.building, addr.landmark].filter(Boolean).join(d.isRtl ? ' — ' : ' — ');
+      const r = await saveCustomerAddress(
+        {
+          name: addr.name || state.customer?.name,
+          phone: addr.phone,
+          street: addr.street,
+          building,
+          city: addr.city,
+          provinceCode: addr.provinceCode,
+        },
         state.session.token,
+        { setAsDefault: makeDefault },
       );
-      actions.goTo('addresses');
+      // Refetch the list, select the new address, and go back to wherever
+      // the shopper came from — checkout, usually.
+      actions.patch({ addresses: null, selectedAddress: r.id ?? state.selectedAddress, newAddr: null, locationFound: false });
+      actions.goBack();
     } catch (err) {
       Alert.alert(
         d.isRtl ? 'تعذّر حفظ العنوان' : 'Could not save the address',
@@ -110,19 +139,20 @@ export default function AddAddressScreen() {
   };
 
   const fields = [
+    { key: 'name', label: d.isRtl ? 'الاسم' : 'Full name', ph: d.isRtl ? 'اسم المستلم' : 'Who receives the order' },
+    { key: 'phone', label: d.isRtl ? 'رقم الموبايل' : 'Mobile number', ph: '01X XXXX XXXX' },
+    { key: 'city', label: d.isRtl ? 'المنطقة / المدينة' : 'Area / city', ph: d.isRtl ? 'مدينة نصر' : 'Nasr City' },
     { key: 'street', label: d.isRtl ? 'الشارع' : 'Street address', ph: d.isRtl ? '١٤ شارع النصر' : '14 Al Nasr St' },
     {
       key: 'building',
       label: d.isRtl ? 'العمارة والدور والشقة' : 'Building, floor, apartment',
       ph: d.isRtl ? 'عمارة ٢، الدور ٥، شقة ١٢' : 'Building 2, Floor 5, Apt 12',
     },
-    { key: 'city', label: d.isRtl ? 'المدينة' : 'City', ph: d.isRtl ? 'القاهرة' : 'Cairo' },
     {
       key: 'landmark',
       label: d.isRtl ? 'علامة مميزة (اختياري)' : 'Nearby landmark (optional)',
       ph: d.isRtl ? 'جوار صيدلية العزبي' : 'Next to El Ezaby Pharmacy',
     },
-    { key: 'phone', label: d.isRtl ? 'رقم الموبايل' : 'Mobile number', ph: '+20 100 123 4567' },
   ];
 
   const types = [
@@ -201,6 +231,36 @@ export default function AddAddressScreen() {
 
           <View>
             <Txt isRtl={d.isRtl} style={styles.fieldLabel}>
+              {d.isRtl ? 'المحافظة' : 'Governorate'}
+            </Txt>
+            <View style={[styles.provinces, rowDir]}>
+              {provinces.map((p) => {
+                const active = state.newAddr?.provinceCode === p.code;
+                return (
+                  <Press
+                    key={p.code}
+                    onPress={() => {
+                      selectionTick();
+                      actions.setNewAddrField('provinceCode', p.code);
+                    }}
+                    style={[styles.provChip, active && styles.provChipOn]}
+                  >
+                    <Txt style={[styles.provTxt, active && { color: '#ffffff' }]}>{d.isRtl ? p.ar : p.en}</Txt>
+                  </Press>
+                );
+              })}
+            </View>
+          </View>
+
+          <Press onPress={() => setMakeDefault(!makeDefault)} style={[styles.defaultRow, rowDir]}>
+            <View style={[styles.check, makeDefault && styles.checkOn]} />
+            <Txt isRtl={d.isRtl} style={styles.defaultTxt}>
+              {d.isRtl ? 'اجعله العنوان الافتراضي' : 'Make this my default address'}
+            </Txt>
+          </Press>
+
+          <View>
+            <Txt isRtl={d.isRtl} style={styles.fieldLabel}>
               {d.isRtl ? 'نوع العنوان' : 'Address type'}
             </Txt>
             <View style={[styles.types, rowDir]}>
@@ -240,6 +300,20 @@ export default function AddAddressScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
+  provinces: { flexWrap: 'wrap', gap: 7 },
+  provChip: {
+    paddingHorizontal: 11,
+    paddingVertical: 7,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.14)',
+  },
+  provChipOn: { backgroundColor: C.ink, borderColor: C.ink },
+  provTxt: { fontSize: 12.5, fontWeight: W.semibold, color: C.ink },
+  defaultRow: { alignItems: 'center', gap: 10 },
+  check: { width: 20, height: 20, borderRadius: 6, borderWidth: 1.6, borderColor: 'rgba(0,0,0,0.3)' },
+  checkOn: { backgroundColor: C.accent, borderColor: C.accent },
+  defaultTxt: { fontSize: 14, color: C.ink },
   map: {
     marginHorizontal: 22,
     marginBottom: 16,

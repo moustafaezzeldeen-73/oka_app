@@ -14,7 +14,7 @@ import { snapCollection, snapNotch, success } from '../haptics';
 import { C, D, EASE, GLASS_LENS_SHADOW, GLASS_PILL_SHADOW, W } from '../theme';
 import { DarkFill, DoublePress, Glass, Img, Press, Txt } from '../components/ui';
 import { FadeIn } from '../components/anim';
-import { Cube, Tag } from '../components/Icons';
+import { Cube, Tag, Search } from '../components/Icons';
 
 /**
  * Selector geometry.
@@ -173,7 +173,9 @@ export default function HomeScreen() {
       {/* ── sticky header ─────────────────────────────────────────── */}
       <Glass blur={24} style={styles.header}>
         <View style={[styles.headerRow, { flexDirection: isRtl ? 'row-reverse' : 'row' }]}>
-          <View style={styles.headerSlot} />
+          <Press onPress={() => actions.goTo('search')} activeScale={0.94} style={styles.langBtn} hitSlop={6}>
+            <Search size={16} />
+          </Press>
           <Img source={SHOP_LOGO} contentFit="contain" style={styles.logo} />
           <Press
             onPress={actions.toggleLang}
