@@ -15,5 +15,5 @@ web-build/
 *.tsbuildinfo
 
 # Subscription records — real customer data generated at runtime, not
-# something to ship in the repo. See server/subscriptions.js.
+# something to ship in the repo. See server/services/subscriptions.js.
 server/data/

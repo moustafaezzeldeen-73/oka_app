@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 process.env.SESSION_SECRET = 'x'.repeat(40);
-const { issueToken, verifyToken, requireSession, SESSION_TTL_MS } = await import('../auth.js');
+const { issueToken, verifyToken, requireSession, SESSION_TTL_MS } = await import('../auth/session.js');
 
 test('a token round-trips with the customer id', () => {
   const t = issueToken({ identifier: '+201001234567', customerId: 'gid://shopify/Customer/1', via: 'otp' });

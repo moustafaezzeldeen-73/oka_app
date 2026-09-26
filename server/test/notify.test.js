@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { dueNotices, messageFor } from '../notify.js';
+import { dueNotices, messageFor } from '../services/notify.js';
 
 const NOW = Date.parse('2026-09-26T12:00:00Z');
 const at = (hoursAgo) => new Date(NOW - hoursAgo * 3600 * 1000).toISOString();

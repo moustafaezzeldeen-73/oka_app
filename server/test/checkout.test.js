@@ -4,7 +4,7 @@ import { beforeEach, test } from 'node:test';
 process.env.SHOPIFY_STORE_DOMAIN = 'test.myshopify.com';
 process.env.SHOPIFY_ADMIN_ACCESS_TOKEN = 'shpat_test';
 
-const { quote, placeOrder, CheckoutError } = await import('../checkout.js');
+const { quote, placeOrder, CheckoutError } = await import('../services/checkout.js');
 
 /**
  * A fake Shopify Admin API: answers the variant lookup, the discount check

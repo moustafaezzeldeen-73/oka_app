@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-const { testLoginEnabled } = await import('../testLogin.js');
+const { testLoginEnabled } = await import('../auth/testLogin.js');
 
 test('test login needs a long key and is never on in production', () => {
   const saved = { key: process.env.TEST_LOGIN_KEY, env: process.env.NODE_ENV };

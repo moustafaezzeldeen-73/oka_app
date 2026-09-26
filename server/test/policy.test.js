@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { POLICY, REWARDS, applyPaymentPerk, pointsEarned, pointsToEgp } from '../policy.js';
-import { FEE_TIER_THRESHOLD, etaFor, provinceFor, tableFee } from '../zones.js';
+import { POLICY, REWARDS, applyPaymentPerk, pointsEarned, pointsToEgp } from '../config/policy.js';
+import { FEE_TIER_THRESHOLD, etaFor, provinceFor, tableFee } from '../config/zones.js';
 
 test('the fee table mirrors the store: zone fee, lower from the 300 EGP tier', () => {
   assert.equal(FEE_TIER_THRESHOLD, 300);
