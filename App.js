@@ -5,7 +5,7 @@ import {
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-import { runOnJS } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
@@ -169,7 +169,7 @@ function Shell() {
           const startX = e.absoluteX - e.translationX;
           if (startX > BACK_SWIPE.EDGE) return;
           if (e.translationX > BACK_SWIPE.DISTANCE || e.velocityX > BACK_SWIPE.VELOCITY) {
-            runOnJS(actions.goBack)();
+            scheduleOnRN(actions.goBack);
           }
         }),
     [canSwipeBack, actions.goBack],

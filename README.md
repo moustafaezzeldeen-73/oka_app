@@ -1,12 +1,12 @@
 # OKA — Expo app
 
-A native port of the OKA App prototype for **Expo SDK 54 / Expo Go on iOS**,
+A native port of the OKA App prototype for **Expo SDK 57 / Expo Go on iOS**,
 reproducing the prototype's layout, animations and transitions, and wired to the
 live OKA Egypt Shopify store.
 
 ```bash
 npm install
-npx expo start        # scan the QR code with Expo Go (iOS, SDK 54)
+npx expo start        # scan the QR code with Expo Go (iOS, SDK 57)
 ```
 
 ---
@@ -49,7 +49,7 @@ re-invented, so timings match one for one.
 | `style-hover: background` | `<Press activeBg>` (press state on touch) |
 
 CSS blur radii are halved when they become React Native `shadowRadius`; inset
-shadows use RN 0.81's `boxShadow` string syntax.
+shadows use React Native's `boxShadow` string syntax.
 
 ### The collection feed
 
@@ -153,7 +153,7 @@ balance rather than blocking the rest of the app.
 ## Notes
 
 - No custom native modules: everything used (Reanimated, Gesture Handler, SVG,
-  Blur, Linear Gradient, Haptics, Image) ships inside Expo Go for SDK 54.
+  Blur, Linear Gradient, Haptics, Image) ships inside Expo Go for SDK 57.
 - The bundled catalogue is the prototype's 22 products; the live store has 38
   active products across 15 collections, so the live catalogue shows more.
 - The Categories screen has no tab of its own, matching the prototype.

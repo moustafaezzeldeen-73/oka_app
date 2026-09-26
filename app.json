@@ -7,7 +7,6 @@
     "icon": "./assets/brand/icon.png",
     "scheme": "okaapp",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
       "image": "./assets/brand/splash-icon.png",
       "resizeMode": "contain",
@@ -30,7 +29,6 @@
         "backgroundColor": "#f5f5f7"
       },
       "package": "com.oka.app",
-      "edgeToEdgeEnabled": true,
       "permissions": [
         "android.permission.CAMERA"
       ]
@@ -45,7 +43,10 @@
         {
           "cameraPermission": "OKA uses the camera to show products in your space in AR."
         }
-      ]
+      ],
+      "expo-image",
+      "expo-splash-screen",
+      "expo-status-bar"
     ]
   }
 }
