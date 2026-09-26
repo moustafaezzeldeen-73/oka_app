@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "OKA",
+    "slug": "oka-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/brand/icon.png",
+    "scheme": "okaapp",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/brand/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f5f5f7"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.oka.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "OKA uses the camera to show products in your space in AR.",
+        "NSPhotoLibraryUsageDescription": "OKA needs photo access only if you save an AR snapshot."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/brand/adaptive-icon.png",
+        "backgroundColor": "#f5f5f7"
+      },
+      "package": "com.oka.app",
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/brand/icon.png"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "OKA uses the camera to show products in your space in AR."
+        }
+      ],
+      "expo-image",
+      "expo-splash-screen",
+      "expo-status-bar",
+      "expo-secure-store",
+      "expo-notifications"
+    ]
+  }
+}
