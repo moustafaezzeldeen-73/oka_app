@@ -11,6 +11,7 @@ import {
   STR,
 } from './data';
 import { arDigits } from './rtl';
+import { resolveProvince, shippingFor } from './api/shipping';
 
 /**
  * A direct port of the prototype's `Component` class: same state shape, same
@@ -53,6 +54,14 @@ const INITIAL = {
   selectedOrderName: null,
   /** Bumped after an edit or cancel so the order screen refetches. */
   ordersVersion: 0,
+  /**
+   * Orders cancelled from this device, name → ISO time. Shopify cancels in a
+   * background job, so a refresh straight afterwards can still read the order
+   * as open; this keeps it showing as cancelled until Shopify catches up.
+   */
+  cancelledOrders: {},
+  /** Shopify's shipping zones and rates (GET /shipping/scheme); null until loaded. */
+  shippingScheme: null,
 
   /** The signed-in customer's subscriptions; null until fetched. */
   subscriptions: null,
@@ -163,8 +172,15 @@ export function useActions() {
           stack: [],
         })),
 
-      cancelOrder: () =>
-        patch((s) => ({ order: s.order ? { ...s.order, status: 'cancelled' } : s.order })),
+      /** `name` is the cancelled order; the session's own order follows if it matches. */
+      cancelOrder: (name, at = new Date().toISOString()) =>
+        patch((s) => ({
+          cancelledOrders: { ...s.cancelledOrders, [name]: at },
+          order:
+            s.order && (!name || s.order.number === name)
+              ? { ...s.order, status: 'cancelled' }
+              : s.order,
+        })),
 
       /**
        * `seed` is {productId: qty}. A real Shopify order carries line items
@@ -196,12 +212,14 @@ export function useActions() {
           session: null,
           customer: null,
           remoteOrders: null,
+          cancelledOrders: {},
           addresses: null,
           subscriptions: null,
           screen: 'account',
           stack: [],
         }),
       setRemoteOrders: (remoteOrders) => patch({ remoteOrders }),
+      setShippingScheme: (shippingScheme) => patch({ shippingScheme }),
       setAddresses: (addresses) => patch({ addresses }),
       setSubscriptions: (subscriptions) => patch({ subscriptions }),
       openOrder: (selectedOrderName) => patch({ selectedOrderName }),
@@ -260,11 +278,51 @@ export function useDerived() {
       cityAlex: t('days23'),
       cityOther: t('days35'),
     };
-    const shippingRaw =
-      subtotalRaw - discountRaw >= FREE_SHIPPING_THRESHOLD ? 0 : CITY_FEES[state.city] || 50;
+    /**
+     * Shipping comes from Shopify's own zones and rates (state.shippingScheme),
+     * priced for the governorate of the address the order will go to. The old
+     * built-in table is only a last resort for when the scheme can't be
+     * loaded at all (no service configured, or offline).
+     */
+    const scheme = state.shippingScheme;
+    const addr =
+      (state.addresses ?? []).find((a) => a.id === state.selectedAddress) ??
+      (state.addresses ?? []).find((a) => a.isDefault) ??
+      null;
+    const provinceCode = resolveProvince(
+      scheme,
+      addr?.raw?.province,
+      addr?.raw?.city,
+      state.customer?.address?.province,
+      state.customer?.address?.city,
+      state.newAddr?.city,
+      state.city,
+    );
+    const legacyShipping = (value) =>
+      value >= FREE_SHIPPING_THRESHOLD ? 0 : CITY_FEES[state.city] || 50;
+    const shipQuote = (value) => shippingFor(scheme, provinceCode, value);
+    const shipPrice = (value) => shipQuote(value)?.price ?? legacyShipping(value);
+
+    const cartShip = shipQuote(subtotalRaw - discountRaw);
+    const shippingRaw = shipPrice(subtotalRaw - discountRaw);
     const totalRaw = subtotalRaw - discountRaw + shippingRaw;
     const pointsEarn = Math.round(totalRaw);
     const remainingForFree = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotalRaw);
+
+    /**
+     * The "spend a little more" bar, from Shopify's tiers: how far the basket
+     * is from the next cheaper rate, and what that rate is. `null` when
+     * Shopify's scheme isn't loaded, in which case the old free-shipping bar
+     * is used.
+     */
+    const shipTier = (value, quote) =>
+      quote
+        ? {
+            price: quote.price,
+            next: quote.next,
+            pct: quote.next ? Math.min(100, Math.round((value / quote.next.at) * 100)) : 100,
+          }
+        : null;
 
     const editCart = state.editCart || {};
     const editCartEntries = Object.keys(editCart)
@@ -272,10 +330,7 @@ export function useDerived() {
       .filter((e) => e.p);
     const editSubtotalRaw = editCartEntries.reduce((a, e) => a + e.p.price * e.qty, 0);
     const editDiscountRaw = state.discountApplied ? Math.round(editSubtotalRaw * 0.1) : 0;
-    const editShippingRaw =
-      editSubtotalRaw - editDiscountRaw >= FREE_SHIPPING_THRESHOLD
-        ? 0
-        : CITY_FEES[state.city] || 50;
+    const editShippingRaw = shipPrice(editSubtotalRaw - editDiscountRaw);
     const editTotalRaw = editSubtotalRaw - editDiscountRaw + editShippingRaw;
 
     const redeemed = Object.keys(state.redeemedRewards || {}).reduce(
@@ -289,6 +344,31 @@ export function useDerived() {
       ? subtotalRaw + selectedProduct.price * (state.pdpQty || 1)
       : subtotalRaw;
     const pdpRemaining = Math.max(0, FREE_SHIPPING_THRESHOLD - pdpSubtotal);
+    const pdpShip = shipQuote(pdpSubtotal);
+
+    /** The shipping bar under the cart and on the product page: fill and wording. */
+    const shipBar = (tier, legacyRemaining, legacyPct) => {
+      if (!tier) {
+        return {
+          pct: legacyPct,
+          text: legacyRemaining > 0
+            ? t('freeShipProgress', { n: legacyRemaining })
+            : t('freeShipReached'),
+        };
+      }
+      if (tier.next) {
+        return {
+          pct: tier.pct,
+          text: tier.next.price === 0
+            ? t('freeShipProgress', { n: tier.next.remaining })
+            : t('shipCheaper', { n: tier.next.remaining, p: fmtPrice(tier.next.price) }),
+        };
+      }
+      return {
+        pct: 100,
+        text: tier.price === 0 ? t('freeShipReached') : t('shipBest', { p: fmtPrice(tier.price) }),
+      };
+    };
 
     return {
       lang,
@@ -308,7 +388,23 @@ export function useDerived() {
       pointsEarn,
       remainingForFree,
       cityDays,
-      cityFee: CITY_FEES[state.city] || 50,
+      cityFee: shipPrice(subtotalRaw - discountRaw),
+      provinceCode,
+      shippingKnown: Boolean(cartShip),
+      shippingTitle: cartShip?.title ?? null,
+      cartShipTier: shipTier(subtotalRaw - discountRaw, cartShip),
+      pdpShipTier: shipTier(pdpSubtotal, pdpShip),
+      pdpShipping: shipPrice(pdpSubtotal),
+      cartShipBar: shipBar(
+        shipTier(subtotalRaw - discountRaw, cartShip),
+        remainingForFree,
+        Math.min(100, Math.round((subtotalRaw / FREE_SHIPPING_THRESHOLD) * 100)),
+      ),
+      pdpShipBar: shipBar(
+        shipTier(pdpSubtotal, pdpShip),
+        pdpRemaining,
+        Math.min(100, Math.round((pdpSubtotal / FREE_SHIPPING_THRESHOLD) * 100)),
+      ),
       editCartEntries,
       editSubtotalRaw,
       editTotalRaw,

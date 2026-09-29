@@ -74,11 +74,9 @@ export default function CartScreen() {
             ))}
 
             <View style={styles.shipBox}>
-              <Progress pct={d.cartProgressPct} isRtl={d.isRtl} style={{ marginBottom: 8 }} />
+              <Progress pct={d.cartShipBar.pct} isRtl={d.isRtl} style={{ marginBottom: 8 }} />
               <Txt isRtl={d.isRtl} style={styles.shipTxt}>
-                {d.remainingForFree > 0
-                  ? d.t('freeShipProgress', { n: d.remainingForFree })
-                  : d.t('freeShipReached')}
+                {d.cartShipBar.text}
               </Txt>
             </View>
 

@@ -5,6 +5,8 @@
  * a server the app talks to over HTTPS. The token is never sent to a device.
  */
 
+import { resolveProvince } from './provinces.js';
+
 const API_VERSION = process.env.SHOPIFY_API_VERSION || '2026-07';
 
 /**
@@ -114,6 +116,7 @@ export async function createOrder(payload) {
     customer = {},
     customerId = null,
     shipping = 0,
+    shippingTitle,
     discountCode,
     paymentMethod = 'cod',
     lang = 'ar',
@@ -151,12 +154,16 @@ export async function createOrder(payload) {
 
   const [firstName, ...rest] = String(customer.name || '').trim().split(/\s+/);
   const phone = normalizePhone(customer.phone);
+  const provinceCode = resolveProvince(customer.province, customer.city);
   const address = {
     firstName: firstName || 'OKA',
     lastName: rest.join(' ') || 'Customer',
     address1: customer.street || '',
     city: customer.city || '',
     countryCode: 'EG',
+    // The governorate is what the courier routes on and what Shopify's own
+    // shipping zones key on; it used to be left off every app order.
+    ...(provinceCode ? { provinceCode } : {}),
     // Omitted entirely when it cannot be normalised — an invalid phone fails
     // the whole order, an absent one does not.
     ...(phone ? { phone } : {}),
@@ -187,7 +194,7 @@ export async function createOrder(payload) {
     financialStatus: 'PENDING',
     shippingLines: shipping > 0
       ? [{
-          title: 'Delivery',
+          title: shippingTitle || 'Delivery',
           priceSet: { shopMoney: { amount: String(shipping), currencyCode: 'EGP' } },
         }]
       : undefined,
@@ -215,6 +222,7 @@ const ORDER_STATUS = `
           displayFinancialStatus
           createdAt
           cancelledAt
+          customer { id }
           fulfillments(first: 5) {
             createdAt
             trackingInfo { number url company }
@@ -325,6 +333,11 @@ const CUSTOMER_ORDERS = `
                 cancelledAt
                 displayFulfillmentStatus
                 displayFinancialStatus
+                tags
+                currentSubtotalPriceSet { shopMoney { amount } }
+                currentShippingPriceSet { shopMoney { amount } }
+                currentTotalDiscountsSet { shopMoney { amount } }
+                currentTotalPriceSet { shopMoney { amount currencyCode } }
                 totalPriceSet { shopMoney { amount currencyCode } }
                 shippingAddress {
                   firstName lastName name
@@ -336,8 +349,10 @@ const CUSTOMER_ORDERS = `
                       id
                       title
                       quantity
+                      currentQuantity
                       variant { id }
                       originalUnitPriceSet { shopMoney { amount } }
+                      discountedUnitPriceAfterAllDiscountsSet { shopMoney { amount } }
                       image { url }
                     }
                   }
@@ -389,6 +404,18 @@ export async function findCustomerProfile(identifier) {
   return node ? profileOf(node) : null;
 }
 
+const money = (set) => Number(set?.shopMoney?.amount ?? 0);
+
+/**
+ * 'cod' | 'card' | 'wallet' | 'paid'. App orders carry a payment: tag; web
+ * orders don't, and on this store an unpaid one is cash on delivery.
+ */
+function paymentMethodOf(o) {
+  const tag = (o.tags ?? []).find((t) => t.startsWith('payment:'));
+  if (tag) return tag.slice('payment:'.length);
+  return o.displayFinancialStatus === 'PAID' ? 'paid' : 'cod';
+}
+
 /** Finds a customer by email or phone and returns their recent orders. */
 export async function findCustomerOrders(identifier) {
   const data = await adminGraphql(CUSTOMER_ORDERS, { q: customerQuery(identifier) });
@@ -404,8 +431,17 @@ export async function findCustomerOrders(identifier) {
       cancelled: Boolean(o.cancelledAt),
       fulfillmentStatus: o.displayFulfillmentStatus,
       financialStatus: o.displayFinancialStatus,
-      total: Number(o.totalPriceSet?.shopMoney?.amount ?? 0),
+      // `current*` rather than the as-placed figures: they follow edits and
+      // removed lines, so the invoice matches what the courier will collect.
+      total: money(o.currentTotalPriceSet ?? o.totalPriceSet),
       currency: o.totalPriceSet?.shopMoney?.currencyCode ?? 'EGP',
+      breakdown: {
+        subtotal: money(o.currentSubtotalPriceSet),
+        shipping: money(o.currentShippingPriceSet),
+        discount: money(o.currentTotalDiscountsSet),
+        total: money(o.currentTotalPriceSet ?? o.totalPriceSet),
+      },
+      paymentMethod: paymentMethodOf(o),
       city: o.shippingAddress?.city ?? null,
       // The order's own delivery address, not the account's current default —
       // an order shipped to a previous address must keep showing that one.
@@ -428,14 +464,20 @@ export async function findCustomerOrders(identifier) {
       trackingCompany: o.fulfillments?.flatMap((f) => f.trackingInfo ?? [])?.[0]?.company ?? null,
       fulfilledAt: o.fulfillments?.[0]?.createdAt ?? null,
       cancelledAt: o.cancelledAt ?? null,
-      items: o.lineItems.edges.map(({ node: li }) => ({
-        id: li.id,
-        title: li.title,
-        quantity: li.quantity,
-        variantId: li.variant?.id ?? null,
-        price: Number(li.originalUnitPriceSet?.shopMoney?.amount ?? 0),
-        image: li.image?.url ?? null,
-      })),
+      items: o.lineItems.edges
+        .map(({ node: li }) => ({
+          id: li.id,
+          title: li.title,
+          quantity: li.currentQuantity ?? li.quantity,
+          variantId: li.variant?.id ?? null,
+          // What the customer actually pays per unit. The per-line discounted
+          // price misses order-level codes; this one nets out every discount.
+          price: money(li.discountedUnitPriceAfterAllDiscountsSet ?? li.originalUnitPriceSet),
+          originalPrice: money(li.originalUnitPriceSet),
+          image: li.image?.url ?? null,
+        }))
+        // A line edited down to zero is no longer part of the order.
+        .filter((li) => li.quantity > 0),
     })),
   };
 }
@@ -655,6 +697,9 @@ export async function updateOrderAddress(orderName, addr) {
         city: addr.city || '',
         ...(addr.zip ? { zip: addr.zip } : {}),
         countryCode: 'EG',
+        ...(resolveProvince(addr.province, addr.city)
+          ? { provinceCode: resolveProvince(addr.province, addr.city) }
+          : {}),
         ...(phone ? { phone } : {}),
       },
     },
@@ -791,11 +836,11 @@ const DRAFT_CALCULATE = `
     draftOrderCalculate(input: $input) {
       calculatedDraftOrder {
         subtotalPriceSet { shopMoney { amount } }
-        totalShippingPriceSet { shopMoney { amount } }
         totalDiscountsSet { shopMoney { amount } }
         totalTaxSet { shopMoney { amount } }
         totalPriceSet { shopMoney { amount } }
         appliedDiscount { title value valueType }
+        availableShippingRates { handle title price { amount } }
       }
       userErrors { field message }
     }
@@ -803,15 +848,20 @@ const DRAFT_CALCULATE = `
 `;
 
 /**
- * Asks Shopify what this basket actually costs.
+ * Asks Shopify what this basket actually costs, shipping included.
  *
- * Shipping tiers and discount codes were being computed in the app from
- * hardcoded tables, so the total a shopper agreed to could differ from what
- * the store charged. Shopify is the authority on both; this returns its
- * numbers, and the caller falls back to the local estimate only if the call
- * fails outright.
+ * Shipping is Shopify's own answer, not the app's: the draft is priced with
+ * the delivery address and no shipping line, and Shopify replies with the
+ * rates its checkout would offer there — the same zones, prices and order-
+ * value tiers set under Settings → Shipping. Change a rate in Shopify and the
+ * app follows on the next quote; there is no table here to keep in step.
+ *
+ * `customer.province` / `customer.city` can be any spelling of a governorate
+ * or district; see provinces.js. If none resolves, Shopify can't place the
+ * address in a zone and `shipping` comes back null — the caller decides what
+ * to show rather than this guessing a price.
  */
-export async function calculateTotals({ items = [], customer = {}, shipping, discountCode }) {
+export async function calculateTotals({ items = [], customer = {}, discountCode }) {
   const lineItems = items
     .map((it) =>
       it.variantId
@@ -826,6 +876,7 @@ export async function calculateTotals({ items = [], customer = {}, shipping, dis
 
   if (!lineItems.length) throw new Error('no line items to calculate');
 
+  const provinceCode = resolveProvince(customer.province, customer.city);
   const phone = normalizePhone(customer.phone);
   const input = {
     lineItems,
@@ -834,11 +885,9 @@ export async function calculateTotals({ items = [], customer = {}, shipping, dis
       address1: customer.street || '',
       city: customer.city || '',
       countryCode: 'EG',
+      ...(provinceCode ? { provinceCode } : {}),
       ...(phone ? { phone } : {}),
     },
-    ...(shipping != null
-      ? { shippingLine: { title: 'Delivery', priceWithCurrency: { amount: String(shipping), currencyCode: 'EGP' } } }
-      : {}),
     ...(discountCode ? { appliedDiscount: { code: discountCode } } : {}),
   };
 
@@ -846,16 +895,123 @@ export async function calculateTotals({ items = [], customer = {}, shipping, dis
   const { calculatedDraftOrder: c, userErrors } = data.draftOrderCalculate;
   if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join('; '));
 
-  const money = (node) => Math.round(Number(node?.shopMoney?.amount ?? 0));
+  // Several rates can apply at once; a shopper would pick the cheapest, and
+  // on this store only one ever matches a given zone and order value anyway.
+  const rate = [...(c.availableShippingRates ?? [])].sort(
+    (a, b) => Number(a.price.amount) - Number(b.price.amount),
+  )[0] ?? null;
+
+  const amount = (node) => Number(node?.shopMoney?.amount ?? 0);
+  const shipping = rate ? Number(rate.price.amount) : null;
   return {
-    subtotal: money(c.subtotalPriceSet),
-    shipping: money(c.totalShippingPriceSet),
-    discount: money(c.totalDiscountsSet),
-    tax: money(c.totalTaxSet),
-    total: money(c.totalPriceSet),
+    subtotal: Math.round(amount(c.subtotalPriceSet)),
+    discount: Math.round(amount(c.totalDiscountsSet)),
+    tax: Math.round(amount(c.totalTaxSet)),
+    shipping,
+    shippingTitle: rate?.title ?? null,
+    provinceCode,
+    // No shipping line was on the draft, so its total is goods only.
+    total: Math.round(amount(c.totalPriceSet) + (shipping ?? 0)),
     discountTitle: c.appliedDiscount?.title ?? null,
     discountApplied: Boolean(c.appliedDiscount),
   };
+}
+
+/* ── Shipping scheme ──────────────────────────────────────────────────────
+ * The zones and rates themselves, for the places the app shows shipping
+ * before there is a basket to quote — the cart's "add X for cheaper
+ * shipping" bar, the product page. Read from the default delivery profile,
+ * cached briefly: a change in Shopify shows up within a few minutes.
+ */
+
+const DELIVERY_PROFILES = `
+  query OkaShippingScheme {
+    deliveryProfiles(first: 5) {
+      edges {
+        node {
+          default
+          profileLocationGroups {
+            locationGroupZones(first: 30) {
+              edges {
+                node {
+                  zone { name countries { code { countryCode } provinces { code } } }
+                  methodDefinitions(first: 20) {
+                    edges {
+                      node {
+                        name
+                        active
+                        rateProvider { ... on DeliveryRateDefinition { price { amount } } }
+                        methodConditions {
+                          field
+                          operator
+                          conditionCriteria { __typename ... on MoneyV2 { amount } }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const SCHEME_TTL_MS = Number(process.env.SHIPPING_SCHEME_TTL_MS ?? 5 * 60 * 1000);
+let schemeCache = null; // { at, value }
+
+/** Order-value bounds from a method's TOTAL_PRICE conditions. */
+function boundsOf(conditions = []) {
+  let min = null;
+  let max = null;
+  for (const c of conditions) {
+    if (c.field !== 'TOTAL_PRICE' || c.conditionCriteria?.__typename !== 'MoneyV2') continue;
+    const v = Number(c.conditionCriteria.amount);
+    if (c.operator === 'GREATER_THAN_OR_EQUAL_TO') min = Math.max(min ?? v, v);
+    if (c.operator === 'LESS_THAN_OR_EQUAL_TO') max = Math.min(max ?? v, v);
+  }
+  return { min, max };
+}
+
+/**
+ * { zones: [{ name, provinces: [code], rates: [{ title, price, min, max }] }] }
+ *
+ * Only the default profile: it is the one every product ships under unless
+ * moved to another, and the store's other profiles have no zones.
+ */
+export async function getShippingScheme() {
+  if (schemeCache && Date.now() - schemeCache.at < SCHEME_TTL_MS) return schemeCache.value;
+  try {
+    const data = await adminGraphql(DELIVERY_PROFILES);
+    const profile =
+      data.deliveryProfiles.edges.map((e) => e.node).find((p) => p.default) ?? null;
+    const zones = (profile?.profileLocationGroups ?? []).flatMap((g) =>
+      g.locationGroupZones.edges.map(({ node }) => ({
+        name: node.zone.name,
+        provinces: node.zone.countries
+          .filter((c) => c.code?.countryCode === 'EG')
+          .flatMap((c) => c.provinces.map((p) => p.code)),
+        rates: node.methodDefinitions.edges
+          .map((e) => e.node)
+          .filter((m) => m.active && m.rateProvider?.price)
+          .map((m) => ({
+            title: m.name,
+            price: Number(m.rateProvider.price.amount),
+            ...boundsOf(m.methodConditions),
+          })),
+      })),
+    );
+    const value = { zones, fetchedAt: new Date().toISOString() };
+    schemeCache = { at: Date.now(), value };
+    return value;
+  } catch (err) {
+    // A stale scheme beats none: shipping estimates keep working through a
+    // Shopify hiccup, and the next request tries again.
+    if (schemeCache) return schemeCache.value;
+    throw err;
+  }
 }
 
 const ADDRESS_CREATE = `
@@ -888,6 +1044,9 @@ export async function createCustomerAddress(identifier, addr) {
       address2: addr.building || '',
       city: addr.city || '',
       countryCode: 'EG',
+      ...(resolveProvince(addr.province, addr.city)
+        ? { provinceCode: resolveProvince(addr.province, addr.city) }
+        : {}),
       ...(phone ? { phone } : {}),
     },
   });

@@ -6,4 +6,4 @@
  * the app. Bump this string with every bundle shipped so it can be checked in
  * one glance on the Account screen instead of guessed at.
  */
-export const BUILD_VERSION = 'oka-v22 — Expo SDK 57';
+export const BUILD_VERSION = 'oka-v23 — Shopify shipping';

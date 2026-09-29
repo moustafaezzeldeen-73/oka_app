@@ -1,4 +1,4 @@
-import { createOrder } from './shopify.js';
+import { calculateTotals, createOrder } from './shopify.js';
 import { dueSubscriptions, markCycleResult } from './subscriptions.js';
 
 /**
@@ -29,20 +29,38 @@ async function runDueSubscriptions() {
 
   for (const sub of due) {
     try {
-      const order = await createOrder({
-        items: sub.items.map((it) => ({
-          ...it,
-          priceOverride: discountedPrice(it, sub.discountPct),
+      const items = sub.items.map((it) => ({
+        ...it,
+        priceOverride: discountedPrice(it, sub.discountPct),
+      }));
+      const customer = {
+        name: sub.customerName,
+        email: sub.email,
+        phone: sub.address?.phone,
+        street: [sub.address?.address1, sub.address?.address2].filter(Boolean).join(', '),
+        city: sub.address?.city,
+        province: sub.address?.province,
+      };
+
+      // Shipping is re-read from Shopify every cycle, so a rate changed in
+      // Shopify reaches standing subscriptions too. The quote is priced on
+      // the discounted lines (title + price, no variant) because that is the
+      // order value Shopify's rate tiers are meant to see.
+      const quote = await calculateTotals({
+        items: items.map((it) => ({
+          title: it.title || it.id,
+          quantity: it.quantity,
+          price: it.priceOverride,
         })),
-        customer: {
-          name: sub.customerName,
-          email: sub.email,
-          phone: sub.address?.phone,
-          street: [sub.address?.address1, sub.address?.address2].filter(Boolean).join(', '),
-          city: sub.address?.city,
-        },
+        customer,
+      }).catch(() => null);
+
+      const order = await createOrder({
+        items,
+        customer,
         customerId: sub.customerId,
-        shipping: sub.shippingFee,
+        shipping: quote?.shipping ?? sub.shippingFee,
+        shippingTitle: quote?.shippingTitle ?? undefined,
         paymentMethod: 'cod',
         lang: 'ar',
         extraTags: ['oka-subscription', `sub-frequency:${sub.frequencyId}`],

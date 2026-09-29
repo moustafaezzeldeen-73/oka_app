@@ -56,6 +56,13 @@ export default function CheckoutScreen() {
       state.customer?.address?.address1 ||
       STR[d.lang].street,
     city: selectedAddr?.city || state.newAddr?.city || state.customer?.address?.city || d.t(state.city),
+    // The governorate is what Shopify prices shipping by. Sent as-is; the
+    // server resolves any spelling (or a district name in `city`) to a code.
+    province:
+      selectedAddr?.raw?.province ||
+      state.customer?.address?.province ||
+      d.provinceCode ||
+      null,
   };
 
   /**
@@ -75,15 +82,26 @@ export default function CheckoutScreen() {
     title: ce.product.titleEn,
   }));
 
-  const quoteKey = JSON.stringify([lineItems, state.city, state.discountApplied, state.discountCode]);
+  const quoteKey = JSON.stringify([
+    lineItems,
+    buyer.city,
+    buyer.province,
+    state.discountApplied,
+    state.discountCode,
+  ]);
 
   const loadQuote = useCallback(async () => {
     if (!lineItems.length) return;
     try {
       const q = await calculateCheckout({
         items: lineItems,
-        customer: { street: buyer.street, city: buyer.city, phone: buyer.phone, email: buyer.email },
-        shipping: d.shippingRaw,
+        customer: {
+          street: buyer.street,
+          city: buyer.city,
+          province: buyer.province,
+          phone: buyer.phone,
+          email: buyer.email,
+        },
         discountCode: state.discountApplied ? state.discountCode : null,
       });
       setQuote(q);
@@ -99,10 +117,22 @@ export default function CheckoutScreen() {
     loadQuote();
   }, [loadQuote]);
 
-  /** Shopify's number when we have it, the local estimate until then. */
-  const totalRaw = quote?.total ?? d.totalRaw;
-  const shippingRaw = quote?.shipping ?? d.shippingRaw;
+  /**
+   * Shopify's numbers when we have them, the local estimate until then.
+   * Shopify's quote leaves shipping null when it can't place the address in
+   * a shipping zone; the scheme-based estimate stands in and is flagged.
+   */
+  const shippingFromShopify = quote?.shipping != null;
+  const shippingRaw = shippingFromShopify ? quote.shipping : d.shippingRaw;
+  const subtotalShown = quote?.subtotal ?? d.subtotalRaw;
+  const discountShown = quote?.discount ?? d.discountRaw;
+  const totalRaw = quote
+    ? shippingFromShopify
+      ? quote.total
+      : quote.total + d.shippingRaw
+    : d.totalRaw;
   const totalLabel = d.fmtPrice(totalRaw);
+  const shippingTitle = quote?.shippingTitle ?? d.shippingTitle;
 
   const hero = d.cartEntries[0];
   const payOptions = [
@@ -146,6 +176,7 @@ export default function CheckoutScreen() {
           phone: buyer.phone,
           street: buyer.street,
           city: buyer.city,
+          province: buyer.province,
         },
       });
 
@@ -160,6 +191,16 @@ export default function CheckoutScreen() {
         heroImg: hero ? hero.product.img : null,
         heroTitle: hero ? d.title(hero.product) : '',
         heroProductId: hero ? hero.id : null,
+        // Kept so the order screen can show the invoice even for an order
+        // that never reached Shopify, where there is nothing to re-read.
+        paymentMethod: state.paymentMethod,
+        breakdown: {
+          subtotal: quote?.subtotal ?? d.subtotalRaw,
+          shipping: shippingRaw,
+          discount: quote?.discount ?? d.discountRaw,
+          total: totalRaw,
+        },
+        prices: Object.fromEntries(d.cartEntries.map((ce) => [ce.id, ce.product.price])),
       });
     } finally {
       setPlacing(false);
@@ -269,9 +310,41 @@ export default function CheckoutScreen() {
         <Divider style={styles.ruleTop} />
 
         <Field label={d.t('total')} isRtl={d.isRtl} style={{ paddingBottom: 110 }}>
+          {/* The same lines the order screen's invoice shows afterwards. */}
+          <View style={styles.sumRows}>
+            <SumRow
+              label={d.isRtl ? 'المجموع الفرعي' : 'Subtotal'}
+              value={d.fmtPrice(Math.round(subtotalShown))}
+              rowDir={rowDir}
+            />
+            {discountShown > 0 ? (
+              <SumRow
+                label={d.isRtl ? 'الخصم' : 'Discount'}
+                value={`−${d.fmtPrice(Math.round(discountShown))}`}
+                rowDir={rowDir}
+              />
+            ) : null}
+            <SumRow
+              label={d.isRtl ? 'الشحن' : 'Shipping'}
+              value={shippingRaw > 0 ? d.fmtPrice(Math.round(shippingRaw)) : d.isRtl ? 'مجاني' : 'Free'}
+              rowDir={rowDir}
+            />
+            {shippingTitle ? (
+              <Txt isRtl={d.isRtl} style={styles.shipMethod}>
+                {shippingTitle}
+              </Txt>
+            ) : null}
+          </View>
           <Txt isRtl={d.isRtl} style={styles.arrivesTitle}>
             {totalLabel}
           </Txt>
+          {quote && !shippingFromShopify ? (
+            <Txt isRtl={d.isRtl} style={styles.quoteWarn}>
+              {d.isRtl
+                ? 'مصاريف الشحن تقديرية — اكتب المحافظة في العنوان عشان نحسبها بالظبط.'
+                : 'Shipping is estimated — add the governorate to the address for the exact rate.'}
+            </Txt>
+          ) : null}
           {quoteError ? (
             <Txt isRtl={d.isRtl} style={styles.quoteWarn}>
               {d.isRtl
@@ -296,6 +369,15 @@ export default function CheckoutScreen() {
         </Cta>
       </LinearGradient>
     </FadeIn>
+  );
+}
+
+function SumRow({ label, value, rowDir }) {
+  return (
+    <View style={[styles.sumRow, rowDir]}>
+      <Txt style={styles.sumLabel}>{label}</Txt>
+      <Txt style={styles.sumValue}>{value}</Txt>
+    </View>
   );
 }
 
@@ -366,6 +448,11 @@ const styles = StyleSheet.create({
   fawry: { fontSize: 8.5, fontWeight: W.heavy, color: '#e8b100' },
   meeza: { fontSize: 8.5, fontWeight: W.heavy, color: '#0a7a3c' },
   codNote: { fontSize: 12.5, color: C.ink, lineHeight: 19 },
+  sumRows: { gap: 5, marginBottom: 8 },
+  sumRow: { justifyContent: 'space-between', alignItems: 'center' },
+  sumLabel: { fontSize: 13.5, color: 'rgba(110,110,115,0.9)' },
+  sumValue: { fontSize: 13.5, fontWeight: W.semibold },
+  shipMethod: { fontSize: 11, color: 'rgba(110,110,115,0.8)', lineHeight: 16 },
   quoteWarn: { fontSize: 11.5, color: '#8c1d18', lineHeight: 17, marginTop: 6 },
 
   placeBar: {

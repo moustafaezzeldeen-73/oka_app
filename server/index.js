@@ -13,10 +13,10 @@ import {
   findCustomerOrders,
   findCustomerProfile,
   findOrder,
+  getShippingScheme,
   getWishlist,
   hasShopify,
   isShipped,
-  orderIdByName,
   setDefaultAddress,
   setWishlist,
   updateOrderAddress,
@@ -32,6 +32,7 @@ import {
 import { findShipmentsByOrderNames, getOrders, hasJT, pingJT, toTracking, trace } from './jt.js';
 import { trackOrders } from './shipping.js';
 import { fmtCairo } from './timefmt.js';
+import { PROVINCES } from './provinces.js';
 import { authenticate, issueToken, verifyToken } from './auth.js';
 import { startSubscriptionScheduler } from './scheduler.js';
 import {
@@ -298,6 +299,20 @@ app.post('/checkout/calculate', async (req, res) => {
   }
 });
 
+/**
+ * Shopify's shipping zones and rates, plus the governorate list the app
+ * matches addresses against — for estimates shown before checkout (cart,
+ * product page). Checkout itself is priced by /checkout/calculate.
+ */
+app.get('/shipping/scheme', async (_req, res) => {
+  try {
+    const scheme = await getShippingScheme();
+    return res.json({ ...scheme, provinces: PROVINCES });
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
 /** Saves a new address onto the signed-in customer's Shopify record. */
 app.post('/customer/addresses', async (req, res) => {
   const s = session(req);
@@ -349,13 +364,57 @@ app.post('/customer/wishlist', async (req, res) => {
   }
 });
 
-/** Cancels a real Shopify order. */
+/**
+ * The order named in the URL, if it belongs to the signed-in customer.
+ *
+ * Cancel and edit used to act on any order name they were given, with no
+ * session at all — anyone who could reach the service could cancel a
+ * stranger's order by guessing its number. Replies with the refusal itself
+ * and returns null when the caller may not touch this order.
+ */
+async function ownOrder(req, res) {
+  const s = session(req);
+  if (!s?.identifier) {
+    res.status(401).json({ error: 'not signed in' });
+    return null;
+  }
+  const [order, me] = await Promise.all([
+    findOrder(req.params.name),
+    findCustomerProfile(s.identifier),
+  ]);
+  if (!order) {
+    res.status(404).json({ error: `order ${req.params.name} not found` });
+    return null;
+  }
+  if (!me?.id || order.customer?.id !== me.id) {
+    res.status(403).json({ error: 'this order belongs to a different account' });
+    return null;
+  }
+  return order;
+}
+
+/**
+ * Cancels a real Shopify order.
+ *
+ * Refused once it has shipped: the parcel is already with the courier, and
+ * cancelling on Shopify would not stop it arriving. Shopify cancels in a
+ * background job, so the reply says `cancelled: true` straight away and the
+ * app shows that, rather than re-reading an order that hasn't caught up yet.
+ */
 app.post('/orders/:name/cancel', async (req, res) => {
   try {
-    const id = await orderIdByName(req.params.name);
-    if (!id) return res.status(404).json({ error: `order ${req.params.name} not found` });
-    const result = await cancelOrder(id, req.body?.reason ?? 'CUSTOMER');
-    return res.json(result);
+    const order = await ownOrder(req, res);
+    if (!order) return undefined;
+    if (order.cancelledAt) {
+      return res.json({ ok: true, cancelled: true, cancelledAt: order.cancelledAt, already: true });
+    }
+    if (isShipped(order)) {
+      return res.status(409).json({
+        error: 'this order has already shipped and can no longer be cancelled',
+      });
+    }
+    const result = await cancelOrder(order.id, req.body?.reason ?? 'CUSTOMER');
+    return res.json({ ...result, cancelled: true, cancelledAt: new Date().toISOString() });
   } catch (err) {
     return fail(res, err);
   }
@@ -374,8 +433,11 @@ app.post('/orders/:name/edit', async (req, res) => {
   const lines = req.body?.lines;
   if (!Array.isArray(lines)) return res.status(400).json({ error: 'lines[] is required' });
   try {
-    const order = await findOrder(req.params.name);
-    if (!order) return res.status(404).json({ error: `order ${req.params.name} not found` });
+    const order = await ownOrder(req, res);
+    if (!order) return undefined;
+    if (order.cancelledAt) {
+      return res.status(409).json({ error: 'this order has been cancelled and can no longer be edited' });
+    }
     if (isShipped(order)) {
       return res.status(409).json({
         error: 'this order has already been fulfilled and can no longer be edited',
@@ -398,6 +460,7 @@ app.post('/orders/:name/address', async (req, res) => {
   const address = req.body?.address;
   if (!address) return res.status(400).json({ error: 'address is required' });
   try {
+    if (!(await ownOrder(req, res))) return undefined;
     const result = await updateOrderAddress(req.params.name, address);
     return res.json(result);
   } catch (err) {
@@ -412,7 +475,20 @@ app.post('/orders/:name/address', async (req, res) => {
 /** Native checkout: turn the app's basket into a real Shopify order. */
 app.post('/orders', async (req, res) => {
   try {
-    const order = await createOrder(req.body ?? {});
+    const payload = { ...(req.body ?? {}) };
+    // The shipping charged is Shopify's rate for this address and basket,
+    // worked out here — not the number the app sent, which could be stale
+    // or come from an older app build with its own table. If Shopify can't
+    // price the address (no governorate recognised) the app's figure stands.
+    const quote = await calculateTotals(payload).catch((err) => {
+      console.warn('[orders] shipping quote failed, using the app figure:', err.message);
+      return null;
+    });
+    if (quote?.shipping != null) {
+      payload.shipping = quote.shipping;
+      payload.shippingTitle = quote.shippingTitle;
+    }
+    const order = await createOrder(payload);
     // No courier lookup here: the AWB is issued later, when the order is
     // packed, so asking now only made every checkout wait on a courier API
     // for an answer that was always "not yet". The order screen picks the

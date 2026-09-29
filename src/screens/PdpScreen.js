@@ -68,11 +68,9 @@ export default function PdpScreen() {
           </Txt>
 
           <View style={styles.shipBox}>
-            <Progress pct={d.pdpProgressPct} isRtl={d.isRtl} style={{ marginBottom: 8 }} />
+            <Progress pct={d.pdpShipBar.pct} isRtl={d.isRtl} style={{ marginBottom: 8 }} />
             <Txt isRtl={d.isRtl} style={styles.shipTxt}>
-              {d.pdpRemaining > 0
-                ? d.t('freeShipProgress', { n: d.pdpRemaining })
-                : d.t('freeShipReached')}
+              {d.pdpShipBar.text}
             </Txt>
           </View>
 
@@ -97,7 +95,7 @@ export default function PdpScreen() {
             <View style={[styles.spread, rowDir, { marginTop: 6 }]}>
               <Txt style={styles.feeTxt}>{d.t('shippingFee')}</Txt>
               <Txt style={styles.feeTxt}>
-                {d.subtotalRaw >= 300 ? d.t('freeShipReached') : d.fmtPrice(d.cityFee)}
+                {d.pdpShipping === 0 ? d.t('freeShipReached') : d.fmtPrice(d.pdpShipping)}
               </Txt>
             </View>
             <Txt isRtl={d.isRtl} style={styles.payTxt}>
