@@ -7,15 +7,6 @@
     "icon": "./assets/brand/icon.png",
     "scheme": "okaapp",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/brand/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#f5f5f7"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.oka.app",
@@ -30,7 +21,6 @@
         "backgroundColor": "#f5f5f7"
       },
       "package": "com.oka.app",
-      "edgeToEdgeEnabled": true,
       "permissions": [
         "android.permission.CAMERA"
       ]
@@ -44,6 +34,15 @@
         "expo-camera",
         {
           "cameraPermission": "OKA uses the camera to show products in your space in AR."
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/brand/splash-icon.png",
+          "backgroundColor": "#f5f5f7",
+          "resizeMode": "contain",
+          "imageWidth": 200
         }
       ]
     ]
