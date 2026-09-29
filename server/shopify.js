@@ -46,7 +46,12 @@ export function normalizePhone(raw, countryCode = '20') {
 const customerQuery = (identifier) =>
   String(identifier).includes('@') ? `email:${identifier}` : `phone:${identifier}`;
 
-export async function adminGraphql(query, variables = {}) {
+/** Shopify's per-request complexity cap — a query over it is refused outright. */
+export const isTooCostly = (err) => /exceeds the single query max cost/i.test(String(err?.message));
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+export async function adminGraphql(query, variables = {}, attempt = 0) {
   const shop = shopDomain();
   const token = adminToken();
   if (!shop || !token) {
@@ -70,6 +75,12 @@ export async function adminGraphql(query, variables = {}) {
   }
   const json = await res.json();
   if (json.errors?.length) {
+    // THROTTLED means the shop's cost bucket is momentarily empty — it refills
+    // within a second or two, so waiting beats failing the request.
+    if (json.errors.some((e) => e.extensions?.code === 'THROTTLED') && attempt < 2) {
+      await sleep(1000 * (attempt + 1));
+      return adminGraphql(query, variables, attempt + 1);
+    }
     throw new Error(`Shopify Admin API: ${json.errors.map((e) => e.message).join('; ')}`);
   }
   return json.data;
@@ -677,14 +688,14 @@ const CATALOGUE_PRODUCT_FIELDS = `
   variants(first: 1) {
     edges { node { id availableForSale inventoryQuantity price } }
   }
-  media(first: 8) {
+  model3d: media(first: 1, query: "media_type:MODEL_3D") {
     edges { node { __typename ... on Model3d { sources { url format } } } }
   }
 `;
 
 function toCatalogueProduct(node, catId) {
   const variant = node.variants?.edges?.[0]?.node;
-  const model = node.media?.edges?.map((e) => e.node)?.find((m) => m.__typename === 'Model3d');
+  const model = node.model3d?.edges?.map((e) => e.node)?.find((m) => m.__typename === 'Model3d');
   const sourceUrl = (fmt) => model?.sources?.find((s) => s.format === fmt)?.url ?? null;
 
   return {
@@ -705,14 +716,9 @@ function toCatalogueProduct(node, catId) {
   };
 }
 
-/**
- * Loads every collection the app navigates by, each with its products, in one
- * request. Collections with no Shopify counterpart are skipped rather than
- * guessed at — see COLLECTION_HANDLE_OVERRIDES for the one known rename.
- */
-export async function fetchAdminCatalogue(localIds) {
+/** One aliased request for a set of collections → { localId: collection|null }. */
+async function fetchCollections(localIds) {
   const handleFor = (id) => COLLECTION_HANDLE_OVERRIDES[id] ?? id;
-
   const query = `
     query OkaCatalogue {
       ${localIds
@@ -731,13 +737,36 @@ export async function fetchAdminCatalogue(localIds) {
     }
   `;
 
-  const data = await adminGraphql(query);
+  try {
+    const data = await adminGraphql(query);
+    return Object.fromEntries(localIds.map((id, i) => [id, data[`c${i}`] ?? null]));
+  } catch (err) {
+    // Shopify caps each request's cost, and the cost grows with every
+    // collection asked for. Rather than hardcode a batch size that breaks the
+    // next time a collection or field is added, an over-budget request is
+    // split in half and each half tried again — one after the other, so the
+    // halves don't drain the shop's rate-limit bucket together.
+    if (!isTooCostly(err) || localIds.length < 2) throw err;
+    const mid = Math.ceil(localIds.length / 2);
+    const first = await fetchCollections(localIds.slice(0, mid));
+    const second = await fetchCollections(localIds.slice(mid));
+    return { ...first, ...second };
+  }
+}
+
+/**
+ * Loads every collection the app navigates by, each with its products.
+ * Collections with no Shopify counterpart are skipped rather than guessed at —
+ * see COLLECTION_HANDLE_OVERRIDES for the one known rename.
+ */
+export async function fetchAdminCatalogue(localIds) {
+  const byId = await fetchCollections(localIds);
   const cats = [];
   const products = [];
 
-  localIds.forEach((localId, i) => {
-    const c = data[`c${i}`];
-    if (!c) return; // no matching Shopify collection for this local id
+  for (const localId of localIds) {
+    const c = byId[localId];
+    if (!c) continue; // no matching Shopify collection for this local id
     cats.push({
       id: localId,
       en: c.title,
@@ -750,7 +779,7 @@ export async function fetchAdminCatalogue(localIds) {
         products.push(toCatalogueProduct(node, localId));
       }
     });
-  });
+  }
 
   return { cats, products };
 }
