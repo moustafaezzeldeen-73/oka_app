@@ -3,6 +3,8 @@ import { beforeEach, test } from 'node:test';
 
 process.env.SHOPIFY_STORE_DOMAIN = 'test.myshopify.com';
 process.env.SHOPIFY_ADMIN_ACCESS_TOKEN = 'shpat_test';
+// Every quote re-reads the (fake) delivery profile, so tests can change it.
+process.env.SHIPPING_SCHEME_TTL_MS = '0';
 
 const { quote, placeOrder, CheckoutError } = await import('../services/checkout.js');
 
@@ -17,10 +19,33 @@ const VARIANTS = {
 let sent;
 let discountAmount;
 let shippingRates;
+/** The fake store's delivery-profile zones; [] = no profile, so the fee table is used. */
+let schemeZones;
+
+/** A delivery-profile zone as the Admin API returns it. */
+const zone = (name, provinces, rates) => ({
+  node: {
+    zone: { name, countries: [{ code: { countryCode: 'EG' }, provinces: provinces.map((code) => ({ code })) }] },
+    methodDefinitions: {
+      edges: rates.map(([title, price, min]) => ({
+        node: {
+          name: title,
+          active: true,
+          rateProvider: { price: { amount: String(price) } },
+          methodConditions:
+            min == null
+              ? []
+              : [{ field: 'TOTAL_PRICE', operator: 'GREATER_THAN_OR_EQUAL_TO', conditionCriteria: { __typename: 'MoneyV2', amount: String(min) } }],
+        },
+      })),
+    },
+  },
+});
 
 beforeEach(() => {
   sent = [];
   discountAmount = 0;
+  schemeZones = [];
   shippingRates = [
     { handle: 'express', title: 'Express', price: { amount: '90.0' } },
     { handle: 'standard', title: 'Standard', price: { amount: '36.0' } },
@@ -56,6 +81,12 @@ beforeEach(() => {
             warnings: discountAmount ? [] : [{ message: 'Discount code is not valid' }],
           },
           userErrors: [],
+        },
+      };
+    } else if (query.includes('OkaShippingScheme')) {
+      data = {
+        deliveryProfiles: {
+          edges: [{ node: { default: true, profileLocationGroups: [{ locationGroupZones: { edges: schemeZones } }] } }],
         },
       };
     } else if (query.includes('OkaOrderCreate')) {
@@ -103,6 +134,34 @@ test('if Shopify offers no rate, the fee table is used', async () => {
   });
   assert.equal(q.shipping, 80);
   assert.equal(q.shippingSource, 'table');
+});
+
+test('before an address, the estimate follows the store\'s delivery profile', async () => {
+  // Rates changed in Shopify: Cairo 65, or 40 from 400 EGP.
+  schemeZones = [zone('Greater Cairo', ['C', 'GZ'], [['Standard', 65], ['Saver', 40, 400]])];
+  const q = await quote({ lines: [{ variantId: 'gid://shopify/ProductVariant/1', quantity: 2 }] });
+  assert.equal(q.shipping, 65);
+  assert.equal(q.shippingTitle, 'Standard');
+  assert.equal(q.shippingSource, 'estimate');
+  // 240 EGP in the basket; the cheaper rate starts at 400.
+  assert.equal(q.remainingForLowerFee, 160);
+});
+
+test('if Shopify offers no rate for an address, its zone in the profile prices it', async () => {
+  shippingRates = [];
+  schemeZones = [
+    zone('Greater Cairo', ['C'], [['Standard', 65]]),
+    zone('Upper Egypt', ['ASN', 'LX'], [['Upper Egypt', 95], ['Upper Egypt saver', 70, 300]]),
+  ];
+  const q = await quote({
+    lines: [{ variantId: 'gid://shopify/ProductVariant/1', quantity: 3 }],
+    // An address saved before the governorate picker: only free text.
+    address: { ...address, provinceCode: null, city: 'أسوان' },
+  });
+  assert.equal(q.shipping, 70);
+  assert.equal(q.shippingTitle, 'Upper Egypt saver');
+  assert.equal(q.shippingSource, 'scheme');
+  assert.equal(q.remainingForLowerFee, 0);
 });
 
 test('lines without a variant are dropped; an empty basket is refused', async () => {

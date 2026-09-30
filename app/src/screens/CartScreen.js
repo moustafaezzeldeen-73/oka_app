@@ -106,11 +106,9 @@ export default function CartScreen() {
             ))}
 
             <View style={styles.shipBox}>
-              <Progress pct={d.cartProgressPct} isRtl={d.isRtl} style={{ marginBottom: 8 }} />
+              <Progress pct={d.cartShipBar.pct} isRtl={d.isRtl} style={{ marginBottom: 8 }} />
               <Txt isRtl={d.isRtl} style={styles.shipTxt}>
-                {d.remainingForTier > 0
-                  ? d.t('freeShipProgress', { n: d.remainingForTier })
-                  : d.t('freeShipReached')}
+                {d.cartShipBar.text}
               </Txt>
             </View>
 
@@ -158,7 +156,7 @@ export default function CartScreen() {
               <SumRow
                 isRtl={d.isRtl}
                 label={d.t('shipping')}
-                value={d.shippingRaw === 0 ? d.t('freeShipReached') : d.fmtPrice(d.shippingRaw)}
+                value={d.shippingRaw === 0 ? d.t('shipFree') : d.fmtPrice(d.shippingRaw)}
                 labelStyle={styles.sumTxt}
                 valueStyle={styles.sumTxt}
               />

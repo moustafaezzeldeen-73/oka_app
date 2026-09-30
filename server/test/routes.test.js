@@ -32,6 +32,9 @@ before(async () => {
         },
       };
     }
+    if (query.includes('OkaOrderCancel')) {
+      data = { orderCancel: { job: { id: 'gid://shopify/Job/1' }, orderCancelUserErrors: [] } };
+    }
     return new Response(JSON.stringify({ data }), { status: 200 });
   };
   server = createApp().listen(0);
@@ -74,6 +77,15 @@ test("another customer's order is 'not found', and nothing is cancelled", async 
   const res = await call('POST', '/orders/%231001/cancel', token, {});
   assert.equal(res.status, 404);
   assert.ok(!shopifyCalls.some((q) => q.includes('orderCancel')));
+});
+
+test('the owner can cancel, and the reply says so at once', async () => {
+  const token = issueToken({ identifier: 'a', customerId: 'gid://shopify/Customer/1', via: 'otp' });
+  const res = await call('POST', '/orders/%231001/cancel', token, {});
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.equal(body.cancelled, true);
+  assert.ok(body.cancelledAt);
 });
 
 test('debug routes are hidden without the staff key', async () => {

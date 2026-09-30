@@ -2,6 +2,44 @@
 
 Everything that has changed in the OKA shop app, newest first.
 
+## 2026-09-30 — Merged the base branch's September 29 work
+
+Four commits landed on the base branch while this work was open. They were
+written against the old flat layout and are carried into the new one here.
+
+### Shipping follows Shopify everywhere
+- Estimates before an address is chosen (cart, product page) and for an
+  address Shopify has no rate for now come from the store's delivery profile,
+  read live from Shopify (`GET /shipping/scheme`, 5-minute cache). The fee
+  table is only the fallback when Shopify can't be read.
+- The cart and product page bar names the next cheaper tier: "add 60 EGP more
+  and shipping drops to 36 EGP", or free shipping where the store offers it.
+- Checkout shows the rate's name, and says when shipping is still an estimate.
+- Addresses saved before the governorate picker are matched to a governorate
+  from their text — Arabic or English, including district names like
+  "مدينة نصر" or "Sheikh Zayed" — so they price and route like new ones.
+- Needs the `read_shipping` Admin scope.
+
+### Orders
+- Invoice on every order: each line at the price actually charged (after
+  every discount, following edits), then subtotal, discount, shipping, total,
+  payment method and the cash to have ready.
+- Cancelling confirms with a message, shows the order as cancelled at once
+  (Shopify cancels in the background), and a red banner says when. Cancel is
+  disabled on cancelled and shipped orders; cancelling twice is not an error.
+
+### Fixes
+- The home feed and the category strip no longer bounce each other up and
+  down on iOS.
+- The catalogue loads even when Shopify's per-query cost limit would refuse
+  it: an over-budget query is split in half until it fits. Throttled Admin
+  API calls are retried.
+- 3D models are looked up directly instead of scanning every product's media.
+
+### App
+- Splash screen configured through the `expo-splash-screen` plugin (SDK 57).
+- Build tag `oka-v24`.
+
 ## 2026-09-26 — Launch readiness
 
 The fixes from the full feature review, the move to Expo SDK 57, and a

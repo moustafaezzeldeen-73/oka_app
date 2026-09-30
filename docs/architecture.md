@@ -13,7 +13,7 @@ server/
 ├─ index.js              starts the service and the background jobs
 ├─ app.js                assembles the Express app — lists every route file
 ├─ routes/               one file per area (what URL does what)
-│  ├─ store.js             /health, /storefront-config, /catalogue   (public)
+│  ├─ store.js             /health, /storefront-config, /shipping/scheme, /catalogue   (public)
 │  ├─ auth.js              /auth/otp/start, /auth/otp/verify, /auth/me
 │  ├─ customer.js          /customer/orders, addresses, wishlist, push-token, delete-request
 │  ├─ checkout.js          /checkout/quote, POST /orders
@@ -91,6 +91,7 @@ inventing an order number.
 | Feature | Path |
 | --- | --- |
 | Store policy | app → `GET /storefront-config` → `server/config/policy.js` + `config/zones.js` (fee table, minimum, payment methods, governorates, rewards) |
+| Shipping estimates | app → `GET /shipping/scheme` → Admin `deliveryProfiles` (default profile's zones and rates, 5 min cache) + governorates with their spellings |
 | Collections, products | app → `GET /catalogue` → Admin `collectionByIdentifier` (60 s cache; falls back to bundled data) |
 | Sign-in | app → `/auth/otp/start` + `/auth/otp/verify` → one-time code, find-or-create the Shopify customer |
 | Cart totals, discount codes, shipping | app → `POST /checkout/quote` → live variant prices + Shopify `draftOrderCalculate` (discounts and the store's shipping rates) |
@@ -165,6 +166,7 @@ Admin API version defaults to `2026-07`. Admin scopes required:
 | `read_orders`, `write_orders` | order history, creating orders, edits, cancels, tags |
 | `read_customers`, `write_customers` | sign-in (find or create), addresses, wishlist, push tokens |
 | `read_products` | catalogue and live prices |
+| `read_shipping` | the delivery profile's zones and rates, for shipping estimates |
 | `read_fulfillments` | tracking numbers |
 | `write_draft_orders` | `draftOrderCalculate`: discount codes and the store's shipping rates |
 | `read_discounts`, `write_discounts` | loyalty voucher codes |

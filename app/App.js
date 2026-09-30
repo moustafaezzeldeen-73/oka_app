@@ -18,6 +18,7 @@ import { useWishlistSync } from './src/hooks/useWishlistSync';
 import { usePersistence } from './src/state/persist';
 import { usePushRegistration } from './src/hooks/usePushRegistration';
 import { fetchServerCatalogue } from './src/api/catalogue';
+import { fetchShippingScheme } from './src/api/shipping';
 import { hasService } from './src/api/config';
 import { hasModel } from './src/lib/ar';
 import { CATS } from './src/data';
@@ -147,6 +148,16 @@ function Shell() {
   useShopifyCart();
   // Persists the wishlist against the customer rather than the app process.
   useWishlistSync();
+
+  // Shopify's shipping zones and rates — every shipping figure in the app is
+  // priced from these. Loaded once per launch; the server caches Shopify's
+  // answer for a few minutes, so a rate changed in Shopify arrives quickly.
+  useEffect(() => {
+    fetchShippingScheme()
+      .then((scheme) => scheme && actions.setShippingScheme(scheme))
+      .catch((err) => console.warn('[oka] shipping scheme unavailable:', err?.message ?? err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * The prototype's 402×874 frame put content 54px below the top of the screen

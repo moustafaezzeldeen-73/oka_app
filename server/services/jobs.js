@@ -1,6 +1,7 @@
 import { creditDeliveredOrders } from './loyalty.js';
 import { notifyShipmentUpdates } from './notify.js';
 import { pickShipping } from './checkout.js';
+import { schemeOrNull } from './shipping.js';
 import { POLICY } from '../config/policy.js';
 import { calculateWithShopify, createOrder, fetchVariants, hasShopify } from '../integrations/shopify.js';
 import { dueSubscriptions, markCycleResult } from './subscriptions.js';
@@ -46,7 +47,8 @@ async function runDueSubscriptions() {
         customerId: sub.customerId,
         address: sub.address,
       });
-      const ship = pickShipping({ shippingRates, merchandise, address: sub.address });
+      const scheme = shippingRates.length ? null : await schemeOrNull();
+      const ship = pickShipping({ shippingRates, merchandise, address: sub.address, scheme });
 
       const order = await createOrder({
         lines: lines.map((it) => ({

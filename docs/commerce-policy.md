@@ -3,8 +3,17 @@
 **Shipping matches the website.** For every quote and order with an address,
 the fee is the store's own Shopify rate for that address and basket
 (`draftOrderCalculate` → available shipping rates, cheapest one), and the
-order's shipping line carries that rate's name. Before an address is chosen,
-the app estimates from a copy of the store's fee table in `server/config/zones.js`:
+order's shipping line carries that rate's name.
+
+Before an address is chosen (the cart, the product page), and for an address
+Shopify offers no rate for, the estimate comes from the store's delivery
+profile itself: its zones and rates, read from Shopify and cached for five
+minutes (`GET /shipping/scheme`). So a rate changed under Settings → Shipping
+reaches the estimates too, and the cart's bar names the next cheaper tier
+("add 60 EGP more and shipping drops to 36 EGP").
+
+Only if Shopify can't be read at all does the app fall back to a copy of the
+store's fee table in `server/config/zones.js`:
 
 | Zone | Under 300 EGP | 300 EGP and over |
 | --- | --- | --- |
@@ -12,8 +21,12 @@ the app estimates from a copy of the store's fee table in `server/config/zones.j
 | Delta and Canal | 70 | 46 |
 | Upper Egypt, Sinai, Red Sea, Matrouh, New Valley | 80 | 56 |
 
-Update that table if the store's delivery profiles change; orders themselves
-always follow Shopify.
+Keep that table roughly in step with the store; orders and, normally, the
+estimates follow Shopify.
+
+Addresses saved before governorates were picked from a list are matched to
+one from their text — Arabic or English, with common district names
+("مدينة نصر", "Sheikh Zayed") — so they price and route like new ones.
 
 The rest lives in `server/config/policy.js` and can be overridden from the
 environment:

@@ -109,6 +109,23 @@ export default function CheckoutScreen() {
         heroImg: hero ? hero.product.img : null,
         heroTitle: hero ? d.title(hero.product) : '',
         heroProductId: hero ? hero.id : null,
+        // What was charged, from the server's own quote, so the order screen
+        // can show the invoice before Shopify's copy is re-read.
+        paymentMethod: result.quote?.paymentMethod ?? state.paymentMethod,
+        breakdown: result.quote
+          ? {
+              subtotal: result.quote.subtotal,
+              discount: result.quote.discount?.amount ?? 0,
+              shipping: result.quote.shipping,
+              total: result.total,
+            }
+          : null,
+        prices: Object.fromEntries(
+          d.cartEntries.map((ce) => [
+            ce.id,
+            result.quote?.lines?.find((l) => l.variantId === ce.product.variantId)?.unitPrice ?? ce.product.price,
+          ]),
+        ),
       });
     } catch (err) {
       // The cart stays as it is: nothing was ordered, and the shopper is told
@@ -259,9 +276,16 @@ export default function CheckoutScreen() {
               ) : null}
               <SumLine
                 d={d}
-                label={d.t('shipping')}
-                value={quote.shipping === 0 ? d.t('freeShipReached') : d.fmtPrice(quote.shipping)}
+                label={quote.shippingTitle ? `${d.t('shipping')} · ${quote.shippingTitle}` : d.t('shipping')}
+                value={quote.shipping === 0 ? d.t('shipFree') : d.fmtPrice(quote.shipping)}
               />
+              {quote.shippingSource !== 'shopify' ? (
+                <Txt isRtl={d.isRtl} style={styles.quoteWarn}>
+                  {d.isRtl
+                    ? 'مصاريف الشحن تقديرية — هتتأكد لما نثبّت العنوان.'
+                    : 'Shipping is an estimate until your address is confirmed.'}
+                </Txt>
+              ) : null}
               <Txt isRtl={d.isRtl} style={[styles.arrivesTitle, { marginTop: 6 }]}>
                 {totalLabel}
               </Txt>

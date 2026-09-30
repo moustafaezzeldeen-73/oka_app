@@ -9,14 +9,23 @@ import { mergeTimeline } from '../lib/timeline.js';
 
 
 export default function orderRoutes(app) {
+  /**
+   * Shopify cancels in a background job, so the reply says `cancelled: true`
+   * straight away and the app shows that, rather than re-reading an order
+   * that hasn't caught up yet. Cancelling twice (a double tap, a retry) is
+   * answered as success, not an error.
+   */
   app.post('/orders/:name/cancel', requireSession, async (req, res) => {
     try {
       const order = await ownOrder(req);
-      if (order.cancelledAt) return res.status(409).json({ error: 'this order is already cancelled' });
+      if (order.cancelledAt) {
+        return res.json({ ok: true, cancelled: true, cancelledAt: order.cancelledAt, already: true });
+      }
       if (isShipped(order)) {
         return res.status(409).json({ error: 'this order is already with the courier and can no longer be cancelled' });
       }
-      return res.json(await cancelOrder(order.id, 'CUSTOMER'));
+      const result = await cancelOrder(order.id, 'CUSTOMER');
+      return res.json({ ...result, cancelled: true, cancelledAt: new Date().toISOString() });
     } catch (err) {
       return fail(res, err);
     }

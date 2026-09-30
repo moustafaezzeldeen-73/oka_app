@@ -41,10 +41,11 @@ Even if forgotten, the route refuses to mount when `NODE_ENV=production`.
 ## Shopify
 
 - [ ] Admin API scopes listed in [architecture.md](architecture.md#shopify-scopes),
-      including `write_draft_orders`, `read_discounts`, `write_discounts` and
-      the store-credit scopes.
-- [ ] If the store's delivery rates change, update the estimate table in
-      `server/config/zones.js` (orders always use Shopify's own rates).
+      including `write_draft_orders`, `read_shipping`, `read_discounts`,
+      `write_discounts` and the store-credit scopes.
+- [ ] If the store's delivery rates change, update the fallback table in
+      `server/config/zones.js` (orders and estimates normally read Shopify's
+      own rates).
 
 ## App build
 

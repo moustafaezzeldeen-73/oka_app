@@ -61,7 +61,7 @@ oka_app/
 | To change | Edit |
 | --- | --- |
 | Minimum order, loyalty rates, rewards, subscription discount | `server/config/policy.js` (or the matching env vars) |
-| Shipping fee estimates and governorates | `server/config/zones.js` (orders always use Shopify's rates) |
+| Shipping rates | In Shopify (Settings → Shipping) — the app follows them. `server/config/zones.js` holds the governorates and a fallback fee table |
 | App text (Arabic and English) | `app/src/data.js` (`STR`) |
 | Colours, fonts, timings | `app/src/theme.js` |
 | A screen | `app/src/screens/<Name>Screen.js` |

@@ -2,7 +2,7 @@ import { FEE_TIER_THRESHOLD, PROVINCES, ZONE_FEES } from '../config/zones.js';
 import { POLICY, REWARDS, paymentMethods } from '../config/policy.js';
 import { otpProvider } from '../auth/otp.js';
 import { testLoginEnabled } from '../auth/testLogin.js';
-import { fetchAdminCatalogue, findOrder, hasShopify } from '../integrations/shopify.js';
+import { fetchAdminCatalogue, findOrder, getShippingScheme, hasShopify } from '../integrations/shopify.js';
 import { hasJT, pingJT } from '../integrations/jt.js';
 import { hasBosta, pingBosta } from '../integrations/bosta.js';
 import { fail } from '../lib/http.js';
@@ -65,6 +65,20 @@ export default function storeRoutes(app) {
         policiesBaseUrl: process.env.POLICIES_BASE_URL || 'https://www.okaegypt.com/policies',
       },
     });
+  });
+
+  /**
+   * Shopify's shipping zones and rates, plus the governorates (with their
+   * common spellings) the app matches addresses against — for estimates shown
+   * before checkout. Checkout itself is priced by Shopify per address.
+   */
+  app.get('/shipping/scheme', async (_req, res) => {
+    try {
+      const scheme = await getShippingScheme();
+      return res.json({ ...scheme, provinces: PROVINCES });
+    } catch (err) {
+      return fail(res, err);
+    }
   });
 
   /* ── Catalogue ─────────────────────────────────────────────────────────── */

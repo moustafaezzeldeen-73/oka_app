@@ -103,11 +103,22 @@ export default function HomeScreen() {
   );
 
   /**
-   * The strip and the feed drive each other. `driver` records which one the
-   * user is touching, so the programmatic scroll it triggers on the other does
-   * not bounce straight back and fight the gesture.
+   * The strip and the feed drive each other, which is a loop waiting to
+   * happen: iOS reports the end of a *programmatic* scroll through the same
+   * onMomentumScrollEnd a swipe uses, so moving the strip to follow the feed
+   * came back as "the user picked this collection" and moved the feed — which
+   * moved the strip — and the page bounced up and down on its own.
+   *
+   * `driver` is set only by a real finger (onScrollBeginDrag), and each
+   * scroller acts on its own end-of-scroll only while it is the one being
+   * driven. Programmatic scrolls never set it, so their end events are inert.
    */
   const driver = useRef(null);
+
+  // The handlers below are stable across renders; they read the current
+  // index from here rather than from a closure that may be a render behind.
+  const activeRef = useRef(state.activeCollectionIndex);
+  activeRef.current = state.activeCollectionIndex;
   const navPad = Math.max(0, winW / 2 - NAV_ITEM / 2);
 
   const centerNav = useCallback(
@@ -119,13 +130,14 @@ export default function HomeScreen() {
 
   const setActive = useCallback(
     (idx, { haptic = true, moveNav = true, moveFeed = false } = {}) => {
-      if (idx === state.activeCollectionIndex) return;
+      if (idx === activeRef.current) return;
+      activeRef.current = idx;
       if (moveNav) centerNav(idx);
       if (moveFeed && feedH) feedRef.current?.scrollTo({ y: idx * feedH, animated: true });
       actions.setActiveCollection(idx);
       if (haptic) snapCollection();
     },
-    [state.activeCollectionIndex, centerNav, actions, feedH],
+    [centerNav, actions, feedH],
   );
 
   /** Park the strip under the lens once its width is known, and on direction flip. */
@@ -137,7 +149,7 @@ export default function HomeScreen() {
   /** Scrolling the selector itself selects a collection and moves the feed. */
   const onNavScroll = useCallback(
     (e) => {
-      if (driver.current === 'feed') return;
+      if (driver.current !== 'nav') return;
       const pos = Math.round(e.nativeEvent.contentOffset.x / NAV_ITEM);
       const logical = isRtl ? navCount - 1 - pos : pos;
       const clamped = Math.max(0, Math.min(navCount - 1, logical));
@@ -149,7 +161,7 @@ export default function HomeScreen() {
   /** Scrolling the feed moves the selector under the lens. */
   const onFeedScroll = useCallback(
     (e) => {
-      if (!feedH) return;
+      if (!feedH || driver.current !== 'feed') return;
       const idx = Math.round(e.nativeEvent.contentOffset.y / feedH);
       setActive(Math.max(0, Math.min(navCount - 1, idx)), { moveNav: true });
     },
@@ -159,6 +171,9 @@ export default function HomeScreen() {
   /** Tapping a selector item drives the feed. */
   const scrollToCollection = useCallback(
     (idx) => {
+      // A tap is not a drag — any driver left over from an earlier swipe
+      // would let this scroll's end event be read as a user choice.
+      driver.current = null;
       feedRef.current?.scrollTo({ y: idx * feedH, animated: true });
       setActive(idx, { moveNav: true });
     },
@@ -197,8 +212,8 @@ export default function HomeScreen() {
             decelerationRate="fast"
             onLayout={(e) => setNavW(e.nativeEvent.layout.width)}
             onScrollBeginDrag={() => { driver.current = 'nav'; }}
+            onScrollEndDrag={settleIfStill(onNavScroll)}
             onMomentumScrollEnd={(e) => { onNavScroll(e); driver.current = null; }}
-            onScrollEndDrag={onNavScroll}
             scrollEventThrottle={16}
             contentContainerStyle={[styles.navContent, { paddingHorizontal: navPad }]}
           >
@@ -227,8 +242,8 @@ export default function HomeScreen() {
             decelerationRate="fast"
             showsVerticalScrollIndicator={false}
             onScrollBeginDrag={() => { driver.current = 'feed'; }}
+            onScrollEndDrag={settleIfStill(onFeedScroll)}
             onMomentumScrollEnd={(e) => { onFeedScroll(e); driver.current = null; }}
-            onScrollEndDrag={onFeedScroll}
             scrollEventThrottle={16}
             refreshControl={control}
           >
@@ -257,6 +272,20 @@ export default function HomeScreen() {
       </View>
     </FadeIn>
   );
+}
+
+/**
+ * A drag that ends with the finger still has no momentum phase, so nothing
+ * else would ever report where it settled. A drag that ends with a flick does
+ * get one — and until it runs, the offset here is a half-way position, which
+ * is exactly what used to select the wrong collection mid-swipe.
+ */
+function settleIfStill(handler) {
+  return (e) => {
+    const v = e.nativeEvent.velocity;
+    if (v && (Math.abs(v.x) > 0.05 || Math.abs(v.y) > 0.05)) return;
+    handler(e);
+  };
 }
 
 /** Categories without their own artwork borrow their first product's photo. */

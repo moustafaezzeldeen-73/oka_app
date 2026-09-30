@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useMemo, useState } from
 
 import { CATS as LOCAL_CATS, DEFAULT_CONFIG, PRODUCTS as LOCAL_PRODUCTS, STR } from '../data';
 import { arDigits } from '../lib/rtl';
+import { resolveProvince, shippingQuote } from '../api/shipping';
 
 /**
  * A direct port of the prototype's `Component` class: same state shape, same
@@ -56,6 +57,14 @@ const INITIAL = {
   selectedOrderName: null,
   /** Bumped after an edit or cancel so the order screen refetches. */
   ordersVersion: 0,
+  /**
+   * Orders cancelled from this device, name → ISO time. Shopify cancels in a
+   * background job, so a refresh straight afterwards can still read the order
+   * as open; this keeps it showing as cancelled until Shopify catches up.
+   */
+  cancelledOrders: {},
+  /** Shopify's shipping zones and rates (GET /shipping/scheme); null until loaded. */
+  shippingScheme: null,
   /** Where to go after signing in (e.g. back to checkout). */
   afterSignIn: null,
 
@@ -183,8 +192,14 @@ export function useActions() {
           ordersVersion: s.ordersVersion + 1,
         })),
 
-      cancelOrder: () =>
-        patch((s) => ({ order: s.order ? { ...s.order, status: 'cancelled' } : s.order })),
+      /** `name` is the cancelled order; the session's own order follows if it matches. */
+      cancelOrder: (name, at = new Date().toISOString()) =>
+        patch((s) => ({
+          cancelledOrders: { ...s.cancelledOrders, [name]: at },
+          order:
+            s.order && s.order.number === name ? { ...s.order, status: 'cancelled' } : s.order,
+          ordersVersion: s.ordersVersion + 1,
+        })),
 
       /**
        * `seed` is {productId: qty}. A real Shopify order carries line items
@@ -235,6 +250,7 @@ export function useActions() {
           session: null,
           customer: null,
           remoteOrders: null,
+          cancelledOrders: {},
           addresses: null,
           subscriptions: null,
           selectedAddress: null,
@@ -243,6 +259,7 @@ export function useActions() {
           stack: [],
         }),
       setRemoteOrders: (remoteOrders) => patch({ remoteOrders }),
+      setShippingScheme: (shippingScheme) => patch({ shippingScheme }),
       setAddresses: (addresses) => patch({ addresses }),
       setSubscriptions: (subscriptions) => patch({ subscriptions }),
       openOrder: (selectedOrderName) => patch({ selectedOrderName }),
@@ -304,25 +321,62 @@ export function useDerived() {
     const discountRaw = state.discount?.applied ? state.discount.amount : 0;
 
     /**
-     * The store's fee for a product total — an estimate from its fee table,
-     * for the chosen (or default) address's zone. Checkout shows Shopify's
-     * own rate, which is what the order is charged.
+     * The store's fee for a product total, for the chosen (or default)
+     * address's governorate. Estimated from Shopify's own zones and rates
+     * (state.shippingScheme), or the store's fee table until those load.
+     * Checkout shows Shopify's rate for the exact address, which is what the
+     * order is charged.
      */
     const chosenAddr =
       (state.addresses ?? []).find((a) => a.id === state.selectedAddress) ??
       (state.addresses ?? []).find((a) => a.isDefault) ??
       null;
-    const zone = cfg.provinces.find((x) => x.code === chosenAddr?.provinceCode)?.zone ?? 'metro';
+    const scheme = state.shippingScheme;
+    const provinceCode =
+      chosenAddr?.provinceCode ??
+      resolveProvince(scheme?.provinces ?? cfg.provinces, chosenAddr?.raw?.province, chosenAddr?.raw?.city);
+    const zone = cfg.provinces.find((x) => x.code === provinceCode)?.zone ?? 'metro';
     const zoneFees = cfg.shipping.zones[zone] ?? cfg.shipping.zones.metro;
     const tier = cfg.shipping.tierThreshold;
     const perk = state.paymentMethod === 'cod' ? 0 : cfg.prepaidShippingDiscount;
-    const shippingFor = (merch) => Math.max(0, (merch >= tier ? zoneFees.over : zoneFees.under) - perk);
+    const shipQuote = (merch) => shippingQuote(scheme, provinceCode, merch);
+    const shippingFor = (merch) =>
+      Math.max(0, (shipQuote(merch)?.price ?? (merch >= tier ? zoneFees.over : zoneFees.under)) - perk);
 
-    const shippingRaw = shippingFor(subtotalRaw - discountRaw);
-    const totalRaw = subtotalRaw - discountRaw + shippingRaw;
-    const pointsEarn = Math.floor(Math.max(0, subtotalRaw - discountRaw) * cfg.loyalty.earnPointsPerEgp);
-    const remainingForTier = Math.max(0, tier - (subtotalRaw - discountRaw));
-    const belowMinimum = subtotalRaw - discountRaw < cfg.minOrder;
+    const merchRaw = subtotalRaw - discountRaw;
+    const shippingRaw = shippingFor(merchRaw);
+    const totalRaw = merchRaw + shippingRaw;
+    const pointsEarn = Math.floor(Math.max(0, merchRaw) * cfg.loyalty.earnPointsPerEgp);
+    const belowMinimum = merchRaw < cfg.minOrder;
+
+    /**
+     * The "spend a little more" bar under the cart and on the product page:
+     * how far `merch` is from the next cheaper rate, and what that rate is —
+     * from Shopify's tiers when loaded, else the fee table's one threshold.
+     */
+    const shipBar = (merch) => {
+      const q = shipQuote(merch);
+      if (!q) {
+        const remaining = Math.max(0, tier - merch);
+        return {
+          pct: Math.min(100, Math.round((merch / tier) * 100)),
+          text: remaining > 0 ? t('freeShipProgress', { n: remaining }) : t('freeShipReached'),
+        };
+      }
+      if (q.next) {
+        return {
+          pct: Math.min(100, Math.round((merch / q.next.at) * 100)),
+          text:
+            q.next.price === 0
+              ? t('shipFreeProgress', { n: q.next.remaining })
+              : t('shipCheaper', { n: q.next.remaining, p: fmtPrice(q.next.price) }),
+        };
+      }
+      return {
+        pct: 100,
+        text: q.price === 0 ? t('shipFree') : t('shipBest', { p: fmtPrice(Math.max(0, q.price - perk)) }),
+      };
+    };
 
     /** "1–2 days" for a delivery window. */
     const days = (min, max) =>
@@ -348,7 +402,6 @@ export function useDerived() {
     const pdpSubtotal = selectedProduct
       ? subtotalRaw + selectedProduct.price * (state.pdpQty || 1)
       : subtotalRaw;
-    const pdpRemaining = Math.max(0, tier - pdpSubtotal);
 
     return {
       lang,
@@ -368,8 +421,10 @@ export function useDerived() {
       shippingRaw,
       totalRaw,
       pointsEarn,
-      remainingForTier,
       shippingFor,
+      /** Shopify's name for the estimated rate, once the scheme is loaded. */
+      shippingTitle: shipQuote(merchRaw)?.title ?? null,
+      cartShipBar: shipBar(merchRaw),
       belowMinimum,
       minOrder: cfg.minOrder,
       feeTierThreshold: tier,
@@ -381,9 +436,9 @@ export function useDerived() {
       editTotalRaw,
       selectedProduct,
       pdpSubtotal,
-      pdpRemaining,
-      pdpProgressPct: Math.min(100, Math.round((pdpSubtotal / tier) * 100)),
-      cartProgressPct: Math.min(100, Math.round(((subtotalRaw - discountRaw) / tier) * 100)),
+      pdpShipBar: shipBar(pdpSubtotal),
+      /** Orders cancelled from this device that Shopify may not show yet. */
+      cancelledOrders: state.cancelledOrders,
       langLabel: isRtl ? 'EN' : 'ع',
     };
   }, [state, lang, isRtl, products]);

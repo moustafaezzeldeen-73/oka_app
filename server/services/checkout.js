@@ -1,6 +1,7 @@
 import { POLICY, applyPaymentPerk, isPrepaid, paymentMethods } from '../config/policy.js';
 import { calculateWithShopify, createOrder, fetchVariants, retireVoucher } from '../integrations/shopify.js';
-import { FEE_TIER_THRESHOLD, etaFor, tableFee } from '../config/zones.js';
+import { FEE_TIER_THRESHOLD, etaFor } from '../config/zones.js';
+import { estimate, schemeOrNull } from './shipping.js';
 
 /**
  * Checkout, priced entirely on the server.
@@ -38,18 +39,20 @@ function cleanLines(raw) {
 
 /**
  * The store's shipping for this basket. With an address it is the cheapest
- * rate Shopify offers for it (what the website would charge); without one,
- * an estimate from the store's fee table.
+ * rate Shopify offers for it (what the website would charge). Without one, or
+ * if Shopify offers none, an estimate from the store's delivery profile
+ * (`scheme`, see services/shipping.js), and failing that its fee table.
  */
-export function pickShipping({ shippingRates, merchandise, address }) {
+export function pickShipping({ shippingRates, merchandise, address, scheme = null }) {
   if (address && shippingRates.length) {
     const best = shippingRates.reduce((a, r) => (r.price < a.price ? r : a));
     return { fee: best.price, title: best.title, source: 'shopify' };
   }
   if (address) {
-    console.warn('[oka][checkout] Shopify offered no shipping rate for this address; using the fee table');
+    console.warn('[oka][checkout] Shopify offered no shipping rate for this address; estimating');
   }
-  return { fee: tableFee(merchandise, address), title: 'Delivery', source: address ? 'table' : 'estimate' };
+  const e = estimate(scheme, merchandise, address);
+  return { fee: e.fee, title: e.title, source: address ? e.source : 'estimate' };
 }
 
 /**
@@ -86,8 +89,12 @@ export async function quote({ lines: rawLines, discountCode, customerId, address
   const subtotal = priced.reduce((a, l) => a + l.lineTotal, 0);
   const { discount, shippingRates } = await calculateWithShopify({ lines, discountCode, customerId, address });
   const merchandise = Math.max(0, subtotal - discount.amount);
-  const ship = pickShipping({ shippingRates, merchandise, address });
+  // The delivery profile (cached for a few minutes) prices the estimate when
+  // there is no Shopify rate, and says how far the basket is from a cheaper one.
+  const scheme = await schemeOrNull();
+  const ship = pickShipping({ shippingRates, merchandise, address, scheme });
   const shipping = applyPaymentPerk(ship.fee, paymentMethod);
+  const tier = estimate(scheme, merchandise, address);
 
   return {
     lines: priced,
@@ -104,7 +111,7 @@ export async function quote({ lines: rawLines, discountCode, customerId, address
     // 'shopify' = the store's own rate for this address; otherwise an estimate.
     shippingSource: ship.source,
     feeTierThreshold: FEE_TIER_THRESHOLD,
-    remainingForLowerFee: Math.max(0, FEE_TIER_THRESHOLD - merchandise),
+    remainingForLowerFee: tier.remainingForLowerFee,
     eta: etaFor(address ?? {}),
   };
 }

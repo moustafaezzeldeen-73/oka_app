@@ -24,6 +24,48 @@ function waNumber(raw) {
   return digits;
 }
 
+/**
+ * A line's price before order discounts, so the invoice's lines add up to
+ * its subtotal and the discount is shown once, on its own row.
+ */
+const lineUnit = (it) => it.originalPrice ?? it.price ?? 0;
+
+/**
+ * The order's money, whichever source it came from. Shopify orders carry
+ * their own breakdown; one the server predates is rebuilt from its lines and
+ * total, so the invoice never has to be left out.
+ */
+function invoiceOf(o) {
+  if (o.breakdown) return o.breakdown;
+  if (o.total == null) return null;
+  const itemsSum = (o.items ?? []).reduce((a, it) => a + lineUnit(it) * (it.quantity ?? 0), 0);
+  return { subtotal: itemsSum, discount: 0, shipping: Math.max(0, o.total - itemsSum), total: o.total };
+}
+
+/** The server's refusal text is already written for people; transport errors aren't. */
+function friendlyError(err, ar) {
+  const msg = String(err?.message ?? err);
+  if (/already (shipped|with the courier)/i.test(msg)) {
+    return ar
+      ? 'الطلب اتشحن بالفعل ومش ممكن يتلغي دلوقتي. كلّم خدمة العملاء لو محتاج ترجعه.'
+      : 'This order has already shipped and can no longer be cancelled. Contact support if you need to return it.';
+  }
+  if (/not signed in|session/i.test(msg)) {
+    return ar ? 'سجّل دخولك بالحساب اللي عمل الطلب ده.' : 'Sign in with the account that placed this order.';
+  }
+  if (/timed out|network|non-JSON|aborted/i.test(msg)) {
+    return ar ? 'مفيش اتصال بالسيرفر دلوقتي. جرّب تاني.' : "Couldn't reach the server. Please try again.";
+  }
+  return msg;
+}
+
+const PAYMENT_LABEL = {
+  cod: ['Cash on delivery', 'الدفع عند الاستلام'],
+  card: ['Card', 'بطاقة'],
+  wallet: ['Mobile wallet', 'محفظة إلكترونية'],
+  paid: ['Paid', 'مدفوع'],
+};
+
 export default function OrdersScreen() {
   const { state, products } = useStore();
   const actions = useActions();
@@ -51,13 +93,16 @@ export default function OrdersScreen() {
               id,
               title: p ? d.title(p) : id,
               quantity: qty,
-              price: p?.price ?? 0,
+              // The price charged at checkout, not today's catalogue price.
+              price: state.order.prices?.[id] ?? p?.price ?? 0,
               image: null,
               localImg: p?.img ?? null,
               variantId: p?.variantId ?? null,
             };
           }),
           cancelled: state.order.status === 'cancelled',
+          breakdown: state.order.breakdown ?? null,
+          paymentMethod: state.order.paymentMethod ?? 'cod',
           local: true,
           shipTo: null,
           hasAwb: Boolean(state.order.trackingNumber),
@@ -68,7 +113,13 @@ export default function OrdersScreen() {
         }
       : null;
 
-  const listRows = [...remoteOrders, ...(localRow ? [localRow] : [])];
+  // An order cancelled from here shows as cancelled at once, even while
+  // Shopify's background cancel job hasn't reached it yet.
+  const listRows = [...remoteOrders, ...(localRow ? [localRow] : [])].map((o) =>
+    state.cancelledOrders?.[o.name] && !o.cancelled
+      ? { ...o, cancelled: true, cancelledAt: o.cancelledAt ?? state.cancelledOrders[o.name] }
+      : o,
+  );
   const selected = listRows.find((o) => o.name === state.selectedOrderName) ?? null;
   const remote = selected && !selected.local ? selected : null;
 
@@ -83,7 +134,10 @@ export default function OrdersScreen() {
           ? { uri: selected.items[0].image }
           : selected.items?.[0]?.localImg ?? null,
         items: selected.items,
-        cancelled: selected.cancelled,
+        cancelled: Boolean(selected.cancelled),
+        cancelledAt: selected.cancelledAt ?? null,
+        invoice: invoiceOf(selected),
+        paymentMethod: selected.paymentMethod ?? 'cod',
         shipTo: selected.shipTo ?? null,
         hasAwb: selected.hasAwb,
         local: Boolean(selected.local),
@@ -122,7 +176,8 @@ export default function OrdersScreen() {
     key: it.id,
     title: it.title,
     qty: it.quantity,
-    price: d.fmtPrice(Math.round((it.price ?? 0) * it.quantity)),
+    unit: d.fmtPrice(Math.round(lineUnit(it))),
+    price: d.fmtPrice(Math.round(lineUnit(it) * it.quantity)),
     img: it.image ? { uri: it.image } : it.localImg ?? null,
   }));
 
@@ -217,7 +272,14 @@ export default function OrdersScreen() {
     actions.goTab('cart');
   }, [selected, products, d, actions]);
 
-  /** Cancels the real Shopify order, not just the local copy. */
+  /**
+   * Cancels the real Shopify order, then says so and shows it.
+   *
+   * Shopify runs the cancel as a background job, so re-reading the order at
+   * once would often still find it open. The store records the cancel
+   * straight away, the screen shows it, and the order is re-read twice (now
+   * and a few seconds later) so Shopify's own state takes over once it lands.
+   */
   const doCancel = useCallback(() => {
     const name = order?.number;
     Alert.alert(
@@ -230,13 +292,18 @@ export default function OrdersScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await cancelShopifyOrder(name, state.session?.token);
-              actions.cancelOrder();
-              // Pull the order back from Shopify so the screen shows what the
-              // store actually says, not an optimistic guess.
-              actions.ordersChanged();
+              const r = await cancelShopifyOrder(name, state.session?.token);
+              actions.cancelOrder(name, r?.cancelledAt);
+              success();
+              Alert.alert(
+                d.isRtl ? 'تم إلغاء الطلب' : 'Order cancelled',
+                d.isRtl
+                  ? `تم إلغاء الطلب ${name}. مش هيتشحن ومش هتدفع حاجة.`
+                  : `Order ${name} has been cancelled. It won't be shipped and you won't be charged.`,
+              );
+              setTimeout(() => actions.ordersChanged(), 4000);
             } catch (err) {
-              Alert.alert(d.isRtl ? 'تعذّر الإلغاء' : 'Could not cancel', String(err.message ?? err));
+              Alert.alert(d.isRtl ? 'تعذّر الإلغاء' : 'Could not cancel', friendlyError(err, d.isRtl));
             }
           },
         },
@@ -416,6 +483,23 @@ export default function OrdersScreen() {
           </Press>
         ) : null}
 
+        {/* Cancelled orders say so first — the timeline and buttons below
+            would otherwise read like an order still in progress. */}
+        {order.cancelled ? (
+          <View style={styles.cancelledBanner}>
+            <Txt isRtl={d.isRtl} style={styles.cancelledTitle}>
+              {d.isRtl ? 'تم إلغاء الطلب' : 'Order cancelled'}
+            </Txt>
+            <Txt isRtl={d.isRtl} style={styles.cancelledTxt}>
+              {order.cancelledAt
+                ? (d.isRtl ? 'اتلغى يوم ' : 'Cancelled on ') + fmtDate(order.cancelledAt, d.isRtl)
+                : d.isRtl
+                  ? 'الطلب ده اتلغى ومش هيتشحن.'
+                  : 'This order was cancelled and will not be shipped.'}
+            </Txt>
+          </View>
+        ) : null}
+
         <View style={[styles.heroRow, rowDir]}>
           <View style={styles.heroImg}>
             {order.heroImg && <Img source={order.heroImg} contentFit="contain" style={styles.fill} />}
@@ -433,31 +517,71 @@ export default function OrdersScreen() {
           </View>
         </View>
 
-        {/* The hero row above shows only the first item — every order can hold
-            several, so the full breakdown is listed here. */}
-        {orderItems.length > 1 && (
-          <View style={styles.itemsList}>
-            <Txt isRtl={d.isRtl} style={styles.itemsLabel}>
-              {d.isRtl ? `كل العناصر (${d.num(orderItems.length)})` : `All items (${orderItems.length})`}
-            </Txt>
-            {orderItems.map((it) => (
-              <View key={it.key} style={[styles.itemRow, rowDir]}>
-                <View style={styles.itemImg}>
-                  {it.img && <Img source={it.img} contentFit="contain" style={styles.fill} />}
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Txt isRtl={d.isRtl} style={styles.itemTitle} numberOfLines={2}>
-                    {it.title}
-                  </Txt>
-                  <Txt isRtl={d.isRtl} style={styles.itemQty}>
-                    {d.isRtl ? `الكمية: ${d.num(it.qty)}` : `Qty: ${it.qty}`}
-                  </Txt>
-                </View>
-                <Txt style={styles.itemPrice}>{it.price}</Txt>
+        {/* The invoice: every line at the price actually charged, then
+            subtotal, discount, shipping and the total the courier collects. */}
+        <View style={styles.itemsList}>
+          <Txt isRtl={d.isRtl} style={styles.itemsLabel}>
+            {d.isRtl ? 'تفاصيل الفاتورة' : 'Invoice'}
+          </Txt>
+          {orderItems.map((it) => (
+            <View key={it.key} style={[styles.itemRow, rowDir]}>
+              <View style={styles.itemImg}>
+                {it.img && <Img source={it.img} contentFit="contain" style={styles.fill} />}
               </View>
-            ))}
-          </View>
-        )}
+              <View style={{ flex: 1, minWidth: 0 }}>
+                <Txt isRtl={d.isRtl} style={styles.itemTitle} numberOfLines={2}>
+                  {it.title}
+                </Txt>
+                <Txt isRtl={d.isRtl} style={styles.itemQty}>
+                  {`${d.num(it.qty)} × ${it.unit}`}
+                </Txt>
+              </View>
+              <Txt style={styles.itemPrice}>{it.price}</Txt>
+            </View>
+          ))}
+
+          {order.invoice ? (
+            <View style={styles.totals}>
+              <TotalRow
+                label={d.t('subtotal')}
+                value={d.fmtPrice(Math.round(order.invoice.subtotal))}
+                rowDir={rowDir}
+                isRtl={d.isRtl}
+              />
+              {order.invoice.discount > 0 ? (
+                <TotalRow
+                  label={d.t('discount')}
+                  value={`−${d.fmtPrice(Math.round(order.invoice.discount))}`}
+                  rowDir={rowDir}
+                  isRtl={d.isRtl}
+                  tone={C.green}
+                />
+              ) : null}
+              <TotalRow
+                label={d.t('shipping')}
+                value={order.invoice.shipping > 0 ? d.fmtPrice(Math.round(order.invoice.shipping)) : d.t('shipFree')}
+                rowDir={rowDir}
+                isRtl={d.isRtl}
+              />
+              <View style={styles.totalsRule} />
+              <TotalRow
+                label={d.t('total')}
+                value={d.fmtPrice(Math.round(order.invoice.total))}
+                rowDir={rowDir}
+                isRtl={d.isRtl}
+                strong
+              />
+              <Txt isRtl={d.isRtl} style={styles.payNote}>
+                {(PAYMENT_LABEL[order.paymentMethod] ?? PAYMENT_LABEL.cod)[d.isRtl ? 1 : 0]}
+                {order.paymentMethod === 'cod' && !order.cancelled
+                  ? d.isRtl
+                    ? ` — هتدفع ${d.fmtPrice(Math.round(order.invoice.total))} للمندوب`
+                    : ` — pay the courier ${d.fmtPrice(Math.round(order.invoice.total))}`
+                  : ''}
+              </Txt>
+            </View>
+          ) : null}
+        </View>
 
         <Divider style={styles.rule} />
 
@@ -704,19 +828,31 @@ export default function OrdersScreen() {
           </Press>
           <Press
             onPress={() =>
-              isLocalOnly || !signedIn
+              order.cancelled
                 ? Alert.alert(
-                    d.isRtl ? 'غير متاح' : 'Not available',
-                    d.isRtl
-                      ? 'لازم تسجل دخولك وتفتح طلب حقيقي من شوبيفاي عشان تلغيه.'
-                      : 'Sign in and open a real Shopify order to cancel it.',
+                    d.isRtl ? 'الطلب ملغي' : 'Already cancelled',
+                    d.isRtl ? 'الطلب ده اتلغى بالفعل.' : 'This order has already been cancelled.',
                   )
-                : doCancel()
+                : isFulfilled && !isLocalOnly
+                  ? Alert.alert(d.isRtl ? 'غير متاح' : 'Not available', friendlyError('already shipped', d.isRtl))
+                  : isLocalOnly || !signedIn
+                    ? Alert.alert(
+                        d.isRtl ? 'غير متاح' : 'Not available',
+                        d.isRtl
+                          ? 'لازم تسجل دخولك وتفتح طلب حقيقي من شوبيفاي عشان تلغيه.'
+                          : 'Sign in and open a real Shopify order to cancel it.',
+                      )
+                    : doCancel()
             }
-            style={[styles.cancelBtn, (isLocalOnly || !signedIn) && styles.disabled]}
+            style={[
+              styles.cancelBtn,
+              (isLocalOnly || !signedIn || order.cancelled || isFulfilled) && styles.disabled,
+            ]}
           >
             <Txt center style={styles.cancelTxt}>
-              {d.isRtl ? 'إلغاء الطلب' : 'Cancel Order'}
+              {order.cancelled
+                ? d.isRtl ? 'ملغي' : 'Cancelled'
+                : d.isRtl ? 'إلغاء الطلب' : 'Cancel Order'}
             </Txt>
           </Press>
         </View>
@@ -743,6 +879,27 @@ function Field({ label, children, isRtl }) {
     </View>
   );
 }
+
+function TotalRow({ label, value, rowDir, isRtl, strong, tone }) {
+  return (
+    <View style={[styles.totalRow, rowDir]}>
+      <Txt isRtl={isRtl} style={[styles.totalLabel, strong && styles.totalStrong]}>
+        {label}
+      </Txt>
+      <Txt style={[styles.totalValue, strong && styles.totalStrong, tone && { color: tone }]}>
+        {value}
+      </Txt>
+    </View>
+  );
+}
+
+const fmtDate = (iso, ar) =>
+  new Date(iso).toLocaleString(ar ? 'ar-EG' : 'en-GB', {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
 const styles = StyleSheet.create({
   reorderBtn: {
@@ -809,6 +966,24 @@ const styles = StyleSheet.create({
   awaitingTxt: { fontSize: 12.5, lineHeight: 19, color: C.inkSoft },
 
   itemsList: { paddingHorizontal: 22, paddingBottom: 18, gap: 10 },
+  cancelledBanner: {
+    marginHorizontal: 22,
+    marginBottom: 16,
+    padding: 14,
+    borderRadius: 16,
+    backgroundColor: 'rgba(179,38,30,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(179,38,30,0.25)',
+  },
+  cancelledTitle: { fontSize: 15, fontWeight: W.heavy, color: '#b3261e' },
+  cancelledTxt: { fontSize: 12.5, color: '#b3261e', marginTop: 3 },
+  totals: { marginTop: 6, gap: 7 },
+  totalRow: { justifyContent: 'space-between', alignItems: 'center' },
+  totalLabel: { fontSize: 13.5, color: C.inkSoft },
+  totalValue: { fontSize: 13.5, fontWeight: W.semibold, color: C.ink },
+  totalStrong: { fontSize: 16, fontWeight: W.heavy, color: C.ink },
+  totalsRule: { height: 1, backgroundColor: C.hairlineSoft, marginVertical: 3 },
+  payNote: { fontSize: 12, color: C.inkSoft, marginTop: 4 },
   itemsLabel: { fontSize: 12.5, fontWeight: W.bold, color: 'rgba(110,110,115,0.9)', marginBottom: 2 },
   itemRow: {
     alignItems: 'center',
