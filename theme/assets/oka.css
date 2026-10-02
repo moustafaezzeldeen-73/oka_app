@@ -220,11 +220,11 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 .progress { height: 5px; border-radius: 3px; background: rgba(0,0,0,0.08); overflow: hidden; position: relative; }
 .progress > i {
-  position: absolute; top: 0; bottom: 0; inset-inline-start: 0;
+  /* Anchored left in both directions — what the app's Progress actually draws. */
+  position: absolute; top: 0; bottom: 0; left: 0;
   border-radius: 3px; background: linear-gradient(90deg, #1d1d1f, #3a3a3c);
   transition: width .3s var(--ease);
 }
-html[dir="rtl"] .progress > i { background: linear-gradient(270deg, #1d1d1f, #3a3a3c); }
 
 .divider { height: 1px; background: var(--hairline); margin: 0 22px; }
 .divider.top { margin-top: 20px; }
@@ -317,8 +317,6 @@ html[dir="rtl"] .progress > i { background: linear-gradient(270deg, #1d1d1f, #3a
   background: rgba(255,255,255,0.16);
   border: 1px solid rgba(255,255,255,0.75);
   box-shadow: var(--glass-lens);
-  -webkit-backdrop-filter: blur(1.5px) saturate(1.4);
-  backdrop-filter: blur(1.5px) saturate(1.4);
   z-index: 2; pointer-events: none;
 }
 .nav-strip {

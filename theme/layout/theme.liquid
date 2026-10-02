@@ -128,16 +128,16 @@
       {%- if show_tabs -%}
         <nav class="tabbar" aria-label="Main">
           <a href="{{ routes.root_url }}" class="tab{% if active_tab == 'home' %} active{% endif %}" aria-label="Home">
-            <span class="tab-icon">{% render 'icon', name: 'home', size: 25 %}</span>
+            <span class="tab-icon">{% render 'icon', name: 'home', px: 25 %}</span>
           </a>
           <a href="{{ routes.cart_url }}" class="tab{% if active_tab == 'cart' %} active{% endif %}" aria-label="Cart">
-            <span class="tab-icon">{% render 'icon', name: 'cart', size: 25 %}<span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span></span>
+            <span class="tab-icon">{% render 'icon', name: 'cart', px: 25 %}<span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span></span>
           </a>
           <a href="/pages/orders" class="tab{% if active_tab == 'orders' %} active{% endif %}" aria-label="Orders">
-            <span class="tab-icon">{% render 'icon', name: 'box', size: 25 %}</span>
+            <span class="tab-icon">{% render 'icon', name: 'box', px: 25 %}</span>
           </a>
           <a href="/pages/account" class="tab{% if active_tab == 'account' %} active{% endif %}" aria-label="Account">
-            <span class="tab-icon">{% render 'icon', name: 'person', size: 25 %}</span>
+            <span class="tab-icon">{% render 'icon', name: 'person', px: 25 %}</span>
           </a>
         </nav>
       {%- endif -%}

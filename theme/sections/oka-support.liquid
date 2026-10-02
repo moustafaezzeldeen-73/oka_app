@@ -14,7 +14,7 @@
 
   {%- if settings.whatsapp != blank -%}
     <a class="wa-btn" data-wa-chat href="https://wa.me/{{ settings.whatsapp | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener">
-      {% render 'icon', name: 'whatsapp', size: 18 %}
+      {% render 'icon', name: 'whatsapp', px: 18 %}
       {% render 'bi', en: 'Chat with us on WhatsApp', ar: 'كلّمنا على واتساب' %}
     </a>
   {%- endif -%}

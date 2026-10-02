@@ -17,7 +17,7 @@
 <div class="home fade-in" data-screen="home">
   <header class="home-hdr">
     <div class="home-row">
-      <a href="{{ routes.search_url }}" class="circle-34 press s94" aria-label="Search">{% render 'icon', name: 'search', size: 16 %}</a>
+      <a href="{{ routes.search_url }}" class="circle-34 press s94" aria-label="Search">{% render 'icon', name: 'search', px: 16 %}</a>
       <img src="{{ logo_url }}" alt="{{ shop.name }}" class="home-logo" width="32" height="32">
       <button class="circle-34 press s94" data-toggle-lang><span data-lang-label>{% if settings.default_lang == 'ar' %}EN{% else %}ع{% endif %}</span></button>
     </div>
@@ -26,7 +26,7 @@
       <div class="lens"></div>
       <div class="nav-strip hscroll" data-nav>
         <button class="nav-item active" data-i="0" aria-label="Offers">
-          <span class="nav-icon"><span class="nav-offers">{% render 'icon', name: 'tag', size: 24, color: '#ffffff' %}</span></span>
+          <span class="nav-icon"><span class="nav-offers">{% render 'icon', name: 'tag', px: 24, color: '#ffffff' %}</span></span>
         </button>
         {%- for c in settings.oka_collections -%}
           {%- liquid
@@ -93,7 +93,7 @@
                 <div class="prod-actions">
                   <button class="add-34" data-add="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %} aria-label="Add">+</button>
                   <button class="ar-pill" data-ar="{{ p.handle }}">
-                    {% render 'icon', name: 'cube', size: 15 %}
+                    {% render 'icon', name: 'cube', px: 15 %}
                     {% render 'bi', en: 'See it on your table', ar: 'شوفها على طرابيزتك' %}
                   </button>
                 </div>

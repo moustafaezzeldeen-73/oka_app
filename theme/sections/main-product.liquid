@@ -95,7 +95,7 @@
 
 <div class="buy-bar">
   <a href="{{ routes.cart_url }}" class="cart-btn" aria-label="Cart">
-    {% render 'icon', name: 'cart', size: 20 %}
+    {% render 'icon', name: 'cart', px: 20 %}
     <span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span>
   </a>
   {%- if p.available -%}

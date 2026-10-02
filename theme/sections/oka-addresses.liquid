@@ -34,7 +34,7 @@
       </div>
     {%- endfor -%}
     <div style="padding:6px 22px 30px">
-      <a href="/pages/addresses?view=oka-add-address" class="outline-btn">{% render 'icon', name: 'plus', size: 16 %}{% render 'bi', en: 'Add new address', ar: 'إضافة عنوان جديد' %}</a>
+      <a href="/pages/addresses?view=oka-add-address" class="outline-btn">{% render 'icon', name: 'plus', px: 16 %}{% render 'bi', en: 'Add new address', ar: 'إضافة عنوان جديد' %}</a>
     </div>
   {%- else -%}
     <a href="{{ routes.account_login_url }}" class="notice" data-sign-in="/pages/addresses">{% render 'bi', en: 'Sign in to see your saved addresses.', ar: 'سجّل دخولك عشان تشوف عناوينك المحفوظة.' %}</a>
