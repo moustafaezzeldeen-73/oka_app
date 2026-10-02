@@ -1,0 +1,85 @@
+{%- layout none -%}
+{%- comment -%}
+  The catalogue as JSON — the theme's version of the app's GET /catalogue.
+  Fetched by assets/oka.js at /collections/all?view=oka-data.
+
+  Walks the collections chosen in Theme settings → Catalogue, in order. A
+  product belongs to the first of them that contains it, exactly as the
+  server's fetchAdminCatalogue() assigns `cat`.
+{%- endcomment -%}
+{%- assign seen = ',' -%}
+{%- capture products_json -%}
+  {%- for c in settings.oka_collections -%}
+    {%- for p in c.products limit: 50 -%}
+      {%- assign probe = ',' | append: p.handle | append: ',' -%}
+      {%- if seen contains probe -%}{%- continue -%}{%- endif -%}
+      {%- assign seen = seen | append: p.handle | append: ',' -%}
+      {%- liquid
+        assign v = p.selected_or_first_available_variant
+        assign price = v.price | divided_by: 100.0 | round
+        assign compare = null
+        if v.compare_at_price > v.price
+          assign compare = v.compare_at_price | divided_by: 100.0 | round
+        endif
+        if v.inventory_management == 'shopify' and v.inventory_policy == 'deny'
+          assign stock = v.inventory_quantity | at_least: 0
+        elsif p.available
+          assign stock = 99
+        else
+          assign stock = 0
+        endif
+        assign glb = null
+        assign usdz = null
+        for m in p.media
+          if m.media_type == 'model'
+            for s in m.sources
+              if s.format == 'glb'
+                assign glb = s.url
+              elsif s.format == 'usdz'
+                assign usdz = s.url
+              endif
+            endfor
+            break
+          endif
+        endfor
+        assign title_ar = p.metafields.oka.title_ar.value | default: p.title
+        assign desc_en = p.description | strip_html | strip
+        assign desc_ar = p.metafields.oka.description_ar.value | default: desc_en
+      -%}
+      {
+        "id": {{ p.handle | json }},
+        "productId": {{ p.id }},
+        "variantId": {{ v.id }},
+        "url": {{ p.url | json }},
+        "cat": {{ c.handle | json }},
+        "price": {{ price }},
+        "compareAtPrice": {{ compare | json }},
+        "stock": {{ stock }},
+        "available": {{ p.available | json }},
+        "titleEn": {{ p.title | json }},
+        "titleAr": {{ title_ar | json }},
+        "descEn": {{ desc_en | json }},
+        "descAr": {{ desc_ar | strip_html | json }},
+        "img": {% if p.featured_image %}{{ p.featured_image | image_url: width: 600 | json }}{% else %}null{% endif %},
+        "images": [{% for img in p.images limit: 6 %}{{ img | image_url: width: 900 | json }}{% unless forloop.last %},{% endunless %}{% endfor %}],
+        "glbUrl": {{ glb | json }},
+        "usdzUrl": {{ usdz | json }}
+      },
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{
+  "cats": [
+    {%- for c in settings.oka_collections -%}
+      {%- assign c_ar = c.metafields.oka.title_ar.value | default: c.title -%}
+      {
+        "id": {{ c.handle | json }},
+        "en": {{ c.title | json }},
+        "ar": {{ c_ar | json }},
+        "url": {{ c.url | json }},
+        "img": {% if c.image %}{{ c.image | image_url: width: 200 | json }}{% elsif c.products.first.featured_image %}{{ c.products.first.featured_image | image_url: width: 200 | json }}{% else %}null{% endif %}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ],
+  "products": [{{ products_json | strip | remove_last: ',' }}]
+}

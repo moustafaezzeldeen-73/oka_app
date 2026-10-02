@@ -1,0 +1,130 @@
+{%- comment -%}
+  HomeScreen.js — the collection feed.
+
+  Vertical: one page per collection (CSS scroll-snap y mandatory — what the
+  prototype used, and what the app's pagingEnabled reproduces).
+  Horizontal: one notch per product. The selector strip is bound to the feed:
+  the glass lens is fixed at the centre and the strip slides beneath it.
+  Behaviour lives in assets/oka-screens.js (screen "home").
+{%- endcomment -%}
+{%- liquid
+  if settings.logo
+    assign logo_url = settings.logo | image_url: width: 128
+  else
+    assign logo_url = 'oka-logo.png' | asset_url
+  endif
+-%}
+<div class="home fade-in" data-screen="home">
+  <header class="home-hdr">
+    <div class="home-row">
+      <a href="{{ routes.search_url }}" class="circle-34 press s94" aria-label="Search">{% render 'icon', name: 'search', size: 16 %}</a>
+      <img src="{{ logo_url }}" alt="{{ shop.name }}" class="home-logo" width="32" height="32">
+      <button class="circle-34 press s94" data-toggle-lang><span data-lang-label>{% if settings.default_lang == 'ar' %}EN{% else %}ع{% endif %}</span></button>
+    </div>
+
+    <div class="nav-wrap">
+      <div class="lens"></div>
+      <div class="nav-strip hscroll" data-nav>
+        <button class="nav-item active" data-i="0" aria-label="Offers">
+          <span class="nav-icon"><span class="nav-offers">{% render 'icon', name: 'tag', size: 24, color: '#ffffff' %}</span></span>
+        </button>
+        {%- for c in settings.oka_collections -%}
+          {%- liquid
+            if c.image
+              assign img = c.image
+            else
+              assign img = c.products.first.featured_image
+            endif
+          -%}
+          <button class="nav-item" data-i="{{ forloop.index }}" aria-label="{{ c.title | escape }}">
+            <span class="nav-icon">{% if img %}{{ img | image_url: width: 160 | image_tag: alt: '', loading: 'eager' }}{% endif %}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+  </header>
+
+  <div class="feed" data-feed>
+    {%- comment -%} Page 0 — the promo carousel. {%- endcomment -%}
+    <section class="page active" data-i="0">
+      <h2 class="page-title">{% render 'bi', en: 'Offers', ar: 'العروض' %}</h2>
+      <div class="rail offers hscroll" data-rail>
+        {%- for block in section.blocks -%}
+          {%- liquid
+            if block.settings.image
+              assign src = block.settings.image | image_url: width: 600
+            elsif block.settings.bundled_image != blank
+              assign src = block.settings.bundled_image | asset_url
+            else
+              assign src = ''
+            endif
+            assign link = block.settings.collection.url | default: routes.collections_url
+            assign offer_variant = block.settings.product.selected_or_first_available_variant
+          -%}
+          <div class="offer-slot{% if forloop.first %} active{% endif %}" data-slot {{ block.shopify_attributes }}>
+            <a href="{{ link }}" class="offer-card">{% if src != '' %}<img src="{{ src }}" alt="" width="264" height="300" loading="{% if forloop.index < 3 %}eager{% else %}lazy{% endif %}">{% endif %}</a>
+            {%- if offer_variant -%}
+              <button class="offer-cta" data-add="{{ offer_variant.id }}">{% render 'bi', en: 'Add to Cart', ar: 'أضف إلى السلة' %}</button>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </section>
+
+    {%- comment -%} Pages 1..n — one rail per collection; a product shows under the first collection that has it. {%- endcomment -%}
+    {%- assign seen = ',' -%}
+    {%- for c in settings.oka_collections -%}
+      <section class="page" data-i="{{ forloop.index }}">
+        <h2 class="page-title anim">{% render 'ctitle', c: c %}</h2>
+        <div class="rail prods hscroll" data-rail>
+          {%- assign first = true -%}
+          {%- for p in c.products limit: 50 -%}
+            {%- assign probe = ',' | append: p.handle | append: ',' -%}
+            {%- if seen contains probe -%}{%- continue -%}{%- endif -%}
+            {%- assign seen = seen | append: p.handle | append: ',' -%}
+            {%- assign v = p.selected_or_first_available_variant -%}
+            <div class="prod-slot{% if first %} active{% endif %}" data-slot>
+              <a href="{{ p.url }}" class="prod-card" data-tap data-variant="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %}>
+                {%- if p.featured_image -%}{{ p.featured_image | image_url: width: 500 | image_tag: alt: p.title, loading: 'lazy', draggable: 'false' }}{%- endif -%}
+              </a>
+              <div class="prod-meta">
+                <div class="prod-title">{% render 'ptitle', p: p %}</div>
+                <div class="prod-price">{% render 'price', cents: v.price %}</div>
+                <div class="prod-actions">
+                  <button class="add-34" data-add="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %} aria-label="Add">+</button>
+                  <button class="ar-pill" data-ar="{{ p.handle }}">
+                    {% render 'icon', name: 'cube', size: 15 %}
+                    {% render 'bi', en: 'See it on your table', ar: 'شوفها على طرابيزتك' %}
+                  </button>
+                </div>
+              </div>
+            </div>
+            {%- assign first = false -%}
+          {%- endfor -%}
+        </div>
+      </section>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "OKA feed",
+  "tag": "div",
+  "class": "home-section",
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "offer",
+      "name": "Offer",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "bundled_image", "label": "Bundled image (theme asset)", "info": "Used when no image is picked, e.g. promo1.jpg" },
+        { "type": "collection", "id": "collection", "label": "Opens collection" },
+        { "type": "product", "id": "product", "label": "Add to Cart adds" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "OKA feed" }]
+}
+{% endschema %}

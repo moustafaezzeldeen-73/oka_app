@@ -1,0 +1,9 @@
+{%- comment -%}
+  ScreenHeader: `grid-template-columns: 40px 1fr 40px`, back chevron, centred title.
+  `back` is where to go when there's no history to pop.
+{%- endcomment -%}
+<div class="hdr">
+  <button class="hdr-btn flip" data-back="{{ back | default: routes.root_url }}" aria-label="Back">{% render 'icon', name: 'chevron-left', size: 20 %}</button>
+  <div class="hdr-title">{% render 'bi', en: en, ar: ar %}</div>
+  <div class="hdr-btn"></div>
+</div>

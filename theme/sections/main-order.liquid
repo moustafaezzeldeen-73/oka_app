@@ -1,0 +1,5 @@
+{%- comment -%} /account/orders/… (classic customer accounts) — the same detail view. {%- endcomment -%}
+<div class="screen fade-in" data-screen="orders" data-standalone>
+  {% render 'order-detail', order: order, standalone: true %}
+</div>
+{% schema %}{ "name": "Order", "tag": "div" }{% endschema %}

@@ -1,0 +1,6 @@
+{%- comment -%}
+  The app's fmtPrice(): "EGP 189" in English, "١٨٩ ج.م" in Arabic, whole pounds.
+  Usage: {% render 'price', cents: product.price %}  or  {% render 'price', egp: 60 %}
+{%- endcomment -%}
+{%- if cents != blank -%}{%- assign amount = cents | divided_by: 100.0 | round -%}{%- else -%}{%- assign amount = egp | round -%}{%- endif -%}
+<span class="l-en">EGP {{ amount }}</span><span class="l-ar">{% render 'ar-digits', s: amount %} ج.م</span>

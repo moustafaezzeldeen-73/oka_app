@@ -1,0 +1,36 @@
+{%- comment -%} AccountScreen.js {%- endcomment -%}
+{%- capture chev -%}<span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right', size: 15 %}</span>{%- endcapture -%}
+<div class="screen fade-in" data-screen="account">
+  <h1 class="big-title">{% render 'bi', en: 'Account', ar: 'حسابي' %}</h1>
+
+  {%- if customer -%}
+    <div class="guest">
+      {{ customer.name | default: customer.email | default: customer.phone }}
+    </div>
+  {%- else -%}
+    <a href="{{ routes.account_login_url }}" class="guest press s98" data-sign-in="/pages/account">
+      {% render 'bi', en: 'Sign in to see orders, points & saved addresses', ar: 'سجّل دخولك لرؤية الطلبات والنقاط والعناوين المحفوظة' %}
+    </a>
+  {%- endif -%}
+
+  <div class="menu">
+    <a href="/pages/addresses" class="menu-row"{% unless customer %} data-sign-in="/pages/addresses"{% endunless %}>{% render 'bi', en: 'My addresses', ar: 'عناويني' %}{{ chev }}</a>
+    <a href="/pages/wishlist" class="menu-row">{% render 'bi', en: 'Wishlist', ar: 'المفضلة' %}{{ chev }}</a>
+    <a href="/pages/loyalty" class="menu-row"{% unless customer %} data-sign-in="/pages/loyalty"{% endunless %}>{% render 'bi', en: 'Loyalty points', ar: 'نقاط الولاء' %}{{ chev }}</a>
+    <a href="/pages/subscriptions" class="menu-row"{% unless customer %} data-sign-in="/pages/subscriptions"{% endunless %}>{% render 'bi', en: 'My Subscriptions', ar: 'اشتراكاتي' %}{{ chev }}</a>
+    <button class="menu-row" data-toggle-lang>{% render 'bi', en: 'Language', ar: 'اللغة' %}<span data-lang-label style="font-size:14px;font-weight:600">EN</span></button>
+    <a href="/pages/support" class="menu-row">{% render 'bi', en: 'Help & support', ar: 'المساعدة والدعم' %}{{ chev }}</a>
+    <a href="/pages/support#legal" class="menu-row">{% render 'bi', en: 'Policies', ar: 'السياسات' %}{{ chev }}</a>
+    {%- if customer and settings.proxy_path != blank -%}
+      <button class="menu-row" data-delete-account>{% render 'bi', en: 'Delete account', ar: 'حذف الحساب' %}</button>
+    {%- endif -%}
+    {%- if customer -%}
+      <a href="{{ routes.account_logout_url }}" class="menu-row sign-out" data-sign-out>{% render 'bi', en: 'Sign out', ar: 'تسجيل الخروج' %}</a>
+    {%- else -%}
+      <a href="{{ routes.account_login_url }}" class="menu-row sign-out" data-sign-in="/pages/account">{% render 'bi', en: 'Sign in', ar: 'تسجيل الدخول' %}</a>
+    {%- endif -%}
+  </div>
+  <div class="build-tag">OKA web {{ theme.name | default: '1.0.0' }}</div>
+  <div style="height:26px"></div>
+</div>
+{% schema %}{ "name": "Account", "tag": "div" }{% endschema %}

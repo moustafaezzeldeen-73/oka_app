@@ -1,0 +1,108 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "OKA",
+    "theme_version": "1.0.0",
+    "theme_author": "OKA Egypt",
+    "theme_documentation_url": "https://www.okaegypt.com",
+    "theme_support_url": "https://www.okaegypt.com"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo",
+        "info": "Shown in the home header at 32×32. Leave empty to use the bundled OKA mark."
+      },
+      {
+        "type": "select",
+        "id": "default_lang",
+        "label": "Default language",
+        "info": "The app opens in Arabic. Shoppers can switch at any time; their choice is remembered.",
+        "options": [
+          { "value": "ar", "label": "العربية" },
+          { "value": "en", "label": "English" }
+        ],
+        "default": "ar"
+      },
+      {
+        "type": "checkbox",
+        "id": "age_gate",
+        "label": "Ask shoppers to confirm they are 18+",
+        "info": "Parts of the catalogue are tobacco products.",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Catalogue",
+    "settings": [
+      {
+        "type": "collection_list",
+        "id": "oka_collections",
+        "label": "Collections",
+        "info": "In order. These drive the home feed, the categories list, search, the edit-order sheet and the subscription builder — the app's CATS list.",
+        "limit": 20
+      }
+    ]
+  },
+  {
+    "name": "Shipping & minimum order",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Estimates shown before checkout (cart bar, product page). Shopify's checkout always charges the store's own rate. Mirrors server/config/zones.js."
+      },
+      { "type": "number", "id": "tier_threshold", "label": "Lower fee from (EGP)", "default": 300 },
+      { "type": "number", "id": "fee_metro_under", "label": "Cairo, Giza, Alexandria — under threshold", "default": 60 },
+      { "type": "number", "id": "fee_metro_over", "label": "Cairo, Giza, Alexandria — at or over threshold", "default": 36 },
+      { "type": "number", "id": "fee_delta_under", "label": "Delta & Canal — under threshold", "default": 70 },
+      { "type": "number", "id": "fee_delta_over", "label": "Delta & Canal — at or over threshold", "default": 46 },
+      { "type": "number", "id": "fee_far_under", "label": "Upper Egypt, Sinai, Red Sea… — under threshold", "default": 80 },
+      { "type": "number", "id": "fee_far_over", "label": "Upper Egypt, Sinai, Red Sea… — at or over threshold", "default": 56 },
+      {
+        "type": "number",
+        "id": "min_order",
+        "label": "Minimum order (EGP)",
+        "info": "0 turns it off. The checkout button stays disabled below it.",
+        "default": 150
+      }
+    ]
+  },
+  {
+    "name": "Loyalty & subscriptions",
+    "settings": [
+      { "type": "number", "id": "points_per_egp", "label": "Points worth 1 EGP", "default": 10 },
+      { "type": "number", "id": "earn_points_per_egp", "label": "Points earned per EGP delivered", "default": 1 },
+      { "type": "number", "id": "subscription_discount", "label": "Subscribe & Save discount (%)", "default": 5 }
+    ]
+  },
+  {
+    "name": "Support",
+    "settings": [
+      {
+        "type": "text",
+        "id": "whatsapp",
+        "label": "WhatsApp number",
+        "info": "International format, e.g. 201001234567. Powers the support button and order-change requests."
+      }
+    ]
+  },
+  {
+    "name": "OKA order service",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Order edit and cancel, live courier tracking, loyalty redemption and Subscribe & Save run on the OKA order service. Connect it through a Shopify App Proxy and enter the proxy path here (for example /apps/oka). Leave empty and those screens fall back to WhatsApp and Shopify's own account pages."
+      },
+      {
+        "type": "text",
+        "id": "proxy_path",
+        "label": "App proxy path",
+        "placeholder": "/apps/oka"
+      }
+    ]
+  }
+]

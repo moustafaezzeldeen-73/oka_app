@@ -1,0 +1,19 @@
+{%- comment -%}
+  SearchScreen.js — instant, on-device, Arabic folded the way people type it
+  ("شيشه" finds "شيشة"). Results come from the catalogue the theme serves.
+{%- endcomment -%}
+<div class="screen fade-in" data-screen="search">
+  {% render 'screen-header', en: 'Search', ar: 'البحث' %}
+  <div class="search-wrap">
+    <input type="search" class="search-input" data-search value="{{ search.terms | escape }}" autofocus enterkeyhint="search" autocomplete="off"
+      data-ph-en="Search hookahs, bowls & accessories" data-ph-ar="ابحث عن شيشة، بولّات وإكسسوارات" aria-label="Search">
+  </div>
+  <div class="cat-chips" data-cats>
+    {%- for c in settings.oka_collections -%}
+      <a href="{{ c.url }}" class="cat-chip">{% render 'ctitle', c: c %}</a>
+    {%- endfor -%}
+  </div>
+  <div data-results></div>
+  <div style="height:30px"></div>
+</div>
+{% schema %}{ "name": "Search", "tag": "div" }{% endschema %}

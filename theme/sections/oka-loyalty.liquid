@@ -1,0 +1,35 @@
+{%- comment -%}
+  LoyaltyScreen.js. Points are the customer's Shopify store credit × 10
+  (10 points = 1 EGP), read straight from Liquid. Rewards, codes and the
+  "how to earn" rules are drawn by assets/oka-screens.js.
+{%- endcomment -%}
+{%- liquid
+  assign points = null
+  if customer and customer.store_credit_account
+    assign points = customer.store_credit_account.balance | times: settings.points_per_egp | divided_by: 100 | floor
+  endif
+-%}
+<div class="screen fade-in" data-screen="loyalty" data-points="{{ points | default: '' }}">
+  {% render 'screen-header', en: 'Loyalty points', ar: 'نقاط الولاء', back: '/pages/account' %}
+  {%- if customer -%}
+    <div class="loyal-card">
+      <div class="tier">{% render 'bi', en: 'YOUR POINTS', ar: 'رصيد نقاطك' %}</div>
+      <div class="points-row">
+        <span class="points" data-points-val>{% if points != null %}<span class="l-en">{{ points }}</span><span class="l-ar">{% render 'ar-digits', s: points %}</span>{% else %}<span class="spinner"></span>{% endif %}</span>
+        <span class="points-unit">{% render 'bi', en: 'points', ar: 'نقطة' %}</span>
+      </div>
+      <div class="progress"><i data-points-pct style="width:0"></i></div>
+      <div class="demo-tag" data-points-err hidden></div>
+      <div class="next-tier" data-next-tier></div>
+    </div>
+    <div data-vouchers></div>
+    <div class="section-title">{% render 'bi', en: 'Rewards', ar: 'المكافآت' %}</div>
+    <div class="rewards" data-rewards></div>
+    <div class="section-title">{% render 'bi', en: 'How to earn', ar: 'طرق كسب النقاط' %}</div>
+    <div class="earn-list" data-earn></div>
+  {%- else -%}
+    <a href="{{ routes.account_login_url }}" class="notice" data-sign-in="/pages/loyalty">{% render 'bi', en: 'Sign in to see your points.', ar: 'سجّل دخولك عشان تشوف نقاطك.' %}</a>
+  {%- endif -%}
+  <div style="height:28px"></div>
+</div>
+{% schema %}{ "name": "Loyalty", "tag": "div" }{% endschema %}

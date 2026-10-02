@@ -1,0 +1,176 @@
+{%- comment -%}
+  OrdersScreen.js, the detail view. `order` is a Shopify order.
+
+  Without the order service, progress comes from Shopify's fulfillment status
+  and tracking from the fulfillment's tracking number. With it (Theme settings
+  → OKA order service), assets/oka-screens.js overlays the live J&T/Bosta
+  timeline, the courier's name and number, and enables Edit/Cancel — the
+  same /customer/orders the app calls.
+{%- endcomment -%}
+{%- liquid
+  assign o = order
+  assign step = 0
+  assign is_fulfilled = false
+  if o.cancelled
+    assign step = 0
+  elsif o.fulfillment_status == 'fulfilled'
+    assign step = 2
+    assign is_fulfilled = true
+  elsif o.fulfillment_status == 'partial'
+    assign step = 1
+    assign is_fulfilled = true
+  endif
+  assign tracking_number = ''
+  assign tracking_url = ''
+  assign tracking_company = ''
+  for li in o.line_items
+    if li.fulfillment and li.fulfillment.tracking_number != blank
+      assign tracking_number = li.fulfillment.tracking_number
+      assign tracking_url = li.fulfillment.tracking_url
+      assign tracking_company = li.fulfillment.tracking_company
+      break
+    endif
+  endfor
+  assign items_sum = 0
+  for li in o.line_items
+    assign items_sum = items_sum | plus: li.original_line_price
+  endfor
+  assign hero = o.line_items.first
+  assign sa = o.shipping_address
+  assign paid = false
+  if o.financial_status == 'paid' or o.financial_status == 'partially_refunded' or o.financial_status == 'refunded'
+    assign paid = true
+  endif
+-%}
+<div class="order-detail" data-order-detail="{{ o.name | escape }}" data-step="{{ step }}" data-fulfilled="{{ is_fulfilled }}"
+  data-cancelled="{{ o.cancelled }}" data-has-awb="{% if tracking_number != blank %}true{% else %}false{% endif %}"
+  data-province="{{ sa.province_code }}" data-lines='[{%- for li in o.line_items -%}{"variantId":{{ li.variant_id | json }},"quantity":{{ li.quantity }},"handle":{{ li.product.handle | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]'
+  {% if standalone != true %}hidden{% endif %}>
+
+  {% render 'screen-header', en: 'Order Details', ar: 'تفاصيل الطلب', back: '/pages/orders' %}
+
+  <div class="cancelled-banner" data-cancelled-banner {% unless o.cancelled %}hidden{% endunless %}>
+    <b>{% render 'bi', en: 'Order cancelled', ar: 'تم إلغاء الطلب' %}</b>
+    <span>
+      {%- if o.cancelled_at -%}
+        {%- assign cancelled_ar = o.cancelled_at | date: '%-d/%-m، %H:%M' -%}
+        <span class="l-en">Cancelled on {{ o.cancelled_at | date: '%-d %b, %H:%M' }}</span><span class="l-ar">اتلغى يوم {% render 'ar-digits', s: cancelled_ar %}</span>
+      {%- else -%}
+        {% render 'bi', en: 'This order was cancelled and will not be shipped.', ar: 'الطلب ده اتلغى ومش هيتشحن.' %}
+      {%- endif -%}
+    </span>
+  </div>
+
+  <div class="hero-row">
+    <div class="hero-img">{% if hero.image %}{{ hero.image | image_url: width: 240 | image_tag: alt: '' }}{% endif %}</div>
+    <div class="hero-meta">
+      {%- assign hero_ar = hero.product.metafields.oka.title_ar.value | default: hero.title -%}
+      <div class="hero-title">{% render 'bi', en: hero.title, ar: hero_ar %}</div>
+      <div class="hero-total">{% render 'price', cents: o.total_price %}</div>
+    </div>
+    <span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right' %}</span>
+  </div>
+
+  <div class="items">
+    <div class="items-label">{% render 'bi', en: 'Invoice', ar: 'تفاصيل الفاتورة' %}</div>
+    {%- for li in o.line_items -%}
+      <div class="item-row">
+        <div class="item-img">{% if li.image %}{{ li.image | image_url: width: 120 | image_tag: alt: '' }}{% endif %}</div>
+        <div style="flex:1;min-width:0">
+          <div class="item-title">{% assign li_ar = li.product.metafields.oka.title_ar.value | default: li.title %}{% render 'bi', en: li.title, ar: li_ar %}</div>
+          <div class="item-qty">{% render 'num', n: li.quantity %} × {% render 'price', cents: li.original_price %}</div>
+        </div>
+        <div class="item-price">{% render 'price', cents: li.original_line_price %}</div>
+      </div>
+    {%- endfor -%}
+
+    <div class="inv-totals">
+      <div class="inv-row"><span>{% render 'bi', en: 'Subtotal', ar: 'الإجمالي الفرعي' %}</span><span>{% render 'price', cents: items_sum %}</span></div>
+      {%- if o.total_discounts > 0 -%}
+        <div class="inv-row green"><span>{% render 'bi', en: 'Discount', ar: 'الخصم' %}</span><span>−{% render 'price', cents: o.total_discounts %}</span></div>
+      {%- endif -%}
+      <div class="inv-row"><span>{% render 'bi', en: 'Shipping', ar: 'الشحن' %}</span><span>{% if o.shipping_price > 0 %}{% render 'price', cents: o.shipping_price %}{% else %}{% render 'bi', en: 'This order ships free', ar: 'الطلب ده شحنه مجاني' %}{% endif %}</span></div>
+      <div class="inv-rule"></div>
+      <div class="inv-row strong"><span>{% render 'bi', en: 'Total', ar: 'الإجمالي' %}</span><span>{% render 'price', cents: o.total_price %}</span></div>
+      <div class="pay-note">
+        {%- if paid -%}{% render 'bi', en: 'Paid', ar: 'مدفوع' %}
+        {%- else -%}{% render 'bi', en: 'Cash on delivery', ar: 'الدفع عند الاستلام' %}{% unless o.cancelled %}<span class="l-en"> — pay the courier {% render 'price', cents: o.total_price %}</span><span class="l-ar"> — هتدفع {% render 'price', cents: o.total_price %} للمندوب</span>{% endunless %}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="arrives">
+    <div class="arrives-title" data-state-label>
+      <span class="l-en">Arrives in <span data-eta></span></span><span class="l-ar">يوصل <span data-eta></span></span>
+    </div>
+    <div class="arrives-note">{% render 'bi', en: 'We’ve received your payment information and we’re preparing your order.', ar: 'استلمنا بيانات الدفع وبدأنا تجهيز طلبك.' %}</div>
+  </div>
+
+  <div class="steps" data-steps>
+    {%- assign labels_en = 'Processing|Preparing to Ship|Shipped|Delivered' | split: '|' -%}
+    {%- assign labels_ar = 'قيد المعالجة|التجهيز للشحن|تم الشحن|تم التوصيل' | split: '|' -%}
+    {%- for l in labels_en -%}
+      {%- assign i = forloop.index0 -%}
+      <div class="step-col{% if i <= step %} done{% endif %}{% if i == step %} current{% endif %}">
+        <div class="step-bar"></div>
+        <div class="step-txt">{% render 'bi', en: l, ar: labels_ar[i] %}</div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <div data-updates>
+    {%- if tracking_number == blank and o.cancelled == false -%}
+      <div class="awaiting">{% render 'bi', en: 'No AWB has been issued for this order yet. J&T updates will appear here once it is.', ar: 'لسه ما اتعملش بوليصة شحن للطلب ده. هتظهر تحديثات J&T هنا أول ما تتصدر.' %}</div>
+    {%- else -%}
+      <div class="awaiting">{% render 'bi', en: 'No updates for this order yet.', ar: 'لا توجد تحديثات بعد لهذا الطلب.' %}</div>
+    {%- endif -%}
+  </div>
+  <div data-live-extra></div>
+
+  <div class="divider top"></div>
+  <div class="field">
+    <div class="field-k" style="color:var(--ink-95)">{% render 'bi', en: 'Ships to', ar: 'الشحن إلى' %}</div>
+    <div class="field-v">
+      <div class="field-strong">{{ sa.name | default: customer.name }}</div>
+      <div class="field-txt">{{ sa.address1 }}{% if sa.address2 != blank %}, {{ sa.address2 }}{% endif %}</div>
+      <div class="field-txt">{{ sa.city }}</div>
+      <div class="field-phone"><span class="nums">{{ sa.phone | default: customer.phone }}</span></div>
+    </div>
+  </div>
+
+  <div class="divider top"></div>
+  <div class="field">
+    <div class="field-k" style="color:var(--ink-95)">{% render 'bi', en: 'Delivers', ar: 'التوصيل' %}</div>
+    <div class="field-v"><div class="field-txt" data-eta></div></div>
+  </div>
+
+  <div class="divider top"></div>
+  <div class="field">
+    <div class="field-k" style="color:var(--ink-95)">{% render 'bi', en: 'Order number', ar: 'رقم الطلب' %}</div>
+    <div class="field-v">
+      <div class="field-strong" style="font-weight:600">{{ o.name }}</div>
+      {%- if tracking_number != blank -%}
+        <div class="field-txt" data-tracking>{% render 'bi', en: 'Tracking: ', ar: 'رقم التتبع: ' %}<span class="nums">{{ tracking_number }}</span></div>
+        {%- if tracking_url != blank -%}<a class="track-link" href="{{ tracking_url }}" target="_blank" rel="noopener">{% render 'bi', en: 'Track shipment', ar: 'تتبع الشحنة' %}{% if tracking_company != blank %} · {{ tracking_company }}{% endif %}</a>{%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="divider top"></div>
+
+  {%- if is_fulfilled -%}
+    <div class="awaiting" style="margin-top:20px">{% render 'bi', en: 'This order has shipped and is on its way, so its items and address can no longer be changed. Contact the courier or support if you need a change.', ar: 'الطلب اتشحن بالفعل وفي الطريق ليك، فمش ممكن تتعدّل عناصره أو عنوانه. لو محتاج تغيير كلّم المندوب أو خدمة العملاء.' %}</div>
+  {%- endif -%}
+
+  <div class="order-actions">
+    <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order>{% render 'bi', en: 'Edit', ar: 'تعديل' %}</button>
+    <button class="cancel-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-cancel-order>
+      {%- if o.cancelled -%}{% render 'bi', en: 'Cancelled', ar: 'ملغي' %}{%- else -%}{% render 'bi', en: 'Cancel Order', ar: 'إلغاء الطلب' %}{%- endif -%}
+    </button>
+  </div>
+  <button class="reorder-btn" data-reorder>{% render 'bi', en: 'Order again', ar: 'اطلب تاني' %}</button>
+  <div style="height:30px"></div>
+</div>
