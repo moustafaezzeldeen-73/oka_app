@@ -50,6 +50,16 @@ app/
 Navigation is a small stack in `state/store.js` (`goTo`, `goBack`, `goTab`),
 ported one-for-one from the prototype; every screen is listed in `App.js`.
 
+## The website
+
+`theme/` is the Shopify theme that reproduces the app on the storefront. It
+talks to this same service through a Shopify App Proxy: Shopify forwards
+`https://<shop>/apps/oka/*` to `/proxy/*` here, signed with the app's secret
+and carrying the storefront's signed-in customer. `server/auth/appProxy.js`
+verifies the signature (and its timestamp and shop), then runs the request
+through the ordinary routes as that customer — `requireSession` accepts it
+the same way it accepts an app token. See `theme/README.md`.
+
 ## Security model
 
 - The app holds no secrets. Every route that reads or changes a customer's

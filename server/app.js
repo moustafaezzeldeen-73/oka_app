@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { assertAuthConfig } from './auth/session.js';
+import { appProxy } from './auth/appProxy.js';
 import authRoutes from './routes/auth.js';
 import checkoutRoutes from './routes/checkout.js';
 import customerRoutes from './routes/customer.js';
@@ -32,6 +33,9 @@ import { mountTestLogin } from './auth/testLogin.js';
  *   routes/loyalty.js        /loyalty, /loyalty/redeem
  *   routes/subscriptions.js  /subscriptions*
  *   routes/debug.js          /debug/*   (staff key only)
+ *
+ * The website reaches the same routes through Shopify's App Proxy at /proxy/*
+ * (auth/appProxy.js), as the storefront's signed-in customer.
  */
 export function createApp() {
   assertAuthConfig();
@@ -51,6 +55,10 @@ export function createApp() {
     if (req.method === 'OPTIONS') return res.sendStatus(204);
     return next();
   });
+
+  // The website: /proxy/* is Shopify's App Proxy (auth/appProxy.js). It is
+  // verified, stripped of its prefix and handed to the same routes below.
+  app.use(appProxy);
 
   storeRoutes(app);
   authRoutes(app);

@@ -2,6 +2,23 @@
 
 Everything that has changed in the OKA shop app, newest first.
 
+## 2026-10-02 — The app on the website
+
+### Shopify theme (`theme/`)
+- Every app screen as a Shopify theme, in Arabic and English: the collection
+  feed, categories, collections, search, product page, cart, checkout review,
+  orders, account, addresses, loyalty, subscriptions, wishlist, support, sign-in,
+  age gate and AR. Packaged as `dist/oka-theme.zip`; see `theme/README.md`.
+- Signing in is optional; guests see what an account gets them (live
+  tracking, points on the order) and can check out without one.
+
+### The website reaches the order service
+- `server/auth/appProxy.js`: Shopify App Proxy requests (`/proxy/*`) are
+  verified and run as the storefront's signed-in customer, so the website gets
+  the app's live J&T timeline, courier call and WhatsApp, edit and cancel,
+  points redemption and subscriptions from the same routes.
+- New setting `SHOPIFY_APP_PROXY_SECRET`; `render.yaml` deploys the service.
+
 ## 2026-09-30 — Merged the base branch's September 29 work
 
 Four commits landed on the base branch while this work was open. They were

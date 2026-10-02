@@ -82,10 +82,13 @@ export function sessionOf(req) {
 
 /**
  * Route guard: a valid session that resolved to a Shopify customer. Anything
- * that reads or changes a customer's data sits behind this.
+ * that reads or changes a customer's data sits behind this. Accepts an app
+ * token or a verified Shopify App Proxy request (auth/appProxy.js).
  */
 export function requireSession(req, res, next) {
-  const s = sessionOf(req);
+  // A request from the website, verified by auth/appProxy.js, carries the
+  // storefront customer Shopify signed for; otherwise the app's own token.
+  const s = req.proxySession ?? sessionOf(req);
   if (!s?.identifier) return res.status(401).json({ error: 'not signed in' });
   if (!s.customerId) return res.status(401).json({ error: 'no customer account for this session' });
   req.session = s;
