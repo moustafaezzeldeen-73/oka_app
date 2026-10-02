@@ -1,0 +1,68 @@
+{%- comment -%}
+  OrdersScreen.js — the list is the entry point; ?order=#1234 opens one.
+  Every order's detail is rendered here (hidden) so opening one is instant,
+  the way the app switches between list and detail without a round trip.
+{%- endcomment -%}
+<div class="screen fade-in" data-screen="orders">
+  <div data-orders-list>
+    <h1 class="big-title">{% render 'bi', en: 'Orders', ar: 'الطلبات' %}</h1>
+    {%- if customer -%}
+      {%- paginate customer.orders by 20 -%}
+        {%- if customer.orders.size == 0 -%}
+          <div class="empty" style="padding:60px 22px">{% render 'bi', en: 'No orders yet', ar: 'لا توجد طلبات بعد' %}</div>
+        {%- endif -%}
+        {%- for o in customer.orders -%}
+          {%- liquid
+            assign hero = o.line_items.first
+            assign more = o.line_items.size | minus: 1
+            assign state_class = ''
+            if o.cancelled
+              assign state_class = 'red'
+            endif
+          -%}
+          <a href="?order={{ o.name | url_encode }}" class="order-card" data-open-order="{{ o.name | escape }}">
+            <div class="order-thumb">{% if hero.image %}{{ hero.image | image_url: width: 120 | image_tag: alt: '' }}{% endif %}</div>
+            <div style="flex:1;min-width:0">
+              <div class="order-top"><span class="order-name">{{ o.name }}</span><span class="order-total">{% render 'price', cents: o.total_price %}</span></div>
+              <div class="order-meta">
+                {%- assign hero_ar = hero.product.metafields.oka.title_ar.value | default: hero.title -%}
+                {%- if more > 0 -%}
+                  <span class="l-en">{{ hero.title }} +{{ more }} more</span><span class="l-ar">{{ hero_ar }} و{% render 'ar-digits', s: more %} أخرى</span>
+                {%- else -%}{% render 'bi', en: hero.title, ar: hero_ar %}{%- endif -%}
+              </div>
+              <div class="order-state {{ state_class }}" data-order-state="{{ o.name | escape }}">
+                {%- if o.cancelled -%}{% render 'bi', en: 'Cancelled', ar: 'ملغي' %}
+                {%- elsif o.fulfillment_status == 'fulfilled' -%}{% render 'bi', en: 'Shipped', ar: 'تم الشحن' %}
+                {%- elsif o.fulfillment_status == 'partial' -%}{% render 'bi', en: 'Preparing to Ship', ar: 'التجهيز للشحن' %}
+                {%- else -%}{% render 'bi', en: 'Processing', ar: 'قيد المعالجة' %}{%- endif -%}
+              </div>
+            </div>
+            <span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right', px: 15 %}</span>
+          </a>
+        {%- endfor -%}
+        {%- if paginate.pages > 1 -%}
+          <div class="chips" style="justify-content:center">
+            {%- if paginate.previous -%}<a class="chip" href="{{ paginate.previous.url }}">‹</a>{%- endif -%}
+            <span class="chip">{{ paginate.current_page }} / {{ paginate.pages }}</span>
+            {%- if paginate.next -%}<a class="chip" href="{{ paginate.next.url }}">›</a>{%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <div class="empty" style="padding:60px 22px">{% render 'bi', en: 'No orders yet', ar: 'لا توجد طلبات بعد' %}</div>
+      <a href="{{ routes.account_login_url }}" class="notice press s99" data-sign-in="/pages/orders">
+        {% render 'bi', en: 'Sign in to see your real orders and track their delivery.', ar: 'سجّل دخولك عشان تشوف طلباتك الحقيقية وتتبع الشحن.' %}
+      </a>
+    {%- endif -%}
+    <div style="height:26px"></div>
+  </div>
+
+  {%- if customer -%}
+    {%- paginate customer.orders by 20 -%}
+      {%- for o in customer.orders -%}
+        {% render 'order-detail', order: o %}
+      {%- endfor -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+</div>
+{% schema %}{ "name": "Orders", "tag": "div" }{% endschema %}

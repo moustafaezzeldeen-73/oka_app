@@ -1,0 +1,22 @@
+{%- layout none -%}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ shop.name }} — {{ gift_card.balance | money }}</title>
+    {{ 'oka.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+  </head>
+  <body style="overflow:auto">
+    <div class="app" style="height:auto;min-height:100vh;padding:40px 22px;gap:18px">
+      <div class="loyal-card" style="margin:0">
+        <div class="tier">{{ shop.name | upcase }} GIFT CARD</div>
+        <div class="points-row"><span class="points">{{ gift_card.balance | money }}</span></div>
+        <div class="next-tier">{{ gift_card.code | format_code }}</div>
+      </div>
+      {%- if gift_card.expired or gift_card.enabled == false -%}<div class="notice" style="margin:0">This gift card is no longer valid.</div>{%- endif -%}
+      <a class="cta" href="{{ shop.url }}">Continue Shopping</a>
+    </div>
+  </body>
+</html>

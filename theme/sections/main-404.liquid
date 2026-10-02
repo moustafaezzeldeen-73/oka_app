@@ -1,0 +1,6 @@
+<div class="screen fade-in" data-screen="404">
+  {% render 'screen-header', en: 'Not found', ar: 'مش موجود' %}
+  <div class="empty">{% render 'bi', en: 'This page doesn’t exist.', ar: 'الصفحة دي مش موجودة.' %}</div>
+  <div style="padding:0 22px"><a class="cta" href="{{ routes.root_url }}">{% render 'bi', en: 'Continue Shopping', ar: 'متابعة التسوق' %}</a></div>
+</div>
+{% schema %}{ "name": "404", "tag": "div" }{% endschema %}

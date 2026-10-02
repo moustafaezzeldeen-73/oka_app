@@ -1,0 +1,5 @@
+{
+  "general": {
+    "note": "The OKA theme is bilingual in the page itself (both languages render; the language toggle shows one). Product and collection Arabic comes from the oka.title_ar and oka.description_ar metafields, exactly as the OKA app reads it."
+  }
+}

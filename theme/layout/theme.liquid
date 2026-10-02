@@ -1,0 +1,143 @@
+<!doctype html>
+{%- liquid
+  assign key = template | append: ''
+  # The tab bar is on every screen — product, checkout and sign-in included.
+  assign show_tabs = true
+  assign active_tab = ''
+  case key
+    when 'index'
+      assign active_tab = 'home'
+    when 'cart'
+      assign active_tab = 'cart'
+    when 'page.oka-orders', 'customers/account', 'customers/order'
+      assign active_tab = 'orders'
+    when 'page.oka-account'
+      assign active_tab = 'account'
+  endcase
+  if settings.logo
+    assign logo_url = settings.logo | image_url: width: 128
+  else
+    assign logo_url = 'oka-logo.png' | asset_url
+  endif
+-%}
+<html lang="{{ settings.default_lang }}" dir="{% if settings.default_lang == 'ar' %}rtl{% else %}ltr{% endif %}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+    <meta name="theme-color" content="#f5f5f7">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="icon" type="image/png" href="{{ logo_url }}">
+    <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+    {%- if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+    <script>
+      /* Language before first paint: the shopper's last choice, else the store default. */
+      (function () {
+        var l = null;
+        try { l = localStorage.getItem('oka.lang'); } catch (e) {}
+        if (l !== 'ar' && l !== 'en') l = {{ settings.default_lang | json }};
+        var h = document.documentElement;
+        h.lang = l;
+        h.dir = l === 'ar' ? 'rtl' : 'ltr';
+      })();
+    </script>
+    {{ 'oka.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+
+    <script>
+      window.OKA = {
+        defaultLang: {{ settings.default_lang | json }},
+        ageGate: {{ settings.age_gate | json }},
+        proxy: {{ settings.proxy_path | strip | json }},
+        whatsapp: {{ settings.whatsapp | strip | json }},
+        minOrder: {{ settings.min_order | default: 0 }},
+        tier: {{ settings.tier_threshold | default: 300 }},
+        zones: {
+          metro: { under: {{ settings.fee_metro_under | default: 60 }}, over: {{ settings.fee_metro_over | default: 36 }} },
+          delta: { under: {{ settings.fee_delta_under | default: 70 }}, over: {{ settings.fee_delta_over | default: 46 }} },
+          far: { under: {{ settings.fee_far_under | default: 80 }}, over: {{ settings.fee_far_over | default: 56 }} }
+        },
+        pointsPerEgp: {{ settings.points_per_egp | default: 10 }},
+        earnPointsPerEgp: {{ settings.earn_points_per_egp | default: 1 }},
+        subscriptionDiscount: {{ settings.subscription_discount | default: 5 }},
+        shopDomain: {{ request.host | json }},
+        catalogueUrl: {{ routes.all_products_collection_url | append: '?view=oka-data' | json }},
+        routes: {
+          root: {{ routes.root_url | json }},
+          cart: {{ routes.cart_url | json }},
+          checkout: '/checkout',
+          search: {{ routes.search_url | json }},
+          collections: {{ routes.collections_url | json }},
+          login: {{ routes.account_login_url | json }},
+          logout: {{ routes.account_logout_url | json }},
+          shopifyAccount: {{ routes.account_url | json }},
+          shopifyAddresses: {{ routes.account_addresses_url | json }},
+          account: '/pages/account',
+          orders: '/pages/orders',
+          addresses: '/pages/addresses',
+          addAddress: '/pages/addresses?view=oka-add-address',
+          checkoutReview: '/pages/checkout-review',
+          loyalty: '/pages/loyalty',
+          subscriptions: '/pages/subscriptions',
+          subscribe: '/pages/subscriptions?view=oka-subscribe',
+          wishlist: '/pages/wishlist',
+          support: '/pages/support'
+        },
+        customer: {% if customer -%}
+          {
+            id: {{ customer.id | json }},
+            name: {{ customer.name | json }},
+            email: {{ customer.email | json }},
+            phone: {{ customer.phone | json }},
+            storeCreditCents: {% if customer.store_credit_account %}{{ customer.store_credit_account.balance | default: 0 }}{% else %}null{% endif %},
+            addresses: [
+              {%- for a in customer.addresses -%}
+                {
+                  id: {{ a.id | json }},
+                  name: {{ a.name | json }},
+                  street: {{ a.address1 | json }},
+                  building: {{ a.address2 | json }},
+                  city: {{ a.city | json }},
+                  province: {{ a.province | json }},
+                  provinceCode: {{ a.province_code | json }},
+                  phone: {{ a.phone | json }},
+                  firstName: {{ a.first_name | json }},
+                  lastName: {{ a.last_name | json }},
+                  country: {{ a.country | json }},
+                  isDefault: {% if a.id == customer.default_address.id %}true{% else %}false{% endif %}
+                }{% unless forloop.last %},{% endunless %}
+              {%- endfor -%}
+            ]
+          }
+        {%- else -%}null{%- endif %}
+      };
+    </script>
+    <script src="{{ 'oka.js' | asset_url }}" defer></script>
+    <script src="{{ 'oka-screens.js' | asset_url }}" defer></script>
+  </head>
+
+  <body class="t-{{ template.name }}">
+    <div class="app" id="app">
+      <main class="content" id="content" role="main">
+        {{ content_for_layout }}
+      </main>
+
+      {%- if show_tabs -%}
+        <nav class="tabbar" aria-label="Main">
+          <a href="{{ routes.root_url }}" class="tab{% if active_tab == 'home' %} active{% endif %}" aria-label="Home">
+            <span class="tab-icon">{% render 'icon', name: 'home', px: 25 %}</span>
+          </a>
+          <a href="{{ routes.cart_url }}" class="tab{% if active_tab == 'cart' %} active{% endif %}" aria-label="Cart">
+            <span class="tab-icon">{% render 'icon', name: 'cart', px: 25 %}<span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span></span>
+          </a>
+          <a href="/pages/orders" class="tab{% if active_tab == 'orders' %} active{% endif %}" aria-label="Orders">
+            <span class="tab-icon">{% render 'icon', name: 'box', px: 25 %}</span>
+          </a>
+          <a href="/pages/account" class="tab{% if active_tab == 'account' %} active{% endif %}" aria-label="Account">
+            <span class="tab-icon">{% render 'icon', name: 'person', px: 25 %}</span>
+          </a>
+        </nav>
+      {%- endif -%}
+    </div>
+  </body>
+</html>

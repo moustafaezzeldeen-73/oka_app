@@ -1,0 +1,4 @@
+{
+  "sections": { "main": { "type": "oka-account", "settings": {} } },
+  "order": ["main"]
+}

@@ -1,0 +1,4 @@
+{
+  "sections": { "main": { "type": "oka-checkout", "settings": {} } },
+  "order": ["main"]
+}

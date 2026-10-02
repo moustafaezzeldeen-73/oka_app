@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "feed": {
+      "type": "oka-home",
+      "blocks": {
+        "offer-1": { "type": "offer", "settings": { "bundled_image": "promo1.jpg", "collection": "hookahs", "product": "oka-cobra" } },
+        "offer-2": { "type": "offer", "settings": { "bundled_image": "promo2.jpg", "collection": "hookahs", "product": "oka-cobra-led-rechargeable-base" } },
+        "offer-3": { "type": "offer", "settings": { "bundled_image": "promo3.jpg", "collection": "hookahs", "product": "oka-carbon-black-hookah" } },
+        "offer-4": { "type": "offer", "settings": { "bundled_image": "promo4.jpg", "collection": "dark-tobacco", "product": "oka-black-tobacco" } },
+        "offer-5": { "type": "offer", "settings": { "bundled_image": "promo5.jpg", "collection": "oka-parts", "product": "oka-stem" } }
+      },
+      "block_order": ["offer-1", "offer-2", "offer-3", "offer-4", "offer-5"],
+      "settings": {}
+    }
+  },
+  "order": ["feed"]
+}

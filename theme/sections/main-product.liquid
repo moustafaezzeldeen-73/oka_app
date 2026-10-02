@@ -1,0 +1,127 @@
+{%- comment -%}
+  PdpScreen.js — gallery hero, detail card, related rail, sticky buy bar.
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign v = p.selected_or_first_available_variant
+  if v.inventory_management == 'shopify' and v.inventory_policy == 'deny'
+    assign stock = v.inventory_quantity | at_least: 0
+  elsif p.available
+    assign stock = 99
+  else
+    assign stock = 0
+  endif
+  assign price_egp = v.price | divided_by: 100.0 | round
+  assign desc_en = p.description | strip_html | strip
+  assign desc_ar = p.metafields.oka.description_ar.value | default: desc_en | strip_html
+  assign points = price_egp | times: settings.earn_points_per_egp | floor
+-%}
+<div class="screen fade-in" data-screen="product"
+  data-handle="{{ p.handle }}" data-variant="{{ v.id }}" data-price="{{ price_egp }}" data-stock="{{ stock }}"
+  data-available="{{ p.available }}" data-url="{{ shop.url }}{{ p.url }}">
+
+  <div class="pdp-hero">
+    <div class="pdp-gallery hscroll" data-gallery>
+      {%- for img in p.images limit: 10 -%}
+        <div>{{ img | image_url: width: 1000 | image_tag: alt: p.title, loading: 'eager', sizes: '430px' }}</div>
+      {%- else -%}
+        <div></div>
+      {%- endfor -%}
+    </div>
+    {%- if p.images.size > 1 -%}
+      <div class="dots" data-dots>{% for img in p.images limit: 10 %}<i class="dot{% if forloop.first %} on{% endif %}"></i>{% endfor %}</div>
+    {%- endif -%}
+    <div class="pdp-fade"></div>
+    <div class="pdp-btns">
+      <button class="circle-38 flip" data-back="{{ routes.root_url }}" aria-label="Back">{% render 'icon', name: 'chevron-left' %}</button>
+      <div>
+        <button class="circle-38" data-share aria-label="Share">↗</button>
+        <button class="circle-38" data-wish aria-label="Wishlist">{% render 'icon', name: 'heart' %}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pdp-card">
+    <div class="pdp-titlerow">
+      <h1 class="pdp-title">{% render 'ptitle', p: p %}</h1>
+      <div>
+        <div class="pdp-price">{% render 'price', cents: v.price %}</div>
+        {%- if v.compare_at_price > v.price -%}<div class="pdp-compare">{% render 'price', cents: v.compare_at_price %}</div>{%- endif -%}
+      </div>
+    </div>
+    <div class="pdp-stock">
+      {%- if stock == 0 -%}{% render 'bi', en: 'Out of stock', ar: 'غير متوفر' %}
+      {%- elsif stock <= 5 -%}<span class="l-en">Only {{ stock }} left</span><span class="l-ar">باقي {% render 'ar-digits', s: stock %} فقط</span>
+      {%- else -%}{% render 'bi', en: 'In stock', ar: 'متوفر' %}{%- endif -%}
+    </div>
+
+    <div class="ship-box">
+      <div class="progress"><i data-ship-pct style="width:0"></i></div>
+      <div class="ship-txt" data-ship-txt>&nbsp;</div>
+    </div>
+
+    <div class="section-label">{% render 'bi', en: 'Customize', ar: 'تخصيص' %}</div>
+    <div class="qty-row">
+      <span class="qty-label">{% render 'bi', en: 'Quantity', ar: 'الكمية' %}</span>
+      <div class="stepper">
+        <button class="step-btn" data-qty="-1" aria-label="Less">–</button>
+        <span class="step-qty" data-qty-val>1</span>
+        <button class="step-btn" data-qty="1" aria-label="More">+</button>
+      </div>
+    </div>
+
+    <div class="pdp-block">
+      <div class="spread"><span class="deliver">{% render 'bi', en: 'Estimated delivery', ar: 'موعد التوصيل المتوقع' %}</span><span class="deliver-muted" data-eta></span></div>
+      <div class="spread" style="margin-top:6px"><span class="fee">{% render 'bi', en: 'Shipping fee', ar: 'رسوم الشحن' %}</span><span class="fee" data-fee></span></div>
+      <div class="pay">{% render 'bi', en: 'Cash on delivery', ar: 'الدفع عند الاستلام' %}</div>
+    </div>
+
+    <div class="pdp-block">
+      <div class="section-label">{% render 'bi', en: 'Description', ar: 'الوصف' %}</div>
+      <div class="desc">{% render 'bi', en: desc_en, ar: desc_ar %}</div>
+    </div>
+
+    <div class="points-box">
+      <span class="l-en">Earn ~{{ points }} points when delivered</span><span class="l-ar">اكسب ~{% render 'ar-digits', s: points %} نقطة عند التوصيل</span>
+    </div>
+  </div>
+
+  <div data-related style="padding-top:22px" hidden>
+    <div class="related-label">{% render 'bi', en: 'You may also like', ar: 'قد يعجبك أيضاً' %}</div>
+    <div class="related hscroll" data-related-list></div>
+  </div>
+  <div style="height:100px"></div>
+</div>
+
+<div class="buy-bar">
+  <a href="{{ routes.cart_url }}" class="cart-btn" aria-label="Cart">
+    {% render 'icon', name: 'cart', px: 20 %}
+    <span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span>
+  </a>
+  {%- if p.available -%}
+    <button class="cta glow buy-cta" data-buy>
+      <span>{% render 'bi', en: 'Add to Cart', ar: 'أضف إلى السلة' %}</span>
+      <span data-buy-price>{% render 'price', cents: v.price %}</span>
+    </button>
+  {%- else -%}
+    <div class="sold-out">{% render 'bi', en: 'Out of stock', ar: 'غير متوفر' %}</div>
+  {%- endif -%}
+</div>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": {{ p.title | json }},
+    "url": {{ shop.url | append: p.url | json }},
+    {% if p.featured_image %}"image": [{{ p.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}],{% endif %}
+    "description": {{ desc_en | json }},
+    "offers": {
+      "@type": "Offer",
+      "price": {{ v.price | divided_by: 100.0 | json }},
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "availability": "https://schema.org/{% if p.available %}InStock{% else %}OutOfStock{% endif %}"
+    }
+  }
+</script>
+{% schema %}{ "name": "Product", "tag": "div", "class": "pdp-section" }{% endschema %}
