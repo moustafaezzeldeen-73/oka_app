@@ -1,11 +1,8 @@
 <!doctype html>
 {%- liquid
   assign key = template | append: ''
-  assign tab_screens = 'index,list-collections,cart,search,page.oka-account,page.oka-orders,page.oka-addresses,page.oka-add-address,page.oka-loyalty,page.oka-subscriptions,page.oka-subscribe,page.oka-wishlist,page.oka-support,customers/account,customers/order,customers/addresses,page' | split: ','
-  assign show_tabs = false
-  if tab_screens contains key
-    assign show_tabs = true
-  endif
+  # The tab bar is on every screen — product, checkout and sign-in included.
+  assign show_tabs = true
   assign active_tab = ''
   case key
     when 'index'

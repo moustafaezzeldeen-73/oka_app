@@ -154,7 +154,17 @@
       <div class="field-strong" style="font-weight:600">{{ o.name }}</div>
       {%- if tracking_number != blank -%}
         <div class="field-txt" data-tracking>{% render 'bi', en: 'Tracking: ', ar: 'رقم التتبع: ' %}<span class="nums">{{ tracking_number }}</span></div>
-        {%- if tracking_url != blank -%}<a class="track-link" href="{{ tracking_url }}" target="_blank" rel="noopener">{% render 'bi', en: 'Track shipment', ar: 'تتبع الشحنة' %}{% if tracking_company != blank %} · {{ tracking_company }}{% endif %}</a>{%- endif -%}
+        {%- liquid
+          if tracking_url == blank and settings.tracking_url != blank
+            assign tracking_url = settings.tracking_url | replace: '{number}', tracking_number
+          endif
+        -%}
+        {%- if tracking_url != blank -%}
+          <a class="track-btn" href="{{ tracking_url }}" target="_blank" rel="noopener" data-copy="{% unless settings.tracking_url contains '{number}' %}{{ tracking_number }}{% endunless %}">
+            {% render 'icon', name: 'box', px: 16 %}
+            {%- if tracking_company != blank -%}<span class="l-en">Track on {{ tracking_company }}</span><span class="l-ar">تتبع على {{ tracking_company }}</span>{%- else -%}{% render 'bi', en: 'Track shipment', ar: 'تتبع الشحنة' %}{%- endif -%}
+          </a>
+        {%- endif -%}
       {%- endif -%}
     </div>
   </div>

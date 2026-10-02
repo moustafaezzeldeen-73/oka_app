@@ -518,6 +518,13 @@
         return;
       }
 
+      // A tracking page that can't take the AWB in its link: copy it for the shopper first.
+      const copy = e.target.closest('[data-copy]');
+      if (copy && copy.dataset.copy) {
+        navigator.clipboard?.writeText(copy.dataset.copy).catch(() => {});
+        toast(L(`AWB ${copy.dataset.copy} copied — paste it on the tracking page`, `اتنسخ رقم الشحنة ${copy.dataset.copy} — الصقه في صفحة التتبع`));
+      }
+
       const signIn = e.target.closest('[data-sign-in]');
       if (signIn) { e.preventDefault(); requireSignIn(signIn.dataset.signIn || undefined); return; }
 

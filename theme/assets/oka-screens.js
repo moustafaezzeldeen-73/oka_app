@@ -482,6 +482,12 @@
             <button class="cs-add" data-add="${p.variantId}"${p.stock === 0 ? ' data-soldout' : ''}>${esc(t('add'))}</button>
           </div>`).join('')}</div>` : ''}
 
+        ${!O.customer ? `<button class="join-nudge" data-sign-in="${esc(CFG.routes.cart)}">
+          <span class="join-tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span style="flex:1"><b>${esc(L(`Earn ${points} points on this order`, `اكسب ${num(points)} نقطة على الطلب ده`))}</b>
+          <span>${esc(L('Sign in to collect them and track your delivery live — optional.', 'سجّل دخولك عشان تجمعها وتتابع التوصيل لحظة بلحظة — اختياري.'))}</span></span>
+          ${chevron(14)}
+        </button>` : ''}
         <div style="padding:0 22px 26px">
           ${belowMinimum ? `<div class="min-note">${esc(L(
             `Minimum order is ${fmtPrice(minOrder)} — add ${fmtPrice(minOrder - merch)} more`,
@@ -512,8 +518,9 @@
       if (e.target.closest('[data-checkout]')) {
         const { merch } = O.cartTotals(lastCart);
         if (Number(CFG.minOrder) > 0 && merch < Number(CFG.minOrder)) return;
-        // Checkout needs an account — sign in first, then continue.
-        if (!O.customer) O.requireSignIn(CFG.routes.checkoutReview);
+        // An account is optional: a guest is offered the reasons to sign in
+        // (live tracking, points on this order) and can carry on without one.
+        if (!O.customer) joinPrompt(Math.floor(Math.max(0, merch) * (CFG.earnPointsPerEgp || 1)));
         else go(CFG.routes.checkoutReview);
       }
     });
@@ -570,6 +577,48 @@
     onLang(render);
   }
 
+  /**
+   * Why sign in — shown to a guest on the way to checkout. Never a wall:
+   * "Continue as guest" goes straight to Shopify's checkout.
+   */
+  function joinCard(points) {
+    const perks = [
+      [L('Live J&T tracking', 'تتبع شحنتك لحظة بلحظة'), L('See where your parcel is and when the courier is on the way.', 'اعرف شحنتك فين وإمتى المندوب جاي.')],
+      [L('Points on every order', 'نقاط على كل طلب'), L(`10 points = EGP 1, credited when your order is delivered.`, '١٠ نقاط = ١ ج.م، بتنزل لما طلبك يوصل.')],
+      [L('Faster next time', 'أسرع المرة الجاية'), L('Saved addresses and one-tap “Order again”.', 'عناوينك محفوظة وتطلب تاني بضغطة.')],
+    ];
+    return `<div class="join">
+      <div class="join-points">
+        <span class="join-num">${esc(num(points))}</span>
+        <span>${esc(L('points waiting for you on this order', 'نقطة مستنياك على الطلب ده'))}</span>
+      </div>
+      <div class="join-title">${esc(L('Sign in to track your order and earn points', 'سجّل دخولك عشان تتابع طلبك وتكسب نقاط'))}</div>
+      <div class="join-perks">${perks.map(([h, b]) => `
+        <div class="join-perk"><span class="join-tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span><b>${esc(h)}</b><span>${esc(b)}</span></span></div>`).join('')}</div>
+      <button class="cta glow" data-join-signin>${esc(L('Sign in & check out', 'سجّل دخولك وكمّل الطلب'))}</button>
+      <button class="join-guest" data-join-guest>${esc(L('Continue as guest', 'كمّل كزائر'))}</button>
+      <div class="join-fine">${esc(L('Takes a few seconds. You can also sign in after ordering — your points still count.', 'بتاخد ثواني. وتقدر تسجّل بعد الطلب كمان ونقاطك محسوبة.'))}</div>
+    </div>`;
+  }
+  function joinPrompt(points) {
+    const app = $('#app');
+    const scrim = document.createElement('div');
+    scrim.className = 'scrim';
+    const sheet = document.createElement('div');
+    sheet.className = 'join-sheet';
+    sheet.innerHTML = `<div class="grabber"></div>${joinCard(points)}`;
+    const close = () => { scrim.remove(); sheet.remove(); };
+    scrim.addEventListener('click', close);
+    app.appendChild(scrim);
+    app.appendChild(sheet);
+  }
+  // Both the sheet (cart) and the inline card (checkout review) answer here.
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-join-signin]')) { e.preventDefault(); O.requireSignIn(CFG.routes.checkoutReview); }
+    if (e.target.closest('[data-join-guest]')) { e.preventDefault(); e.target.closest('[data-join-guest]').innerHTML = spinner(true); go(CFG.routes.checkout); }
+  });
+
   /* ════════════════════════════════════════════════════════════════════
    * Checkout review (CheckoutScreen.js)
    * ════════════════════════════════════════════════════════════════════ */
@@ -582,11 +631,8 @@
     function render() {
       if (!O.customer) {
         bar.hidden = true;
-        host.innerHTML = `<div style="padding:30px 22px 0">
-          <div class="arrives-title">${esc(L('Sign in with your phone to order', 'سجّل دخولك برقم موبايلك'))}</div>
-          <div class="arrives-note">${esc(L('We confirm your number once so the courier can reach you.', 'بنأكد رقمك مرة واحدة عشان المندوب يقدر يوصلك.'))}</div>
-          <button class="cta" style="margin-top:18px" data-sign-in="${esc(CFG.routes.checkoutReview)}">${esc(L('Sign in', 'تسجيل الدخول'))}</button>
-        </div>`;
+        const merch = O.cartTotals(cartData).merch;
+        host.innerHTML = joinCard(Math.floor(Math.max(0, merch) * (CFG.earnPointsPerEgp || 1)));
         return;
       }
       const items = cartData?.items || [];
@@ -602,6 +648,7 @@
       const heroP = catalogue.products.find((p) => String(p.variantId) === String(hero.variant_id));
       const heroTitle = heroP ? O.ptitle(heroP) : hero.product_title;
       const eta = O.etaFor(addr);
+      const shipBarNow = O.shipBar(merch, addr);
       const code = (cartData.discount_codes || []).find((x) => x.applicable)?.code;
 
       host.innerHTML = `
@@ -650,6 +697,10 @@
               <div class="spread field-txt"><span>${esc(t('subtotal'))}</span><span>${esc(fmtPrice(subtotal))}</span></div>
               ${discount > 0 ? `<div class="spread field-txt"><span>${esc(`${t('discount')}${code ? ` (${code})` : ''}`)}</span><span>${esc(`-${fmtPrice(discount)}`)}</span></div>` : ''}
               <div class="spread field-txt"><span>${esc(t('shipping'))}</span><span>${esc(shipping === 0 ? t('shipFree') : fmtPrice(shipping))}</span></div>
+              <div class="ship-box checkout-ship">
+                <div class="progress"><i style="width:${shipBarNow.pct}%"></i></div>
+                <div class="ship-txt">${esc(shipBarNow.text)}</div>
+              </div>
               <div class="quote-warn">${esc(L('Shipping is an estimate until your address is confirmed.', 'مصاريف الشحن تقديرية — هتتأكد لما نثبّت العنوان.'))}</div>
               <div class="arrives-title" style="margin-top:6px">${esc(fmtPrice(total))}</div>
               ${belowMinimum ? `<div class="quote-warn">${esc(L(`The minimum order is ${fmtPrice(minOrder)}.`, `أقل طلب ${fmtPrice(minOrder)}.`))}</div>` : ''}`
