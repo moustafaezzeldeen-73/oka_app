@@ -152,6 +152,26 @@
       dragScroll(rail);
     });
 
+    /*
+     * A card off to the side (faded, scaled down) is not a target yet: a tap
+     * on it — the card, its add button or its AR pill — only brings it to the
+     * centre. Opening a product or adding it takes a tap on the card in focus.
+     * Capture phase, so it runs before the card's own link and the global
+     * add-to-cart handler, and can stop both.
+     */
+    feed.addEventListener('click', (e) => {
+      const slot = e.target.closest('[data-slot]');
+      if (!slot || slot.classList.contains('active')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const rail = slot.closest('[data-rail]');
+      if (!rail) return;
+      const rr = rail.getBoundingClientRect();
+      const sr = slot.getBoundingClientRect();
+      rail.scrollBy({ left: sr.left + sr.width / 2 - (rr.left + rr.width / 2), behavior: 'smooth' });
+      O.haptic.selectionTick();
+    }, true);
+
     // Feed cards: one tap opens the product, two add it to the cart (DoublePress, 280ms).
     feed.addEventListener('click', (e) => {
       const card = e.target.closest('[data-tap]');
