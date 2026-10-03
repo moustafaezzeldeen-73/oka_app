@@ -349,10 +349,12 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .gcard-img img { width: 100%; height: 100%; object-fit: contain; }
 .gcard-body { padding: 8px 12px 14px; }
 .gcard-title { font-size: 12px; font-weight: 600; line-height: 15px; }
-.gcard-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.gcard-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
 .gcard-price { font-size: 13px; font-weight: 800; }
 .gcard-add {
-  min-height: 36px; padding: 0 16px; border-radius: 999px; background: var(--dark-grad);
+  /* Full width under the price: "عبيلي فالشنطة" doesn't fit beside it on a half-width card. */
+  flex: 1 1 100%; white-space: nowrap;
+  min-height: 38px; padding: 0 12px; border-radius: 999px; background: var(--dark-grad);
   color: #fff; font-weight: 800; font-size: 14px;
   display: flex; align-items: center; justify-content: center;
   transition: transform .17s var(--ease-out);
@@ -682,9 +684,9 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .bs-img img { width: 100%; height: 100%; object-fit: contain; }
 .bs-body { padding: 10px 12px 14px; }
 .bs-title { font-size: 12.5px; font-weight: 600; line-height: 16px; }
-.bs-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.bs-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
 .bs-price { font-size: 13.5px; font-weight: 800; }
-.bs-add { min-height: 34px; padding: 0 14px; border-radius: 999px; background: var(--dark-grad); color: #fff; font-weight: 800; font-size: 13.5px; display: flex; align-items: center; justify-content: center; }
+.bs-add { flex: 1 1 100%; white-space: nowrap; min-height: 36px; padding: 0 10px; border-radius: 999px; background: var(--dark-grad); color: #fff; font-weight: 800; font-size: 13.5px; display: flex; align-items: center; justify-content: center; }
 .min-note { font-size: 13px; color: var(--red-deep); text-align: center; margin-bottom: 10px; font-weight: 600; }
 .cart-empty { padding: 50px 22px 24px; text-align: center; font-size: 13.5px; }
 

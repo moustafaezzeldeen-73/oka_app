@@ -58,7 +58,7 @@
           {%- if bundle != blank -%}
             <button class="offer-cta" data-add-bundle="{{ bundle }}">{% render 'bi', en: block.settings.button_en, ar: block.settings.button_ar %}</button>
           {%- else -%}
-            <button class="offer-cta" data-add="{{ offer_variant.id }}">{% render 'bi', en: 'Add to Cart', ar: 'ضيف للسلة' %}</button>
+            <button class="offer-cta" data-add="{{ offer_variant.id }}">{% render 'bi', en: 'Add to Cart', ar: 'عبيلي فالشنطة' %}</button>
           {%- endif -%}
         </div>
       {%- endfor -%}
@@ -109,7 +109,7 @@
                 <div class="prod-title">{% render 'ptitle', p: p %}</div>
                 <div class="prod-price">{% render 'price', cents: v.price %}</div>
                 <div class="prod-actions">
-                  <button class="add-btn" data-add="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %}>{% render 'bi', en: 'Add to cart', ar: 'ضيف للسلة' %}</button>
+                  <button class="add-btn" data-add="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %}>{% render 'bi', en: 'Add to cart', ar: 'عبيلي فالشنطة' %}</button>
                   {%- comment -%}
                     Only products with a 3D model get the AR button; add a model
                     to a product in Shopify and its button appears by itself.
@@ -151,7 +151,7 @@
         { "type": "product", "id": "product", "label": "Add to Cart adds", "info": "One product. Ignored when bundle variant IDs are set." },
         { "type": "text", "id": "variant_ids", "label": "Bundle variant IDs", "info": "Comma-separated. The button adds all of them at once — the website's bundle offers." },
         { "type": "text", "id": "button_en", "label": "Bundle button (English)", "default": "Add bundle to cart" },
-        { "type": "text", "id": "button_ar", "label": "Bundle button (Arabic)", "default": "ضيف العرض للسلة" }
+        { "type": "text", "id": "button_ar", "label": "Bundle button (Arabic)", "default": "عبيلي العرض فالشنطة" }
       ]
     },
     {
@@ -163,7 +163,7 @@
         { "type": "url", "id": "link", "label": "Opens", "info": "Defaults to the collection above." },
         { "type": "text", "id": "variant_ids", "label": "Bundle variant IDs (optional)", "info": "Comma-separated. Adds a button that puts all of them in the cart." },
         { "type": "text", "id": "button_en", "label": "Button (English)", "default": "Add to Cart" },
-        { "type": "text", "id": "button_ar", "label": "Button (Arabic)", "default": "ضيف للسلة" }
+        { "type": "text", "id": "button_ar", "label": "Button (Arabic)", "default": "عبيلي فالشنطة" }
       ]
     },
     {

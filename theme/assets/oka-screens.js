@@ -33,7 +33,7 @@
         <a href="${esc(p.url)}" class="gcard-title">${esc(O.ptitle(p))}</a>
         <div class="gcard-row">
           <span class="gcard-price">${esc(fmtPrice(p.price))}</span>
-          <button class="gcard-add" data-add="${p.variantId}"${p.stock === 0 || p.available === false ? ' data-soldout' : ''}>${esc(L('Add', 'ضيف'))}</button>
+          <button class="gcard-add" data-add="${p.variantId}"${p.stock === 0 || p.available === false ? ' data-soldout' : ''}>${esc(L('Add', 'عبيلي فالشنطة'))}</button>
         </div>
       </div>
     </div>`;
@@ -435,7 +435,7 @@
               <a href="${esc(p.url)}" class="bs-img" style="display:block">${img(p.img)}</a>
               <div class="bs-body">
                 <a href="${esc(p.url)}" class="bs-title" style="display:block">${esc(O.ptitle(p))}</a>
-                <div class="bs-foot"><span class="bs-price">${esc(fmtPrice(p.price))}</span><button class="bs-add press s96" data-add="${p.variantId}"${p.stock === 0 ? ' data-soldout' : ''}>${esc(L('Add', 'ضيف'))}</button></div>
+                <div class="bs-foot"><span class="bs-price">${esc(fmtPrice(p.price))}</span><button class="bs-add press s96" data-add="${p.variantId}"${p.stock === 0 ? ' data-soldout' : ''}>${esc(L('Add', 'عبيلي فالشنطة'))}</button></div>
               </div>
             </div>`).join('')}</div>` : ''}`;
         $$('[data-drag]', host).forEach(dragScroll);
