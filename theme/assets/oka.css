@@ -142,16 +142,19 @@ html[dir="rtl"] .app {
   display: flex; align-items: center; justify-content: center;
   border-start-start-radius: 0; border-end-start-radius: 0;
   border-start-end-radius: 16px; border-end-end-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.6); border-inline-start: 0;
-  background: linear-gradient(160deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.35) 52%, rgba(255,255,255,0.55) 100%);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  backdrop-filter: blur(20px) saturate(1.6);
-  box-shadow: var(--glass-bar);
-  color: rgba(0,0,0,0.7);
+  /* Dark, like the app's primary buttons: a pale glass tab vanished against
+     the white canvas. */
+  border: 0;
+  background: var(--dark-grad);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
+  color: #fff;
   transition: transform .3s var(--ease-out), opacity .2s var(--ease);
 }
 .menu-handle svg { width: 16px; height: 16px; }
-.menu-handle .badge { top: 4px; right: auto; inset-inline-end: -6px; }
+.menu-handle .badge {
+  top: -6px; right: auto; inset-inline-end: -4px;
+  background: #fff; color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
 .menu-open .menu-handle { opacity: 0; pointer-events: none; }
 .menu-scrim {
   position: absolute; inset: 0; z-index: 40;
@@ -173,7 +176,10 @@ html[dir="rtl"] .app {
   visibility: hidden;
 }
 html[dir="rtl"] .side-menu { transform: translateX(104%); box-shadow: 0 0 0 1px rgba(255,255,255,0.6), -18px 0 50px rgba(0,0,0,0.18); }
-.menu-open .side-menu { transform: none; visibility: visible; }
+/* Must outrank the RTL rule above (html[dir] + class), or in Arabic — the
+   default — the drawer opens off-screen and never appears. */
+.menu-open .side-menu,
+html[dir="rtl"] .menu-open .side-menu { transform: none; visibility: visible; }
 .side-head { display: flex; align-items: center; justify-content: space-between; padding: 4px 8px 14px; }
 .side-logo { width: 34px; height: 34px; object-fit: contain; }
 .side-close {
