@@ -251,7 +251,6 @@
   /** Stands in for the success haptic where there is none (desktop, iOS Safari). */
   function addedFeedback() {
     if (canVibrate && matchMedia('(pointer: coarse)').matches) return;
-    if ($('.tabbar')) return; // the cart badge pops — that's the app's own feedback
     toast(L('Added to cart', 'اتضاف للسلة'));
   }
   function toast(text) {
@@ -498,8 +497,60 @@
     }
   }
 
+  /* ── side menu ───────────────────────────────────────────────────────────
+   * Replaces the bottom tab bar. Opened from the edge handle or the home
+   * header's ☰; closed by the scrim, the ✕, Escape, or a swipe back towards
+   * the edge it came from. While closed it is `inert`, so its links are
+   * neither tabbable nor read out.
+   */
+  let menuReturnFocus = null;
+  function openMenu() {
+    const app = $('#app');
+    const menu = $('#side-menu');
+    if (!app || !menu || app.classList.contains('menu-open')) return;
+    menuReturnFocus = document.activeElement;
+    menu.removeAttribute('inert');
+    menu.setAttribute('aria-hidden', 'false');
+    $$('[data-menu-open]').forEach((b) => b.setAttribute('aria-expanded', 'true'));
+    $('.menu-scrim')?.removeAttribute('hidden');
+    app.classList.add('menu-open');
+    haptic.selectionTick();
+    requestAnimationFrame(() => ($('.side-link.active', menu) || $('.side-link', menu))?.focus({ preventScroll: true }));
+  }
+  function closeMenu() {
+    const app = $('#app');
+    const menu = $('#side-menu');
+    if (!app || !menu || !app.classList.contains('menu-open')) return;
+    app.classList.remove('menu-open');
+    menu.setAttribute('inert', '');
+    menu.setAttribute('aria-hidden', 'true');
+    $$('[data-menu-open]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+    $('.menu-scrim')?.setAttribute('hidden', '');
+    menuReturnFocus?.focus?.({ preventScroll: true });
+  }
+  function wireMenu() {
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    // Swipe the drawer back towards its edge to close it.
+    const menu = $('#side-menu');
+    if (!menu) return;
+    let x0 = null;
+    let y0 = null;
+    menu.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    menu.addEventListener('touchend', (e) => {
+      if (x0 == null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      const dy = e.changedTouches[0].clientY - y0;
+      x0 = null;
+      const towardsEdge = isRtl() ? dx > 50 : dx < -50;
+      if (towardsEdge && Math.abs(dx) > Math.abs(dy) * 1.5) closeMenu();
+    }, { passive: true });
+    // Going back to a page from the bfcache must not show the menu still open.
+    window.addEventListener('pageshow', () => closeMenu());
+  }
+
   /* ── global wiring ───────────────────────────────────────────────────── */
   function wire() {
+    wireMenu();
     document.addEventListener('click', (e) => {
       const back = e.target.closest('[data-back]');
       if (back) { e.preventDefault(); goBack(back.dataset.back); return; }
@@ -509,6 +560,21 @@
 
       const ar = e.target.closest('[data-ar]');
       if (ar) { e.preventDefault(); openAr(ar.dataset.ar); return; }
+
+      // A bundle offer: every variant in one cart call, so it lands whole or not at all.
+      const bundle = e.target.closest('[data-add-bundle]');
+      if (bundle) {
+        e.preventDefault();
+        if (bundle.disabled) return;
+        const ids = bundle.dataset.addBundle.split(',').map((x) => x.trim()).filter(Boolean);
+        if (!ids.length) return;
+        bundle.disabled = true;
+        addManyToCart(ids.map((variantId) => ({ variantId, quantity: 1 })))
+          .then(() => { haptic.success?.(); toast(L('Bundle added to cart', 'العرض اتضاف للسلة')); })
+          .catch(() => toast(L("Couldn't add this offer — part of it may be sold out", 'تعذّر إضافة العرض — ممكن جزء منه يكون خلص')))
+          .finally(() => { bundle.disabled = false; });
+        return;
+      }
 
       const add = e.target.closest('[data-add]');
       if (add && add.dataset.add && !add.closest('.ar') && !add.hasAttribute('data-custom')) {
@@ -528,8 +594,17 @@
       const signIn = e.target.closest('[data-sign-in]');
       if (signIn) { e.preventDefault(); requireSignIn(signIn.dataset.signIn || undefined); return; }
 
-      const tab = e.target.closest('.tab');
-      if (tab && !tab.classList.contains('active')) haptic.selectionTick();
+      const opener = e.target.closest('[data-menu-open]');
+      if (opener) { e.preventDefault(); openMenu(); return; }
+      const closer = e.target.closest('[data-menu-close]');
+      if (closer) { e.preventDefault(); closeMenu(); return; }
+
+      const link = e.target.closest('.side-link');
+      if (link) {
+        if (!link.classList.contains('active')) haptic.selectionTick();
+        // Same page: just close. Elsewhere: let it navigate (the menu goes with the page).
+        if (link.classList.contains('active')) { e.preventDefault(); closeMenu(); }
+      }
     });
 
     document.addEventListener('oka:lang', () => renderBadges());
@@ -543,6 +618,7 @@
     getCart, setCart, addToCart, addManyToCart, changeLine, applyDiscount, cartCount, cartQtyOf, cartTotals, toast,
     loadCatalogue, ptitle, pdesc, searchProducts, wishlist,
     api, hasService, requireSignIn, goBack, whatsappUrl, okaAlert, openAr,
+    openMenu, closeMenu,
   };
 
   function init() {

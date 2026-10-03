@@ -2,6 +2,33 @@
 
 Everything that has changed in the OKA shop app, newest first.
 
+## 2026-10-03 — Side menu, the website's banners, tracking via the GCP connector
+
+### Shopify theme (`theme/`)
+- The bottom tab bar is gone. A collapsible side menu replaces it: a slim
+  handle on the leading edge of every screen (and ☰ in the home header) opens
+  it; the scrim, ✕, Escape or a swipe back towards the edge closes it. It
+  slides from the right in Arabic. Home, categories, search, cart (with its
+  badge), orders & tracking, account, points, subscriptions, wishlist,
+  support and the language switch live there.
+- Offers start with the live website's two bundle offers — the banner and a
+  button that adds the whole bundle in one cart call — followed by the
+  existing promos. Offer cards take each banner's own shape.
+- The live website's graphic banners keep their places: each is a feed page of
+  its own, just before the collection it introduces on okaegypt.com. New
+  `Banner` block (image, "show before collection", link, optional bundle).
+- The feed's collections follow the live homepage's order: Premium Hookahs,
+  Parties, Cobra, Dark Tobacco, ready-to-smoke bowls, parts, then basic
+  hookahs, hoses, coal and bowls (theme settings → Collections).
+
+### Order service
+- J&T tracking can run through OKA's J&T connector on GCP (`jt-mcp-server`):
+  set `JT_CONNECTOR_URL` and `JT_CONNECTOR_TOKEN` and every tracking lookup —
+  the app's and the website's — calls its `list_deliveries` and
+  `track_delivery` tools. Only those two read tools are ever called. The token
+  stays in the server's environment; the theme and the app never see it.
+  `/health` reports which route J&T is on (`jt.via`).
+
 ## 2026-10-02 — The app on the website
 
 ### Shopify theme (`theme/`)

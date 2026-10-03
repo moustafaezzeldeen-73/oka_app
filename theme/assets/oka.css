@@ -33,7 +33,6 @@
   --tab-active: inset 0 1.5px 2px rgba(255,255,255,0.95), 0 4px 10px rgba(0,0,0,0.16);
   --app-w: 430px;
   --top-pad: max(calc(env(safe-area-inset-top) - 5px), 8px);
-  --tab-gap: max(calc(env(safe-area-inset-bottom) - 20px), 14px);
 }
 
 /* ── language ─────────────────────────────────────────────────────────── */
@@ -91,7 +90,8 @@ html[dir="rtl"] .app {
   flex: 1;
   min-height: 0;
   padding-top: var(--top-pad);
-  padding-bottom: 8px;
+  /* Nothing is docked below the content any more; it owns the safe area. */
+  padding-bottom: max(env(safe-area-inset-bottom), 8px);
   display: flex;
   flex-direction: column;
 }
@@ -130,37 +130,92 @@ html[dir="rtl"] .app {
 .s99:active { transform: scale(.99); }
 .bg-press:active { background-color: rgba(0,0,0,0.035) !important; }
 
-/* ── tab bar (TabBar.js) ──────────────────────────────────────────────── */
-.tabbar {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  margin: 0 14px var(--tab-gap);
-  padding: 11px 8px;
-  border-radius: 34px;
-  border: 1px solid rgba(255,255,255,0.6);
-  background: linear-gradient(160deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 52%, rgba(255,255,255,0.3) 100%);
+/* ── side menu (replaced the bottom tab bar) ──────────────────────────────
+ * The tab bar's glass, re-cut as a drawer: same blur, same pressed-pill
+ * active state. It sits at the leading edge — left in English, right in
+ * Arabic — so `inset-inline-start` does the mirroring.
+ */
+.menu-handle {
+  position: absolute; z-index: 20;
+  top: 46%; inset-inline-start: 0;
+  width: 26px; height: 64px;
+  display: flex; align-items: center; justify-content: center;
+  border-start-start-radius: 0; border-end-start-radius: 0;
+  border-start-end-radius: 16px; border-end-end-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.6); border-inline-start: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.35) 52%, rgba(255,255,255,0.55) 100%);
   -webkit-backdrop-filter: blur(20px) saturate(1.6);
   backdrop-filter: blur(20px) saturate(1.6);
   box-shadow: var(--glass-bar);
-  flex-shrink: 0;
+  color: rgba(0,0,0,0.7);
+  transition: transform .3s var(--ease-out), opacity .2s var(--ease);
 }
-.tab { flex: 1; display: flex; justify-content: center; padding: 6px 0; }
-.tab-icon {
-  position: relative;
-  width: 46px; height: 46px; border-radius: 23px;
+.menu-handle svg { width: 16px; height: 16px; }
+.menu-handle .badge { top: 4px; right: auto; inset-inline-end: -6px; }
+.menu-open .menu-handle { opacity: 0; pointer-events: none; }
+.menu-scrim {
+  position: absolute; inset: 0; z-index: 40;
+  background: rgba(0,0,0,0.28);
+  animation: okaFade .25s var(--ease) both;
+}
+.side-menu {
+  position: absolute; z-index: 41;
+  top: 0; bottom: 0; inset-inline-start: 0;
+  width: min(300px, 82%);
+  display: flex; flex-direction: column;
+  padding: max(env(safe-area-inset-top), 16px) 14px max(env(safe-area-inset-bottom), 16px);
+  background: linear-gradient(160deg, rgba(255,255,255,0.92) 0%, rgba(250,250,252,0.86) 100%);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.6), 18px 0 50px rgba(0,0,0,0.18);
+  transform: translateX(-104%);
+  transition: transform .35s var(--ease-out);
+  visibility: hidden;
+}
+html[dir="rtl"] .side-menu { transform: translateX(104%); box-shadow: 0 0 0 1px rgba(255,255,255,0.6), -18px 0 50px rgba(0,0,0,0.18); }
+.menu-open .side-menu { transform: none; visibility: visible; }
+.side-head { display: flex; align-items: center; justify-content: space-between; padding: 4px 8px 14px; }
+.side-logo { width: 34px; height: 34px; object-fit: contain; }
+.side-close {
+  width: 34px; height: 34px; border-radius: 17px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.05);
+}
+.side-links { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; scrollbar-width: none; }
+.side-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 10px; border-radius: 16px;
+  font-size: 15px; font-weight: 600; color: rgba(0,0,0,0.78);
+}
+.side-link:active { background: rgba(0,0,0,0.05); }
+.side-icon {
+  position: relative; flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 20px;
   display: flex; align-items: center; justify-content: center;
   color: rgba(0,0,0,0.55);
 }
-.tab.active .tab-icon { color: #000; }
-.tab.active .tab-icon::before {
-  content: "";
-  position: absolute; inset: 0;
-  border-radius: 23px;
-  background: linear-gradient(150deg, rgba(255,255,255,0.9), rgba(255,255,255,0.45));
+.side-icon svg { position: relative; }
+.side-link.active { color: #000; font-weight: 800; }
+.side-link.active .side-icon { color: #000; }
+.side-link.active .side-icon::before {
+  content: ""; position: absolute; inset: 0; border-radius: 20px;
+  background: linear-gradient(150deg, rgba(255,255,255,0.95), rgba(255,255,255,0.5));
   box-shadow: var(--tab-active);
 }
-.tab-icon svg { position: relative; }
+.side-foot { padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.06); }
+.side-lang {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 12px; border-radius: 16px; font-size: 14px; font-weight: 600;
+}
+.side-lang b {
+  min-width: 34px; height: 34px; border-radius: 17px; padding: 0 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.55); border: 1px solid rgba(0,0,0,0.08); font-size: 12px;
+}
+.side-lang:active { background: rgba(0,0,0,0.04); }
+@media (prefers-reduced-motion: reduce) {
+  .side-menu, .menu-handle { transition: none; }
+}
 .badge {
   position: absolute; top: -4px; right: -4px;
   min-width: 15px; height: 15px; padding: 0 3px; border-radius: 8px;
@@ -354,6 +409,21 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
   display: flex; flex-direction: column; justify-content: center;
   padding: 6px 0 18px;
 }
+/* A graphic banner from the original site, on a page of its own. Sized from
+   the feed's own box (container units), so it always fits whole. */
+.feed { container-type: size; }
+.banner-page { align-items: center; gap: 14px; padding: 12px 22px 18px; }
+.banner-card {
+  display: block; border-radius: 26px; overflow: hidden;
+  background: #fff; box-shadow: 0 14px 34px rgba(0,0,0,0.12);
+}
+.banner-card img {
+  display: block; width: auto; height: auto;
+  max-width: min(calc(100cqw - 44px), 420px);
+  max-height: calc(100cqh - 40px);
+}
+.banner-page:has(.banner-cta) .banner-card img { max-height: calc(100cqh - 104px); }
+.banner-cta { width: min(calc(100cqw - 44px), 320px); margin-top: 0; }
 .page-title {
   text-align: center; font-weight: 800; font-size: 22px; margin-bottom: 14px;
   transition: transform .35s var(--ease), opacity .35s var(--ease);
@@ -367,10 +437,14 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 }
 .rail.offers { --w: 264px; height: 363px; align-items: flex-start; }
 .rail.prods { --w: 200px; height: 369px; align-items: center; }
-.offer-slot { flex: 0 0 264px; width: 264px; scroll-snap-align: center; }
+.offer-slot {
+  /* The card keeps the banner's own shape inside the 264×300 box. */
+  --cw: min(264px, calc(300px * var(--ratio, 0.88)));
+  flex: 0 0 var(--cw); width: var(--cw); scroll-snap-align: center;
+}
 .offer-card {
   display: flex; align-items: center; justify-content: center;
-  width: 264px; height: 300px; border-radius: 26px; overflow: hidden;
+  width: var(--cw, 264px); height: calc(var(--cw, 264px) / var(--ratio, 0.88)); border-radius: 26px; overflow: hidden;
   background: #fff; box-shadow: 0 14px 34px rgba(0,0,0,0.12);
 }
 .offer-card img { width: 100%; height: 100%; object-fit: contain; }
@@ -901,7 +975,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 /* the "added" tick that stands in for the success haptic on desktop */
 .toast {
-  position: absolute; left: 50%; bottom: 110px; z-index: 45;
+  position: absolute; left: 50%; bottom: calc(28px + env(safe-area-inset-bottom)); z-index: 45;
   transform: translateX(-50%);
   padding: 10px 16px; border-radius: 999px; background: rgba(29,29,31,0.92); color: #fff;
   font-size: 13px; font-weight: 700; white-space: nowrap;

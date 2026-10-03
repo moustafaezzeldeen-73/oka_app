@@ -1,0 +1,21 @@
+{%- comment -%}
+  One graphic banner from the original website, as its own feed page.
+  `nav` is the selector item it belongs to (the collection it introduces),
+  so scrolling onto it keeps the lens where the shopper expects.
+  Usage: {% render 'banner-page', block: block, nav: 3 %}
+{%- endcomment -%}
+{%- liquid
+  assign img = block.settings.image
+  assign link = block.settings.link | default: block.settings.before.url
+  assign bundle = block.settings.variant_ids | remove: ' '
+-%}
+{%- if img -%}
+  <section class="page banner-page" data-banner data-nav="{{ nav }}" {{ block.shopify_attributes }}>
+    {%- if link != blank -%}<a href="{{ link }}" class="banner-card" style="--ratio: {{ img.aspect_ratio }}">{%- else -%}<div class="banner-card" style="--ratio: {{ img.aspect_ratio }}">{%- endif -%}
+      {{ img | image_url: width: 900 | image_tag: alt: img.alt, loading: 'lazy', widths: '450, 700, 900', sizes: '(min-width: 431px) 400px, 92vw' }}
+    {%- if link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+    {%- if bundle != blank -%}
+      <button class="offer-cta banner-cta" data-add-bundle="{{ bundle }}">{% render 'bi', en: block.settings.button_en, ar: block.settings.button_ar %}</button>
+    {%- endif -%}
+  </section>
+{%- endif -%}

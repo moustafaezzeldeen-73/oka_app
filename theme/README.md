@@ -34,6 +34,12 @@ website reaches it through a Shopify **App Proxy**:
    proxy URL `https://<order service>/proxy`.
 3. Theme settings → **OKA order service** → App proxy path: `/apps/oka`.
 
+**Tracking through OKA's J&T connector (GCP).** Set `JT_CONNECTOR_URL` (the
+connector's address, with or without `/mcp`) and `JT_CONNECTOR_TOKEN` (its
+`CONNECTOR_AUTH_TOKEN`) on the order service, and tracking goes through the
+connector instead of J&T directly. Never put that token in the theme: it can
+create and cancel shipments, and anything in a theme is public.
+
 Shopify signs every proxied request and adds the signed-in storefront
 customer; `server/auth/appProxy.js` verifies it and runs the request as that
 customer, so a shopper only ever sees their own orders. Guests (not signed in)
@@ -47,3 +53,12 @@ store-credit points, AR — and edit/cancel requests go to WhatsApp.
 
 `shopify theme check --path theme` must report no offenses. Rebuild the
 package with `cd theme && zip -qr ../dist/oka-theme.zip layout templates sections snippets assets config locales`.
+
+## Home feed
+
+- **Offers** (`Offer` blocks): a banner and a button. With *Bundle variant
+  IDs* set, the button adds all of them at once — the website's bundle offers.
+- **Banners** (`Banner` blocks): a graphic banner as a page of its own, just
+  before the collection picked in *Show before collection*; a banner whose
+  collection isn't in the feed follows the Offers page.
+- **Menu**: the side menu in `layout/theme.liquid` replaced the bottom tab bar.

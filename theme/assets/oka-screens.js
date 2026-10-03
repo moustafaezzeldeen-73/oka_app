@@ -119,7 +119,19 @@
     const nav = $('[data-nav]', root);
     const pages = $$('.page', feed);
     const items = $$('.nav-item', nav);
-    let active = 0;
+    /**
+     * Pages and selector items are no longer one-to-one: a graphic banner is
+     * a page of its own, belonging to the collection it introduces. `navOf`
+     * maps each page to its selector item; `pageOf` maps an item to its
+     * collection's page (not the banner before it).
+     */
+    const navOf = pages.map((p) => Number(p.dataset.nav ?? p.dataset.i ?? 0));
+    const pageOf = items.map((_, i) => {
+      const own = pages.findIndex((p, k) => navOf[k] === i && !p.hasAttribute('data-banner'));
+      return own >= 0 ? own : Math.max(0, navOf.indexOf(i));
+    });
+    let active = 0; // selector item
+    let activePage = 0;
     /**
      * The strip and the feed drive each other. A scroll the code started
      * must not come back as "the shopper picked this", or the two chase each
@@ -139,15 +151,20 @@
       nav.scrollBy({ left: delta, behavior: smooth ? 'smooth' : 'auto' });
     }
 
-    function setActive(i, { moveNav = true, moveFeed = false, haptic = true } = {}) {
-      if (i === active) return;
-      active = i;
-      items.forEach((el, k) => el.classList.toggle('active', k === i));
-      pages.forEach((el, k) => el.classList.toggle('active', k === i));
-      if (moveNav) centerNav(i);
+    /** `k` is a page index; the selector follows whichever item owns it. */
+    function setActive(k, { moveNav = true, moveFeed = false, haptic = true } = {}) {
+      if (k === activePage) return;
+      activePage = k;
+      pages.forEach((el, j) => el.classList.toggle('active', j === k));
+      const i = navOf[k] ?? 0;
+      if (i !== active) {
+        active = i;
+        items.forEach((el, j) => el.classList.toggle('active', j === i));
+        if (moveNav) centerNav(i);
+      }
       if (moveFeed) {
         hush('feed', 900);
-        feed.scrollTo({ top: i * feed.clientHeight, behavior: 'smooth' });
+        feed.scrollTo({ top: k * feed.clientHeight, behavior: 'smooth' });
       }
       if (haptic) O.haptic.snapCollection();
     }
@@ -167,11 +184,12 @@
     // Scrolling the selector itself selects a collection and moves the feed.
     onScrollEnd(nav, () => {
       if (Date.now() < quiet.nav) return;
-      setActive(nearest(nav, items), { moveNav: false, moveFeed: true });
+      const i = nearest(nav, items);
+      if (i !== active) setActive(pageOf[i], { moveNav: false, moveFeed: true });
     });
 
     // Tapping a selector item drives the feed.
-    items.forEach((it, i) => it.addEventListener('click', () => setActive(i, { moveNav: true, moveFeed: true })));
+    items.forEach((it, i) => it.addEventListener('click', () => setActive(pageOf[i], { moveNav: true, moveFeed: true })));
 
     // One notch per product, with a light tick on every notch.
     $$('[data-rail]', feed).forEach((rail) => {
@@ -219,7 +237,7 @@
       });
     }));
     // Keep the page snapped to a collection when the viewport changes height.
-    window.addEventListener('resize', () => { hush('feed', 300); feed.scrollTop = active * feed.clientHeight; });
+    window.addEventListener('resize', () => { hush('feed', 300); feed.scrollTop = activePage * feed.clientHeight; });
   }
 
   /* ════════════════════════════════════════════════════════════════════

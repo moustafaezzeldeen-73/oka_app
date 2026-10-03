@@ -3,15 +3,128 @@
     "feed": {
       "type": "oka-home",
       "blocks": {
-        "offer-1": { "type": "offer", "settings": { "bundled_image": "promo1.jpg", "collection": "hookahs", "product": "oka-cobra" } },
-        "offer-2": { "type": "offer", "settings": { "bundled_image": "promo2.jpg", "collection": "hookahs", "product": "oka-cobra-led-rechargeable-base" } },
-        "offer-3": { "type": "offer", "settings": { "bundled_image": "promo3.jpg", "collection": "hookahs", "product": "oka-carbon-black-hookah" } },
-        "offer-4": { "type": "offer", "settings": { "bundled_image": "promo4.jpg", "collection": "dark-tobacco", "product": "oka-black-tobacco" } },
-        "offer-5": { "type": "offer", "settings": { "bundled_image": "promo5.jpg", "collection": "oka-parts", "product": "oka-stem" } }
+        "bundle-1": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/1_e837ee23-f89a-4575-a040-145c02960102.png",
+            "collection": "hookahs",
+            "variant_ids": "47026198217002,49400093081898,49400060805418,46037718303018",
+            "button_en": "Add bundle to cart",
+            "button_ar": "أضف العرض للسلة"
+          }
+        },
+        "bundle-2": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/3_38369644-1b55-46a5-82a3-b737d078e7fe.png",
+            "collection": "hookahs",
+            "variant_ids": "47026198217002,49371416363306,49400093081898,49400060805418,46037718303018",
+            "button_en": "Add bundle to cart",
+            "button_ar": "أضف العرض للسلة"
+          }
+        },
+        "offer-1": {
+          "type": "offer",
+          "settings": {
+            "bundled_image": "promo1.jpg",
+            "collection": "hookahs",
+            "product": "oka-cobra"
+          }
+        },
+        "offer-2": {
+          "type": "offer",
+          "settings": {
+            "bundled_image": "promo2.jpg",
+            "collection": "hookahs",
+            "product": "oka-cobra-led-rechargeable-base"
+          }
+        },
+        "offer-3": {
+          "type": "offer",
+          "settings": {
+            "bundled_image": "promo3.jpg",
+            "collection": "hookahs",
+            "product": "oka-carbon-black-hookah"
+          }
+        },
+        "offer-4": {
+          "type": "offer",
+          "settings": {
+            "bundled_image": "promo4.jpg",
+            "collection": "dark-tobacco",
+            "product": "oka-black-tobacco"
+          }
+        },
+        "offer-5": {
+          "type": "offer",
+          "settings": {
+            "bundled_image": "promo5.jpg",
+            "collection": "oka-parts",
+            "product": "oka-stem"
+          }
+        },
+        "banner-premium": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/Copy_of_Your_paragraph_text.png",
+            "before": "oka-basic-hookahs-copy"
+          }
+        },
+        "banner-parties-1": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/1_7afffa90-7771-481e-b8df-384590df3f7e.png",
+            "before": "oka-parties"
+          }
+        },
+        "banner-parties-2": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/2_91efa2d1-41e9-4649-83ec-e145bdb9b254.png",
+            "before": "oka-parties"
+          }
+        },
+        "banner-dark-tobacco": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/1_bbc68db1-54d8-4cd1-84a8-e4c90af8a693.png",
+            "before": "dark-tobacco"
+          }
+        },
+        "banner-bowls": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/Copy_of_OKA_-_1.png",
+            "before": "ready-to-smoke-bowls"
+          }
+        },
+        "banner-parts": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/1_e3f61bcf-4efd-419c-9a50-0efcb0f264fe.png",
+            "before": "oka-parts"
+          }
+        }
       },
-      "block_order": ["offer-1", "offer-2", "offer-3", "offer-4", "offer-5"],
+      "block_order": [
+        "bundle-1",
+        "bundle-2",
+        "offer-1",
+        "offer-2",
+        "offer-3",
+        "offer-4",
+        "offer-5",
+        "banner-premium",
+        "banner-parties-1",
+        "banner-parties-2",
+        "banner-dark-tobacco",
+        "banner-bowls",
+        "banner-parts"
+      ],
       "settings": {}
     }
   },
-  "order": ["feed"]
+  "order": [
+    "feed"
+  ]
 }

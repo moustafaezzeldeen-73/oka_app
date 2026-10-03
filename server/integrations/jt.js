@@ -35,8 +35,109 @@ const CANCELLED = 104;
 
 const md5 = (s) => createHash('md5').update(s, 'utf8');
 
+/**
+ * Two ways to reach J&T for tracking:
+ *
+ *   connector  OKA's own J&T connector (jt-mcp-server, hosted on GCP), when
+ *              JT_CONNECTOR_URL and JT_CONNECTOR_TOKEN are set. It holds the
+ *              J&T credentials itself; this service only holds its token.
+ *   direct     J&T's open platform, signed here with the JT_* credentials.
+ *
+ * The connector wins when both are configured. Only the two read calls this
+ * module makes (trace, order lookup) ever go through it — never create or
+ * cancel — and its token stays in this server's environment: the website
+ * and the app only ever talk to this service, never to the connector.
+ */
+const viaConnector = () =>
+  Boolean(process.env.JT_CONNECTOR_URL && process.env.JT_CONNECTOR_TOKEN);
+
 export const hasJT = () =>
-  Boolean(process.env.JT_API_ACCOUNT && process.env.JT_PRIVATE_KEY);
+  viaConnector() || Boolean(process.env.JT_API_ACCOUNT && process.env.JT_PRIVATE_KEY);
+
+export const jtTransport = () => (viaConnector() ? 'connector' : 'direct');
+
+/**
+ * The connector's tools return J&T's own reply ({ code, msg, data }) as text;
+ * a J&T-side failure comes back as an MCP error result reading
+ * "J&T API error <code>: <msg>". Both are mapped onto what `call` would have
+ * produced, so everything above this layer works the same either way.
+ */
+const CONNECTOR_TOOLS = {
+  'logistics/trace': (biz) => ['track_delivery', { billCodes: String(biz.billCodes).split(',') }],
+  'order/getOrders': (biz) => [
+    'list_deliveries',
+    { command: biz.command, serialNumbers: biz.serialNumber },
+  ],
+};
+
+let rpcId = 0;
+
+async function callConnector(path, biz) {
+  const map = CONNECTOR_TOOLS[path];
+  if (!map) throw new Error(`J&T connector: ${path} is not a read call`);
+  const [name, args] = map(biz);
+  const url = `${process.env.JT_CONNECTOR_URL.replace(/\/+$/, '').replace(/\/mcp$/, '')}/mcp`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // Streamable HTTP: the server may answer as JSON or as one SSE event.
+      Accept: 'application/json, text/event-stream',
+      'x-api-key': process.env.JT_CONNECTOR_TOKEN,
+    },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: ++rpcId,
+      method: 'tools/call',
+      params: { name, arguments: args },
+    }),
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+  });
+
+  const text = await res.text();
+  if (res.status === 401) throw new Error('J&T connector rejected the token (check JT_CONNECTOR_TOKEN)');
+  if (!res.ok) throw new Error(`J&T connector returned HTTP ${res.status}: ${text.slice(0, 200)}`);
+
+  const payload = text.trimStart().startsWith('{')
+    ? text
+    : text
+        .split('\n')
+        .filter((l) => l.startsWith('data:'))
+        .map((l) => l.slice(5).trim())
+        .join('');
+  let rpc;
+  try {
+    rpc = JSON.parse(payload);
+  } catch {
+    throw new Error(`J&T connector returned an unreadable reply: ${text.slice(0, 200)}`);
+  }
+  if (rpc.error) throw new Error(`J&T connector: ${rpc.error.message ?? 'request failed'}`);
+
+  const body = (rpc.result?.content ?? [])
+    .filter((c) => c.type === 'text')
+    .map((c) => c.text)
+    .join('');
+  if (rpc.result?.isError) {
+    const m = /J&T API error (\w+):\s*(.*)/s.exec(body);
+    const err = new Error(`J&T ${path}: ${m ? m[2].trim() : body.slice(0, 200)}${m ? ` (code ${m[1]})` : ''}`);
+    if (m) err.code = m[1];
+    throw err;
+  }
+
+  let json;
+  try {
+    json = JSON.parse(body);
+  } catch {
+    throw new Error(`J&T connector: ${path} returned non-JSON: ${body.slice(0, 200)}`);
+  }
+  if (json.code != null && String(json.code) !== '1') {
+    const err = new Error(`J&T ${path}: ${json.msg ?? 'request failed'} (code ${json.code})`);
+    err.code = String(json.code);
+    throw err;
+  }
+  return json.data ?? json;
+}
 
 function config() {
   const account = process.env.JT_API_ACCOUNT;
@@ -62,6 +163,7 @@ export function customerDigest(customerCode, password, privateKey) {
 }
 
 async function call(path, biz) {
+  if (viaConnector()) return callConnector(path, biz);
   const { account, privateKey } = config();
   const bizContent = JSON.stringify(biz);
 
@@ -129,15 +231,19 @@ const isNoMatch = (err) => err?.code === '999001030' && /waybillNos/.test(err.me
 
 /** J&T order records by our own reference (SHOPIFY…). */
 export async function getOrders(refs = []) {
-  const code = process.env.JT_CUSTOMER_CODE;
-  const password = process.env.JT_CUSTOMER_PASSWORD;
-  if (!code || !password) {
-    throw new Error('Missing required environment variables: JT_CUSTOMER_CODE / JT_CUSTOMER_PASSWORD');
+  // The connector signs the customer digest itself; only a direct call needs it here.
+  let auth = {};
+  if (!viaConnector()) {
+    const code = process.env.JT_CUSTOMER_CODE;
+    const password = process.env.JT_CUSTOMER_PASSWORD;
+    if (!code || !password) {
+      throw new Error('Missing required environment variables: JT_CUSTOMER_CODE / JT_CUSTOMER_PASSWORD');
+    }
+    auth = { customerCode: code, digest: customerDigest(code, password, config().privateKey) };
   }
-  const digest = customerDigest(code, password, config().privateKey);
   const pages = await Promise.all(
     chunk(refs, BATCH).map((part) =>
-      call('order/getOrders', { customerCode: code, digest, command: 1, serialNumber: part }).catch(
+      call('order/getOrders', { ...auth, command: 1, serialNumber: part }).catch(
         (err) => {
           if (isNoMatch(err)) return [];
           throw err;
@@ -196,7 +302,7 @@ export async function pingJT() {
   if (!hasJT()) return { ok: false, error: 'J&T is not configured' };
   try {
     await getOrders(['SHOPIFY0']);
-    return { ok: true };
+    return { ok: true, via: jtTransport() };
   } catch (err) {
     return { ok: false, error: err.message };
   }
