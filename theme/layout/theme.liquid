@@ -156,6 +156,18 @@
 
   <body class="t-{{ template.name }}">
     <div class="app" id="app">
+      {%- comment -%}
+        The logo bar, on every page: menu, logo (home), language. It shrinks
+        as soon as the page's own content scrolls (assets/oka.js), the way the
+        original site's sticky header does.
+      {%- endcomment -%}
+      <header class="top-bar" data-top-bar>
+        <div class="top-row">
+          <button class="circle-34 press s94" data-menu-open aria-label="Menu" aria-controls="side-menu" aria-expanded="false">{% render 'icon', name: 'menu', px: 17 %}</button>
+          <a href="{{ routes.root_url }}" class="top-logo-link" aria-label="{{ shop.name }}"><img src="{{ logo_url }}" alt="{{ shop.name }}" class="top-logo" width="32" height="32"></a>
+          <button class="circle-34 press s94" data-toggle-lang><span data-lang-label>{% if settings.default_lang == 'ar' %}EN{% else %}ع{% endif %}</span></button>
+        </div>
+      </header>
       <main class="content" id="content" role="main">
         {{ content_for_layout }}
       </main>

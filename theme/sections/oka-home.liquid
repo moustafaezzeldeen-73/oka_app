@@ -5,9 +5,9 @@
   prototype used, and what the app's pagingEnabled reproduces).
   Horizontal: one notch per product.
 
-  Above the feed there is only the logo bar; it shrinks once the shopper
-  scrolls past the first page. The collection selector strip that used to sit
-  under it was removed to give the feed the room.
+  Above the feed there is only the layout's logo bar (layout/theme.liquid),
+  which shrinks once the shopper scrolls. The collection selector strip that
+  used to sit under it was removed to give the feed the room.
 
   The feed, top to bottom:
     Offers       real offers only — a banner and a button that buys it
@@ -18,22 +18,8 @@
                  skipped (see snippets/live-collections.liquid)
   Behaviour lives in assets/oka-screens.js (screen "home").
 {%- endcomment -%}
-{%- liquid
-  if settings.logo
-    assign logo_url = settings.logo | image_url: width: 128
-  else
-    assign logo_url = 'oka-logo.png' | asset_url
-  endif
--%}
 {%- capture live -%}{% render 'live-collections', dedupe: true %}{%- endcapture -%}
 <div class="home fade-in" data-screen="home">
-  <header class="home-hdr" data-home-hdr>
-    <div class="home-row">
-      <button class="circle-34 press s94" data-menu-open aria-label="Menu" aria-controls="side-menu" aria-expanded="false">{% render 'icon', name: 'menu', px: 17 %}</button>
-      <img src="{{ logo_url }}" alt="{{ shop.name }}" class="home-logo" width="32" height="32">
-      <button class="circle-34 press s94" data-toggle-lang><span data-lang-label>{% if settings.default_lang == 'ar' %}EN{% else %}ع{% endif %}</span></button>
-    </div>
-  </header>
 
   <div class="feed" data-feed>
     {%- comment -%}

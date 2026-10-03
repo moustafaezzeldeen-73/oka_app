@@ -89,7 +89,8 @@ html[dir="rtl"] .app {
   position: relative;
   flex: 1;
   min-height: 0;
-  padding-top: var(--top-pad);
+  /* The safe area at the top now belongs to the logo bar above. */
+  padding-top: 0;
   /* Nothing is docked below the content any more; it owns the safe area. */
   padding-bottom: max(env(safe-area-inset-bottom), 8px);
   display: flex;
@@ -355,24 +356,26 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 /* ── Home (HomeScreen.js) ─────────────────────────────────────────────── */
 .home { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.home-hdr {
+.top-bar {
   position: relative; z-index: 3; flex-shrink: 0;
+  padding-top: var(--top-pad);
   background: rgba(255,255,255,0.55);
   -webkit-backdrop-filter: blur(24px) saturate(1.8);
   backdrop-filter: blur(24px) saturate(1.8);
   border-bottom: 1px solid rgba(0,0,0,0.06);
   overflow: hidden;
 }
-.home-row {
-  display: flex; align-items: center; justify-content: space-between; padding: 10px 22px 10px;
+.top-row {
+  display: flex; align-items: center; justify-content: space-between; padding: 8px 22px 8px;
   transition: padding .3s var(--ease-out);
 }
-.home-logo { width: 32px; height: 32px; object-fit: contain; transition: width .3s var(--ease-out), height .3s var(--ease-out); }
-.home-row .circle-34 { transition: transform .3s var(--ease-out); }
-/* Past the first page the logo bar shrinks, like the original site's sticky header. */
-.home-hdr.compact .home-row { padding-top: 4px; padding-bottom: 4px; }
-.home-hdr.compact .home-logo { width: 22px; height: 22px; }
-.home-hdr.compact .home-row .circle-34 { transform: scale(.82); }
+.top-logo-link { display: flex; }
+.top-logo { width: 32px; height: 32px; object-fit: contain; transition: width .3s var(--ease-out), height .3s var(--ease-out); }
+.top-row .circle-34 { transition: transform .3s var(--ease-out); }
+/* Once the page scrolls, the logo bar shrinks — the original site's sticky header. */
+.top-bar.compact .top-row { padding-top: 3px; padding-bottom: 3px; }
+.top-bar.compact .top-logo { width: 22px; height: 22px; }
+.top-bar.compact .top-row .circle-34 { transform: scale(.82); }
 .circle-34 {
   width: 34px; height: 34px; border-radius: 17px;
   background: rgba(255,255,255,0.55); border: 1px solid rgba(0,0,0,0.08);
@@ -1092,5 +1095,5 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
     transform: translate(-50%, -50%) rotate(var(--rot, -90deg));
   }
   /* The notch is now on a side of the viewport, i.e. the top of the shop. */
-  html.portrait-lock .content { padding-top: max(env(safe-area-inset-left), env(safe-area-inset-right), 12px); }
+  html.portrait-lock .top-bar { padding-top: max(env(safe-area-inset-left), env(safe-area-inset-right), 8px); }
 }

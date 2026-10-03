@@ -109,7 +109,6 @@
    * ════════════════════════════════════════════════════════════════════ */
   function home(root) {
     const feed = $('[data-feed]', root);
-    const hdr = $('[data-home-hdr]', root);
     const pages = $$('.page', feed);
     let activePage = 0;
 
@@ -129,7 +128,6 @@
       raf = requestAnimationFrame(() => {
         raf = 0;
         if (!feed.clientHeight) return;
-        hdr?.classList.toggle('compact', feed.scrollTop > 8);
         setActive(Math.max(0, Math.min(pages.length - 1, Math.round(feed.scrollTop / feed.clientHeight))));
       });
     }, { passive: true });

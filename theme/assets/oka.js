@@ -528,6 +528,25 @@
     $('.menu-scrim')?.setAttribute('hidden', '');
     menuReturnFocus?.focus?.({ preventScroll: true });
   }
+  /**
+   * The logo bar shrinks while the page's own scroller is scrolled — the feed
+   * on home, the `.screen` everywhere else. Horizontal rails are ignored.
+   */
+  function wireTopBar() {
+    const bar = $('[data-top-bar]');
+    if (!bar) return;
+    let raf = 0;
+    document.addEventListener('scroll', (e) => {
+      const el = e.target;
+      if (!(el instanceof Element) || !el.matches('.feed, .screen')) return;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        bar.classList.toggle('compact', el.scrollTop > 8);
+      });
+    }, { capture: true, passive: true });
+  }
+
   function wireMenu() {
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
     // Swipe the drawer back towards its edge to close it.
@@ -551,6 +570,7 @@
   /* ── global wiring ───────────────────────────────────────────────────── */
   function wire() {
     wireMenu();
+    wireTopBar();
     document.addEventListener('click', (e) => {
       const back = e.target.closest('[data-back]');
       if (back) { e.preventDefault(); goBack(back.dataset.back); return; }
