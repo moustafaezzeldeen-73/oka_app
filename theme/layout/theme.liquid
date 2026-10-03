@@ -183,7 +183,7 @@
         <span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span>
       </button>
       <div class="menu-scrim" data-menu-close hidden></div>
-      <nav class="side-menu" id="side-menu" aria-label="Main" aria-hidden="true" inert>
+      <nav class="side-menu" id="side-menu" aria-label="Main" aria-hidden="true" tabindex="-1" inert>
         <div class="side-head">
           <img src="{{ logo_url }}" alt="{{ shop.name }}" class="side-logo" width="34" height="34">
           <button class="side-close" data-menu-close aria-label="Close">{% render 'icon', name: 'close', px: 16 %}</button>

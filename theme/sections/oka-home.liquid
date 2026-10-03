@@ -110,10 +110,18 @@
                 <div class="prod-price">{% render 'price', cents: v.price %}</div>
                 <div class="prod-actions">
                   <button class="add-34" data-add="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %} aria-label="Add">+</button>
-                  <button class="ar-pill" data-ar="{{ p.handle }}">
-                    {% render 'icon', name: 'cube', px: 15 %}
-                    {% render 'bi', en: 'See it on your table', ar: 'شوفها على طرابيزتك' %}
-                  </button>
+                  {%- comment -%}
+                    Only products with a 3D model get the AR button; add a model
+                    to a product in Shopify and its button appears by itself.
+                  {%- endcomment -%}
+                  {%- assign has_model = false -%}
+                  {%- for m in p.media -%}{%- if m.media_type == 'model' -%}{%- assign has_model = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
+                  {%- if has_model -%}
+                    <button class="ar-pill" data-ar="{{ p.handle }}">
+                      {% render 'icon', name: 'cube', px: 15 %}
+                      {% render 'bi', en: 'See it on your table', ar: 'شوفها على طرابيزتك' %}
+                    </button>
+                  {%- endif -%}
                 </div>
               </div>
             </div>

@@ -515,7 +515,9 @@
     $('.menu-scrim')?.removeAttribute('hidden');
     app.classList.add('menu-open');
     haptic.selectionTick();
-    requestAnimationFrame(() => ($('.side-link.active', menu) || $('.side-link', menu))?.focus({ preventScroll: true }));
+    // The panel takes focus, not a link: focusing a link after a tap drew the
+    // browser's blue focus ring around it.
+    requestAnimationFrame(() => menu.focus({ preventScroll: true }));
   }
   function closeMenu() {
     const app = $('#app');
