@@ -10,7 +10,7 @@
 {%- capture delta -%}<span class="nums">{% render 'price', egp: settings.fee_delta_under %} / {% render 'price', egp: settings.fee_delta_over %}</span>{%- endcapture -%}
 {%- capture far -%}<span class="nums">{% render 'price', egp: settings.fee_far_under %} / {% render 'price', egp: settings.fee_far_over %}</span>{%- endcapture -%}
 <div class="screen fade-in" data-screen="support">
-  {% render 'screen-header', en: 'Help & support', ar: 'المساعدة والدعم', back: '/pages/account' %}
+  {% render 'screen-header', en: 'Help & support', ar: 'محتاج مساعدة؟', back: '/pages/account' %}
 
   {%- if settings.whatsapp != blank -%}
     <a class="wa-btn" data-wa-chat href="https://wa.me/{{ settings.whatsapp | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener">
@@ -19,7 +19,7 @@
     </a>
   {%- endif -%}
 
-  <div class="support-section">{% render 'bi', en: 'Common questions', ar: 'أسئلة شائعة' %}</div>
+  <div class="support-section">{% render 'bi', en: 'Common questions', ar: 'أسئلة بتتسأل كتير' %}</div>
 
   <div class="qa">
     <div class="qa-q">{% render 'bi', en: 'How long does delivery take?', ar: 'التوصيل بياخد قد إيه؟' %}</div>
@@ -36,29 +36,29 @@
   </div>
   <div class="qa">
     <div class="qa-q">{% render 'bi', en: 'How do I pay?', ar: 'بدفع إزاي؟' %}</div>
-    <div class="qa-a">{% render 'bi', en: 'Cash on delivery. Please have the exact amount ready for the courier.', ar: 'الدفع عند الاستلام. جهّز المبلغ للمندوب من فضلك.' %}</div>
+    <div class="qa-a">{% render 'bi', en: 'Cash on delivery. Please have the exact amount ready for the courier.', ar: 'بتدفع كاش لما الطلب يوصلك. جهّز المبلغ للمندوب لو سمحت.' %}</div>
     <div class="divider"></div>
   </div>
   <div class="qa">
     <div class="qa-q">{% render 'bi', en: 'Can I change or cancel my order?', ar: 'أقدر أعدّل أو ألغي طلبي؟' %}</div>
-    <div class="qa-a">{% render 'bi', en: 'Yes, from the Orders tab, until it has been handed to the courier.', ar: 'أيوه، من تبويب الطلبات، لحد ما يتسلم للمندوب.' %}</div>
+    <div class="qa-a">{% render 'bi', en: 'Yes, from the Orders tab, until it has been handed to the courier.', ar: 'أيوه، من صفحة طلباتي، طول ما الطلب لسه متسلمش للمندوب.' %}</div>
     <div class="divider"></div>
   </div>
   <div class="qa">
     <div class="qa-q">{% render 'bi', en: 'How do loyalty points work?', ar: 'نقاط الولاء بتشتغل إزاي؟' %}</div>
-    <div class="qa-a">{% render 'bi', en: 'You earn 1 point for every EGP of products once your order is delivered (10 points = 1 EGP). Redeem points for discount codes from the Loyalty screen.', ar: 'بتكسب نقطة لكل ١ ج.م منتجات بعد ما طلبك يوصل (١٠ نقاط = ١ ج.م). استبدل النقاط بأكواد خصم من صفحة الولاء.' %}</div>
+    <div class="qa-a">{% render 'bi', en: 'You earn 1 point for every EGP of products once your order is delivered (10 points = 1 EGP). Redeem points for discount codes from the Loyalty screen.', ar: 'بتاخد نقطة على كل جنيه منتجات لما طلبك يوصل (١٠ نقاط = ١ جنيه). بدّل نقاطك بأكواد خصم من صفحة النقاط.' %}</div>
     <div class="divider"></div>
   </div>
   <div class="qa">
     <div class="qa-q">{% render 'bi', en: 'What if something arrives damaged?', ar: 'لو حاجة وصلت مكسورة؟' %}</div>
-    <div class="qa-a">{% render 'bi', en: 'Message us on WhatsApp within 48 hours with a photo and your order number and we’ll replace it.', ar: 'ابعتلنا على واتساب خلال ٤٨ ساعة بصورة ورقم الطلب وهنبدلها.' %}</div>
+    <div class="qa-a">{% render 'bi', en: 'Message us on WhatsApp within 48 hours with a photo and your order number and we’ll replace it.', ar: 'ابعتلنا على واتساب في خلال ٤٨ ساعة بصورة ورقم الطلب وإحنا نبدّلهالك.' %}</div>
   </div>
 
-  <div class="support-section" id="legal">{% render 'bi', en: 'Policies', ar: 'السياسات' %}</div>
-  {%- if shop.refund_policy -%}<a class="policy" href="{{ shop.refund_policy.url }}">{% render 'bi', en: 'Returns & refunds', ar: 'الاسترجاع والاسترداد' %}</a>{%- endif -%}
+  <div class="support-section" id="legal">{% render 'bi', en: 'Policies', ar: 'الشروط والسياسات' %}</div>
+  {%- if shop.refund_policy -%}<a class="policy" href="{{ shop.refund_policy.url }}">{% render 'bi', en: 'Returns & refunds', ar: 'الاسترجاع ورجوع فلوسك' %}</a>{%- endif -%}
   {%- if shop.shipping_policy -%}<a class="policy" href="{{ shop.shipping_policy.url }}">{% render 'bi', en: 'Shipping', ar: 'الشحن' %}</a>{%- endif -%}
   {%- if shop.privacy_policy -%}<a class="policy" href="{{ shop.privacy_policy.url }}">{% render 'bi', en: 'Privacy', ar: 'الخصوصية' %}</a>{%- endif -%}
-  {%- if shop.terms_of_service -%}<a class="policy" href="{{ shop.terms_of_service.url }}">{% render 'bi', en: 'Terms of service', ar: 'شروط الخدمة' %}</a>{%- endif -%}
+  {%- if shop.terms_of_service -%}<a class="policy" href="{{ shop.terms_of_service.url }}">{% render 'bi', en: 'Terms of service', ar: 'شروط الاستخدام' %}</a>{%- endif -%}
   <div style="height:30px"></div>
 </div>
 {% schema %}{ "name": "Support", "tag": "div" }{% endschema %}

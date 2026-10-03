@@ -34,7 +34,7 @@
   --app-w: 430px;
   --top-pad: max(calc(env(safe-area-inset-top) - 5px), 8px);
   /* The logo bar's full height: it floats over the content, so pages pad by this. */
-  --bar-h: calc(var(--top-pad) + 50px);
+  --bar-h: calc(var(--top-pad) + 56px);
 }
 
 /* ── language ─────────────────────────────────────────────────────────── */
@@ -143,7 +143,7 @@ html[dir="rtl"] .app {
 .menu-handle {
   position: absolute; z-index: 20;
   top: 46%; inset-inline-start: 0;
-  width: 26px; height: 64px;
+  width: 32px; height: 76px;
   display: flex; align-items: center; justify-content: center;
   border-start-start-radius: 0; border-end-start-radius: 0;
   border-start-end-radius: 16px; border-end-end-radius: 16px;
@@ -155,7 +155,7 @@ html[dir="rtl"] .app {
   color: #fff;
   transition: transform .3s var(--ease-out), opacity .2s var(--ease);
 }
-.menu-handle svg { width: 16px; height: 16px; }
+.menu-handle svg { width: 19px; height: 19px; }
 .menu-handle .badge {
   top: -6px; right: auto; inset-inline-end: -4px;
   background: #fff; color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.25);
@@ -240,11 +240,11 @@ html[dir="rtl"] .menu-open .side-menu { transform: none; visibility: visible; }
 /* ── shared parts (parts.js / ui.js) ──────────────────────────────────── */
 .hdr {
   display: grid;
-  grid-template-columns: 40px 1fr 40px;
+  grid-template-columns: 44px 1fr 44px;
   align-items: center;
   padding: 6px 16px 18px;
 }
-.hdr-btn { width: 40px; height: 36px; display: flex; align-items: center; justify-content: center; }
+.hdr-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
 .hdr-title { text-align: center; font-weight: 700; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 html[dir="rtl"] .flip { transform: scaleX(-1); }
 
@@ -274,7 +274,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 .stepper { display: flex; align-items: center; gap: var(--gap, 10px); }
 .step-btn {
-  width: var(--sz, 32px); height: var(--sz, 32px); border-radius: 50%;
+  width: var(--sz, 38px); height: var(--sz, 38px); border-radius: 50%;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(0,0,0,0.14);
   display: flex; align-items: center; justify-content: center;
@@ -352,8 +352,8 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .gcard-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
 .gcard-price { font-size: 13px; font-weight: 800; }
 .gcard-add {
-  width: 24px; height: 24px; border-radius: 12px; background: var(--dark-grad);
-  color: #fff; font-weight: 800; font-size: 13px; line-height: 15px;
+  min-height: 36px; padding: 0 16px; border-radius: 999px; background: var(--dark-grad);
+  color: #fff; font-weight: 800; font-size: 14px;
   display: flex; align-items: center; justify-content: center;
   transition: transform .17s var(--ease-out);
 }
@@ -385,7 +385,8 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .top-bar.compact .top-logo { width: 22px; height: 22px; }
 .top-bar.compact .top-row .circle-34 { transform: scale(.82); }
 .circle-34 {
-  width: 34px; height: 34px; border-radius: 17px;
+  /* Kept its name; 40px now — easier to hit with a thumb. */
+  width: 40px; height: 40px; border-radius: 20px;
   background: rgba(255,255,255,0.55); border: 1px solid rgba(0,0,0,0.08);
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 12px;
@@ -482,8 +483,8 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .offer-card img { width: 100%; height: 100%; object-fit: contain; }
 .offer-cta {
   display: block; width: 100%; margin-top: 12px;
-  padding: 13px 0; border-radius: 999px; background: var(--dark-grad);
-  color: #fff; font-size: 14px; font-weight: 700; text-align: center;
+  padding: 16px 0; border-radius: 999px; background: var(--dark-grad);
+  color: #fff; font-size: 16px; font-weight: 800; text-align: center;
   transition: transform .17s var(--ease-out);
 }
 .offer-cta:active { transform: scale(.97); }
@@ -503,19 +504,21 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .prod-title { font-size: 14.5px; font-weight: 600; }
 .prod-price { font-size: 16px; font-weight: 800; margin-top: 3px; }
 .prod-actions { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 8px; }
-.add-34 {
-  width: 34px; height: 34px; border-radius: 17px; background: var(--dark-grad);
-  color: #fff; font-weight: 800; font-size: 18px; line-height: 21px;
+.add-btn {
+  min-height: 44px; padding: 0 26px; border-radius: 999px; background: var(--dark-grad);
+  color: #fff; font-weight: 800; font-size: 15px;
   display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.16);
   transition: transform .17s var(--ease-out);
 }
-.add-34:active { transform: scale(.9); }
+.add-btn:active { transform: scale(.95); }
+.add-btn[data-soldout] { opacity: .45; }
 .ar-pill {
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 8px 12px; border-radius: 20px;
+  min-height: 40px; padding: 0 16px; border-radius: 20px;
   background: rgba(255,255,255,0.42); border: 1px solid rgba(255,255,255,0.65);
   box-shadow: var(--glass-pill);
-  font-size: 11.5px; font-weight: 700; letter-spacing: .1px;
+  font-size: 13px; font-weight: 700; letter-spacing: .1px;
   transition: transform .17s var(--ease-out);
 }
 .ar-pill:active { transform: scale(.96); }
@@ -570,7 +573,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .pdp-btns { position: absolute; top: 18px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 2; }
 .pdp-btns > div { display: flex; gap: 10px; }
 .circle-38 {
-  width: 38px; height: 38px; border-radius: 19px; background: rgba(255,255,255,0.75);
+  width: 44px; height: 44px; border-radius: 22px; background: rgba(255,255,255,0.75);
   border: 1px solid rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center;
   font-size: 17px; font-weight: 700;
 }
@@ -681,7 +684,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .bs-title { font-size: 12.5px; font-weight: 600; line-height: 16px; }
 .bs-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
 .bs-price { font-size: 13.5px; font-weight: 800; }
-.bs-add { width: 26px; height: 26px; border-radius: 13px; background: var(--dark-grad); color: #fff; font-weight: 800; font-size: 16px; line-height: 19px; display: flex; align-items: center; justify-content: center; }
+.bs-add { min-height: 34px; padding: 0 14px; border-radius: 999px; background: var(--dark-grad); color: #fff; font-weight: 800; font-size: 13.5px; display: flex; align-items: center; justify-content: center; }
 .min-note { font-size: 13px; color: var(--red-deep); text-align: center; margin-bottom: 10px; font-weight: 600; }
 .cart-empty { padding: 50px 22px 24px; text-align: center; font-size: 13.5px; }
 
@@ -1068,9 +1071,9 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .gcard-row { margin-top: auto; padding-top: 8px; }
 .prod-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 19px; padding: 0 6px; }
 /* Price follows the title; the + and AR pill sit on one baseline across the rail. */
-.prod-meta { height: 146px; }
+.prod-meta { height: 178px; }
 .prod-actions { margin-top: auto; }
-.rail.prods { height: 390px; }
+.rail.prods { height: 422px; }
 .prod-card { display: flex; align-items: center; justify-content: center; }
 .cs-slot, .bs-card { display: flex; flex-direction: column; }
 .cs-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 32px; }
@@ -1083,7 +1086,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .line-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .cs-card, .bs-img, .rcard-img, .line-img, .item-img, .cat-item-img, .order-thumb, .hero-img, .offer-card { background: #fff; }
 .cs-card img, .bs-img img, .rcard-img img, .gcard-img img { object-fit: contain; }
-.offer-cta { min-height: 44px; }
+.offer-cta { min-height: 52px; }
 .join-nudge {
   display: flex; align-items: center; gap: 11px; width: calc(100% - 44px); margin: 0 22px 14px;
   padding: 13px 14px; border-radius: 16px; text-align: start;

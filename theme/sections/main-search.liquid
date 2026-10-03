@@ -3,10 +3,10 @@
   ("شيشه" finds "شيشة"). Results come from the catalogue the theme serves.
 {%- endcomment -%}
 <div class="screen fade-in" data-screen="search">
-  {% render 'screen-header', en: 'Search', ar: 'البحث' %}
+  {% render 'screen-header', en: 'Search', ar: 'دوّر' %}
   <div class="search-wrap">
     <input type="search" class="search-input" data-search value="{{ search.terms | escape }}" autofocus enterkeyhint="search" autocomplete="off"
-      data-ph-en="Search hookahs, bowls & accessories" data-ph-ar="ابحث عن شيشة، بولّات وإكسسوارات" aria-label="Search">
+      data-ph-en="Search hookahs, bowls & accessories" data-ph-ar="دوّر على شيشة، بولّات وإكسسوارات" aria-label="Search">
   </div>
   <div class="cat-chips" data-cats>
     {%- capture live -%}{% render 'live-collections', dedupe: false %}{%- endcapture -%}

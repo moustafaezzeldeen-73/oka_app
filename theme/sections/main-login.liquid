@@ -5,7 +5,7 @@
   sign-in (email one-time code) and this template is never shown.
 {%- endcomment -%}
 <div class="screen fade-in" data-screen="login">
-  {% render 'screen-header', en: 'Sign in', ar: 'تسجيل الدخول' %}
+  {% render 'screen-header', en: 'Sign in', ar: 'سجّل دخول' %}
   <div class="signin" data-login-panel>
     <p class="lead">{% render 'bi', en: 'Sign in with your email. Your orders, points and addresses follow you.', ar: 'ادخل بإيميلك. طلباتك ونقاطك وعناوينك هتكون معاك.' %}</p>
     {%- form 'customer_login', class: 'signin', style: 'padding:0' -%}
@@ -14,7 +14,7 @@
       <label class="field-label">{% render 'bi', en: 'Password', ar: 'كلمة السر' %}</label>
       <input class="field-input" type="password" name="customer[password]" autocomplete="current-password" dir="ltr" required placeholder="••••••">
       {%- if form.errors -%}<div class="error-txt">{{ form.errors | default_errors }}</div>{%- endif -%}
-      <button class="cta" type="submit" style="margin-top:8px">{% render 'bi', en: 'Sign in', ar: 'تسجيل الدخول' %}</button>
+      <button class="cta" type="submit" style="margin-top:8px">{% render 'bi', en: 'Sign in', ar: 'سجّل دخول' %}</button>
     {%- endform -%}
     <a href="{{ routes.account_register_url }}" class="signin-link">{% render 'bi', en: 'New here? Create an account', ar: 'أول مرة؟ اعمل حساب' %}</a>
     <button class="signin-link" data-show-recover>{% render 'bi', en: 'Forgot your password?', ar: 'نسيت كلمة السر؟' %}</button>
@@ -28,7 +28,7 @@
       {%- if form.errors -%}<div class="error-txt">{{ form.errors | default_errors }}</div>{%- endif -%}
       <button class="cta" type="submit" style="margin-top:8px">{% render 'bi', en: 'Send link', ar: 'ابعت اللينك' %}</button>
     {%- endform -%}
-    <button class="signin-link" data-show-login>{% render 'bi', en: 'Back to sign in', ar: 'رجوع لتسجيل الدخول' %}</button>
+    <button class="signin-link" data-show-login>{% render 'bi', en: 'Back to sign in', ar: 'ارجع لتسجيل الدخول' %}</button>
   </div>
 </div>
 {% schema %}{ "name": "Sign in", "tag": "div" }{% endschema %}

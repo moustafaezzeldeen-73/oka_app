@@ -8,7 +8,7 @@
     <a href="{{ p.url }}" class="gcard-title">{% render 'ptitle', p: p %}</a>
     <div class="gcard-row">
       <span class="gcard-price">{% render 'price', cents: v.price %}</span>
-      <button class="gcard-add" data-add="{{ v.id }}" {% unless p.available %}data-soldout{% endunless %} aria-label="Add">+</button>
+      <button class="gcard-add" data-add="{{ v.id }}" {% unless p.available %}data-soldout{% endunless %}>{% render 'bi', en: 'Add', ar: 'ضيف' %}</button>
     </div>
   </div>
 </div>

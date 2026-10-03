@@ -204,12 +204,12 @@
                   assign href = routes.collections_url
                   assign icon = 'grid'
                   assign en = 'Categories'
-                  assign ar = 'الفئات'
+                  assign ar = 'الأقسام'
                 when 'search'
                   assign href = routes.search_url
                   assign icon = 'search'
                   assign en = 'Search'
-                  assign ar = 'بحث'
+                  assign ar = 'دوّر'
                 when 'cart'
                   assign href = routes.cart_url
                   assign icon = 'cart'
@@ -229,7 +229,7 @@
                   assign href = '/pages/loyalty'
                   assign icon = 'star'
                   assign en = 'Points & rewards'
-                  assign ar = 'النقاط والمكافآت'
+                  assign ar = 'نقاطي وهداياي'
                 when 'subscriptions'
                   assign href = '/pages/subscriptions'
                   assign icon = 'repeat'
@@ -244,7 +244,7 @@
                   assign href = '/pages/support'
                   assign icon = 'chat'
                   assign en = 'Help & support'
-                  assign ar = 'المساعدة والدعم'
+                  assign ar = 'محتاج مساعدة؟'
               endcase
             -%}
             <a href="{{ href }}" class="side-link{% if active_tab == l %} active{% endif %}"{% if active_tab == l %} aria-current="page"{% endif %}>

@@ -50,8 +50,8 @@
       </div>
     </div>
     <div class="pdp-stock">
-      {%- if stock == 0 -%}{% render 'bi', en: 'Out of stock', ar: 'غير متوفر' %}
-      {%- elsif stock <= 5 -%}<span class="l-en">Only {{ stock }} left</span><span class="l-ar">باقي {% render 'ar-digits', s: stock %} فقط</span>
+      {%- if stock == 0 -%}{% render 'bi', en: 'Out of stock', ar: 'خلصان' %}
+      {%- elsif stock <= 5 -%}<span class="l-en">Only {{ stock }} left</span><span class="l-ar">فاضل {% render 'ar-digits', s: stock %} بس</span>
       {%- else -%}{% render 'bi', en: 'In stock', ar: 'متوفر' %}{%- endif -%}
     </div>
 
@@ -60,9 +60,9 @@
       <div class="ship-txt" data-ship-txt>&nbsp;</div>
     </div>
 
-    <div class="section-label">{% render 'bi', en: 'Customize', ar: 'تخصيص' %}</div>
+    <div class="section-label">{% render 'bi', en: 'Customize', ar: 'اختار' %}</div>
     <div class="qty-row">
-      <span class="qty-label">{% render 'bi', en: 'Quantity', ar: 'الكمية' %}</span>
+      <span class="qty-label">{% render 'bi', en: 'Quantity', ar: 'العدد' %}</span>
       <div class="stepper">
         <button class="step-btn" data-qty="-1" aria-label="Less">–</button>
         <span class="step-qty" data-qty-val>1</span>
@@ -71,23 +71,23 @@
     </div>
 
     <div class="pdp-block">
-      <div class="spread"><span class="deliver">{% render 'bi', en: 'Estimated delivery', ar: 'موعد التوصيل المتوقع' %}</span><span class="deliver-muted" data-eta></span></div>
-      <div class="spread" style="margin-top:6px"><span class="fee">{% render 'bi', en: 'Shipping fee', ar: 'رسوم الشحن' %}</span><span class="fee" data-fee></span></div>
-      <div class="pay">{% render 'bi', en: 'Cash on delivery', ar: 'الدفع عند الاستلام' %}</div>
+      <div class="spread"><span class="deliver">{% render 'bi', en: 'Estimated delivery', ar: 'هيوصلك إمتى' %}</span><span class="deliver-muted" data-eta></span></div>
+      <div class="spread" style="margin-top:6px"><span class="fee">{% render 'bi', en: 'Shipping fee', ar: 'مصاريف الشحن' %}</span><span class="fee" data-fee></span></div>
+      <div class="pay">{% render 'bi', en: 'Cash on delivery', ar: 'كاش عند الاستلام' %}</div>
     </div>
 
     <div class="pdp-block">
-      <div class="section-label">{% render 'bi', en: 'Description', ar: 'الوصف' %}</div>
+      <div class="section-label">{% render 'bi', en: 'Description', ar: 'التفاصيل' %}</div>
       <div class="desc">{% render 'bi', en: desc_en, ar: desc_ar %}</div>
     </div>
 
     <div class="points-box">
-      <span class="l-en">Earn ~{{ points }} points when delivered</span><span class="l-ar">اكسب ~{% render 'ar-digits', s: points %} نقطة عند التوصيل</span>
+      <span class="l-en">Earn ~{{ points }} points when delivered</span><span class="l-ar">هتاخد ~{% render 'ar-digits', s: points %} نقطة لما يوصلك</span>
     </div>
   </div>
 
   <div data-related style="padding-top:22px" hidden>
-    <div class="related-label">{% render 'bi', en: 'You may also like', ar: 'قد يعجبك أيضاً' %}</div>
+    <div class="related-label">{% render 'bi', en: 'You may also like', ar: 'ممكن يعجبك كمان' %}</div>
     <div class="related hscroll" data-related-list></div>
   </div>
   <div style="height:100px"></div>
@@ -100,11 +100,11 @@
   </a>
   {%- if p.available -%}
     <button class="cta glow buy-cta" data-buy>
-      <span>{% render 'bi', en: 'Add to Cart', ar: 'أضف إلى السلة' %}</span>
+      <span>{% render 'bi', en: 'Add to Cart', ar: 'ضيف للسلة' %}</span>
       <span data-buy-price>{% render 'price', cents: v.price %}</span>
     </button>
   {%- else -%}
-    <div class="sold-out">{% render 'bi', en: 'Out of stock', ar: 'غير متوفر' %}</div>
+    <div class="sold-out">{% render 'bi', en: 'Out of stock', ar: 'خلصان' %}</div>
   {%- endif -%}
 </div>
 
