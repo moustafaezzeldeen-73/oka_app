@@ -2,6 +2,26 @@
 
 Everything that has changed in the OKA shop app, newest first.
 
+## 2026-10-03 (later) — A cleaner home feed
+
+### Shopify theme (`theme/`)
+- The collection selector strip under the logo is gone; the logo bar is all
+  that sits above the feed, and it shrinks once you scroll past the first page.
+- Empty collections are hidden everywhere — home feed, categories, search,
+  the app data — and come back by themselves once they have an active product
+  (`snippets/live-collections.liquid`). On the home feed a collection whose
+  products all appeared in an earlier one counts as empty too.
+- Offers holds only things you can buy: the bundle offers (and any offer with
+  a product). Picture-only promos were removed from it.
+- Banners fill the screen: tall posters edge to edge; square and wide ones
+  whole, over a blurred copy of themselves, so no text is cut.
+- The original site's before/after slider is back, full screen, just above
+  OKA Cobra (new `Before / after slider` block): drag sideways to compare;
+  it nudges once when it comes into view.
+- Portrait lock: on a phone turned sideways the layout is turned back, so
+  the shop stays upright as if rotation were locked (and
+  `screen.orientation.lock('portrait')` is asked for where browsers allow it).
+
 ## 2026-10-03 — Side menu, the website's banners, tracking via the GCP connector
 
 ### Shopify theme (`theme/`)

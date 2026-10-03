@@ -54,6 +54,31 @@
         h.dir = l === 'ar' ? 'rtl' : 'ltr';
       })();
     </script>
+    <script>
+      /*
+       * Portrait lock. Browsers only honour screen.orientation.lock() for
+       * installed or full-screen apps, so it is asked for and, failing that,
+       * the CSS in oka.css turns the layout back against the phone's turn
+       * (--rot is the opposite of the device's angle).
+       */
+      (function () {
+        var h = document.documentElement;
+        h.classList.add('portrait-lock');
+        function sync() {
+          var a = typeof window.orientation === 'number'
+            ? window.orientation
+            : (screen.orientation && screen.orientation.angle) || 0;
+          if (a > 180) a -= 360;
+          h.style.setProperty('--rot', (a === -90 ? 90 : -90) + 'deg');
+        }
+        sync();
+        window.addEventListener('orientationchange', sync);
+        if (screen.orientation) {
+          screen.orientation.addEventListener && screen.orientation.addEventListener('change', sync);
+          try { screen.orientation.lock('portrait').catch(function () {}); } catch (e) {}
+        }
+      })();
+    </script>
     {{ 'oka.css' | asset_url | stylesheet_tag }}
     {{ content_for_header }}
 

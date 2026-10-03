@@ -363,42 +363,21 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
   border-bottom: 1px solid rgba(0,0,0,0.06);
   overflow: hidden;
 }
-.home-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 22px 8px; }
-.home-logo { width: 32px; height: 32px; object-fit: contain; }
+.home-row {
+  display: flex; align-items: center; justify-content: space-between; padding: 10px 22px 10px;
+  transition: padding .3s var(--ease-out);
+}
+.home-logo { width: 32px; height: 32px; object-fit: contain; transition: width .3s var(--ease-out), height .3s var(--ease-out); }
+.home-row .circle-34 { transition: transform .3s var(--ease-out); }
+/* Past the first page the logo bar shrinks, like the original site's sticky header. */
+.home-hdr.compact .home-row { padding-top: 4px; padding-bottom: 4px; }
+.home-hdr.compact .home-logo { width: 22px; height: 22px; }
+.home-hdr.compact .home-row .circle-34 { transform: scale(.82); }
 .circle-34 {
   width: 34px; height: 34px; border-radius: 17px;
   background: rgba(255,255,255,0.55); border: 1px solid rgba(0,0,0,0.08);
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 12px;
-}
-.nav-wrap { position: relative; }
-.lens {
-  position: absolute; top: 5px; left: 50%; margin-left: -32px;
-  width: 64px; height: 64px; border-radius: 32px;
-  background: rgba(255,255,255,0.16);
-  border: 1px solid rgba(255,255,255,0.75);
-  box-shadow: var(--glass-lens);
-  z-index: 2; pointer-events: none;
-}
-.nav-strip {
-  padding: 6px calc(50% - 43px) 18px;
-  scroll-snap-type: x mandatory;
-}
-.nav-item {
-  flex: 0 0 86px; width: 86px; position: relative; z-index: 1;
-  display: flex; align-items: center; justify-content: center; padding-top: 6px;
-  scroll-snap-align: center;
-}
-.nav-icon {
-  width: 52px; height: 52px; border-radius: 26px; overflow: hidden;
-  transform: scale(.82); transition: transform .35s var(--ease-out);
-  background: rgba(0,0,0,0.04);
-}
-.nav-item.active .nav-icon { transform: scale(1.22); }
-.nav-icon img { width: 100%; height: 100%; object-fit: cover; }
-.nav-offers {
-  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(155deg, #0e0e10 0%, #3a3a3c 55%, #1a1a1d 100%);
 }
 .feed {
   flex: 1; min-height: 0;
@@ -415,21 +394,53 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
   display: flex; flex-direction: column; justify-content: center;
   padding: 6px 0 18px;
 }
-/* A graphic banner from the original site, on a page of its own. Sized from
-   the feed's own box (container units), so it always fits whole. */
+/* ── Full-screen banners (original website) and the Cobra slider ────────── */
 .feed { container-type: size; }
-.banner-page { align-items: center; gap: 14px; padding: 12px 22px 18px; }
-.banner-card {
-  display: block; border-radius: 26px; overflow: hidden;
-  background: #fff; box-shadow: 0 14px 34px rgba(0,0,0,0.12);
+.banner-page, .compare-page {
+  position: relative; overflow: hidden; padding: 0;
+  align-items: center; justify-content: center;
+  background: #111;
 }
-.banner-card img {
-  display: block; width: auto; height: auto;
-  max-width: min(calc(100cqw - 44px), 420px);
-  max-height: calc(100cqh - 40px);
+.banner-fill { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.banner-fill img { display: block; width: 100%; height: 100%; }
+.fill-cover .banner-fill img { object-fit: cover; }
+.fill-contain .banner-fill img { object-fit: contain; position: relative; z-index: 1; }
+.banner-backdrop {
+  position: absolute; inset: -30px;
+  background-size: cover; background-position: center;
+  filter: blur(26px) saturate(1.3) brightness(.85);
+  transform: scale(1.15);
 }
-.banner-page:has(.banner-cta) .banner-card img { max-height: calc(100cqh - 104px); }
-.banner-cta { width: min(calc(100cqw - 44px), 320px); margin-top: 0; }
+/* `.page` in front: the generic .offer-cta (full width, margin-top) comes
+   later in this file and would otherwise win. */
+.page .banner-cta {
+  position: absolute; z-index: 3; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  width: min(calc(100% - 64px), 320px); margin: 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+.page .banner-cta:active { transform: translateX(-50%) scale(.97); }
+/* Home runs edge to edge: the feed reaches the bottom of the screen, and
+   collection pages keep their own breathing room above the home indicator. */
+.t-index .content { padding-bottom: 0; }
+.t-index .page:not(.banner-page):not(.compare-page) { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
+
+.compare-frame { position: absolute; inset: 0; direction: ltr; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; }
+.compare-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.compare-before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.compare-line {
+  position: absolute; top: 0; bottom: 0; left: var(--pos); width: 3px; margin-left: -1.5px;
+  background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.35); pointer-events: none;
+}
+.compare-knob {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 48px; height: 48px; border-radius: 24px; background: #fff; color: #000;
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+.compare-page.nudging .compare-before, .compare-page.nudging .compare-line { transition: clip-path .6s var(--ease), left .6s var(--ease); }
+.compare-range { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.compare-frame:focus-within .compare-knob { outline: 2px solid #fff; outline-offset: 3px; }
+
 .page-title {
   text-align: center; font-weight: 800; font-size: 22px; margin-bottom: 14px;
   transition: transform .35s var(--ease), opacity .35s var(--ease);
@@ -1065,3 +1076,21 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 }
 .join-nudge b { display: block; font-size: 13.5px; font-weight: 800; line-height: 18px; }
 .join-nudge span span { display: block; font-size: 12px; line-height: 17px; margin-top: 2px; color: var(--ink-soft); }
+
+/* ── Portrait lock ─────────────────────────────────────────────────────────
+ * The web can't stop a phone from rotating, so a phone turned sideways gets
+ * the portrait layout turned back the other way: the shop stays upright
+ * relative to the phone, exactly as if rotation were locked. Phones only
+ * (coarse pointer, short landscape viewport) — tablets and desktops lay out
+ * normally. --rot is set from the device's angle in layout/theme.liquid.
+ */
+@media (orientation: landscape) and (max-height: 540px) and (hover: none) and (pointer: coarse) {
+  html.portrait-lock .app {
+    position: fixed; top: 50%; left: 50%; margin: 0;
+    width: 100vh; width: 100dvh; max-width: none;
+    height: 100vw; height: 100dvw;
+    transform: translate(-50%, -50%) rotate(var(--rot, -90deg));
+  }
+  /* The notch is now on a side of the viewport, i.e. the top of the shop. */
+  html.portrait-lock .content { padding-top: max(env(safe-area-inset-left), env(safe-area-inset-right), 12px); }
+}

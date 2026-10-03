@@ -1,18 +1,29 @@
 {%- comment -%}
-  One graphic banner from the original website, as its own feed page.
-  `nav` is the selector item it belongs to (the collection it introduces),
-  so scrolling onto it keeps the lens where the shopper expects.
-  Usage: {% render 'banner-page', block: block, nav: 3 %}
+  One graphic banner from the original website, filling a feed page edge to
+  edge.
+
+  Tall banners (the 2:3 posters) are cropped to the screen — they lose a
+  sliver of the sides at most. Square and wide ones would lose text that
+  way, so they sit whole across the screen on a blurred, enlarged copy of
+  themselves that fills the rest: full screen either way, nothing cut off.
+  Usage: {% render 'banner-page', block: block %}
 {%- endcomment -%}
 {%- liquid
   assign img = block.settings.image
   assign link = block.settings.link | default: block.settings.before.url
   assign bundle = block.settings.variant_ids | remove: ' '
+  assign fit = 'contain'
+  if img.aspect_ratio < 0.8
+    assign fit = 'cover'
+  endif
 -%}
 {%- if img -%}
-  <section class="page banner-page" data-banner data-nav="{{ nav }}" {{ block.shopify_attributes }}>
-    {%- if link != blank -%}<a href="{{ link }}" class="banner-card" style="--ratio: {{ img.aspect_ratio }}">{%- else -%}<div class="banner-card" style="--ratio: {{ img.aspect_ratio }}">{%- endif -%}
-      {{ img | image_url: width: 900 | image_tag: alt: img.alt, loading: 'lazy', widths: '450, 700, 900', sizes: '(min-width: 431px) 400px, 92vw' }}
+  <section class="page banner-page fill-{{ fit }}" data-banner {{ block.shopify_attributes }}>
+    {%- if fit == 'contain' -%}
+      <div class="banner-backdrop" style="background-image: url({{ img | image_url: width: 200 }})" aria-hidden="true"></div>
+    {%- endif -%}
+    {%- if link != blank -%}<a href="{{ link }}" class="banner-fill">{%- else -%}<div class="banner-fill">{%- endif -%}
+      {{ img | image_url: width: 1200 | image_tag: alt: img.alt, loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw' }}
     {%- if link != blank -%}</a>{%- else -%}</div>{%- endif -%}
     {%- if bundle != blank -%}
       <button class="offer-cta banner-cta" data-add-bundle="{{ bundle }}">{% render 'bi', en: block.settings.button_en, ar: block.settings.button_ar %}</button>

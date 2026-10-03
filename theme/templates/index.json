@@ -23,46 +23,6 @@
             "button_ar": "أضف العرض للسلة"
           }
         },
-        "offer-1": {
-          "type": "offer",
-          "settings": {
-            "bundled_image": "promo1.jpg",
-            "collection": "hookahs",
-            "product": "oka-cobra"
-          }
-        },
-        "offer-2": {
-          "type": "offer",
-          "settings": {
-            "bundled_image": "promo2.jpg",
-            "collection": "hookahs",
-            "product": "oka-cobra-led-rechargeable-base"
-          }
-        },
-        "offer-3": {
-          "type": "offer",
-          "settings": {
-            "bundled_image": "promo3.jpg",
-            "collection": "hookahs",
-            "product": "oka-carbon-black-hookah"
-          }
-        },
-        "offer-4": {
-          "type": "offer",
-          "settings": {
-            "bundled_image": "promo4.jpg",
-            "collection": "dark-tobacco",
-            "product": "oka-black-tobacco"
-          }
-        },
-        "offer-5": {
-          "type": "offer",
-          "settings": {
-            "bundled_image": "promo5.jpg",
-            "collection": "oka-parts",
-            "product": "oka-stem"
-          }
-        },
         "banner-premium": {
           "type": "banner",
           "settings": {
@@ -104,19 +64,23 @@
             "image": "shopify://shop_images/1_e3f61bcf-4efd-419c-9a50-0efcb0f264fe.png",
             "before": "oka-parts"
           }
+        },
+        "cobra-slider": {
+          "type": "compare",
+          "settings": {
+            "before_image": "shopify://shop_images/1_c9081114-663b-461a-9d9a-7f610c512a91.png",
+            "after_image": "shopify://shop_images/2_c998b195-330f-4ccf-8095-157512d0d7dd.png",
+            "before": "oka-cobra"
+          }
         }
       },
       "block_order": [
         "bundle-1",
         "bundle-2",
-        "offer-1",
-        "offer-2",
-        "offer-3",
-        "offer-4",
-        "offer-5",
         "banner-premium",
         "banner-parties-1",
         "banner-parties-2",
+        "cobra-slider",
         "banner-dark-tobacco",
         "banner-bowls",
         "banner-parts"

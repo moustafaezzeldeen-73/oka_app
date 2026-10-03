@@ -90,13 +90,6 @@
     el.addEventListener('dragstart', (e) => e.preventDefault());
   }
 
-  /** Calls `fn` once scrolling has stopped — `scrollend` where it exists. */
-  function onScrollEnd(el, fn) {
-    if ('onscrollend' in window) { el.addEventListener('scrollend', fn); return; }
-    let timer;
-    el.addEventListener('scroll', () => { clearTimeout(timer); timer = setTimeout(fn, 120); }, { passive: true });
-  }
-
   /** The slot nearest the rail's centre — direction-agnostic. */
   function nearest(rail, slots) {
     const r = rail.getBoundingClientRect();
@@ -116,80 +109,30 @@
    * ════════════════════════════════════════════════════════════════════ */
   function home(root) {
     const feed = $('[data-feed]', root);
-    const nav = $('[data-nav]', root);
+    const hdr = $('[data-home-hdr]', root);
     const pages = $$('.page', feed);
-    const items = $$('.nav-item', nav);
-    /**
-     * Pages and selector items are no longer one-to-one: a graphic banner is
-     * a page of its own, belonging to the collection it introduces. `navOf`
-     * maps each page to its selector item; `pageOf` maps an item to its
-     * collection's page (not the banner before it).
-     */
-    const navOf = pages.map((p) => Number(p.dataset.nav ?? p.dataset.i ?? 0));
-    const pageOf = items.map((_, i) => {
-      const own = pages.findIndex((p, k) => navOf[k] === i && !p.hasAttribute('data-banner'));
-      return own >= 0 ? own : Math.max(0, navOf.indexOf(i));
-    });
-    let active = 0; // selector item
     let activePage = 0;
-    /**
-     * The strip and the feed drive each other. A scroll the code started
-     * must not come back as "the shopper picked this", or the two chase each
-     * other — the bug the app's `driver` ref exists to stop.
-     */
-    const quiet = { nav: 0, feed: 0 };
-    const hush = (k, ms = 700) => { quiet[k] = Date.now() + ms; };
 
-    function centerNav(i, smooth = true) {
-      const it = items[i];
-      if (!it) return;
-      const nr = nav.getBoundingClientRect();
-      const ir = it.getBoundingClientRect();
-      const delta = ir.left + ir.width / 2 - (nr.left + nr.width / 2);
-      if (Math.abs(delta) < 1) return;
-      hush('nav');
-      nav.scrollBy({ left: delta, behavior: smooth ? 'smooth' : 'auto' });
-    }
-
-    /** `k` is a page index; the selector follows whichever item owns it. */
-    function setActive(k, { moveNav = true, moveFeed = false, haptic = true } = {}) {
+    /** One page per snap: titles, haptic, and the shrinking logo bar. */
+    function setActive(k) {
       if (k === activePage) return;
       activePage = k;
       pages.forEach((el, j) => el.classList.toggle('active', j === k));
-      const i = navOf[k] ?? 0;
-      if (i !== active) {
-        active = i;
-        items.forEach((el, j) => el.classList.toggle('active', j === i));
-        if (moveNav) centerNav(i);
-      }
-      if (moveFeed) {
-        hush('feed', 900);
-        feed.scrollTo({ top: k * feed.clientHeight, behavior: 'smooth' });
-      }
-      if (haptic) O.haptic.snapCollection();
+      O.haptic.snapCollection();
+      const cmp = pages[k]?.hasAttribute('data-compare') ? pages[k] : null;
+      if (cmp) nudge(cmp);
     }
 
-    // Scrolling the feed moves the selector under the lens.
     let raf = 0;
     feed.addEventListener('scroll', () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         raf = 0;
-        if (Date.now() < quiet.feed || !feed.clientHeight) return;
-        const i = Math.max(0, Math.min(pages.length - 1, Math.round(feed.scrollTop / feed.clientHeight)));
-        setActive(i, { moveNav: true });
+        if (!feed.clientHeight) return;
+        hdr?.classList.toggle('compact', feed.scrollTop > 8);
+        setActive(Math.max(0, Math.min(pages.length - 1, Math.round(feed.scrollTop / feed.clientHeight))));
       });
     }, { passive: true });
-
-    // Scrolling the selector itself selects a collection and moves the feed.
-    onScrollEnd(nav, () => {
-      if (Date.now() < quiet.nav) return;
-      const i = nearest(nav, items);
-      if (i !== active) setActive(pageOf[i], { moveNav: false, moveFeed: true });
-    });
-
-    // Tapping a selector item drives the feed.
-    items.forEach((it, i) => it.addEventListener('click', () => setActive(pageOf[i], { moveNav: true, moveFeed: true })));
 
     // One notch per product, with a light tick on every notch.
     $$('[data-rail]', feed).forEach((rail) => {
@@ -210,7 +153,6 @@
       }, { passive: true });
       dragScroll(rail);
     });
-    dragScroll(nav);
 
     // Feed cards: one tap opens the product, two add it to the cart (DoublePress, 280ms).
     feed.addEventListener('click', (e) => {
@@ -226,18 +168,65 @@
       card._t = setTimeout(() => { card._t = null; go(card.getAttribute('href')); }, 280);
     });
 
-    // Park the strip under the lens, and again when the direction flips.
-    requestAnimationFrame(() => centerNav(active, false));
+    /*
+     * Before / after slider (snippets/compare-page.liquid). Sideways drags
+     * move the divider; vertical ones are left to the feed (touch-action:
+     * pan-y on the frame). A hidden range input carries keyboard and
+     * screen-reader control.
+     */
+    function setPos(page, pct) {
+      const v = Math.max(0, Math.min(100, pct));
+      page.style.setProperty('--pos', `${v}%`);
+      const r = $('[data-compare-range]', page);
+      if (r) r.value = String(Math.round(v));
+    }
+    function nudge(page) {
+      if (page._nudged || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      page._nudged = true;
+      page.classList.add('nudging');
+      setPos(page, 62);
+      setTimeout(() => setPos(page, 38), 650);
+      setTimeout(() => setPos(page, 50), 1300);
+      setTimeout(() => page.classList.remove('nudging'), 1950);
+    }
+    $$('[data-compare]', feed).forEach((page) => {
+      const frame = $('.compare-frame', page);
+      const range = $('[data-compare-range]', page);
+      let drag = null;
+      const pctAt = (x) => {
+        const r = frame.getBoundingClientRect();
+        return ((x - r.left) / r.width) * 100;
+      };
+      frame.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY, on: false }; });
+      frame.addEventListener('pointermove', (e) => {
+        if (!drag) return;
+        if (!drag.on) {
+          const dx = Math.abs(e.clientX - drag.x);
+          const dy = Math.abs(e.clientY - drag.y);
+          if (dy > dx && dy > 6) { drag = null; return; } // a feed scroll, not ours
+          if (dx < 6) return;
+          drag.on = true;
+          page.classList.remove('nudging');
+          frame.setPointerCapture?.(e.pointerId);
+        }
+        setPos(page, pctAt(e.clientX));
+      });
+      const end = () => { drag = null; };
+      frame.addEventListener('pointerup', end);
+      frame.addEventListener('pointercancel', end);
+      range?.addEventListener('input', () => setPos(page, Number(range.value)));
+    });
+    if (pages[0]?.hasAttribute('data-compare')) nudge(pages[0]);
+
     onLang(() => requestAnimationFrame(() => {
-      centerNav(active, false);
       $$('[data-rail]', feed).forEach((rail) => {
         const slots = $$('[data-slot]', rail);
         rail.scrollLeft = 0;
         slots.forEach((s, k) => s.classList.toggle('active', k === 0));
       });
     }));
-    // Keep the page snapped to a collection when the viewport changes height.
-    window.addEventListener('resize', () => { hush('feed', 300); feed.scrollTop = activePage * feed.clientHeight; });
+    // Keep the page snapped when the viewport changes height (or the phone turns).
+    window.addEventListener('resize', () => { feed.scrollTop = activePage * feed.clientHeight; });
   }
 
   /* ════════════════════════════════════════════════════════════════════

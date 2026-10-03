@@ -11,6 +11,8 @@
         {%- assign count = count | plus: 1 -%}
       {%- endunless -%}
     {%- endfor -%}
+    {%- comment -%} Nothing to show (no active products left): hidden until it has some. {%- endcomment -%}
+    {%- if count == 0 -%}{%- continue -%}{%- endif -%}
     {%- liquid
       if c.image
         assign img = c.image

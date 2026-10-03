@@ -58,7 +58,14 @@ package with `cd theme && zip -qr ../dist/oka-theme.zip layout templates section
 
 - **Offers** (`Offer` blocks): a banner and a button. With *Bundle variant
   IDs* set, the button adds all of them at once — the website's bundle offers.
-- **Banners** (`Banner` blocks): a graphic banner as a page of its own, just
-  before the collection picked in *Show before collection*; a banner whose
-  collection isn't in the feed follows the Offers page.
+  An offer with nothing to buy (no bundle, no product) is not shown.
+- **Banners** (`Banner` blocks): a graphic banner, full screen, on a page of its
+  own just before the collection picked in *Show before collection*; a banner
+  whose collection isn't shown follows the Offers page.
+- **Before / after slider** (`compare` blocks): two images, full screen, same
+  placement rule as banners.
+- **Empty collections** are skipped automatically and return when they have an
+  active product — `snippets/live-collections.liquid`.
+- **Portrait lock**: `layout/theme.liquid` + the `portrait-lock` rules in
+  `assets/oka.css`.
 - **Menu**: the side menu in `layout/theme.liquid` replaced the bottom tab bar.
