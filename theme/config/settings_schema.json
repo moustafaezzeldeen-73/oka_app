@@ -181,7 +181,13 @@
         "type": "text",
         "id": "test_connector_url",
         "label": "J&T connector address (staff testing)",
-        "info": "The GCP connector's base URL, e.g. https://jt-mcp-server-xxxx.run.app — prefills the lookup panel. Not secret; the token is never stored in the theme."
+        "info": "The GCP connector's base URL, e.g. https://jt-mcp-server-xxxx.run.app — prefills the lookup panel."
+      },
+      {
+        "type": "text",
+        "id": "test_connector_token",
+        "label": "J&T connector token (staff testing)",
+        "info": "Prefills the panel's token. It is written into the Orders page while the panel is on, so anyone who can open this theme can read it: use it only on an unpublished theme, clear it when testing ends, and rotate the key afterwards."
       }
     ]
   }

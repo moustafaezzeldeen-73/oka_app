@@ -1807,7 +1807,7 @@
     let open = null;
 
     field('server').value = O.store.get('oka.test.connector', '') || panel.dataset.defaultUrl || '';
-    field('key').value = O.store.sget('oka.test.token', '') || '';
+    field('key').value = O.store.sget('oka.test.token', '') || panel.dataset.defaultToken || '';
 
     const showError = (msg) => { errEl.hidden = !msg; errEl.textContent = msg || ''; };
     const digits = (v) => String(v ?? '').replace(/\D/g, '');

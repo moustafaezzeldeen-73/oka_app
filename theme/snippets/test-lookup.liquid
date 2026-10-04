@@ -5,15 +5,15 @@
   Finds a customer's J&T shipments by phone, with the live scan history and
   the courier's Call / WhatsApp buttons, straight from OKA's J&T connector on
   GCP (jt-mcp-server) — to check the shipping connector on real orders from
-  the website. The tester types the connector token; it stays in the tab's
-  sessionStorage only. Shown only when Theme settings → OKA order service →
+  the website. The connector token comes from the test_connector_token
+  setting (written into the page while the panel is on) or is typed in. Shown only when Theme settings → OKA order service →
   "J&T lookup panel" is on.
 
   To remove: delete this file, its render line in sections/oka-orders.liquid,
-  the test_panel / test_connector_url settings, and testLookup() in
+  the test_panel / test_connector_url / test_connector_token settings, and testLookup() in
   assets/oka-screens.js.
 {%- endcomment -%}
-<div class="test-panel" data-test-lookup data-default-url="{{ settings.test_connector_url | escape }}">
+<div class="test-panel" data-test-lookup data-default-url="{{ settings.test_connector_url | escape }}" data-default-token="{{ settings.test_connector_token | escape }}">
   <div class="test-badge">TESTING — staff only</div>
   <label class="field-label">J&amp;T connector address</label>
   <input class="field-input" data-tl-server type="url" dir="ltr" autocomplete="off" placeholder="https://jt-mcp-server-….run.app">
