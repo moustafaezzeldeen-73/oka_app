@@ -1938,18 +1938,26 @@
       </div>`;
     }
 
+    // The list first; a tap opens that shipment's tracking in its place.
     function render() {
       if (!data) { results.innerHTML = ''; return; }
-      results.innerHTML = data.map((o) => `
-        <div class="test-order">
-          <button class="order-card" data-tl-open="${esc(o.awb)}" style="width:calc(100% - 44px);text-align:start">
-            <div style="flex:1;min-width:0">
-              <div class="order-top"><span class="order-name nums">${esc(o.awb)}</span>${o.createdAt ? `<span class="order-total nums" style="font-weight:500">${esc(String(o.createdAt).slice(0, 10))}</span>` : ''}</div>
-              <div class="order-state${o.step >= 3 ? ' green' : ''}">${esc(o.stateLabel || L('No scans yet', 'مفيش تحديثات لسه'))}</div>
-            </div>
-          </button>
-          ${open === o.awb ? detail(o) : ''}
-        </div>`).join('');
+      const card = (o, tappable) => `
+        <button class="order-card" ${tappable ? `data-tl-open="${esc(o.awb)}"` : ''} style="width:calc(100% - 44px);text-align:start">
+          <div style="flex:1;min-width:0">
+            <div class="order-top"><span class="order-name nums">${esc(o.awb)}</span>${o.createdAt ? `<span class="order-total nums" style="font-weight:500">${esc(String(o.createdAt).slice(0, 10))}</span>` : ''}</div>
+            <div class="order-state${o.step >= 3 ? ' green' : ''}">${esc(o.stateLabel || L('No scans yet', 'مفيش تحديثات لسه'))}</div>
+          </div>
+          ${tappable ? `<span class="flip" style="display:flex;opacity:.4">›</span>` : ''}
+        </button>`;
+      const o = open && data.find((x) => x.awb === open);
+      if (o) {
+        results.innerHTML = `
+          <button class="outline-btn test-back" data-tl-back>${esc(L('‹ All shipments', '‹ كل الشحنات'))}</button>
+          <div class="test-order">${card(o, false)}${detail(o)}</div>`;
+      } else {
+        results.innerHTML = `<div class="test-who">${esc(`${data.length} J&T shipments`)}</div>
+          ${data.map((x) => `<div class="test-order">${card(x, true)}</div>`).join('')}`;
+      }
     }
 
     async function lookUp() {
@@ -1970,7 +1978,8 @@
           const scans = await jtTrack(awbs);
           data = awbs.map((awb) => ({ awb, ...jtShape(scans.get(awb), 1) }));
         }
-        open = data[0]?.awb ?? null;
+        // One result opens straight away; several are listed first.
+        open = data.length === 1 ? data[0].awb : null;
         render();
       } catch (err) {
         data = null;
@@ -1985,10 +1994,11 @@
     field('go').addEventListener('click', lookUp);
     field('clear').addEventListener('click', () => { data = null; open = null; field('awbs').value = ''; showError(''); render(); });
     results.addEventListener('click', (e) => {
-      const b = e.target.closest('[data-tl-open]');
+      const b = e.target.closest('[data-tl-open], [data-tl-back]');
       if (!b) return;
-      open = open === b.dataset.tlOpen ? null : b.dataset.tlOpen;
+      open = b.dataset.tlOpen || null;
       render();
+      results.scrollIntoView({ block: 'start', behavior: 'smooth' });
     });
     onLang(() => { if (data) lookUp(); });
   }
