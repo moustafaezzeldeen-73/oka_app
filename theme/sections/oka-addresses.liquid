@@ -6,7 +6,7 @@
   {% render 'screen-header', en: 'My addresses', ar: 'عناويني', back: '/pages/account' %}
   {%- if customer -%}
     {%- if customer.addresses.size == 0 -%}
-      <div class="empty" style="color:var(--ink-soft)">{% render 'bi', en: 'No saved addresses yet', ar: 'لا توجد عناوين محفوظة' %}</div>
+      <div class="empty" style="color:var(--ink-soft)">{% render 'bi', en: 'No saved addresses yet', ar: 'مفيش عناوين محفوظة لسه' %}</div>
     {%- endif -%}
     {%- for a in customer.addresses -%}
       {%- assign is_default = false -%}
@@ -16,17 +16,17 @@
           <div style="flex:1;min-width:0">
             <div class="addr-labelrow">
               <span class="addr-label" data-addr-label><span class="l-en">Address {{ forloop.index }}</span><span class="l-ar">عنوان {% render 'ar-digits', s: forloop.index %}</span></span>
-              {%- if is_default -%}<span class="addr-badge">{% render 'bi', en: 'Default', ar: 'الافتراضي' %}</span>{%- endif -%}
+              {%- if is_default -%}<span class="addr-badge">{% render 'bi', en: 'Default', ar: 'الأساسي' %}</span>{%- endif -%}
             </div>
             <div class="addr-line">{{ a.name | default: customer.name }}</div>
             <div class="addr-line">{{ a.address1 }}{% if a.address2 != blank %}, {{ a.address2 }}{% endif %}</div>
             <div class="addr-line">{{ a.city }}</div>
             {%- assign ph = a.phone | default: customer.phone -%}
             {%- if ph != blank -%}<div class="addr-line" style="letter-spacing:.5px"><span class="nums">{{ ph }}</span></div>{%- endif -%}
-            <div class="addr-eta"><span class="l-en">Delivery in <span data-eta></span></span><span class="l-ar">التوصيل خلال <span data-eta></span></span></div>
+            <div class="addr-eta"><span class="l-en">Delivery in <span data-eta></span></span><span class="l-ar">بيوصل في <span data-eta></span></span></div>
             <div class="addr-actions">
-              {%- unless is_default -%}<button class="addr-action" data-make-default>{% render 'bi', en: 'Make default', ar: 'اجعله الافتراضي' %}</button>{%- endunless -%}
-              <button class="addr-action red" data-delete-addr>{% render 'bi', en: 'Delete', ar: 'حذف' %}</button>
+              {%- unless is_default -%}<button class="addr-action" data-make-default>{% render 'bi', en: 'Make default', ar: 'خليه الأساسي' %}</button>{%- endunless -%}
+              <button class="addr-action red" data-delete-addr>{% render 'bi', en: 'Delete', ar: 'امسح' %}</button>
             </div>
           </div>
           <span class="radio lg"></span>
@@ -34,7 +34,7 @@
       </div>
     {%- endfor -%}
     <div style="padding:6px 22px 30px">
-      <a href="/pages/addresses?view=oka-add-address" class="outline-btn">{% render 'icon', name: 'plus', px: 16 %}{% render 'bi', en: 'Add new address', ar: 'إضافة عنوان جديد' %}</a>
+      <a href="/pages/addresses?view=oka-add-address" class="outline-btn">{% render 'icon', name: 'plus', px: 16 %}{% render 'bi', en: 'Add new address', ar: 'ضيف عنوان جديد' %}</a>
     </div>
   {%- else -%}
     <a href="{{ routes.account_login_url }}" class="notice" data-sign-in="/pages/addresses">{% render 'bi', en: 'Sign in to see your saved addresses.', ar: 'سجّل دخولك عشان تشوف عناوينك المحفوظة.' %}</a>

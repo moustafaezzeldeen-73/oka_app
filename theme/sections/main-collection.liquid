@@ -9,7 +9,7 @@
     <div class="count" data-count-label></div>
     <div class="chips">
       <button class="chip dark" data-sort></button>
-      <button class="chip" data-filter="inStock">{% render 'bi', en: 'In stock', ar: 'المتوفر' %}</button>
+      <button class="chip" data-filter="inStock">{% render 'bi', en: 'In stock', ar: 'المتاح' %}</button>
       <button class="chip" data-filter="onSale">{% render 'bi', en: 'On sale', ar: 'عليه خصم' %}</button>
     </div>
     <div class="grid" data-grid>
@@ -18,7 +18,7 @@
       {%- endfor -%}
     </div>
   {% endpaginate %}
-  <div class="empty" data-empty hidden>{% render 'bi', en: 'No products in this category', ar: 'لا توجد منتجات في هذه الفئة' %}</div>
+  <div class="empty" data-empty hidden>{% render 'bi', en: 'No products in this category', ar: 'مفيش منتجات هنا لسه' %}</div>
   <div style="height:26px"></div>
 </div>
 {% schema %}{ "name": "Collection", "tag": "div" }{% endschema %}

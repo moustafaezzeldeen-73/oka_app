@@ -82,21 +82,21 @@
       all: 'All',
     },
     ar: {
-      search: 'ابحث عن شيشة، بولّات وإكسسوارات', add: 'إضافة', productsCount: 'منتج',
-      noMatch: 'لا توجد منتجات في هذه الفئة', inStock: 'متوفر', onlyLeft: 'باقي {n} فقط', outOfStock: 'غير متوفر',
-      freeShipProgress: 'أضف {n} ج.م عشان رسوم التوصيل تقل', freeShipReached: 'رسوم التوصيل الأقل مفعّلة',
-      shipCheaper: 'أضف {n} ج.م كمان والشحن ينزل لـ {p}', shipBest: 'الشحن {p} — أقل سعر لمنطقتك',
-      shipFreeProgress: 'أضف {n} ج.م كمان والشحن يبقى مجاني', shipFree: 'الطلب ده شحنه مجاني',
-      qty: 'الكمية', customize: 'تخصيص', addToCart: 'أضف إلى السلة',
-      estDelivery: 'موعد التوصيل المتوقع', shippingFee: 'رسوم الشحن', payMethods: 'الدفع عند الاستلام', description: 'الوصف',
-      pointsNote: 'اكسب ~{n} نقطة عند التوصيل', related: 'قد يعجبك أيضاً',
-      cartTitle: 'السلة', emptyCart: 'سلتك فارغة', browse: 'تصفح الأكثر مبيعاً',
-      subtotal: 'الإجمالي الفرعي', discount: 'الخصم', shipping: 'الشحن', total: 'الإجمالي',
-      earnOnDelivery: 'ستكسب {n} نقطة عند التوصيل',
-      discountPlaceholder: 'كود الخصم', apply: 'تطبيق', applied: 'مُطبّق', checkout: 'الدفع',
-      change: 'تغيير', paymentTitle: 'طريقة الدفع', cod: 'الدفع عند الاستلام', card: 'بطاقة', wallet: 'محفظة إلكترونية',
-      codNote: 'جهّز هذا المبلغ للمندوب', placeOrder: 'تأكيد الطلب', orderNumber: 'رقم الطلب',
-      myAddresses: 'عناويني', myWishlist: 'المفضلة', loyaltyRow: 'نقاط الولاء', faq: 'المساعدة والدعم', legal: 'السياسات',
+      search: 'دوّر على شيشة، بولّات وإكسسوارات', add: 'عبيلي فالشنطة', productsCount: 'منتج',
+      noMatch: 'مفيش منتجات هنا لسه', inStock: 'متوفر', onlyLeft: 'فاضل {n} بس', outOfStock: 'خلصان',
+      freeShipProgress: 'ضيف {n} ج.م والشحن يقل', freeShipReached: 'خدت أقل سعر شحن',
+      shipCheaper: 'ضيف {n} ج.م كمان والشحن ينزل لـ {p}', shipBest: 'الشحن {p} — أقل سعر لمنطقتك',
+      shipFreeProgress: 'ضيف {n} ج.م كمان والشحن يبقى ببلاش', shipFree: 'الطلب ده شحنه مجاني',
+      qty: 'العدد', customize: 'اختار', addToCart: 'عبيلي فالشنطة',
+      estDelivery: 'هيوصلك إمتى', shippingFee: 'مصاريف الشحن', payMethods: 'كاش عند الاستلام', description: 'التفاصيل',
+      pointsNote: 'هتاخد ~{n} نقطة لما يوصلك', related: 'ممكن يعجبك كمان',
+      cartTitle: 'السلة', emptyCart: 'سلتك فاضية', browse: 'شوف الأكتر مبيعاً',
+      subtotal: 'المجموع قبل الشحن', discount: 'الخصم', shipping: 'الشحن', total: 'الإجمالي',
+      earnOnDelivery: 'هتاخد {n} نقطة لما يوصلك',
+      discountPlaceholder: 'كود الخصم', apply: 'فعّل', applied: 'اتفعّل', checkout: 'الدفع',
+      change: 'غيّر', paymentTitle: 'هتدفع إزاي', cod: 'كاش عند الاستلام', card: 'كارت', wallet: 'محفظة موبايل',
+      codNote: 'جهّز المبلغ ده للمندوب', placeOrder: 'أكّد الطلب', orderNumber: 'رقم الطلب',
+      myAddresses: 'عناويني', myWishlist: 'المفضلة', loyaltyRow: 'نقاطي', faq: 'محتاج مساعدة؟', legal: 'الشروط والسياسات',
       all: 'الكل',
     },
   };
@@ -216,7 +216,7 @@
       if (!silent) addedFeedback();
       return c;
     } catch (err) {
-      okaAlert(L('Could not add', 'تعذّر الإضافة'), String(err.message || err));
+      okaAlert(L('Could not add', 'معرفناش نضيفه'), String(err.message || err));
       throw err;
     }
   }
@@ -251,7 +251,6 @@
   /** Stands in for the success haptic where there is none (desktop, iOS Safari). */
   function addedFeedback() {
     if (canVibrate && matchMedia('(pointer: coarse)').matches) return;
-    if ($('.tabbar')) return; // the cart badge pops — that's the app's own feedback
     toast(L('Added to cart', 'اتضاف للسلة'));
   }
   function toast(text) {
@@ -330,7 +329,7 @@
     });
     const txt = await res.text();
     let json;
-    try { json = JSON.parse(txt); } catch (e) { throw new Error(L('The service returned an unexpected answer.', 'السيرفر رد برد غير متوقع.')); }
+    try { json = JSON.parse(txt); } catch (e) { throw new Error(L('The service returned an unexpected answer.', 'حصلت مشكلة من عندنا، جرّب تاني.')); }
     if (!res.ok) {
       const err = new Error(json.error || `HTTP ${res.status}`);
       if (json.code) err.code = json.code;
@@ -364,7 +363,7 @@
 
   /* ── Alert.alert, iOS style ──────────────────────────────────────────── */
   function okaAlert(title, message, buttons) {
-    const btns = buttons && buttons.length ? buttons : [{ text: L('OK', 'حسناً') }];
+    const btns = buttons && buttons.length ? buttons : [{ text: L('OK', 'تمام') }];
     return new Promise((resolve) => {
       const app = $('#app') || document.body;
       const scrim = document.createElement('div');
@@ -394,7 +393,7 @@
     el.className = 'overlay age-gate';
     el.innerHTML = `<div class="age-card fade-in">
       <div class="age-title"><span class="l-en">Are you 18 or older?</span><span class="l-ar">عندك ١٨ سنة أو أكتر؟</span></div>
-      <div class="age-body"><span class="l-en">Some OKA products contain tobacco and are sold to adults only.</span><span class="l-ar">بعض منتجات أوكا فيها تبغ، وبنبيعها للكبار بس.</span></div>
+      <div class="age-body"><span class="l-en">Some OKA products contain tobacco and are sold to adults only.</span><span class="l-ar">شوية من منتجات أوكا فيها دخان، وبنبيعها للكبار بس.</span></div>
       <button class="cta" data-yes><span class="l-en">Yes, I’m 18+</span><span class="l-ar">أيوه، عندي ١٨+</span></button>
       <button class="age-lang" data-lang><span class="l-en">العربية</span><span class="l-ar">English</span></button>
     </div>`;
@@ -433,12 +432,12 @@
       <div class="ar-table"></div><div class="ar-horizon"></div>
       <div class="ar-top">
         <button class="ar-close s94 press" data-close aria-label="Close"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#fff" stroke-width="2.1" stroke-linecap="round"/></svg></button>
-        <div class="ar-status"><i></i>${esc(L('Surface detected', 'تم تحديد السطح'))}</div>
+        <div class="ar-status"><i></i>${esc(L('Surface detected', 'لقينا السطح'))}</div>
       </div>
       <div class="ar-stage">
         <div class="ar-object">
           ${p.img ? `<img src="${esc(p.img)}" alt="">` : ''}
-          <div class="ar-scale"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/></svg>${esc(L('Shown at actual size', 'بالمقاس الحقيقي'))}</div>
+          <div class="ar-scale"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/></svg>${esc(L('Shown at actual size', 'بحجمها الحقيقي'))}</div>
         </div>
         <div class="ar-contact"></div>
       </div>
@@ -448,9 +447,9 @@
             <div class="ar-live-hint">${esc(L('Opens your camera and places it at real size', 'هتفتح الكاميرا وتحط المنتج بحجمه الحقيقي'))}</div>
           </div>`
         : `<div class="ar-controls">${[
-            ['⤢', L('Drag to move', 'اسحب للتحريك')],
-            ['⟳', L('Twist to rotate', 'لف للدوران')],
-            ['⤡', L('Pinch to scale', 'قرّب للتحجيم')],
+            ['⤢', L('Drag to move', 'اسحب عشان تحركها')],
+            ['⟳', L('Twist to rotate', 'لف بصباعين')],
+            ['⤡', L('Pinch to scale', 'قرّب أو بعّد')],
           ].map(([g, label]) => `<div class="ar-control"><div class="ar-control-btn">${g}</div><span>${esc(label)}</span></div>`).join('')}</div>`}
       <div class="ar-panel-wrap"><div class="ar-panel">
         <div class="ar-head">
@@ -461,7 +460,7 @@
         <div class="ar-facts">
           <div class="ar-fact"><span>${esc(L('Price', 'السعر'))}</span><b>${esc(fmtPrice(p.price))}</b></div>
           <div class="ar-fact"><span>${esc(L('Delivery', 'التوصيل'))}</span><b>${esc(etaFor(def))}</b></div>
-          <div class="ar-fact"><span>${esc(L('Availability', 'التوفر'))}</span><b>${esc(stockText)}</b></div>
+          <div class="ar-fact"><span>${esc(L('Availability', 'متاح؟'))}</span><b>${esc(stockText)}</b></div>
         </div>
       </div></div>`;
 
@@ -492,14 +491,88 @@
         el.classList.add('has-model');
         el.querySelector('[data-live]').onclick = () => {
           if (mv.canActivateAR) mv.activateAR();
-          else okaAlert(L('AR isn’t available here', 'الواقع المعزز مش متاح هنا'), L('Open this page on a phone to place it in your space. You can still turn the model around here.', 'افتح الصفحة دي من الموبايل عشان تحطها في مكانك. تقدر تلف الموديل هنا.'));
+          else okaAlert(L('AR isn’t available here', 'الكاميرا مش هتشتغل هنا'), L('Open this page on a phone to place it in your space. You can still turn the model around here.', 'افتح الصفحة دي من الموبايل عشان تحطها في مكانك. تقدر تلف الموديل هنا.'));
         };
       }).catch(() => {});
     }
   }
 
+  /* ── side menu ───────────────────────────────────────────────────────────
+   * Replaces the bottom tab bar. Opened from the edge handle or the home
+   * header's ☰; closed by the scrim, the ✕, Escape, or a swipe back towards
+   * the edge it came from. While closed it is `inert`, so its links are
+   * neither tabbable nor read out.
+   */
+  let menuReturnFocus = null;
+  function openMenu() {
+    const app = $('#app');
+    const menu = $('#side-menu');
+    if (!app || !menu || app.classList.contains('menu-open')) return;
+    menuReturnFocus = document.activeElement;
+    menu.removeAttribute('inert');
+    menu.setAttribute('aria-hidden', 'false');
+    $$('[data-menu-open]').forEach((b) => b.setAttribute('aria-expanded', 'true'));
+    $('.menu-scrim')?.removeAttribute('hidden');
+    app.classList.add('menu-open');
+    haptic.selectionTick();
+    // The panel takes focus, not a link: focusing a link after a tap drew the
+    // browser's blue focus ring around it.
+    requestAnimationFrame(() => menu.focus({ preventScroll: true }));
+  }
+  function closeMenu() {
+    const app = $('#app');
+    const menu = $('#side-menu');
+    if (!app || !menu || !app.classList.contains('menu-open')) return;
+    app.classList.remove('menu-open');
+    menu.setAttribute('inert', '');
+    menu.setAttribute('aria-hidden', 'true');
+    $$('[data-menu-open]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+    $('.menu-scrim')?.setAttribute('hidden', '');
+    menuReturnFocus?.focus?.({ preventScroll: true });
+  }
+  /**
+   * The logo bar shrinks while the page's own scroller is scrolled — the feed
+   * on home, the `.screen` everywhere else. Horizontal rails are ignored.
+   */
+  function wireTopBar() {
+    const bar = $('[data-top-bar]');
+    if (!bar) return;
+    let raf = 0;
+    document.addEventListener('scroll', (e) => {
+      const el = e.target;
+      if (!(el instanceof Element) || !el.matches('.feed, .screen')) return;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        bar.classList.toggle('compact', el.scrollTop > 8);
+      });
+    }, { capture: true, passive: true });
+  }
+
+  function wireMenu() {
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    // Swipe the drawer back towards its edge to close it.
+    const menu = $('#side-menu');
+    if (!menu) return;
+    let x0 = null;
+    let y0 = null;
+    menu.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    menu.addEventListener('touchend', (e) => {
+      if (x0 == null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      const dy = e.changedTouches[0].clientY - y0;
+      x0 = null;
+      const towardsEdge = isRtl() ? dx > 50 : dx < -50;
+      if (towardsEdge && Math.abs(dx) > Math.abs(dy) * 1.5) closeMenu();
+    }, { passive: true });
+    // Going back to a page from the bfcache must not show the menu still open.
+    window.addEventListener('pageshow', () => closeMenu());
+  }
+
   /* ── global wiring ───────────────────────────────────────────────────── */
   function wire() {
+    wireMenu();
+    wireTopBar();
     document.addEventListener('click', (e) => {
       const back = e.target.closest('[data-back]');
       if (back) { e.preventDefault(); goBack(back.dataset.back); return; }
@@ -509,6 +582,21 @@
 
       const ar = e.target.closest('[data-ar]');
       if (ar) { e.preventDefault(); openAr(ar.dataset.ar); return; }
+
+      // A bundle offer: every variant in one cart call, so it lands whole or not at all.
+      const bundle = e.target.closest('[data-add-bundle]');
+      if (bundle) {
+        e.preventDefault();
+        if (bundle.disabled) return;
+        const ids = bundle.dataset.addBundle.split(',').map((x) => x.trim()).filter(Boolean);
+        if (!ids.length) return;
+        bundle.disabled = true;
+        addManyToCart(ids.map((variantId) => ({ variantId, quantity: 1 })))
+          .then(() => { haptic.success?.(); toast(L('Bundle added to cart', 'العرض اتضاف للسلة')); })
+          .catch(() => toast(L("Couldn't add this offer — part of it may be sold out", 'معرفناش نضيف العرض — ممكن حاجة منه تكون خلصت')))
+          .finally(() => { bundle.disabled = false; });
+        return;
+      }
 
       const add = e.target.closest('[data-add]');
       if (add && add.dataset.add && !add.closest('.ar') && !add.hasAttribute('data-custom')) {
@@ -528,8 +616,17 @@
       const signIn = e.target.closest('[data-sign-in]');
       if (signIn) { e.preventDefault(); requireSignIn(signIn.dataset.signIn || undefined); return; }
 
-      const tab = e.target.closest('.tab');
-      if (tab && !tab.classList.contains('active')) haptic.selectionTick();
+      const opener = e.target.closest('[data-menu-open]');
+      if (opener) { e.preventDefault(); openMenu(); return; }
+      const closer = e.target.closest('[data-menu-close]');
+      if (closer) { e.preventDefault(); closeMenu(); return; }
+
+      const link = e.target.closest('.side-link');
+      if (link) {
+        if (!link.classList.contains('active')) haptic.selectionTick();
+        // Same page: just close. Elsewhere: let it navigate (the menu goes with the page).
+        if (link.classList.contains('active')) { e.preventDefault(); closeMenu(); }
+      }
     });
 
     document.addEventListener('oka:lang', () => renderBadges());
@@ -543,6 +640,7 @@
     getCart, setCart, addToCart, addManyToCart, changeLine, applyDiscount, cartCount, cartQtyOf, cartTotals, toast,
     loadCatalogue, ptitle, pdesc, searchProducts, wishlist,
     api, hasService, requireSignIn, goBack, whatsappUrl, okaAlert, openAr,
+    openMenu, closeMenu,
   };
 
   function init() {

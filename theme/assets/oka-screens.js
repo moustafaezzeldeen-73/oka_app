@@ -33,7 +33,7 @@
         <a href="${esc(p.url)}" class="gcard-title">${esc(O.ptitle(p))}</a>
         <div class="gcard-row">
           <span class="gcard-price">${esc(fmtPrice(p.price))}</span>
-          <button class="gcard-add" data-add="${p.variantId}"${p.stock === 0 || p.available === false ? ' data-soldout' : ''} aria-label="Add">+</button>
+          <button class="gcard-add" data-add="${p.variantId}"${p.stock === 0 || p.available === false ? ' data-soldout' : ''}>${esc(L('Add', 'عبيلي فالشنطة'))}</button>
         </div>
       </div>
     </div>`;
@@ -90,13 +90,6 @@
     el.addEventListener('dragstart', (e) => e.preventDefault());
   }
 
-  /** Calls `fn` once scrolling has stopped — `scrollend` where it exists. */
-  function onScrollEnd(el, fn) {
-    if ('onscrollend' in window) { el.addEventListener('scrollend', fn); return; }
-    let timer;
-    el.addEventListener('scroll', () => { clearTimeout(timer); timer = setTimeout(fn, 120); }, { passive: true });
-  }
-
   /** The slot nearest the rail's centre — direction-agnostic. */
   function nearest(rail, slots) {
     const r = rail.getBoundingClientRect();
@@ -116,65 +109,28 @@
    * ════════════════════════════════════════════════════════════════════ */
   function home(root) {
     const feed = $('[data-feed]', root);
-    const nav = $('[data-nav]', root);
     const pages = $$('.page', feed);
-    const items = $$('.nav-item', nav);
-    let active = 0;
-    /**
-     * The strip and the feed drive each other. A scroll the code started
-     * must not come back as "the shopper picked this", or the two chase each
-     * other — the bug the app's `driver` ref exists to stop.
-     */
-    const quiet = { nav: 0, feed: 0 };
-    const hush = (k, ms = 700) => { quiet[k] = Date.now() + ms; };
+    let activePage = 0;
 
-    function centerNav(i, smooth = true) {
-      const it = items[i];
-      if (!it) return;
-      const nr = nav.getBoundingClientRect();
-      const ir = it.getBoundingClientRect();
-      const delta = ir.left + ir.width / 2 - (nr.left + nr.width / 2);
-      if (Math.abs(delta) < 1) return;
-      hush('nav');
-      nav.scrollBy({ left: delta, behavior: smooth ? 'smooth' : 'auto' });
+    /** One page per snap: titles, haptic, and the shrinking logo bar. */
+    function setActive(k) {
+      if (k === activePage) return;
+      activePage = k;
+      pages.forEach((el, j) => el.classList.toggle('active', j === k));
+      O.haptic.snapCollection();
+      const cmp = pages[k]?.hasAttribute('data-compare') ? pages[k] : null;
+      if (cmp) nudge(cmp);
     }
 
-    function setActive(i, { moveNav = true, moveFeed = false, haptic = true } = {}) {
-      if (i === active) return;
-      active = i;
-      items.forEach((el, k) => el.classList.toggle('active', k === i));
-      pages.forEach((el, k) => el.classList.toggle('active', k === i));
-      if (moveNav) centerNav(i);
-      if (moveFeed) {
-        hush('feed', 900);
-        feed.scrollTo({ top: i * feed.clientHeight, behavior: 'smooth' });
-      }
-      if (haptic) O.haptic.snapCollection();
-    }
-
-    // Scrolling the feed moves the selector under the lens.
     let raf = 0;
     feed.addEventListener('scroll', () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         raf = 0;
-        if (Date.now() < quiet.feed || !feed.clientHeight) return;
-        const i = Math.max(0, Math.min(pages.length - 1, Math.round(feed.scrollTop / feed.clientHeight)));
-        setActive(i, { moveNav: true });
+        if (!feed.clientHeight) return;
+        setActive(Math.max(0, Math.min(pages.length - 1, Math.round(feed.scrollTop / feed.clientHeight))));
       });
     }, { passive: true });
-
-    // Scrolling the selector itself selects a collection and moves the feed.
-    onScrollEnd(nav, () => {
-      if (Date.now() < quiet.nav) return;
-      setActive(nearest(nav, items), { moveNav: false, moveFeed: true });
-    });
-
-    // The opening screen's "See offers" moves the feed one page on.
-    $$('[data-next-page]', feed).forEach((b) => b.addEventListener('click', () => setActive(Math.min(pages.length - 1, active + 1), { moveNav: true, moveFeed: true })));
-
-    // Tapping a selector item drives the feed.
-    items.forEach((it, i) => it.addEventListener('click', () => setActive(i, { moveNav: true, moveFeed: true })));
 
     // One notch per product, with a light tick on every notch.
     $$('[data-rail]', feed).forEach((rail) => {
@@ -195,7 +151,26 @@
       }, { passive: true });
       dragScroll(rail);
     });
-    dragScroll(nav);
+
+    /*
+     * A card off to the side (faded, scaled down) is not a target yet: a tap
+     * on it — the card, its add button or its AR pill — only brings it to the
+     * centre. Opening a product or adding it takes a tap on the card in focus.
+     * Capture phase, so it runs before the card's own link and the global
+     * add-to-cart handler, and can stop both.
+     */
+    feed.addEventListener('click', (e) => {
+      const slot = e.target.closest('[data-slot]');
+      if (!slot || slot.classList.contains('active')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const rail = slot.closest('[data-rail]');
+      if (!rail) return;
+      const rr = rail.getBoundingClientRect();
+      const sr = slot.getBoundingClientRect();
+      rail.scrollBy({ left: sr.left + sr.width / 2 - (rr.left + rr.width / 2), behavior: 'smooth' });
+      O.haptic.selectionTick();
+    }, true);
 
     // Feed cards: one tap opens the product, two add it to the cart (DoublePress, 280ms).
     feed.addEventListener('click', (e) => {
@@ -211,30 +186,76 @@
       card._t = setTimeout(() => { card._t = null; go(card.getAttribute('href')); }, 280);
     });
 
-    // The feed's own height drives the card sizes (CSS --fh). Measured here
-    // rather than with container queries, which older iPhones don't support.
+    /*
+     * Before / after slider (snippets/compare-page.liquid). Sideways drags
+     * move the divider; vertical ones are left to the feed (touch-action:
+     * pan-y on the frame). A hidden range input carries keyboard and
+     * screen-reader control.
+     */
+    function setPos(page, pct) {
+      const v = Math.max(0, Math.min(100, pct));
+      page.style.setProperty('--pos', `${v}%`);
+      const r = $('[data-compare-range]', page);
+      if (r) r.value = String(Math.round(v));
+    }
+    function nudge(page) {
+      if (page._nudged || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      page._nudged = true;
+      page.classList.add('nudging');
+      setPos(page, 62);
+      setTimeout(() => setPos(page, 38), 650);
+      setTimeout(() => setPos(page, 50), 1300);
+      setTimeout(() => page.classList.remove('nudging'), 1950);
+    }
+    $$('[data-compare]', feed).forEach((page) => {
+      const frame = $('.compare-frame', page);
+      const range = $('[data-compare-range]', page);
+      let drag = null;
+      const pctAt = (x) => {
+        const r = frame.getBoundingClientRect();
+        return ((x - r.left) / r.width) * 100;
+      };
+      frame.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY, on: false }; });
+      frame.addEventListener('pointermove', (e) => {
+        if (!drag) return;
+        if (!drag.on) {
+          const dx = Math.abs(e.clientX - drag.x);
+          const dy = Math.abs(e.clientY - drag.y);
+          if (dy > dx && dy > 6) { drag = null; return; } // a feed scroll, not ours
+          if (dx < 6) return;
+          drag.on = true;
+          page.classList.remove('nudging');
+          frame.setPointerCapture?.(e.pointerId);
+        }
+        setPos(page, pctAt(e.clientX));
+      });
+      const end = () => { drag = null; };
+      frame.addEventListener('pointerup', end);
+      frame.addEventListener('pointercancel', end);
+      range?.addEventListener('input', () => setPos(page, Number(range.value)));
+    });
+    if (pages[0]?.hasAttribute('data-compare')) nudge(pages[0]);
+
+    // The feed's own size drives the card sizes (CSS --fh / --fw). Measured
+    // here rather than with container queries, which older iPhones lack.
     const sizeFeed = () => {
-      const h = feed.clientHeight;
-      if (!h) return;
-      feed.style.setProperty('--fh', `${h}px`);
-      feed.classList.toggle('short', h < 380);
+      if (!feed.clientHeight) return;
+      feed.style.setProperty('--fh', `${feed.clientHeight}px`);
+      feed.style.setProperty('--fw', `${feed.clientWidth}px`);
     };
     sizeFeed();
     if ('ResizeObserver' in window) new ResizeObserver(sizeFeed).observe(feed);
     else window.addEventListener('resize', sizeFeed);
 
-    // Park the strip under the lens, and again when the direction flips.
-    requestAnimationFrame(() => centerNav(active, false));
     onLang(() => requestAnimationFrame(() => {
-      centerNav(active, false);
       $$('[data-rail]', feed).forEach((rail) => {
         const slots = $$('[data-slot]', rail);
         rail.scrollLeft = 0;
         slots.forEach((s, k) => s.classList.toggle('active', k === 0));
       });
     }));
-    // Keep the page snapped to a collection when the viewport changes height.
-    window.addEventListener('resize', () => { hush('feed', 300); feed.scrollTop = active * feed.clientHeight; });
+    // Keep the page snapped when the viewport changes height (or the phone turns).
+    window.addEventListener('resize', () => { feed.scrollTop = activePage * feed.clientHeight; });
   }
 
   /* ════════════════════════════════════════════════════════════════════
@@ -242,8 +263,8 @@
    * ════════════════════════════════════════════════════════════════════ */
   const SORTS = [
     { id: 'featured', en: 'Featured', ar: 'المميز' },
-    { id: 'priceAsc', en: 'Price: low to high', ar: 'السعر: من الأقل' },
-    { id: 'priceDesc', en: 'Price: high to low', ar: 'السعر: من الأعلى' },
+    { id: 'priceAsc', en: 'Price: low to high', ar: 'الأرخص الأول' },
+    { id: 'priceDesc', en: 'Price: high to low', ar: 'الأغلى الأول' },
   ];
   function collection(root) {
     const gridEl = $('[data-grid]', root);
@@ -445,7 +466,7 @@
               <a href="${esc(p.url)}" class="bs-img" style="display:block">${img(p.img)}</a>
               <div class="bs-body">
                 <a href="${esc(p.url)}" class="bs-title" style="display:block">${esc(O.ptitle(p))}</a>
-                <div class="bs-foot"><span class="bs-price">${esc(fmtPrice(p.price))}</span><button class="bs-add press s90" data-add="${p.variantId}"${p.stock === 0 ? ' data-soldout' : ''}>+</button></div>
+                <div class="bs-foot"><span class="bs-price">${esc(fmtPrice(p.price))}</span><button class="bs-add press s96" data-add="${p.variantId}"${p.stock === 0 ? ' data-soldout' : ''}>${esc(L('Add', 'عبيلي فالشنطة'))}</button></div>
               </div>
             </div>`).join('')}</div>` : ''}`;
         $$('[data-drag]', host).forEach(dragScroll);
@@ -522,11 +543,11 @@
         const q = Number(line.dataset.qty) + Number(step.dataset.step);
         const max = Number(line.dataset.max) || 50;
         if (q > max) return;
-        try { await O.changeLine(line.dataset.key, Math.max(0, q)); } catch (err) { O.okaAlert(L('Could not update', 'تعذّر التحديث'), errText(err)); }
+        try { await O.changeLine(line.dataset.key, Math.max(0, q)); } catch (err) { O.okaAlert(L('Could not update', 'معرفناش نحدّث'), errText(err)); }
         return;
       }
       if (line && e.target.closest('[data-remove]')) {
-        try { await O.changeLine(line.dataset.key, 0); } catch (err) { O.okaAlert(L('Could not update', 'تعذّر التحديث'), errText(err)); }
+        try { await O.changeLine(line.dataset.key, 0); } catch (err) { O.okaAlert(L('Could not update', 'معرفناش نحدّث'), errText(err)); }
         return;
       }
       if (e.target.closest('[data-apply]')) { applyCode(); return; }
@@ -598,7 +619,7 @@
    */
   function joinCard(points) {
     const perks = [
-      [L('Live J&T tracking', 'تتبع شحنتك لحظة بلحظة'), L('See where your parcel is and when the courier is on the way.', 'اعرف شحنتك فين وإمتى المندوب جاي.')],
+      [L('Live J&T tracking', 'تابع شحنتك لحظة بلحظة'), L('See where your parcel is and when the courier is on the way.', 'اعرف شحنتك فين وإمتى المندوب جاي.')],
       [L('Points on every order', 'نقاط على كل طلب'), L(`10 points = EGP 1, credited when your order is delivered.`, '١٠ نقاط = ١ ج.م، بتنزل لما طلبك يوصل.')],
       [L('Faster next time', 'أسرع المرة الجاية'), L('Saved addresses and one-tap “Order again”.', 'عناوينك محفوظة وتطلب تاني بضغطة.')],
     ];
@@ -612,7 +633,7 @@
         <div class="join-perk"><span class="join-tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <span><b>${esc(h)}</b><span>${esc(b)}</span></span></div>`).join('')}</div>
       <button class="cta glow" data-join-signin>${esc(L('Sign in & check out', 'سجّل دخولك وكمّل الطلب'))}</button>
-      <button class="join-guest" data-join-guest>${esc(L('Continue as guest', 'كمّل كزائر'))}</button>
+      <button class="join-guest" data-join-guest>${esc(L('Continue as guest', 'كمّل من غير حساب'))}</button>
       <div class="join-fine">${esc(L('Takes a few seconds. You can also sign in after ordering — your points still count.', 'بتاخد ثواني. وتقدر تسجّل بعد الطلب كمان ونقاطك محسوبة.'))}</div>
     </div>`;
   }
@@ -683,7 +704,7 @@
         <div class="divider"></div>
 
         <div class="field">
-          <div class="field-k">${esc(L('Ships to', 'الشحن إلى'))}</div>
+          <div class="field-k">${esc(L('Ships to', 'هيتشحن على'))}</div>
           <div class="field-v">${addr
             ? `<a href="${esc(CFG.routes.addresses)}" style="display:block">
                 <div class="field-strong">${esc(addr.name || O.customer.name || '')}</div>
@@ -868,7 +889,7 @@
       const extra = $('[data-live-extra]', det);
       let html = '';
       if (o.shippingError && updates.length) {
-        html += `<div class="ship-err">${esc(L('Couldn’t reach the courier — shipment updates may be missing. Pull to refresh.', 'تعذّر الوصول لشركة الشحن — تحديثات الشحنة ممكن تكون ناقصة. اسحب للتحديث.'))}</div>`;
+        html += `<div class="ship-err">${esc(L('Couldn’t reach the courier — shipment updates may be missing. Pull to refresh.', 'مقدرناش نوصل لشركة الشحن — ممكن تحديثات الشحنة تكون ناقصة. اسحب لتحت عشان تحدّث.'))}</div>`;
       }
       if (o.courier) {
         html += `<div class="courier">
@@ -876,13 +897,13 @@
           <div class="courier-name">${esc(o.courier)}</div>
           ${o.courierPhone ? `<div class="courier-phone"><span class="nums">${esc(o.courierPhone)}</span></div>
           <div class="courier-btns">
-            <a class="courier-btn call press s96" href="tel:${esc(String(o.courierPhone).replace(/\s/g, ''))}"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M7.5 3.5h-2A2.5 2.5 0 003 6c0 8.28 6.72 15 15 15a2.5 2.5 0 002.5-2.5v-2a1 1 0 00-.76-.97l-3.6-.9a1 1 0 00-1 .32l-1.1 1.32a12.5 12.5 0 01-5.63-5.63l1.32-1.1a1 1 0 00.32-1l-.9-3.6a1 1 0 00-.97-.76z" fill="#fff"/></svg>${esc(L('Call', 'اتصال'))}</a>
+            <a class="courier-btn call press s96" href="tel:${esc(String(o.courierPhone).replace(/\s/g, ''))}"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M7.5 3.5h-2A2.5 2.5 0 003 6c0 8.28 6.72 15 15 15a2.5 2.5 0 002.5-2.5v-2a1 1 0 00-.76-.97l-3.6-.9a1 1 0 00-1 .32l-1.1 1.32a12.5 12.5 0 01-5.63-5.63l1.32-1.1a1 1 0 00.32-1l-.9-3.6a1 1 0 00-.97-.76z" fill="#fff"/></svg>${esc(L('Call', 'كلّمه'))}</a>
             <a class="courier-btn wa press s96" target="_blank" rel="noopener" href="https://wa.me/${esc(waNumber(o.courierPhone))}"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2.5a9.5 9.5 0 00-8.2 14.28L2.5 21.5l4.85-1.26A9.5 9.5 0 1012 2.5zm0 1.9a7.6 7.6 0 016.45 11.6l-.23.37.62 2.26-2.33-.6-.36.21A7.6 7.6 0 1112 4.4z" fill="#fff"/><path d="M9.3 7.6c-.18-.42-.37-.43-.55-.44h-.46a.9.9 0 00-.65.3 2.7 2.7 0 00-.84 2 4.7 4.7 0 001 2.5 10.6 10.6 0 004.05 3.56c2 .79 2.42.63 2.85.59a2.44 2.44 0 001.63-1.15 2 2 0 00.14-1.15c-.06-.1-.22-.16-.46-.28s-1.42-.7-1.64-.78-.38-.12-.55.12-.62.78-.76.94-.28.18-.52.06a6.5 6.5 0 01-1.9-1.18 7.2 7.2 0 01-1.33-1.65c-.14-.24 0-.37.1-.49s.24-.28.36-.42a1.6 1.6 0 00.24-.4.44.44 0 000-.42c-.06-.12-.54-1.32-.75-1.8z" fill="#fff"/></svg>${esc(L('WhatsApp', 'واتساب'))}</a>
           </div>` : ''}
         </div>`;
       }
       if (o.actionNeeded) {
-        html += `<div class="action-needed"><b>${esc(L('Action needed', 'مطلوب إجراء'))}</b><span>${esc(o.actionNeeded)}</span></div>`;
+        html += `<div class="action-needed"><b>${esc(L('Action needed', 'محتاجين منك حاجة'))}</b><span>${esc(o.actionNeeded)}</span></div>`;
       }
       extra.innerHTML = html;
       if (o.trackingNumber && !$('[data-tracking]', det)) {
@@ -903,24 +924,24 @@
       const lines = JSON.parse(det.dataset.lines || '[]');
 
       if (e.target.closest('[data-edit-order]')) {
-        if (cancelled) return O.okaAlert(L('Not available', 'غير متاح'), L('This order has already been cancelled.', 'الطلب ده اتلغى بالفعل.'));
+        if (cancelled) return O.okaAlert(L('Not available', 'مش متاح'), L('This order has already been cancelled.', 'الطلب ده اتلغى خلاص.'));
         if (shipped) {
-          return O.okaAlert(L('Not available', 'غير متاح'), L('This order has already shipped, so its items and address can no longer be changed.', 'الطلب اتشحن بالفعل، فمش ممكن تتعدّل عناصره أو عنوانه.'));
+          return O.okaAlert(L('Not available', 'مش متاح'), L('This order has already shipped, so its items and address can no longer be changed.', 'الطلب اتشحن خلاص، فمينفعش تغيّر منتجاته أو عنوانه.'));
         }
         if (O.hasService()) return openEditSheet(name, lines);
-        return askOnWhatsApp(L(`Hi, I'd like to change order ${name}.`, `مرحباً، عايز أعدّل الطلب ${name}.`));
+        return askOnWhatsApp(L(`Hi, I'd like to change order ${name}.`, `أهلاً، عايز أعدّل الطلب ${name}.`));
       }
 
       if (e.target.closest('[data-cancel-order]')) {
-        if (cancelled) return O.okaAlert(L('Already cancelled', 'الطلب ملغي'), L('This order has already been cancelled.', 'الطلب ده اتلغى بالفعل.'));
-        if (shipped) return O.okaAlert(L('Not available', 'غير متاح'), friendlyError('already shipped'));
+        if (cancelled) return O.okaAlert(L('Already cancelled', 'الطلب ملغي'), L('This order has already been cancelled.', 'الطلب ده اتلغى خلاص.'));
+        if (shipped) return O.okaAlert(L('Not available', 'مش متاح'), friendlyError('already shipped'));
         if (!O.hasService()) {
-          return askOnWhatsApp(L(`Hi, please cancel order ${name}.`, `مرحباً، من فضلك الغوا الطلب ${name}.`));
+          return askOnWhatsApp(L(`Hi, please cancel order ${name}.`, `أهلاً، لو سمحت الغوا الطلب ${name}.`));
         }
-        return O.okaAlert(L('Cancel order', 'إلغاء الطلب'), L(`Order ${name} will be cancelled.`, `هيتم إلغاء الطلب ${name} نهائياً.`), [
-          { text: L('Back', 'رجوع'), style: 'cancel' },
+        return O.okaAlert(L('Cancel order', 'الغي الطلب'), L(`Order ${name} will be cancelled.`, `الطلب ${name} هيتلغي خالص.`), [
+          { text: L('Back', 'ارجع'), style: 'cancel' },
           {
-            text: L('Cancel order', 'إلغاء الطلب'),
+            text: L('Cancel order', 'الغي الطلب'),
             style: 'destructive',
             onPress: async () => {
               try {
@@ -929,9 +950,9 @@
                 O.store.set('oka.cancelled', cancelledHere);
                 markCancelled(name);
                 O.haptic.success();
-                O.okaAlert(L('Order cancelled', 'تم إلغاء الطلب'), L(`Order ${name} has been cancelled. It won't be shipped and you won't be charged.`, `تم إلغاء الطلب ${name}. مش هيتشحن ومش هتدفع حاجة.`));
+                O.okaAlert(L('Order cancelled', 'الطلب اتلغى'), L(`Order ${name} has been cancelled. It won't be shipped and you won't be charged.`, `الطلب ${name} اتلغى. مش هيتشحن ومش هتدفع حاجة.`));
               } catch (err) {
-                O.okaAlert(L('Could not cancel', 'تعذّر الإلغاء'), friendlyError(err));
+                O.okaAlert(L('Could not cancel', 'معرفناش نلغيه'), friendlyError(err));
               }
             },
           },
@@ -948,14 +969,14 @@
           if (p && p.stock !== 0 && p.available !== false) items.push({ variantId: l.variantId, quantity: l.quantity });
           else missing += 1;
         });
-        if (!items.length) return O.okaAlert(L('Not available', 'غير متاح'), L('These items aren’t available right now.', 'المنتجات دي مش متوفرة دلوقتي.'));
+        if (!items.length) return O.okaAlert(L('Not available', 'مش متاح'), L('These items aren’t available right now.', 'المنتجات دي مش متوفرة دلوقتي.'));
         try {
           await O.addManyToCart(items);
           O.haptic.success();
-          if (missing) await O.okaAlert(L('Added what’s available', 'أضفنا المتاح'), L(`${missing} item(s) aren’t available right now.`, `${num(missing)} منتج مش متوفر حالياً.`));
+          if (missing) await O.okaAlert(L('Added what’s available', 'ضفنا الموجود'), L(`${missing} item(s) aren’t available right now.`, `${num(missing)} منتج مش متوفر حالياً.`));
           go(CFG.routes.cart);
         } catch (err) {
-          O.okaAlert(L('Could not add', 'تعذّر الإضافة'), errText(err));
+          O.okaAlert(L('Could not add', 'معرفناش نضيفه'), errText(err));
         }
       }
     });
@@ -963,13 +984,13 @@
 
   function askOnWhatsApp(text) {
     if (!CFG.whatsapp) {
-      return O.okaAlert(L('Not available', 'غير متاح'), L('Contact support to change or cancel this order.', 'كلّم خدمة العملاء عشان تعدّل أو تلغي الطلب ده.'));
+      return O.okaAlert(L('Not available', 'مش متاح'), L('Contact support to change or cancel this order.', 'كلّم خدمة العملاء عشان تعدّل أو تلغي الطلب ده.'));
     }
     return O.okaAlert(
-      L('We’ll do it for you', 'هنعملها لك'),
+      L('We’ll do it for you', 'إحنا نعملهالك'),
       L('Send us this request on WhatsApp and the team will update your order before it ships.', 'ابعتلنا الطلب ده على واتساب والفريق هيعدّل طلبك قبل ما يتشحن.'),
       [
-        { text: L('Back', 'رجوع'), style: 'cancel' },
+        { text: L('Back', 'ارجع'), style: 'cancel' },
         { text: L('WhatsApp', 'واتساب'), onPress: () => window.open(O.whatsappUrl(text), '_blank', 'noopener') },
       ],
     );
@@ -1025,21 +1046,21 @@
       const scrollTop = $('.sheet-body', sheet)?.scrollTop || 0;
       sheet.innerHTML = `
         <div class="grabber"></div>
-        <div class="sheet-head"><span class="sheet-title">${esc(L('Edit Order', 'تعديل الطلب'))}</span>
+        <div class="sheet-head"><span class="sheet-title">${esc(L('Edit Order', 'عدّل الطلب'))}</span>
           <button class="sheet-close" data-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
         <div class="sheet-body">
-          <div class="sec-label">${esc(L('YOUR ORDER ITEMS', 'عناصر طلبك'))}</div>
+          <div class="sec-label">${esc(L('YOUR ORDER ITEMS', 'منتجات طلبك'))}</div>
           ${entries.length ? entries.map((e) => `
             <div class="sheet-item" data-pid="${esc(e.p.id)}">
               <div class="cat-item-img">${img(e.p.img)}</div>
               <div class="cat-item-meta" style="gap:4px"><div class="cat-item-title" style="font-size:13.5px;line-height:18px">${esc(O.ptitle(e.p))}</div><div class="sheet-item-total">${esc(fmtPrice(e.p.price * e.qty))}</div></div>
               ${stepper(e.qty, { size: 26, fs: 14, gap: 8 })}
             </div>`).join('')
-            : `<div class="awaiting" style="margin:0 20px 8px;text-align:center">${esc(L('No items in this order', 'لا توجد عناصر في الطلب'))}</div>`}
+            : `<div class="awaiting" style="margin:0 20px 8px;text-align:center">${esc(L('No items in this order', 'مفيش منتجات في الطلب'))}</div>`}
           ${addrs.length > 1 ? `<div class="sheet-rule"></div>
             <div class="sec-label">${esc(L('DELIVERY ADDRESS', 'عنوان التوصيل'))}</div>
             ${addressPicker(addrs, activeId, 'data-pick')}
-            ${picked ? `<div class="addr-note">${esc(L('The order will be redirected here when you save.', 'هيتم تحويل الطلب للعنوان ده لما تحفظ التعديلات.'))}</div>` : ''}` : ''}
+            ${picked ? `<div class="addr-note">${esc(L('The order will be redirected here when you save.', 'الطلب هيروح على العنوان ده لما تحفظ.'))}</div>` : ''}` : ''}
           <div class="sheet-rule"></div>
           <div class="sec-label">${esc(L('ALL PRODUCTS', 'كل المنتجات'))}</div>
           ${cats.map((c) => {
@@ -1057,7 +1078,7 @@
         <div class="sheet-foot">
           ${sumRow(t('subtotal'), fmtPrice(subtotal))}
           ${sumRow(t('total'), fmtPrice(total), 'total')}
-          <button class="accept" data-accept>${saving ? spinner() : esc(L('Accept Changes', 'قبول التعديلات'))}</button>
+          <button class="accept" data-accept>${saving ? spinner() : esc(L('Accept Changes', 'احفظ التعديلات'))}</button>
         </div>`;
       $('.sheet-body', sheet).scrollTop = scrollTop;
     }
@@ -1091,7 +1112,7 @@
         } catch (err) {
           saving = false;
           render();
-          O.okaAlert(L('Could not save the edit', 'تعذّر حفظ التعديل'), errText(err));
+          O.okaAlert(L('Could not save the edit', 'معرفناش نحفظ التعديل'), errText(err));
         }
       }
     });
@@ -1108,19 +1129,19 @@
     O.applyAttrs(root);
     const del = $('[data-delete-account]', root);
     if (del) del.addEventListener('click', () => O.okaAlert(
-      L('Delete account', 'حذف الحساب'),
-      L('We’ll remove your personal data within 7 days. Order records are kept for accounting and tax.', 'هنحذف بياناتك الشخصية خلال ٧ أيام. سجلات الطلبات بتفضل للحسابات والضرائب.'),
+      L('Delete account', 'امسح حسابي'),
+      L('We’ll remove your personal data within 7 days. Order records are kept for accounting and tax.', 'هنمسح بياناتك في خلال ٧ أيام. سجلات الطلبات بتفضل عشان الحسابات والضرايب.'),
       [
-        { text: L('Back', 'رجوع'), style: 'cancel' },
+        { text: L('Back', 'ارجع'), style: 'cancel' },
         {
-          text: L('Delete my account', 'احذف حسابي'),
+          text: L('Delete my account', 'امسح حسابي'),
           style: 'destructive',
           onPress: async () => {
             try {
               await O.api('/customer/delete-request', { method: 'POST', body: {} });
               go(CFG.routes.logout);
             } catch (err) {
-              O.okaAlert(L('Could not send the request', 'تعذّر الطلب'), errText(err));
+              O.okaAlert(L('Could not send the request', 'معرفناش نبعت الطلب'), errText(err));
             }
           },
         },
@@ -1194,17 +1215,17 @@
             });
           }
         } catch (err) {
-          O.okaAlert(L('Could not update the default address', 'تعذّر تحديث العنوان الافتراضي'), errText(err));
+          O.okaAlert(L('Could not update the default address', 'معرفناش نغيّر العنوان الأساسي'), errText(err));
         }
         return;
       }
 
       if (e.target.closest('[data-delete-addr]')) {
         e.stopPropagation();
-        O.okaAlert(L('Delete address', 'حذف العنوان'), L('Are you sure?', 'متأكد؟'), [
-          { text: L('Back', 'رجوع'), style: 'cancel' },
+        O.okaAlert(L('Delete address', 'امسح العنوان'), L('Are you sure?', 'متأكد؟'), [
+          { text: L('Back', 'ارجع'), style: 'cancel' },
           {
-            text: L('Delete', 'حذف'),
+            text: L('Delete', 'امسح'),
             style: 'destructive',
             onPress: async () => {
               if (String(O.store.get('oka.addr')) === id) O.store.del('oka.addr');
@@ -1216,7 +1237,7 @@
                   postForm(`/account/addresses/${id}`, { _method: 'delete' });
                 }
               } catch (err) {
-                O.okaAlert(L('Could not delete', 'تعذّر الحذف'), errText(err));
+                O.okaAlert(L('Could not delete', 'معرفناش نمسحه'), errText(err));
               }
             },
           },
@@ -1280,7 +1301,7 @@
       if (locating) return;
       O.haptic.selectionTick();
       if (!navigator.geolocation) {
-        O.okaAlert(L('Could not find your location', 'تعذّر تحديد الموقع'), L('This browser can’t share a location.', 'المتصفح ده مش بيدعم تحديد الموقع.'));
+        O.okaAlert(L('Could not find your location', 'معرفناش نحدد مكانك'), L('This browser can’t share a location.', 'المتصفح ده مش بيدعم تحديد الموقع.'));
         return;
       }
       locating = true;
@@ -1307,11 +1328,11 @@
           if (!field('phone').value && O.customer?.phone) field('phone').value = O.customer.phone;
           $('[data-found]', root).hidden = false;
         } catch (err) {
-          O.okaAlert(L('Could not find your location', 'تعذّر تحديد الموقع'), errText(err));
+          O.okaAlert(L('Could not find your location', 'معرفناش نحدد مكانك'), errText(err));
         } finally { done(); }
       }, () => {
         done();
-        O.okaAlert(L('Location permission denied', 'إذن الموقع مرفوض'), L('Enable location access in Settings to fill the address automatically.', 'فعّل إذن الموقع من إعدادات الجهاز عشان نملأ العنوان تلقائياً.'));
+        O.okaAlert(L('Location permission denied', 'إذن الموقع مقفول'), L('Enable location access in Settings to fill the address automatically.', 'فعّل إذن الموقع من إعدادات الجهاز عشان نملأ العنوان تلقائياً.'));
       }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 });
     });
 
@@ -1352,7 +1373,7 @@
         } catch (err) {
           saving = false;
           btn.innerHTML = btnHtml;
-          O.okaAlert(L('Could not save the address', 'تعذّر حفظ العنوان'), errText(err));
+          O.okaAlert(L('Could not save the address', 'معرفناش نحفظ العنوان'), errText(err));
         }
         return;
       }
@@ -1375,7 +1396,7 @@
   const DEFAULT_REWARDS = [
     { id: 'off20', points: 200, en: '20 EGP off orders over 300', ar: 'خصم ٢٠ ج.م على طلب فوق ٣٠٠' },
     { id: 'off50', points: 500, en: '50 EGP off orders over 600', ar: 'خصم ٥٠ ج.م على طلب فوق ٦٠٠' },
-    { id: 'ship', points: 800, en: 'Free delivery (80 EGP off) over 800', ar: 'توصيل مجاني (خصم ٨٠ ج.م) فوق ٨٠٠' },
+    { id: 'ship', points: 800, en: 'Free delivery (80 EGP off) over 800', ar: 'شحن ببلاش (خصم ٨٠ ج.م) على طلب فوق ٨٠٠' },
     { id: 'off150', points: 1500, en: '150 EGP off orders over 1,500', ar: 'خصم ١٥٠ ج.م على طلب فوق ١٥٠٠' },
   ];
   function loyalty(root) {
@@ -1398,7 +1419,7 @@
       errEl.textContent = error || '';
       $('[data-next-tier]', root).textContent = next
         ? L(`${fmtPts(next.points - (balance ?? 0))} points to your next reward · worth EGP ${worth}`, `${fmtPts(next.points - (balance ?? 0))} نقطة للمكافأة الجاية · قيمتها ${fmtPts(worth)} ج.م`)
-        : L('Every reward is unlocked', 'تقدر تستبدل أي مكافأة');
+        : L('Every reward is unlocked', 'تقدر تبدّل أي هدية');
 
       const vouchers = (O.store.get('oka.vouchers', []) || []).filter((v) => new Date(v.endsAt) > new Date());
       $('[data-vouchers]', root).innerHTML = vouchers.length ? `
@@ -1416,7 +1437,7 @@
             <span class="reward-title" style="display:block">${esc(L(r.en, r.ar))}</span>
             <span class="reward-cost" style="display:block">${esc(L(`${fmtPts(r.points)} points`, `${fmtPts(r.points)} نقطة`))}</span>
           </span>
-          <button class="reward-btn${ok ? ' on' : ''}" data-redeem="${esc(r.id)}">${busyId === r.id ? spinner().replace('spinner', 'spinner sm') : esc(ok ? L('Redeem', 'استبدال') : L('Locked', 'مقفول'))}</button>
+          <button class="reward-btn${ok ? ' on' : ''}" data-redeem="${esc(r.id)}">${busyId === r.id ? spinner().replace('spinner', 'spinner sm') : esc(ok ? L('Redeem', 'بدّل') : L('Locked', 'مقفول'))}</button>
         </div>`;
       }).join('');
 
@@ -1431,7 +1452,7 @@
 
     function showVoucher(v) {
       O.okaAlert(L('Your voucher code', 'كود الخصم بتاعك'), `${v.code}\n\n${L(v.reward.en, v.reward.ar)}`, [
-        { text: L('Copy', 'نسخ'), onPress: () => navigator.clipboard?.writeText(v.code).catch(() => {}) },
+        { text: L('Copy', 'انسخ'), onPress: () => navigator.clipboard?.writeText(v.code).catch(() => {}) },
         { text: L('Use in cart', 'استخدمه في السلة'), onPress: () => { O.store.set('oka.pendingCode', v.code); go(CFG.routes.cart); } },
       ]);
     }
@@ -1451,18 +1472,18 @@
         // Points are the account's Shopify store credit; Shopify's checkout spends it directly.
         const worth = Math.floor(balance / ppe);
         O.okaAlert(
-          L('Use your points at checkout', 'استخدم نقاطك في الدفع'),
+          L('Use your points at checkout', 'ادفع بنقاطك'),
           L(`Your ${fmtPts(balance)} points are EGP ${worth} of store credit. Choose to apply it on the payment step at checkout.`,
-            `نقاطك (${fmtPts(balance)}) تساوي ${fmtPts(worth)} ج.م رصيد في المتجر. اختار تطبيقه في خطوة الدفع.`),
+            `نقاطك (${fmtPts(balance)}) تساوي ${fmtPts(worth)} ج.م رصيد عندنا. فعّله وانت بتدفع.`),
         );
         return;
       }
-      O.okaAlert(L('Redeem points', 'استبدال النقاط'),
+      O.okaAlert(L('Redeem points', 'بدّل نقاطك'),
         L(`${fmtPts(r.points)} points for a one-time code: ${r.en}. Valid for 90 days.`, `هنخصم ${fmtPts(r.points)} نقطة ونديك كود: ${r.ar}. صالح ${fmtPts(90)} يوم ولمرة واحدة.`),
         [
-          { text: L('Back', 'رجوع'), style: 'cancel' },
+          { text: L('Back', 'ارجع'), style: 'cancel' },
           {
-            text: L('Redeem', 'استبدال'),
+            text: L('Redeem', 'بدّل'),
             onPress: async () => {
               busyId = r.id;
               render();
@@ -1473,7 +1494,7 @@
                 O.store.set('oka.vouchers', [res.voucher, ...(O.store.get('oka.vouchers', []) || [])].slice(0, 10));
                 showVoucher(res.voucher);
               } catch (err) {
-                O.okaAlert(L('Could not redeem', 'تعذّر الاستبدال'), errText(err));
+                O.okaAlert(L('Could not redeem', 'معرفناش نبدّل'), errText(err));
               } finally { busyId = null; render(); }
             },
           },
@@ -1499,9 +1520,9 @@
    * Subscriptions (SubscriptionsScreen.js) — order service only
    * ════════════════════════════════════════════════════════════════════ */
   const STATUS_META = {
-    active: { en: 'Active', ar: 'نشط', color: 'var(--green-deep)', bg: 'rgba(31,143,78,0.09)' },
-    paused: { en: 'Paused', ar: 'متوقف مؤقتاً', color: 'var(--ink-95)', bg: 'rgba(0,0,0,0.045)' },
-    action_needed: { en: 'Needs attention', ar: 'يحتاج انتباه', color: 'var(--red-deep)', bg: 'rgba(179,38,30,0.08)' },
+    active: { en: 'Active', ar: 'شغّال', color: 'var(--green-deep)', bg: 'rgba(31,143,78,0.09)' },
+    paused: { en: 'Paused', ar: 'واقف مؤقتاً', color: 'var(--ink-95)', bg: 'rgba(0,0,0,0.045)' },
+    action_needed: { en: 'Needs attention', ar: 'محتاج تبص عليه', color: 'var(--red-deep)', bg: 'rgba(179,38,30,0.08)' },
     cancelled: { en: 'Cancelled', ar: 'ملغي', color: 'rgba(110,110,115,0.7)', bg: 'rgba(0,0,0,0.03)' },
   };
   const FREQ_LABELS = { weekly: ['week', 'أسبوع'], biweekly: ['2 weeks', 'أسبوعين'], monthly: ['month', 'شهر'] };
@@ -1538,15 +1559,15 @@
               </div>
               <span class="status-badge" style="background:${meta.bg};color:${meta.color}">${esc(L(meta.en, meta.ar))}</span>
             </div>
-            ${s.status === 'active' || s.status === 'paused' ? `<div class="sub-next">${esc(s.status === 'paused' ? L("Paused — won't ship right now", 'متوقف — مش هيتشحن حاليًا') : L('Next order: ', 'الطلب الجاي: ') + fmtDate(s.nextOrderDate))}</div>` : ''}
+            ${s.status === 'active' || s.status === 'paused' ? `<div class="sub-next">${esc(s.status === 'paused' ? L("Paused — won't ship right now", 'واقف — مش هيتشحن دلوقتي') : L('Next order: ', 'الطلب الجاي: ') + fmtDate(s.nextOrderDate))}</div>` : ''}
             ${s.status === 'action_needed' && s.lastError ? `<div class="sub-err">${esc(s.lastError)}</div>` : ''}
             ${s.ordersCreated > 0 ? `<div class="sub-hist">${esc(L(`${s.ordersCreated} order${s.ordersCreated > 1 ? 's' : ''} shipped — last ${s.lastOrderName ?? ''}`, `${num(s.ordersCreated)} طلب اتشحن — آخر واحد ${s.lastOrderName ?? ''}`))}</div>` : ''}
             ${s.status !== 'cancelled' ? `<div class="sub-actions">
-              <button class="sub-btn" data-act="edit">${esc(L('Edit', 'تعديل'))}</button>
+              <button class="sub-btn" data-act="edit">${esc(L('Edit', 'عدّل'))}</button>
               ${s.status === 'paused' || s.status === 'action_needed'
-                ? `<button class="sub-btn" data-act="resume">${busy ? '…' : esc(L('Resume', 'استئناف'))}</button>`
-                : `<button class="sub-btn" data-act="pause">${busy ? '…' : esc(L('Pause', 'إيقاف مؤقت'))}</button>`}
-              <button class="sub-btn red" data-act="cancel">${esc(L('Cancel', 'إلغاء'))}</button>
+                ? `<button class="sub-btn" data-act="resume">${busy ? '…' : esc(L('Resume', 'كمّل'))}</button>`
+                : `<button class="sub-btn" data-act="pause">${busy ? '…' : esc(L('Pause', 'وقّف شوية'))}</button>`}
+              <button class="sub-btn red" data-act="cancel">${esc(L('Cancel', 'الغي'))}</button>
             </div>` : ''}
           </div>`;
         }).join(''));
@@ -1560,7 +1581,7 @@
         const r = await O.api(`/subscriptions/${encodeURIComponent(sub.id)}/${action}`, { method: 'POST', body: {} });
         subs = subs.map((s) => (s.id === sub.id ? r.subscription : s));
       } catch (err) {
-        O.okaAlert(L('Could not do that', 'تعذّر تنفيذ الإجراء'), errText(err));
+        O.okaAlert(L('Could not do that', 'معرفناش نعملها'), errText(err));
       } finally { busyId = null; render(); }
     }
 
@@ -1572,9 +1593,9 @@
       if (!sub) return;
       if (b.dataset.act === 'edit') { O.store.sset('oka.editingSub', sub); go(CFG.routes.subscribe); return; }
       if (b.dataset.act === 'cancel') {
-        O.okaAlert(L('Cancel subscription', 'إلغاء الاشتراك'), L('No more orders will go out until you subscribe again.', 'مش هتتشحن طلبات جديدة بعد كده لحد ما تشترك تاني.'), [
-          { text: L('Back', 'رجوع'), style: 'cancel' },
-          { text: L('Cancel subscription', 'إلغاء الاشتراك'), style: 'destructive', onPress: () => act(sub, 'cancel') },
+        O.okaAlert(L('Cancel subscription', 'الغي الاشتراك'), L('No more orders will go out until you subscribe again.', 'مش هتتشحن طلبات جديدة بعد كده لحد ما تشترك تاني.'), [
+          { text: L('Back', 'ارجع'), style: 'cancel' },
+          { text: L('Cancel subscription', 'الغي الاشتراك'), style: 'destructive', onPress: () => act(sub, 'cancel') },
         ]);
         return;
       }
@@ -1594,7 +1615,7 @@
     if (!host) return;
     if (!O.hasService()) { host.innerHTML = serviceMissing(); return; }
     const editing = O.store.sget('oka.editingSub');
-    if (editing) $('.hdr-title', root).innerHTML = `<span class="l-en">Edit Subscription</span><span class="l-ar">تعديل الاشتراك</span>`;
+    if (editing) $('.hdr-title', root).innerHTML = `<span class="l-en">Edit Subscription</span><span class="l-ar">عدّل الاشتراك</span>`;
     const pct = CFG.subscriptionDiscount || 5;
     let frequencies = [
       { id: 'monthly', en: 'Every month', ar: 'كل شهر', discountPct: pct },
@@ -1649,11 +1670,11 @@
         <div class="sub-totals">
           ${sumRow(t('subtotal'), fmtPrice(subtotal))}
           ${freq ? sumRow(L(`${freq.discountPct}% discount`, `خصم ${num(freq.discountPct)}٪`), `-${fmtPrice(discount)}`, 'green') : ''}
-          ${sumRow(L('Shipping', 'الشحن'), shipping > 0 ? fmtPrice(shipping) : L('Free', 'مجاني'))}
-          ${sumRow(L('Each delivery', 'كل عملية توصيل'), fmtPrice(total), 'main')}
+          ${sumRow(L('Shipping', 'الشحن'), shipping > 0 ? fmtPrice(shipping) : L('Free', 'ببلاش'))}
+          ${sumRow(L('Each delivery', 'كل مرة توصيل'), fmtPrice(total), 'main')}
         </div>
         <div style="padding:6px 22px 30px">
-          <button class="cta bold" data-submit>${submitting ? spinner() : esc(editing ? L('Save changes', 'حفظ التعديلات') : L('Start subscription', 'ابدأ الاشتراك'))}</button>
+          <button class="cta bold" data-submit>${submitting ? spinner() : esc(editing ? L('Save changes', 'احفظ التعديلات') : L('Start subscription', 'ابدأ الاشتراك'))}</button>
           ${!can ? `<div class="hint">${esc(!freq ? L('Pick a delivery frequency first.', 'اختار مواعيد التوصيل الأول.')
             : !entries.length ? L('Add at least one product.', 'ضيف منتج واحد على الأقل.')
               : below ? L(`Each delivery needs at least ${fmtPrice(minOrder)} after the discount.`, `أقل طلب ${fmtPrice(minOrder)} بعد الخصم.`)
@@ -1695,7 +1716,7 @@
         } catch (err) {
           submitting = false;
           render();
-          O.okaAlert(L('Could not save the subscription', 'تعذّر حفظ الاشتراك'), errText(err));
+          O.okaAlert(L('Could not save the subscription', 'معرفناش نحفظ الاشتراك'), errText(err));
         }
       }
     });
@@ -1760,7 +1781,7 @@
     wa.addEventListener('click', (e) => {
       e.preventDefault();
       const last = O.store.get('oka.lastOrder');
-      const text = last ? L(`Hi, about order ${last}`, `مرحباً، بخصوص طلب ${last}`) : L('Hi', 'مرحباً');
+      const text = last ? L(`Hi, about order ${last}`, `أهلاً، بخصوص طلب ${last}`) : L('Hi', 'أهلاً');
       window.open(O.whatsappUrl(text), '_blank', 'noopener');
     });
   }

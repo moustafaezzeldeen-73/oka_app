@@ -3,12 +3,15 @@
     "default_lang": "ar",
     "age_gate": true,
     "oka_collections": [
-      "hookahs",
+      "oka-basic-hookahs-copy",
+      "oka-parties",
+      "oka-cobra",
+      "dark-tobacco",
       "ready-to-smoke-bowls",
       "oka-parts",
+      "hookahs",
       "hoses",
       "coal",
-      "dark-tobacco",
       "bowls"
     ],
     "tier_threshold": 300,

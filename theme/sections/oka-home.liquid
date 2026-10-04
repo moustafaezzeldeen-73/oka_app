@@ -3,114 +3,110 @@
 
   Vertical: one page per collection (CSS scroll-snap y mandatory — what the
   prototype used, and what the app's pagingEnabled reproduces).
-  Horizontal: one notch per product. The selector strip is bound to the feed:
-  the glass lens is fixed at the centre and the strip slides beneath it.
+  Horizontal: one notch per product.
+
+  Above the feed there is only the layout's logo bar (layout/theme.liquid),
+  which shrinks once the shopper scrolls. The collection selector strip that
+  used to sit under it was removed to give the feed the room.
+
+  The feed, top to bottom:
+    Offers       real offers only — a banner and a button that buys it
+    banners      the original website's graphic banners and the Cobra
+                 before/after slider, each a full-screen page just before the
+                 collection it introduces there
+    collections  one page each; a collection with nothing active to show is
+                 skipped (see snippets/live-collections.liquid)
   Behaviour lives in assets/oka-screens.js (screen "home").
 {%- endcomment -%}
-{%- liquid
-  assign opening = false
-  assign slider_offset = 0
-  if section.settings.opening_screen and section.blocks.size > 1
-    assign opening = true
-    assign slider_offset = 1
-  endif
-  if settings.logo
-    assign logo_url = settings.logo | image_url: width: 128
-  else
-    assign logo_url = 'oka-logo.png' | asset_url
-  endif
--%}
+{%- capture live -%}{% render 'live-collections', dedupe: true %}{%- endcapture -%}
 <div class="home fade-in" data-screen="home">
-  <header class="home-hdr">
-    <div class="home-row">
-      <a href="{{ routes.search_url }}" class="circle-34 press s94" aria-label="Search">{% render 'icon', name: 'search', px: 16 %}</a>
-      <img src="{{ logo_url }}" alt="{{ shop.name }}" class="home-logo" width="32" height="32">
-      <button class="circle-34 press s94" data-toggle-lang><span data-lang-label>{% if settings.default_lang == 'ar' %}EN{% else %}ع{% endif %}</span></button>
-    </div>
-
-    <div class="nav-wrap">
-      <div class="lens"></div>
-      <div class="nav-strip hscroll" data-nav>
-        {%- if opening -%}
-          <button class="nav-item active" aria-label="{{ shop.name | escape }}">
-            <span class="nav-icon nav-logo"><img src="{{ logo_url }}" alt="" width="52" height="52"></span>
-          </button>
-        {%- endif -%}
-        <button class="nav-item{% unless opening %} active{% endunless %}" aria-label="Offers">
-          <span class="nav-icon"><span class="nav-offers">{% render 'icon', name: 'tag', px: 24, color: '#ffffff' %}</span></span>
-        </button>
-        {%- for c in settings.oka_collections -%}
-          {%- liquid
-            if c.image
-              assign img = c.image
-            else
-              assign img = c.products.first.featured_image
-            endif
-          -%}
-          <button class="nav-item" data-i="{{ forloop.index }}" aria-label="{{ c.title | escape }}">
-            <span class="nav-icon">{% if img %}{{ img | image_url: width: 160 | image_tag: alt: '', loading: 'eager' }}{% endif %}</span>
-          </button>
-        {%- endfor -%}
-      </div>
-    </div>
-  </header>
 
   <div class="feed" data-feed>
-    {%- if opening -%}
-      {%- comment -%} The opening screen: the first banner on its own, before the offers slider. {%- endcomment -%}
-      {%- liquid
-        assign first = section.blocks.first
-        if first.settings.image
-          assign hero_src = first.settings.image | image_url: width: 1000
-        elsif first.settings.bundled_image != blank
-          assign hero_src = first.settings.bundled_image | asset_url
-        else
-          assign hero_src = ''
-        endif
-        assign hero_link = first.settings.collection.url | default: routes.collections_url
-        assign hero_variant = first.settings.product.selected_or_first_available_variant
-      -%}
-      <section class="page opening active" {{ first.shopify_attributes }}>
-        <a href="{{ hero_link }}" class="opening-card">{% if hero_src != '' %}<img src="{{ hero_src }}" alt="" width="733" height="1100" loading="eager" fetchpriority="high">{% endif %}</a>
-        <div class="opening-actions">
-          {%- if hero_variant -%}
-            <button class="offer-cta" data-add="{{ hero_variant.id }}">{% render 'bi', en: 'Add to Cart', ar: 'أضف إلى السلة' %}</button>
+    {%- comment -%} The opening screen: the first banner, on its own, before the offers slider. {%- endcomment -%}
+    {%- assign opening_id = '' -%}
+    {%- if section.settings.opening_screen -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'banner' and block.settings.image -%}
+          {%- assign opening_id = block.id -%}
+          {%- render 'banner-page', block: block -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      Offers — only blocks that can actually be bought: a bundle (variant IDs)
+      or a single product. A picture with nothing to buy is advertising and
+      belongs in a Banner block, not here.
+    {%- endcomment -%}
+    {%- capture offers -%}
+      {%- assign offer_n = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type != 'offer' -%}{%- continue -%}{%- endif -%}
+        {%- liquid
+          assign bundle = block.settings.variant_ids | remove: ' '
+          assign offer_variant = block.settings.product.selected_or_first_available_variant
+          if bundle == blank and offer_variant == blank
+            continue
+          endif
+          assign offer_n = offer_n | plus: 1
+          assign ratio = 0.88
+          assign iw = 264
+          assign ih = 300
+          if block.settings.image
+            assign src = block.settings.image | image_url: width: 700
+            assign ratio = block.settings.image.aspect_ratio
+            assign iw = block.settings.image.width
+            assign ih = block.settings.image.height
+          elsif block.settings.bundled_image != blank
+            assign src = block.settings.bundled_image | asset_url
+          else
+            assign src = ''
+          endif
+          assign link = block.settings.collection.url | default: routes.collections_url
+        -%}
+        <div class="offer-slot{% if offer_n == 1 %} active{% endif %}" data-slot style="--ratio: {{ ratio }}" {{ block.shopify_attributes }}>
+          <a href="{{ link }}" class="offer-card">{% if src != '' %}<img src="{{ src }}" alt="" width="{{ iw }}" height="{{ ih }}" loading="{% if offer_n < 3 %}eager{% else %}lazy{% endif %}">{% endif %}</a>
+          {%- if bundle != blank -%}
+            <button class="offer-cta" data-add-bundle="{{ bundle }}">{% render 'bi', en: block.settings.button_en, ar: block.settings.button_ar %}</button>
+          {%- else -%}
+            <button class="offer-cta" data-add="{{ offer_variant.id }}">{% render 'bi', en: 'Add to Cart', ar: 'عبيلي فالشنطة' %}</button>
           {%- endif -%}
-          <button class="opening-next" data-next-page>{% render 'bi', en: 'See offers', ar: 'شوف العروض' %}<span class="opening-arrow">↓</span></button>
         </div>
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- assign has_offers = false -%}
+    {%- if offers contains 'offer-slot' -%}{%- assign has_offers = true -%}{%- endif -%}
+    {%- if has_offers -%}
+      <section class="page{% if opening_id == blank %} active{% endif %}" data-i="0">
+        <h2 class="page-title">{% render 'bi', en: 'Offers', ar: 'العروض' %}</h2>
+        <div class="rail offers hscroll" data-rail>{{ offers }}</div>
       </section>
     {%- endif -%}
 
-    {%- comment -%} The promo carousel. {%- endcomment -%}
-    <section class="page{% unless opening %} active{% endunless %}">
-      <h2 class="page-title">{% render 'bi', en: 'Offers', ar: 'العروض' %}</h2>
-      <div class="rail offers hscroll" data-rail>
-        {%- for block in section.blocks offset: slider_offset -%}
-          {%- liquid
-            if block.settings.image
-              assign src = block.settings.image | image_url: width: 600
-            elsif block.settings.bundled_image != blank
-              assign src = block.settings.bundled_image | asset_url
-            else
-              assign src = ''
-            endif
-            assign link = block.settings.collection.url | default: routes.collections_url
-            assign offer_variant = block.settings.product.selected_or_first_available_variant
-          -%}
-          <div class="offer-slot{% if forloop.first %} active{% endif %}" data-slot {{ block.shopify_attributes }}>
-            <a href="{{ link }}" class="offer-card">{% if src != '' %}<img src="{{ src }}" alt="" width="264" height="300" loading="{% if forloop.index < 3 %}eager{% else %}lazy{% endif %}">{% endif %}</a>
-            {%- if offer_variant -%}
-              <button class="offer-cta" data-add="{{ offer_variant.id }}">{% render 'bi', en: 'Add to Cart', ar: 'أضف إلى السلة' %}</button>
-            {%- endif -%}
-          </div>
-        {%- endfor -%}
-      </div>
-    </section>
+    {%- comment -%} Banners whose collection isn't shown follow the Offers page. {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type != 'banner' and block.type != 'compare' -%}{%- continue -%}{%- endif -%}
+      {%- if block.id == opening_id -%}{%- continue -%}{%- endif -%}
+      {%- assign probe = ',' | append: block.settings.before.handle | append: ',' -%}
+      {%- if live contains probe -%}{%- continue -%}{%- endif -%}
+      {%- if block.type == 'banner' -%}{%- render 'banner-page', block: block -%}{%- else -%}{%- render 'compare-page', block: block -%}{%- endif -%}
+    {%- endfor -%}
 
-    {%- comment -%} Pages 1..n — one rail per collection; a product shows under the first collection that has it. {%- endcomment -%}
+    {%- comment -%} One rail per collection; a product shows under the first collection that has it. {%- endcomment -%}
     {%- assign seen = ',' -%}
+    {%- assign first_page = true -%}
+    {%- if has_offers or opening_id != blank -%}{%- assign first_page = false -%}{%- endif -%}
     {%- for c in settings.oka_collections -%}
-      <section class="page" data-i="{{ forloop.index }}">
+      {%- assign probe = ',' | append: c.handle | append: ',' -%}
+      {%- unless live contains probe -%}{%- continue -%}{%- endunless -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.before.handle != c.handle -%}{%- continue -%}{%- endif -%}
+        {%- if block.id == opening_id -%}{%- continue -%}{%- endif -%}
+        {%- if block.type == 'banner' -%}{%- render 'banner-page', block: block -%}{%- elsif block.type == 'compare' -%}{%- render 'compare-page', block: block -%}{%- endif -%}
+      {%- endfor -%}
+      <section class="page{% if first_page %} active{% endif %}" data-i="{{ forloop.index }}">
+        {%- assign first_page = false -%}
         <h2 class="page-title anim">{% render 'ctitle', c: c %}</h2>
         <div class="rail prods hscroll" data-rail>
           {%- assign first = true -%}
@@ -127,11 +123,19 @@
                 <div class="prod-title">{% render 'ptitle', p: p %}</div>
                 <div class="prod-price">{% render 'price', cents: v.price %}</div>
                 <div class="prod-actions">
-                  <button class="add-34" data-add="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %} aria-label="Add">+</button>
-                  <button class="ar-pill" data-ar="{{ p.handle }}">
-                    {% render 'icon', name: 'cube', px: 15 %}
-                    {% render 'bi', en: 'See it on your table', ar: 'شوفها على طرابيزتك' %}
-                  </button>
+                  <button class="add-btn" data-add="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %}>{% render 'bi', en: 'Add to cart', ar: 'عبيلي فالشنطة' %}</button>
+                  {%- comment -%}
+                    Only products with a 3D model get the AR button; add a model
+                    to a product in Shopify and its button appears by itself.
+                  {%- endcomment -%}
+                  {%- assign has_model = false -%}
+                  {%- for m in p.media -%}{%- if m.media_type == 'model' -%}{%- assign has_model = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
+                  {%- if has_model -%}
+                    <button class="ar-pill" data-ar="{{ p.handle }}">
+                      {% render 'icon', name: 'cube', px: 15 %}
+                      {% render 'bi', en: 'See it on your table', ar: 'شوفها على طرابيزتك' %}
+                    </button>
+                  {%- endif -%}
                 </div>
               </div>
             </div>
@@ -148,13 +152,13 @@
   "name": "OKA feed",
   "tag": "div",
   "class": "home-section",
-  "max_blocks": 12,
+  "max_blocks": 30,
   "settings": [
     {
       "type": "checkbox",
       "id": "opening_screen",
-      "label": "Show the first offer as the opening screen",
-      "info": "The first offer gets a full screen of its own before the offers slider.",
+      "label": "Show the first banner as the opening screen",
+      "info": "The first Banner block gets the first full screen, before the offers slider.",
       "default": true
     }
   ],
@@ -163,10 +167,36 @@
       "type": "offer",
       "name": "Offer",
       "settings": [
+        { "type": "paragraph", "content": "Only offers that can be bought appear: set bundle variant IDs or a product. A picture alone belongs in a Banner block." },
         { "type": "image_picker", "id": "image", "label": "Image" },
         { "type": "text", "id": "bundled_image", "label": "Bundled image (theme asset)", "info": "Used when no image is picked, e.g. promo1.jpg" },
         { "type": "collection", "id": "collection", "label": "Opens collection" },
-        { "type": "product", "id": "product", "label": "Add to Cart adds" }
+        { "type": "product", "id": "product", "label": "Add to Cart adds", "info": "One product. Ignored when bundle variant IDs are set." },
+        { "type": "text", "id": "variant_ids", "label": "Bundle variant IDs", "info": "Comma-separated. The button adds all of them at once — the website's bundle offers." },
+        { "type": "text", "id": "button_en", "label": "Bundle button (English)", "default": "Add bundle to cart" },
+        { "type": "text", "id": "button_ar", "label": "Bundle button (Arabic)", "default": "عبيلي العرض فالشنطة" }
+      ]
+    },
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Shown full screen." },
+        { "type": "collection", "id": "before", "label": "Show before collection", "info": "The banner gets its own page just before this collection. Not shown: it follows the Offers page." },
+        { "type": "url", "id": "link", "label": "Opens", "info": "Defaults to the collection above." },
+        { "type": "text", "id": "variant_ids", "label": "Bundle variant IDs (optional)", "info": "Comma-separated. Adds a button that puts all of them in the cart." },
+        { "type": "text", "id": "button_en", "label": "Button (English)", "default": "Add to Cart" },
+        { "type": "text", "id": "button_ar", "label": "Button (Arabic)", "default": "عبيلي فالشنطة" }
+      ]
+    },
+    {
+      "type": "compare",
+      "name": "Before / after slider",
+      "settings": [
+        { "type": "image_picker", "id": "before_image", "label": "Before image" },
+        { "type": "image_picker", "id": "after_image", "label": "After image" },
+        { "type": "collection", "id": "before", "label": "Show before collection" },
+        { "type": "url", "id": "link", "label": "Opens", "info": "Defaults to the collection above." }
       ]
     }
   ],

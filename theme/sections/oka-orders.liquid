@@ -5,13 +5,13 @@
 {%- endcomment -%}
 <div class="screen fade-in" data-screen="orders">
   <div data-orders-list>
-    <h1 class="big-title">{% render 'bi', en: 'Orders', ar: 'الطلبات' %}</h1>
+    <h1 class="big-title">{% render 'bi', en: 'Orders', ar: 'طلباتي' %}</h1>
     {%- comment -%} TESTING ONLY — the staff order-lookup panel. Remove with snippets/test-lookup.liquid before launch. {%- endcomment -%}
     {%- if settings.test_panel -%}{% render 'test-lookup' %}{%- endif -%}
     {%- if customer -%}
       {%- paginate customer.orders by 20 -%}
         {%- if customer.orders.size == 0 -%}
-          <div class="empty" style="padding:60px 22px">{% render 'bi', en: 'No orders yet', ar: 'لا توجد طلبات بعد' %}</div>
+          <div class="empty" style="padding:60px 22px">{% render 'bi', en: 'No orders yet', ar: 'مفيش طلبات لسه' %}</div>
         {%- endif -%}
         {%- for o in customer.orders -%}
           {%- liquid
@@ -34,9 +34,9 @@
               </div>
               <div class="order-state {{ state_class }}" data-order-state="{{ o.name | escape }}">
                 {%- if o.cancelled -%}{% render 'bi', en: 'Cancelled', ar: 'ملغي' %}
-                {%- elsif o.fulfillment_status == 'fulfilled' -%}{% render 'bi', en: 'Shipped', ar: 'تم الشحن' %}
-                {%- elsif o.fulfillment_status == 'partial' -%}{% render 'bi', en: 'Preparing to Ship', ar: 'التجهيز للشحن' %}
-                {%- else -%}{% render 'bi', en: 'Processing', ar: 'قيد المعالجة' %}{%- endif -%}
+                {%- elsif o.fulfillment_status == 'fulfilled' -%}{% render 'bi', en: 'Shipped', ar: 'اتشحن' %}
+                {%- elsif o.fulfillment_status == 'partial' -%}{% render 'bi', en: 'Preparing to Ship', ar: 'بيتجهز للشحن' %}
+                {%- else -%}{% render 'bi', en: 'Processing', ar: 'بنراجعه' %}{%- endif -%}
               </div>
             </div>
             <span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right', px: 15 %}</span>
@@ -51,9 +51,9 @@
         {%- endif -%}
       {%- endpaginate -%}
     {%- else -%}
-      <div class="empty" style="padding:60px 22px">{% render 'bi', en: 'No orders yet', ar: 'لا توجد طلبات بعد' %}</div>
+      <div class="empty" style="padding:60px 22px">{% render 'bi', en: 'No orders yet', ar: 'مفيش طلبات لسه' %}</div>
       <a href="{{ routes.account_login_url }}" class="notice press s99" data-sign-in="/pages/orders">
-        {% render 'bi', en: 'Sign in to see your real orders and track their delivery.', ar: 'سجّل دخولك عشان تشوف طلباتك الحقيقية وتتبع الشحن.' %}
+        {% render 'bi', en: 'Sign in to see your real orders and track their delivery.', ar: 'سجّل دخولك عشان تشوف طلباتك وتتابع الشحنة.' %}
       </a>
     {%- endif -%}
     <div style="height:26px"></div>

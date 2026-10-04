@@ -50,7 +50,7 @@
   {% render 'screen-header', en: 'Order Details', ar: 'تفاصيل الطلب', back: '/pages/orders' %}
 
   <div class="cancelled-banner" data-cancelled-banner {% unless o.cancelled %}hidden{% endunless %}>
-    <b>{% render 'bi', en: 'Order cancelled', ar: 'تم إلغاء الطلب' %}</b>
+    <b>{% render 'bi', en: 'Order cancelled', ar: 'الطلب اتلغى' %}</b>
     <span>
       {%- if o.cancelled_at -%}
         {%- assign cancelled_ar = o.cancelled_at | date: '%-d/%-m، %H:%M' -%}
@@ -72,7 +72,7 @@
   </div>
 
   <div class="items">
-    <div class="items-label">{% render 'bi', en: 'Invoice', ar: 'تفاصيل الفاتورة' %}</div>
+    <div class="items-label">{% render 'bi', en: 'Invoice', ar: 'الفاتورة' %}</div>
     {%- for li in o.line_items -%}
       <div class="item-row">
         <div class="item-img">{% if li.image %}{{ li.image | image_url: width: 120 | image_tag: alt: '' }}{% endif %}</div>
@@ -85,7 +85,7 @@
     {%- endfor -%}
 
     <div class="inv-totals">
-      <div class="inv-row"><span>{% render 'bi', en: 'Subtotal', ar: 'الإجمالي الفرعي' %}</span><span>{% render 'price', cents: items_sum %}</span></div>
+      <div class="inv-row"><span>{% render 'bi', en: 'Subtotal', ar: 'المجموع قبل الشحن' %}</span><span>{% render 'price', cents: items_sum %}</span></div>
       {%- if o.total_discounts > 0 -%}
         <div class="inv-row green"><span>{% render 'bi', en: 'Discount', ar: 'الخصم' %}</span><span>−{% render 'price', cents: o.total_discounts %}</span></div>
       {%- endif -%}
@@ -93,8 +93,8 @@
       <div class="inv-rule"></div>
       <div class="inv-row strong"><span>{% render 'bi', en: 'Total', ar: 'الإجمالي' %}</span><span>{% render 'price', cents: o.total_price %}</span></div>
       <div class="pay-note">
-        {%- if paid -%}{% render 'bi', en: 'Paid', ar: 'مدفوع' %}
-        {%- else -%}{% render 'bi', en: 'Cash on delivery', ar: 'الدفع عند الاستلام' %}{% unless o.cancelled %}<span class="l-en"> — pay the courier {% render 'price', cents: o.total_price %}</span><span class="l-ar"> — هتدفع {% render 'price', cents: o.total_price %} للمندوب</span>{% endunless %}
+        {%- if paid -%}{% render 'bi', en: 'Paid', ar: 'اتدفع' %}
+        {%- else -%}{% render 'bi', en: 'Cash on delivery', ar: 'كاش عند الاستلام' %}{% unless o.cancelled %}<span class="l-en"> — pay the courier {% render 'price', cents: o.total_price %}</span><span class="l-ar"> — هتدفع {% render 'price', cents: o.total_price %} للمندوب</span>{% endunless %}
         {%- endif -%}
       </div>
     </div>
@@ -106,12 +106,12 @@
     <div class="arrives-title" data-state-label>
       <span class="l-en">Arrives in <span data-eta></span></span><span class="l-ar">يوصل <span data-eta></span></span>
     </div>
-    <div class="arrives-note">{% render 'bi', en: 'We’ve received your payment information and we’re preparing your order.', ar: 'استلمنا بيانات الدفع وبدأنا تجهيز طلبك.' %}</div>
+    <div class="arrives-note">{% render 'bi', en: 'We’ve received your payment information and we’re preparing your order.', ar: 'استلمنا طلبك وبدأنا نجهّزه.' %}</div>
   </div>
 
   <div class="steps" data-steps>
     {%- assign labels_en = 'Processing|Preparing to Ship|Shipped|Delivered' | split: '|' -%}
-    {%- assign labels_ar = 'قيد المعالجة|التجهيز للشحن|تم الشحن|تم التوصيل' | split: '|' -%}
+    {%- assign labels_ar = 'بنراجعه|بيتجهز للشحن|اتشحن|وصل' | split: '|' -%}
     {%- for l in labels_en -%}
       {%- assign i = forloop.index0 -%}
       <div class="step-col{% if i <= step %} done{% endif %}{% if i == step %} current{% endif %}">
@@ -123,16 +123,16 @@
 
   <div data-updates>
     {%- if tracking_number == blank and o.cancelled == false -%}
-      <div class="awaiting">{% render 'bi', en: 'No AWB has been issued for this order yet. J&T updates will appear here once it is.', ar: 'لسه ما اتعملش بوليصة شحن للطلب ده. هتظهر تحديثات J&T هنا أول ما تتصدر.' %}</div>
+      <div class="awaiting">{% render 'bi', en: 'No AWB has been issued for this order yet. J&T updates will appear here once it is.', ar: 'لسه معملناش بوليصة شحن للطلب ده. أول ما تطلع هتلاقي تحديثات J&T هنا.' %}</div>
     {%- else -%}
-      <div class="awaiting">{% render 'bi', en: 'No updates for this order yet.', ar: 'لا توجد تحديثات بعد لهذا الطلب.' %}</div>
+      <div class="awaiting">{% render 'bi', en: 'No updates for this order yet.', ar: 'مفيش تحديثات للطلب ده لسه.' %}</div>
     {%- endif -%}
   </div>
   <div data-live-extra></div>
 
   <div class="divider top"></div>
   <div class="field">
-    <div class="field-k" style="color:var(--ink-95)">{% render 'bi', en: 'Ships to', ar: 'الشحن إلى' %}</div>
+    <div class="field-k" style="color:var(--ink-95)">{% render 'bi', en: 'Ships to', ar: 'هيتشحن على' %}</div>
     <div class="field-v">
       <div class="field-strong">{{ sa.name | default: customer.name }}</div>
       <div class="field-txt">{{ sa.address1 }}{% if sa.address2 != blank %}, {{ sa.address2 }}{% endif %}</div>
@@ -162,7 +162,7 @@
         {%- if tracking_url != blank -%}
           <a class="track-btn" href="{{ tracking_url }}" target="_blank" rel="noopener" data-copy="{% unless settings.tracking_url contains '{number}' %}{{ tracking_number }}{% endunless %}">
             {% render 'icon', name: 'box', px: 16 %}
-            {%- if tracking_company != blank -%}<span class="l-en">Track on {{ tracking_company }}</span><span class="l-ar">تتبع على {{ tracking_company }}</span>{%- else -%}{% render 'bi', en: 'Track shipment', ar: 'تتبع الشحنة' %}{%- endif -%}
+            {%- if tracking_company != blank -%}<span class="l-en">Track on {{ tracking_company }}</span><span class="l-ar">تابع على {{ tracking_company }}</span>{%- else -%}{% render 'bi', en: 'Track shipment', ar: 'تابع الشحنة' %}{%- endif -%}
           </a>
         {%- endif -%}
       {%- endif -%}
@@ -172,13 +172,13 @@
   <div class="divider top"></div>
 
   {%- if is_fulfilled -%}
-    <div class="awaiting" style="margin-top:20px">{% render 'bi', en: 'This order has shipped and is on its way, so its items and address can no longer be changed. Contact the courier or support if you need a change.', ar: 'الطلب اتشحن بالفعل وفي الطريق ليك، فمش ممكن تتعدّل عناصره أو عنوانه. لو محتاج تغيير كلّم المندوب أو خدمة العملاء.' %}</div>
+    <div class="awaiting" style="margin-top:20px">{% render 'bi', en: 'This order has shipped and is on its way, so its items and address can no longer be changed. Contact the courier or support if you need a change.', ar: 'الطلب اتشحن خلاص وفي الطريق ليك، فمينفعش تغيّر منتجاته أو عنوانه. لو محتاج تغيير كلّم المندوب أو خدمة العملاء.' %}</div>
   {%- endif -%}
 
   <div class="order-actions">
-    <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order>{% render 'bi', en: 'Edit', ar: 'تعديل' %}</button>
+    <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order>{% render 'bi', en: 'Edit', ar: 'عدّل' %}</button>
     <button class="cancel-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-cancel-order>
-      {%- if o.cancelled -%}{% render 'bi', en: 'Cancelled', ar: 'ملغي' %}{%- else -%}{% render 'bi', en: 'Cancel Order', ar: 'إلغاء الطلب' %}{%- endif -%}
+      {%- if o.cancelled -%}{% render 'bi', en: 'Cancelled', ar: 'ملغي' %}{%- else -%}{% render 'bi', en: 'Cancel Order', ar: 'الغي الطلب' %}{%- endif -%}
     </button>
   </div>
   <button class="reorder-btn" data-reorder>{% render 'bi', en: 'Order again', ar: 'اطلب تاني' %}</button>

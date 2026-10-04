@@ -1,18 +1,31 @@
 <!doctype html>
 {%- liquid
   assign key = template | append: ''
-  # The tab bar is on every screen — product, checkout and sign-in included.
-  assign show_tabs = true
+  # The side menu is on every screen — product, checkout and sign-in included.
+  # It replaced the bottom tab bar, which took a permanent strip of every
+  # screen; `active_tab` marks where the shopper is.
   assign active_tab = ''
   case key
     when 'index'
       assign active_tab = 'home'
+    when 'list-collections', 'collection'
+      assign active_tab = 'categories'
     when 'cart'
       assign active_tab = 'cart'
     when 'page.oka-orders', 'customers/account', 'customers/order'
       assign active_tab = 'orders'
     when 'page.oka-account'
       assign active_tab = 'account'
+    when 'page.oka-loyalty'
+      assign active_tab = 'loyalty'
+    when 'page.oka-subscriptions', 'page.oka-subscribe'
+      assign active_tab = 'subscriptions'
+    when 'page.oka-wishlist'
+      assign active_tab = 'wishlist'
+    when 'page.oka-support'
+      assign active_tab = 'support'
+    when 'search'
+      assign active_tab = 'search'
   endcase
   if settings.logo
     assign logo_url = settings.logo | image_url: width: 128
@@ -39,6 +52,31 @@
         var h = document.documentElement;
         h.lang = l;
         h.dir = l === 'ar' ? 'rtl' : 'ltr';
+      })();
+    </script>
+    <script>
+      /*
+       * Portrait lock. Browsers only honour screen.orientation.lock() for
+       * installed or full-screen apps, so it is asked for and, failing that,
+       * the CSS in oka.css turns the layout back against the phone's turn
+       * (--rot is the opposite of the device's angle).
+       */
+      (function () {
+        var h = document.documentElement;
+        h.classList.add('portrait-lock');
+        function sync() {
+          var a = typeof window.orientation === 'number'
+            ? window.orientation
+            : (screen.orientation && screen.orientation.angle) || 0;
+          if (a > 180) a -= 360;
+          h.style.setProperty('--rot', (a === -90 ? 90 : -90) + 'deg');
+        }
+        sync();
+        window.addEventListener('orientationchange', sync);
+        if (screen.orientation) {
+          screen.orientation.addEventListener && screen.orientation.addEventListener('change', sync);
+          try { screen.orientation.lock('portrait').catch(function () {}); } catch (e) {}
+        }
       })();
     </script>
     {{ 'oka.css' | asset_url | stylesheet_tag }}
@@ -118,26 +156,110 @@
 
   <body class="t-{{ template.name }}">
     <div class="app" id="app">
+      {%- comment -%}
+        The logo bar, on every page: menu, logo (home), language. It shrinks
+        as soon as the page's own content scrolls (assets/oka.js), the way the
+        original site's sticky header does.
+      {%- endcomment -%}
+      <header class="top-bar" data-top-bar>
+        <div class="top-row">
+          <button class="circle-34 press s94" data-menu-open aria-label="Menu" aria-controls="side-menu" aria-expanded="false">{% render 'icon', name: 'menu', px: 17 %}</button>
+          <a href="{{ routes.root_url }}" class="top-logo-link" aria-label="{{ shop.name }}"><img src="{{ logo_url }}" alt="{{ shop.name }}" class="top-logo" width="32" height="32"></a>
+          <button class="circle-34 press s94" data-toggle-lang><span data-lang-label>{% if settings.default_lang == 'ar' %}EN{% else %}ع{% endif %}</span></button>
+        </div>
+      </header>
       <main class="content" id="content" role="main">
         {{ content_for_layout }}
       </main>
 
-      {%- if show_tabs -%}
-        <nav class="tabbar" aria-label="Main">
-          <a href="{{ routes.root_url }}" class="tab{% if active_tab == 'home' %} active{% endif %}" aria-label="Home">
-            <span class="tab-icon">{% render 'icon', name: 'home', px: 25 %}</span>
-          </a>
-          <a href="{{ routes.cart_url }}" class="tab{% if active_tab == 'cart' %} active{% endif %}" aria-label="Cart">
-            <span class="tab-icon">{% render 'icon', name: 'cart', px: 25 %}<span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span></span>
-          </a>
-          <a href="/pages/orders" class="tab{% if active_tab == 'orders' %} active{% endif %}" aria-label="Orders">
-            <span class="tab-icon">{% render 'icon', name: 'box', px: 25 %}</span>
-          </a>
-          <a href="/pages/account" class="tab{% if active_tab == 'account' %} active{% endif %}" aria-label="Account">
-            <span class="tab-icon">{% render 'icon', name: 'person', px: 25 %}</span>
-          </a>
-        </nav>
-      {%- endif -%}
+      {%- comment -%}
+        Side menu. A slim handle on the leading edge opens it on every
+        screen (the home header has a ☰ button too); the screen behind dims
+        and a tap there, Escape, or a swipe back towards the edge closes it.
+        It slides in from the start edge, so it follows the language.
+      {%- endcomment -%}
+      <button class="menu-handle" data-menu-open aria-label="Menu" aria-controls="side-menu" aria-expanded="false">
+        {% render 'icon', name: 'menu', px: 18 %}
+        <span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span>
+      </button>
+      <div class="menu-scrim" data-menu-close hidden></div>
+      <nav class="side-menu" id="side-menu" aria-label="Main" aria-hidden="true" tabindex="-1" inert>
+        <div class="side-head">
+          <img src="{{ logo_url }}" alt="{{ shop.name }}" class="side-logo" width="34" height="34">
+          <button class="side-close" data-menu-close aria-label="Close">{% render 'icon', name: 'close', px: 16 %}</button>
+        </div>
+        <div class="side-links">
+          {%- liquid
+            assign links = 'home|categories|search|cart|orders|account|loyalty|subscriptions|wishlist|support' | split: '|'
+          -%}
+          {%- for l in links -%}
+            {%- liquid
+              case l
+                when 'home'
+                  assign href = routes.root_url
+                  assign icon = 'home'
+                  assign en = 'Home'
+                  assign ar = 'الرئيسية'
+                when 'categories'
+                  assign href = routes.collections_url
+                  assign icon = 'grid'
+                  assign en = 'Categories'
+                  assign ar = 'الأقسام'
+                when 'search'
+                  assign href = routes.search_url
+                  assign icon = 'search'
+                  assign en = 'Search'
+                  assign ar = 'دوّر'
+                when 'cart'
+                  assign href = routes.cart_url
+                  assign icon = 'cart'
+                  assign en = 'Cart'
+                  assign ar = 'السلة'
+                when 'orders'
+                  assign href = '/pages/orders'
+                  assign icon = 'box'
+                  assign en = 'My orders & tracking'
+                  assign ar = 'طلباتي وتتبع الشحن'
+                when 'account'
+                  assign href = '/pages/account'
+                  assign icon = 'person'
+                  assign en = 'Account'
+                  assign ar = 'حسابي'
+                when 'loyalty'
+                  assign href = '/pages/loyalty'
+                  assign icon = 'star'
+                  assign en = 'Points & rewards'
+                  assign ar = 'نقاطي وهداياي'
+                when 'subscriptions'
+                  assign href = '/pages/subscriptions'
+                  assign icon = 'repeat'
+                  assign en = 'Subscribe & save'
+                  assign ar = 'اشترك ووفّر'
+                when 'wishlist'
+                  assign href = '/pages/wishlist'
+                  assign icon = 'heart'
+                  assign en = 'Wishlist'
+                  assign ar = 'المفضلة'
+                when 'support'
+                  assign href = '/pages/support'
+                  assign icon = 'chat'
+                  assign en = 'Help & support'
+                  assign ar = 'محتاج مساعدة؟'
+              endcase
+            -%}
+            <a href="{{ href }}" class="side-link{% if active_tab == l %} active{% endif %}"{% if active_tab == l %} aria-current="page"{% endif %}>
+              <span class="side-icon">{% render 'icon', name: icon, px: 20 %}{% if l == 'cart' %}<span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span>{% endif %}</span>
+              <span class="side-label">{% render 'bi', en: en, ar: ar %}</span>
+            </a>
+          {%- endfor -%}
+        </div>
+        <div class="side-foot">
+          <button class="side-lang" data-toggle-lang>
+            <span>{% render 'bi', en: 'Language', ar: 'اللغة' %}</span>
+            <b data-lang-label>{% if settings.default_lang == 'ar' %}EN{% else %}ع{% endif %}</b>
+          </button>
+        </div>
+      </nav>
     </div>
   </body>
 </html>

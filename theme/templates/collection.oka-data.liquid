@@ -70,7 +70,13 @@
 {%- endcapture -%}
 {
   "cats": [
+    {%- capture live -%}{% render 'live-collections', dedupe: true %}{%- endcapture -%}
+    {%- assign first_cat = true -%}
     {%- for c in settings.oka_collections -%}
+      {%- assign probe = ',' | append: c.handle | append: ',' -%}
+      {%- unless live contains probe -%}{%- continue -%}{%- endunless -%}
+      {%- unless first_cat -%},{%- endunless -%}
+      {%- assign first_cat = false -%}
       {%- assign c_ar = c.metafields.oka.title_ar.value | default: c.title -%}
       {
         "id": {{ c.handle | json }},
@@ -78,7 +84,7 @@
         "ar": {{ c_ar | json }},
         "url": {{ c.url | json }},
         "img": {% if c.image %}{{ c.image | image_url: width: 200 | json }}{% elsif c.products.first.featured_image %}{{ c.products.first.featured_image | image_url: width: 200 | json }}{% else %}null{% endif %}
-      }{% unless forloop.last %},{% endunless %}
+      }
     {%- endfor -%}
   ],
   "products": [{{ products_json | strip | remove_last: ',' }}]

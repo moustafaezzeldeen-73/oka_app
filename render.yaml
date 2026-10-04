@@ -24,6 +24,10 @@ services:
         sync: false
       - key: SHOPIFY_APP_PROXY_SECRET
         sync: false
+      - key: JT_CONNECTOR_URL
+        sync: false
+      - key: JT_CONNECTOR_TOKEN
+        sync: false
       - key: JT_API_BASE_URL
         value: https://openapi.jtjms-eg.com/webopenplatformapi
       - key: JT_API_ACCOUNT

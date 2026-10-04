@@ -33,7 +33,8 @@
   --tab-active: inset 0 1.5px 2px rgba(255,255,255,0.95), 0 4px 10px rgba(0,0,0,0.16);
   --app-w: 430px;
   --top-pad: max(calc(env(safe-area-inset-top) - 5px), 8px);
-  --tab-gap: max(calc(env(safe-area-inset-bottom) - 20px), 14px);
+  /* The logo bar's full height: it floats over the content, so pages pad by this. */
+  --bar-h: calc(var(--top-pad) + 56px);
 }
 
 /* ── language ─────────────────────────────────────────────────────────── */
@@ -90,8 +91,10 @@ html[dir="rtl"] .app {
   position: relative;
   flex: 1;
   min-height: 0;
-  padding-top: var(--top-pad);
-  padding-bottom: 8px;
+  /* The safe area at the top now belongs to the logo bar above. */
+  padding-top: 0;
+  /* Nothing is docked below the content any more; it owns the safe area. */
+  padding-bottom: max(env(safe-area-inset-bottom), 8px);
   display: flex;
   flex-direction: column;
 }
@@ -100,6 +103,8 @@ html[dir="rtl"] .app {
   position: relative;
   flex: 1;
   min-height: 0;
+  /* Room for the floating logo bar; content scrolls up beneath its glass. */
+  padding-top: var(--bar-h);
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -130,37 +135,99 @@ html[dir="rtl"] .app {
 .s99:active { transform: scale(.99); }
 .bg-press:active { background-color: rgba(0,0,0,0.035) !important; }
 
-/* ── tab bar (TabBar.js) ──────────────────────────────────────────────── */
-.tabbar {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  margin: 0 14px var(--tab-gap);
-  padding: 11px 8px;
-  border-radius: 34px;
-  border: 1px solid rgba(255,255,255,0.6);
-  background: linear-gradient(160deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 52%, rgba(255,255,255,0.3) 100%);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  backdrop-filter: blur(20px) saturate(1.6);
-  box-shadow: var(--glass-bar);
-  flex-shrink: 0;
+/* ── side menu (replaced the bottom tab bar) ──────────────────────────────
+ * The tab bar's glass, re-cut as a drawer: same blur, same pressed-pill
+ * active state. It sits at the leading edge — left in English, right in
+ * Arabic — so `inset-inline-start` does the mirroring.
+ */
+.menu-handle {
+  position: absolute; z-index: 20;
+  top: 46%; inset-inline-start: 0;
+  width: 32px; height: 76px;
+  display: flex; align-items: center; justify-content: center;
+  border-start-start-radius: 0; border-end-start-radius: 0;
+  border-start-end-radius: 16px; border-end-end-radius: 16px;
+  /* Dark, like the app's primary buttons: a pale glass tab vanished against
+     the white canvas. */
+  border: 0;
+  background: var(--dark-grad);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
+  color: #fff;
+  transition: transform .3s var(--ease-out), opacity .2s var(--ease);
 }
-.tab { flex: 1; display: flex; justify-content: center; padding: 6px 0; }
-.tab-icon {
-  position: relative;
-  width: 46px; height: 46px; border-radius: 23px;
+.menu-handle svg { width: 19px; height: 19px; }
+.menu-handle .badge {
+  top: -6px; right: auto; inset-inline-end: -4px;
+  background: #fff; color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
+.menu-open .menu-handle { opacity: 0; pointer-events: none; }
+.menu-scrim {
+  position: absolute; inset: 0; z-index: 40;
+  background: rgba(0,0,0,0.28);
+  animation: okaFade .25s var(--ease) both;
+}
+.side-menu {
+  position: absolute; z-index: 41;
+  top: 0; bottom: 0; inset-inline-start: 0;
+  width: min(300px, 82%);
+  display: flex; flex-direction: column;
+  padding: max(env(safe-area-inset-top), 16px) 14px max(env(safe-area-inset-bottom), 16px);
+  background: linear-gradient(160deg, rgba(255,255,255,0.92) 0%, rgba(250,250,252,0.86) 100%);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.6), 18px 0 50px rgba(0,0,0,0.18);
+  transform: translateX(-104%);
+  transition: transform .35s var(--ease-out);
+  visibility: hidden;
+}
+html[dir="rtl"] .side-menu { transform: translateX(104%); box-shadow: 0 0 0 1px rgba(255,255,255,0.6), -18px 0 50px rgba(0,0,0,0.18); }
+/* Must outrank the RTL rule above (html[dir] + class), or in Arabic — the
+   default — the drawer opens off-screen and never appears. */
+.menu-open .side-menu,
+html[dir="rtl"] .menu-open .side-menu { transform: none; visibility: visible; }
+.side-head { display: flex; align-items: center; justify-content: space-between; padding: 4px 8px 14px; }
+.side-logo { width: 34px; height: 34px; object-fit: contain; }
+.side-close {
+  width: 34px; height: 34px; border-radius: 17px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.05);
+}
+.side-menu:focus, .side-menu :focus:not(:focus-visible) { outline: none; }
+.side-links { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; scrollbar-width: none; }
+.side-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 10px; border-radius: 16px;
+  font-size: 15px; font-weight: 600; color: rgba(0,0,0,0.78);
+}
+.side-link:active { background: rgba(0,0,0,0.05); }
+.side-icon {
+  position: relative; flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 20px;
   display: flex; align-items: center; justify-content: center;
   color: rgba(0,0,0,0.55);
 }
-.tab.active .tab-icon { color: #000; }
-.tab.active .tab-icon::before {
-  content: "";
-  position: absolute; top: 0; right: 0; bottom: 0; left: 0;
-  border-radius: 23px;
-  background: linear-gradient(150deg, rgba(255,255,255,0.9), rgba(255,255,255,0.45));
+.side-icon svg { position: relative; }
+.side-link.active { color: #000; font-weight: 800; }
+.side-link.active .side-icon { color: #000; }
+.side-link.active .side-icon::before {
+  content: ""; position: absolute; inset: 0; border-radius: 20px;
+  background: linear-gradient(150deg, rgba(255,255,255,0.95), rgba(255,255,255,0.5));
   box-shadow: var(--tab-active);
 }
-.tab-icon svg { position: relative; }
+.side-foot { padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.06); }
+.side-lang {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 12px; border-radius: 16px; font-size: 14px; font-weight: 600;
+}
+.side-lang b {
+  min-width: 34px; height: 34px; border-radius: 17px; padding: 0 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.55); border: 1px solid rgba(0,0,0,0.08); font-size: 12px;
+}
+.side-lang:active { background: rgba(0,0,0,0.04); }
+@media (prefers-reduced-motion: reduce) {
+  .side-menu, .menu-handle { transition: none; }
+}
 .badge {
   position: absolute; top: -4px; right: -4px;
   min-width: 15px; height: 15px; padding: 0 3px; border-radius: 8px;
@@ -173,11 +240,11 @@ html[dir="rtl"] .app {
 /* ── shared parts (parts.js / ui.js) ──────────────────────────────────── */
 .hdr {
   display: grid;
-  grid-template-columns: 40px 1fr 40px;
+  grid-template-columns: 44px 1fr 44px;
   align-items: center;
   padding: 6px 16px 18px;
 }
-.hdr-btn { width: 40px; height: 36px; display: flex; align-items: center; justify-content: center; }
+.hdr-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
 .hdr-title { text-align: center; font-weight: 700; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 html[dir="rtl"] .flip { transform: scaleX(-1); }
 
@@ -207,7 +274,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 .stepper { display: flex; align-items: center; gap: var(--gap, 10px); }
 .step-btn {
-  width: var(--sz, 32px); height: var(--sz, 32px); border-radius: 50%;
+  width: var(--sz, 38px); height: var(--sz, 38px); border-radius: 50%;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(0,0,0,0.14);
   display: flex; align-items: center; justify-content: center;
@@ -282,11 +349,13 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .gcard-img img { width: 100%; height: 100%; object-fit: contain; }
 .gcard-body { padding: 8px 12px 14px; }
 .gcard-title { font-size: 12px; font-weight: 600; line-height: 15px; }
-.gcard-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.gcard-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
 .gcard-price { font-size: 13px; font-weight: 800; }
 .gcard-add {
-  width: 24px; height: 24px; border-radius: 12px; background: var(--dark-grad);
-  color: #fff; font-weight: 800; font-size: 13px; line-height: 15px;
+  /* Full width under the price: "عبيلي فالشنطة" doesn't fit beside it on a half-width card. */
+  flex: 1 1 100%; white-space: nowrap;
+  min-height: 38px; padding: 0 12px; border-radius: 999px; background: var(--dark-grad);
+  color: #fff; font-weight: 800; font-size: 14px;
   display: flex; align-items: center; justify-content: center;
   transition: transform .17s var(--ease-out);
 }
@@ -294,50 +363,35 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 /* ── Home (HomeScreen.js) ─────────────────────────────────────────────── */
 .home { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.home-hdr {
-  position: relative; z-index: 3; flex-shrink: 0;
-  background: rgba(255,255,255,0.55);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8);
-  backdrop-filter: blur(24px) saturate(1.8);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+.top-bar {
+  /* Floats over the page, so its shrinking never changes the height of the
+     feed — which is what threw the first banner's snap off. */
+  position: absolute; top: 0; left: 0; right: 0; z-index: 15;
+  padding-top: var(--top-pad);
+  /* Clear glass: a faint tint and a blur, so whatever scrolls beneath shows through. */
+  background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08));
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  backdrop-filter: blur(16px) saturate(1.6);
+  border-bottom: 1px solid rgba(255,255,255,0.35);
   overflow: hidden;
 }
-.home-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 22px 8px; }
-.home-logo { width: 32px; height: 32px; object-fit: contain; }
+.top-row {
+  display: flex; align-items: center; justify-content: space-between; padding: 8px 22px 8px;
+  transition: padding .3s var(--ease-out);
+}
+.top-logo-link { display: flex; }
+.top-logo { width: 32px; height: 32px; object-fit: contain; transition: width .3s var(--ease-out), height .3s var(--ease-out); }
+.top-row .circle-34 { transition: transform .3s var(--ease-out); }
+/* Once the page scrolls, the logo bar shrinks — the original site's sticky header. */
+.top-bar.compact .top-row { padding-top: 3px; padding-bottom: 3px; }
+.top-bar.compact .top-logo { width: 22px; height: 22px; }
+.top-bar.compact .top-row .circle-34 { transform: scale(.82); }
 .circle-34 {
-  width: 34px; height: 34px; border-radius: 17px;
+  /* Kept its name; 40px now — easier to hit with a thumb. */
+  width: 40px; height: 40px; border-radius: 20px;
   background: rgba(255,255,255,0.55); border: 1px solid rgba(0,0,0,0.08);
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 12px;
-}
-.nav-wrap { position: relative; }
-.lens {
-  position: absolute; top: 5px; left: 50%; margin-left: -32px;
-  width: 64px; height: 64px; border-radius: 32px;
-  background: rgba(255,255,255,0.16);
-  border: 1px solid rgba(255,255,255,0.75);
-  box-shadow: var(--glass-lens);
-  z-index: 2; pointer-events: none;
-}
-.nav-strip {
-  padding: 6px calc(50% - 43px) 18px;
-  scroll-snap-type: x mandatory;
-}
-.nav-item {
-  flex: 0 0 86px; width: 86px; position: relative; z-index: 1;
-  display: flex; align-items: center; justify-content: center; padding-top: 6px;
-  scroll-snap-align: center;
-}
-.nav-icon {
-  width: 52px; height: 52px; border-radius: 26px; overflow: hidden;
-  transform: scale(.82); transition: transform .35s var(--ease-out);
-  background: rgba(0,0,0,0.04);
-}
-.nav-item.active .nav-icon { transform: scale(1.22); }
-.nav-icon img { width: 100%; height: 100%; object-fit: cover; }
-.nav-offers {
-  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(155deg, #0e0e10 0%, #3a3a3c 55%, #1a1a1d 100%);
 }
 .feed {
   flex: 1; min-height: 0;
@@ -354,6 +408,60 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
   display: flex; flex-direction: column; justify-content: center;
   padding: 6px 0 18px;
 }
+/* ── Full-screen banners (original website) and the Cobra slider ────────── */
+/* --fh / --fw: the feed's size, measured in assets/oka-screens.js (container
+   queries aren't supported on older iPhones). */
+.feed { --fh: 620px; --fw: 390px; }
+.banner-page, .compare-page {
+  position: relative; overflow: hidden; padding: 0;
+  align-items: center; justify-content: center;
+  background: #111;
+}
+/* The banner starts below the floating logo bar, so the bar never covers its
+   top; the blurred backdrop (or the dark page) fills the strip behind the bar. */
+.banner-fill { position: absolute; top: var(--bar-h); right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; }
+.banner-fill img { display: block; width: 100%; height: 100%; }
+.fill-cover .banner-fill img { object-fit: cover; }
+.fill-contain .banner-fill img { object-fit: contain; position: relative; z-index: 1; }
+.banner-backdrop {
+  position: absolute; inset: -30px;
+  background-size: cover; background-position: center;
+  filter: blur(26px) saturate(1.3) brightness(.85);
+  transform: scale(1.15);
+}
+/* `.page` in front: the generic .offer-cta (full width, margin-top) comes
+   later in this file and would otherwise win. */
+.page .banner-cta {
+  position: absolute; z-index: 3; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  width: min(calc(100% - 64px), 320px); margin: 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+.page .banner-cta:active { transform: translateX(-50%) scale(.97); }
+/* Home runs edge to edge: the feed reaches the bottom of the screen, and
+   collection pages keep their own breathing room above the home indicator. */
+.t-index .content { padding-bottom: 0; }
+.t-index .page:not(.banner-page):not(.compare-page) {
+  padding-top: var(--bar-h);
+  padding-bottom: calc(18px + env(safe-area-inset-bottom));
+}
+
+.compare-frame { position: absolute; top: var(--bar-h); right: 0; bottom: 0; left: 0; direction: ltr; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; }
+.compare-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.compare-before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.compare-line {
+  position: absolute; top: 0; bottom: 0; left: var(--pos); width: 3px; margin-left: -1.5px;
+  background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.35); pointer-events: none;
+}
+.compare-knob {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 48px; height: 48px; border-radius: 24px; background: #fff; color: #000;
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+.compare-page.nudging .compare-before, .compare-page.nudging .compare-line { transition: clip-path .6s var(--ease), left .6s var(--ease); }
+.compare-range { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.compare-frame:focus-within .compare-knob { outline: 2px solid #fff; outline-offset: 3px; }
+
 .page-title {
   text-align: center; font-weight: 800; font-size: 22px; margin-bottom: 14px;
   transition: transform .35s var(--ease), opacity .35s var(--ease);
@@ -365,19 +473,24 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
   padding: 0 calc(50% - var(--w) / 2) 8px;
   gap: 16px;
 }
-.rail.offers { --w: 264px; height: 363px; align-items: flex-start; }
+/* Offers: big cards — up to ~58% of the screen's height, never wider than
+   84% of its width — so a bundle poster reads at a glance. */
+.rail.offers { --w: min(calc(min(calc(var(--fh) * 0.58), 560px) * 0.667), calc(var(--fw) * 0.84)); height: auto; align-items: flex-start; }
 .rail.prods { --w: 200px; height: 369px; align-items: center; }
-.offer-slot { flex: 0 0 264px; width: 264px; scroll-snap-align: center; }
+.offer-slot {
+  --cw: min(calc(min(calc(var(--fh) * 0.58), 560px) * var(--ratio, 0.88)), calc(var(--fw) * 0.84));
+  flex: 0 0 var(--cw); width: var(--cw); scroll-snap-align: center;
+}
 .offer-card {
   display: flex; align-items: center; justify-content: center;
-  width: 264px; height: 300px; border-radius: 26px; overflow: hidden;
+  width: var(--cw); height: calc(var(--cw) / var(--ratio, 0.88)); border-radius: 26px; overflow: hidden;
   background: #fff; box-shadow: 0 14px 34px rgba(0,0,0,0.12);
 }
 .offer-card img { width: 100%; height: 100%; object-fit: contain; }
 .offer-cta {
   display: block; width: 100%; margin-top: 12px;
-  padding: 13px 0; border-radius: 999px; background: var(--dark-grad);
-  color: #fff; font-size: 14px; font-weight: 700; text-align: center;
+  padding: 16px 0; border-radius: 999px; background: var(--dark-grad);
+  color: #fff; font-size: 16px; font-weight: 800; text-align: center;
   transition: transform .17s var(--ease-out);
 }
 .offer-cta:active { transform: scale(.97); }
@@ -397,19 +510,21 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .prod-title { font-size: 14.5px; font-weight: 600; }
 .prod-price { font-size: 16px; font-weight: 800; margin-top: 3px; }
 .prod-actions { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 8px; }
-.add-34 {
-  width: 34px; height: 34px; border-radius: 17px; background: var(--dark-grad);
-  color: #fff; font-weight: 800; font-size: 18px; line-height: 21px;
+.add-btn {
+  min-height: 44px; padding: 0 26px; border-radius: 999px; background: var(--dark-grad);
+  color: #fff; font-weight: 800; font-size: 15px;
   display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.16);
   transition: transform .17s var(--ease-out);
 }
-.add-34:active { transform: scale(.9); }
+.add-btn:active { transform: scale(.95); }
+.add-btn[data-soldout] { opacity: .45; }
 .ar-pill {
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 8px 12px; border-radius: 20px;
+  min-height: 40px; padding: 0 16px; border-radius: 20px;
   background: rgba(255,255,255,0.42); border: 1px solid rgba(255,255,255,0.65);
   box-shadow: var(--glass-pill);
-  font-size: 11.5px; font-weight: 700; letter-spacing: .1px;
+  font-size: 13px; font-weight: 700; letter-spacing: .1px;
   transition: transform .17s var(--ease-out);
 }
 .ar-pill:active { transform: scale(.96); }
@@ -457,14 +572,14 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .pdp-gallery { height: 100%; scroll-snap-type: x mandatory; }
 .pdp-gallery > div { flex: 0 0 100%; height: 100%; scroll-snap-align: start; }
 .pdp-gallery img { width: 100%; height: 100%; object-fit: cover; }
-.pdp-fade { position: absolute; top: 0; right: 0; bottom: 0; left: 0; pointer-events: none; background: linear-gradient(180deg, rgba(255,255,255,0) 55%, #fff 98%); }
+.pdp-fade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(255,255,255,0) 55%, #fff 98%); }
 .dots { position: absolute; bottom: 40px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; pointer-events: none; z-index: 1; }
 .dot { width: 6px; height: 6px; border-radius: 3px; background: rgba(0,0,0,0.2); transition: width .2s; }
 .dot.on { width: 16px; background: var(--ink); }
 .pdp-btns { position: absolute; top: 18px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 2; }
 .pdp-btns > div { display: flex; gap: 10px; }
 .circle-38 {
-  width: 38px; height: 38px; border-radius: 19px; background: rgba(255,255,255,0.75);
+  width: 44px; height: 44px; border-radius: 22px; background: rgba(255,255,255,0.75);
   border: 1px solid rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center;
   font-size: 17px; font-weight: 700;
 }
@@ -573,9 +688,9 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .bs-img img { width: 100%; height: 100%; object-fit: contain; }
 .bs-body { padding: 10px 12px 14px; }
 .bs-title { font-size: 12.5px; font-weight: 600; line-height: 16px; }
-.bs-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.bs-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
 .bs-price { font-size: 13.5px; font-weight: 800; }
-.bs-add { width: 26px; height: 26px; border-radius: 13px; background: var(--dark-grad); color: #fff; font-weight: 800; font-size: 16px; line-height: 19px; display: flex; align-items: center; justify-content: center; }
+.bs-add { flex: 1 1 100%; white-space: nowrap; min-height: 36px; padding: 0 10px; border-radius: 999px; background: var(--dark-grad); color: #fff; font-weight: 800; font-size: 13.5px; display: flex; align-items: center; justify-content: center; }
 .min-note { font-size: 13px; color: var(--red-deep); text-align: center; margin-bottom: 10px; font-weight: 600; }
 .cart-empty { padding: 50px 22px 24px; text-align: center; font-size: 13.5px; }
 
@@ -711,7 +826,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .pin { position: absolute; left: 50%; top: 50%; margin-left: -15px; margin-top: -38px; display: flex; flex-direction: column; align-items: center; }
 .pin i { width: 10px; height: 4px; border-radius: 5px; background: rgba(0,0,0,0.25); margin-top: 2px; }
 .loc-btn {
-  position: absolute; bottom: 12px; right: 12px;
+  position: absolute; bottom: 12px; inset-inline-end: 12px;
   display: flex; align-items: center; gap: 7px; padding: 10px 14px; border-radius: 999px;
   background: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.9);
   box-shadow: 0 6px 16px rgba(0,0,0,0.14); font-size: 12px; font-weight: 700;
@@ -820,7 +935,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .rte a { text-decoration: underline; }
 
 /* ── Overlays ─────────────────────────────────────────────────────────── */
-.overlay { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 20; }
+.overlay { position: absolute; inset: 0; z-index: 20; }
 .age-gate { display: flex; align-items: center; padding: 0 28px; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); background: rgba(255,255,255,0.35); z-index: 40; }
 .age-card { width: 100%; background: #fff; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 48px rgba(0,0,0,0.12); text-align: center; }
 .age-title { font-size: 20px; font-weight: 800; }
@@ -829,7 +944,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 /* AR (ArOverlay.js) */
 .ar { display: flex; flex-direction: column; overflow: hidden; animation: okaFade .3s var(--ease) both; background: linear-gradient(180deg, #6f6a63 0%, #8d8579 38%, #b3a795 66%, #8a7a63 100%); }
-.ar::before { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: radial-gradient(70% 45% at 50% 62%, rgba(255,255,255,0.34), rgba(255,255,255,0) 65%); pointer-events: none; }
+.ar::before { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 45% at 50% 62%, rgba(255,255,255,0.34), rgba(255,255,255,0) 65%); pointer-events: none; }
 .ar-table { position: absolute; left: 0; right: 0; top: 56%; bottom: 0; background: linear-gradient(180deg, rgba(126,101,70,0.32), rgba(74,57,38,0.66)); pointer-events: none; }
 .ar-horizon { position: absolute; left: 0; right: 0; top: 60%; height: 2px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent); pointer-events: none; }
 .ar > :not(.ar-table):not(.ar-horizon):not(model-viewer) { position: relative; z-index: 3; }
@@ -840,7 +955,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .ar-stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 24px; }
 .ar-object { position: relative; width: 238px; border-radius: 26px; overflow: hidden; background: #fff; border: 1px solid rgba(255,255,255,0.85); box-shadow: 0 26px 44px rgba(38,26,14,0.42), 0 3px 10px rgba(38,26,14,0.28); animation: okaPop .5s var(--ease-out) both; }
 .ar-object img { width: 100%; height: 272px; object-fit: cover; }
-.ar-scale { position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 12px; background: rgba(24,20,16,0.62); color: #fff; font-size: 10.5px; font-weight: 700; }
+.ar-scale { position: absolute; top: 10px; inset-inline-start: 10px; display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 12px; background: rgba(24,20,16,0.62); color: #fff; font-size: 10.5px; font-weight: 700; }
 .ar-contact { width: 196px; height: 28px; margin-top: -6px; background: radial-gradient(50% 50% at 50% 50%, rgba(40,28,16,0.42), rgba(40,28,16,0) 72%); }
 .ar-controls { display: flex; justify-content: center; gap: 10px; padding: 0 20px 14px; }
 .ar-control { width: 82px; display: flex; flex-direction: column; align-items: center; gap: 7px; }
@@ -859,11 +974,11 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .ar-facts { display: flex; flex-direction: column; gap: 7px; }
 .ar-fact { display: flex; justify-content: space-between; gap: 12px; font-size: 12.5px; color: rgba(255,255,255,0.85); }
 .ar-fact b { font-size: 12px; font-weight: 700; color: #fff; }
-.ar model-viewer { position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; z-index: 2; --poster-color: transparent; background: transparent; }
+.ar model-viewer { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; --poster-color: transparent; background: transparent; }
 .ar.has-model .ar-stage { visibility: hidden; }
 
 /* Edit order sheet */
-.scrim { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 30; background: rgba(0,0,0,0.32); animation: okaFade .25s var(--ease) both; }
+.scrim { position: absolute; inset: 0; z-index: 30; background: rgba(0,0,0,0.32); animation: okaFade .25s var(--ease) both; }
 .sheet { position: absolute; left: 0; right: 0; bottom: 0; top: 9%; z-index: 31; display: flex; flex-direction: column; background: var(--sheet-bg); border-radius: 26px 26px 0 0; overflow: hidden; box-shadow: 0 -14px 40px rgba(0,0,0,0.25); animation: okaFadeIn .3s var(--ease) both; }
 .grabber { width: 38px; height: 4px; border-radius: 3px; background: rgba(0,0,0,0.18); margin: 10px auto 0; }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid var(--card-border); }
@@ -885,7 +1000,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .accept { display: flex; justify-content: center; width: 100%; padding: 15px 0; border-radius: 999px; background: #1a1a1a; color: #fff; font-weight: 700; font-size: 14.5px; }
 
 /* iOS-style alert (Alert.alert) */
-.alert-scrim { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 50; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; animation: okaFade .2s var(--ease) both; }
+.alert-scrim { position: absolute; inset: 0; z-index: 50; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; animation: okaFade .2s var(--ease) both; }
 .alert { width: 270px; border-radius: 14px; overflow: hidden; background: rgba(242,242,247,0.96); -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px); text-align: center; animation: okaPop .3s var(--ease) both; }
 .alert-body { padding: 19px 16px 18px; }
 .alert-title { font-size: 17px; font-weight: 600; line-height: 22px; }
@@ -901,7 +1016,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 /* the "added" tick that stands in for the success haptic on desktop */
 .toast {
-  position: absolute; left: 50%; bottom: 110px; z-index: 45;
+  position: absolute; left: 50%; bottom: calc(28px + env(safe-area-inset-bottom)); z-index: 45;
   transform: translateX(-50%);
   padding: 10px 16px; border-radius: 999px; background: rgba(29,29,31,0.92); color: #fff;
   font-size: 13px; font-weight: 700; white-space: nowrap;
@@ -915,7 +1030,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .content > .shopify-section > .home-section, .home-section { display: flex; flex-direction: column; }
 
 /* Shopify's own policy pages render straight into the layout. */
-.shopify-policy__container { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 22px 30px; max-width: none !important; font-size: 14px; line-height: 22px; color: var(--ink-soft); }
+.shopify-policy__container { margin-top: var(--bar-h) !important; flex: 1; min-height: 0; overflow-y: auto; padding: 18px 22px 30px; max-width: none !important; font-size: 14px; line-height: 22px; color: var(--ink-soft); }
 .shopify-policy__title h1 { font-size: 26px; font-weight: 800; color: var(--ink); margin-bottom: 14px; }
 
 /* ── Courier tracking button (order detail) ───────────────────────────── */
@@ -962,9 +1077,9 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .gcard-row { margin-top: auto; padding-top: 8px; }
 .prod-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 19px; padding: 0 6px; }
 /* Price follows the title; the + and AR pill sit on one baseline across the rail. */
-.prod-meta { height: 146px; }
+.prod-meta { height: 178px; }
 .prod-actions { margin-top: auto; }
-.rail.prods { height: 390px; }
+.rail.prods { height: 422px; }
 .prod-card { display: flex; align-items: center; justify-content: center; }
 .cs-slot, .bs-card { display: flex; flex-direction: column; }
 .cs-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 32px; }
@@ -977,7 +1092,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .line-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .cs-card, .bs-img, .rcard-img, .line-img, .item-img, .cat-item-img, .order-thumb, .hero-img, .offer-card { background: #fff; }
 .cs-card img, .bs-img img, .rcard-img img, .gcard-img img { object-fit: contain; }
-.offer-cta { min-height: 44px; }
+.offer-cta { min-height: 52px; }
 .join-nudge {
   display: flex; align-items: center; gap: 11px; width: calc(100% - 44px); margin: 0 22px 14px;
   padding: 13px 14px; border-radius: 16px; text-align: start;
@@ -986,62 +1101,23 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .join-nudge b { display: block; font-size: 13.5px; font-weight: 800; line-height: 18px; }
 .join-nudge span span { display: block; font-size: 12px; line-height: 17px; margin-top: 2px; color: var(--ink-soft); }
 
-/* ── Home feed: fit short screens, never slide under the header ───────────
- * A phone browser's own bars leave the feed less height than the app gets.
- * Cards size to the feed's height (--fh, measured in JS) — on a full-height
- * screen that is exactly the app's 264×300 offer and 200×230 product — and a
- * page whose content still doesn't fit starts below the header instead of
- * centring up underneath it. */
-/* --fh is the feed's own height, measured by assets/oka-screens.js (no container queries — old iOS lacks them). */
-.feed { --fh: 620px; }
-.page {
-  --oh: 300px; --ow: 264px; --ph: 230px; --pw: 200px;
-  --oh: clamp(170px, calc(var(--fh) - 150px), 300px);
-  --ow: calc(var(--oh) * 0.88);
-  --ph: clamp(120px, calc(var(--fh) - 262px), 230px);
-  --pw: calc(var(--ph) * 0.87 + 0px);
-  justify-content: flex-start;
-  padding-top: 14px;
-  overflow: hidden;
+/* ── Portrait lock ─────────────────────────────────────────────────────────
+ * The web can't stop a phone from rotating, so a phone turned sideways gets
+ * the portrait layout turned back the other way: the shop stays upright
+ * relative to the phone, exactly as if rotation were locked. Phones only
+ * (coarse pointer, short landscape viewport) — tablets and desktops lay out
+ * normally. --rot is set from the device's angle in layout/theme.liquid.
+ */
+@media (orientation: landscape) and (max-height: 540px) and (hover: none) and (pointer: coarse) {
+  html.portrait-lock .app {
+    position: fixed; top: 50%; left: 50%; margin: 0;
+    width: 100vh; width: 100dvh; max-width: none;
+    height: 100vw; height: 100dvw;
+    transform: translate(-50%, -50%) rotate(var(--rot, -90deg));
+  }
+  /* The notch is now on a side of the viewport, i.e. the top of the shop. */
+  html.portrait-lock { --top-pad: max(env(safe-area-inset-left), env(safe-area-inset-right), 8px); }
 }
-.page > :first-child { margin-top: auto; }
-.page > :last-child { margin-bottom: auto; }
-.rail.offers { --w: var(--ow); height: calc(var(--oh) + 63px); }
-.offer-slot { flex-basis: var(--ow); width: var(--ow); }
-.offer-card { width: var(--ow); height: var(--oh); }
-.rail.prods { --w: max(var(--pw), 200px); height: calc(var(--ph) + 160px); }
-.prod-slot { flex-basis: max(var(--pw), 200px); width: max(var(--pw), 200px); }
-.prod-card { width: var(--pw); height: var(--ph); margin: 0 auto; }
-/* Very short feeds (.short, set by assets/oka-screens.js): the AR pill moves beside the + so nothing is clipped. */
-.feed.short .page { --ph: clamp(110px, calc(var(--fh) - 222px), 230px); }
-.feed.short .prod-meta { height: 112px; }
-.feed.short .prod-actions { flex-direction: row; justify-content: center; }
-.feed.short .rail.prods { height: calc(var(--ph) + 126px); }
-
-/* ── Opening screen: the first banner, before the offers slider ───────── */
-.page.opening { align-items: center; padding: 14px 22px 18px; gap: 12px; }
-.opening-card {
-  display: flex; align-items: center; justify-content: center;
-  width: min(100%, calc((var(--fh) - 118px) * 0.667)); max-width: 100%;
-  height: calc(var(--fh) - 118px); max-height: 560px;
-  border-radius: 26px; overflow: hidden; background: #fff;
-  box-shadow: 0 14px 34px rgba(0,0,0,0.12);
-}
-.opening-card img { width: 100%; height: 100%; object-fit: cover; }
-.opening-actions { display: flex; gap: 10px; width: 100%; max-width: 358px; }
-.opening-actions > * { white-space: nowrap; }
-.opening-actions .offer-cta { flex: 1; margin-top: 0; }
-.opening-next {
-  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 13px 0; border-radius: 999px; font-size: 14px; font-weight: 700;
-  background: rgba(255,255,255,0.55); border: 1px solid rgba(0,0,0,0.14);
-  min-height: 44px;
-}
-.opening-arrow { display: inline-block; animation: okaNudge 1.6s ease-in-out infinite; }
-@keyframes okaNudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
-.nav-logo { background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); }
-.nav-logo img { width: 70%; height: 70%; object-fit: contain; }
-
 /* ── TESTING ONLY: staff order lookup (snippets/test-lookup.liquid) ───── */
 .test-panel {
   margin: 0 22px 18px; padding: 16px; border-radius: 18px;
@@ -1057,11 +1133,3 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .test-order { margin-bottom: 4px; }
 .test-detail { margin: -4px 22px 16px; padding: 14px; border-radius: 0 0 18px 18px; border: 1px solid var(--card-border); border-top: 0; background: rgba(255,255,255,0.6); }
 .test-meta { margin-top: 12px; font-size: 11.5px; line-height: 17px; color: var(--ink-soft); }
-/* Direction-aware positions, without logical properties (older Safari lacks them). */
-html[dir="rtl"] .loc-btn { right: auto; left: 12px; }
-html[dir="rtl"] .ar-scale { left: auto; right: 10px; }
-/* Square product images where aspect-ratio isn't supported (Safari < 15). */
-@supports not (aspect-ratio: 1 / 1) {
-  .gcard-img { position: relative; height: 0; padding-top: 100%; }
-  .gcard-img img { position: absolute; top: 8px; left: 8px; width: calc(100% - 16px); height: calc(100% - 16px); }
-}
