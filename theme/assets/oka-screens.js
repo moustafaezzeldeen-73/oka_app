@@ -842,6 +842,7 @@
       awb: sh.billCode,
       createdAt: sh.createdAt,
       status: sh.status,
+      order: sh.order || null,
       scans: (sh.scans || []).map((x) => ({ scanTime: x.time, scanType: x.type, desc: x.description, scanTypeCode: JT_TYPE_CODE[x.type] })),
     }));
   }
@@ -1917,7 +1918,13 @@
     const showError = (msg) => { errEl.hidden = !msg; errEl.textContent = msg || ''; };
 
     function detail(o) {
+      const items = o.order?.items || [];
       return `<div class="test-detail">
+        ${items.length ? `<div class="items" style="padding:0 0 12px">${items.map((it) => `
+          <div class="item-row">
+            <div class="item-img">${img(it.image)}</div>
+            <div style="flex:1;min-width:0"><div class="item-title">${esc(it.title)}</div><div class="item-qty">${esc([it.variant, `× ${num(it.quantity)}`].filter(Boolean).join(' · '))}</div></div>
+          </div>`).join('')}</div>` : ''}
         <div class="arrives-title" style="font-size:16px">${esc(o.stateLabel || L('No scans yet', 'مفيش تحديثات لسه'))}</div>
         <div class="steps" style="padding:14px 0 16px">${steps.map((s, i) => `
           <div class="step-col${i <= o.step ? ' done' : ''}${i === o.step ? ' current' : ''}"><div class="step-bar"></div><div class="step-txt">${esc(L(s[0], s[1]))}</div></div>`).join('')}</div>
@@ -1941,14 +1948,24 @@
     // The list first; a tap opens that shipment's tracking in its place.
     function render() {
       if (!data) { results.innerHTML = ''; return; }
-      const card = (o, tappable) => `
+      // The Shopify order (number + product thumbnails) when the tracking
+      // service knows it; the AWB alone otherwise.
+      const card = (o, tappable) => {
+        const items = o.order?.items || [];
+        const thumbs = items.slice(0, 4).map((it) => `<span class="tl-thumb">${img(it.image)}${it.quantity > 1 ? `<b>×${esc(num(it.quantity))}</b>` : ''}</span>`).join('');
+        const more = items.length > 4 ? `<span class="tl-more nums">+${esc(num(items.length - 4))}</span>` : '';
+        return `
         <button class="order-card" ${tappable ? `data-tl-open="${esc(o.awb)}"` : ''} style="width:calc(100% - 44px);text-align:start">
           <div style="flex:1;min-width:0">
-            <div class="order-top"><span class="order-name nums">${esc(o.awb)}</span>${o.createdAt ? `<span class="order-total nums" style="font-weight:500">${esc(String(o.createdAt).slice(0, 10))}</span>` : ''}</div>
+            <div class="order-top"><span class="order-name nums">${esc(o.order?.name || o.awb)}</span>${o.createdAt ? `<span class="order-total nums" style="font-weight:500">${esc(String(o.createdAt).slice(0, 10))}</span>` : ''}</div>
+            ${items.length ? `<div class="tl-thumbs">${thumbs}${more}</div>
+            <div class="order-meta">${esc(items.map((it) => it.title).join(' · '))}</div>` : ''}
             <div class="order-state${o.step >= 3 ? ' green' : ''}">${esc(o.stateLabel || L('No scans yet', 'مفيش تحديثات لسه'))}</div>
+            ${o.order ? `<div class="order-meta nums" style="opacity:.7">AWB ${esc(o.awb)}</div>` : ''}
           </div>
           ${tappable ? `<span class="flip" style="display:flex;opacity:.4">›</span>` : ''}
         </button>`;
+      };
       const o = open && data.find((x) => x.awb === open);
       if (o) {
         results.innerHTML = `
@@ -1972,7 +1989,7 @@
       try {
         if (phone) {
           const found = await jtByPhone(phone, Number(field('days').value) || 30);
-          data = found.map((sh) => ({ awb: sh.awb, createdAt: sh.createdAt, ...jtShape(sh.scans, 1, sh.status) }));
+          data = found.map((sh) => ({ awb: sh.awb, createdAt: sh.createdAt, order: sh.order, ...jtShape(sh.scans, 1, sh.status) }));
           if (!data.length) showError(`No J&T shipments for ${phone} in that window.`);
         } else {
           const scans = await jtTrack(awbs);
