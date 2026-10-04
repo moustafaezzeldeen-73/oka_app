@@ -985,3 +985,36 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 }
 .join-nudge b { display: block; font-size: 13.5px; font-weight: 800; line-height: 18px; }
 .join-nudge span span { display: block; font-size: 12px; line-height: 17px; margin-top: 2px; color: var(--ink-soft); }
+
+/* ── Home feed: fit short screens, never slide under the header ───────────
+ * A phone browser's own bars leave the feed less height than the app gets.
+ * Cards size to the feed's height (container units) — on a full-height
+ * screen that is exactly the app's 264×300 offer and 200×230 product — and a
+ * page whose content still doesn't fit starts below the header instead of
+ * centring up underneath it. */
+.feed { container-type: size; }
+.page {
+  --oh: 300px; --ow: 264px; --ph: 230px; --pw: 200px;
+  --oh: clamp(170px, calc(100cqh - 150px), 300px);
+  --ow: calc(var(--oh) * 0.88);
+  --ph: clamp(120px, calc(100cqh - 262px), 230px);
+  --pw: calc(var(--ph) * 0.87 + 0px);
+  justify-content: flex-start;
+  padding-top: 14px;
+  overflow: hidden;
+}
+.page > :first-child { margin-top: auto; }
+.page > :last-child { margin-bottom: auto; }
+.rail.offers { --w: var(--ow); height: calc(var(--oh) + 63px); }
+.offer-slot { flex-basis: var(--ow); width: var(--ow); }
+.offer-card { width: var(--ow); height: var(--oh); }
+.rail.prods { --w: max(var(--pw), 200px); height: calc(var(--ph) + 160px); }
+.prod-slot { flex-basis: max(var(--pw), 200px); width: max(var(--pw), 200px); }
+.prod-card { width: var(--pw); height: var(--ph); margin: 0 auto; }
+/* Very short feeds: the AR pill moves beside the + so nothing is clipped. */
+@container (max-height: 380px) {
+  .prod-meta { height: 112px; }
+  .prod-actions { flex-direction: row; justify-content: center; }
+  .rail.prods { height: calc(var(--ph) + 126px); }
+  .page { --ph: clamp(110px, calc(100cqh - 222px), 230px); }
+}
