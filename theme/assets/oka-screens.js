@@ -211,6 +211,18 @@
       card._t = setTimeout(() => { card._t = null; go(card.getAttribute('href')); }, 280);
     });
 
+    // The feed's own height drives the card sizes (CSS --fh). Measured here
+    // rather than with container queries, which older iPhones don't support.
+    const sizeFeed = () => {
+      const h = feed.clientHeight;
+      if (!h) return;
+      feed.style.setProperty('--fh', `${h}px`);
+      feed.classList.toggle('short', h < 380);
+    };
+    sizeFeed();
+    if ('ResizeObserver' in window) new ResizeObserver(sizeFeed).observe(feed);
+    else window.addEventListener('resize', sizeFeed);
+
     // Park the strip under the lens, and again when the direction flips.
     requestAnimationFrame(() => centerNav(active, false));
     onLang(() => requestAnimationFrame(() => {
