@@ -170,6 +170,9 @@
       setActive(nearest(nav, items), { moveNav: false, moveFeed: true });
     });
 
+    // The opening screen's "See offers" moves the feed one page on.
+    $$('[data-next-page]', feed).forEach((b) => b.addEventListener('click', () => setActive(Math.min(pages.length - 1, active + 1), { moveNav: true, moveFeed: true })));
+
     // Tapping a selector item drives the feed.
     items.forEach((it, i) => it.addEventListener('click', () => setActive(i, { moveNav: true, moveFeed: true })));
 

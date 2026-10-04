@@ -1018,3 +1018,27 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
   .rail.prods { height: calc(var(--ph) + 126px); }
   .page { --ph: clamp(110px, calc(100cqh - 222px), 230px); }
 }
+
+/* ── Opening screen: the first banner, before the offers slider ───────── */
+.page.opening { align-items: center; padding: 14px 22px 18px; gap: 12px; }
+.opening-card {
+  display: flex; align-items: center; justify-content: center;
+  width: min(100%, calc((100cqh - 118px) * 0.667)); max-width: 100%;
+  height: calc(100cqh - 118px); max-height: 560px;
+  border-radius: 26px; overflow: hidden; background: #fff;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.12);
+}
+.opening-card img { width: 100%; height: 100%; object-fit: cover; }
+.opening-actions { display: flex; gap: 10px; width: 100%; max-width: 358px; }
+.opening-actions > * { white-space: nowrap; }
+.opening-actions .offer-cta { flex: 1; margin-top: 0; }
+.opening-next {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 13px 0; border-radius: 999px; font-size: 14px; font-weight: 700;
+  background: rgba(255,255,255,0.55); border: 1px solid rgba(0,0,0,0.14);
+  min-height: 44px;
+}
+.opening-arrow { display: inline-block; animation: okaNudge 1.6s ease-in-out infinite; }
+@keyframes okaNudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+.nav-logo { background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); }
+.nav-logo img { width: 70%; height: 70%; object-fit: contain; }

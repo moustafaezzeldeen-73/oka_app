@@ -8,6 +8,12 @@
   Behaviour lives in assets/oka-screens.js (screen "home").
 {%- endcomment -%}
 {%- liquid
+  assign opening = false
+  assign slider_offset = 0
+  if section.settings.opening_screen and section.blocks.size > 1
+    assign opening = true
+    assign slider_offset = 1
+  endif
   if settings.logo
     assign logo_url = settings.logo | image_url: width: 128
   else
@@ -25,7 +31,12 @@
     <div class="nav-wrap">
       <div class="lens"></div>
       <div class="nav-strip hscroll" data-nav>
-        <button class="nav-item active" data-i="0" aria-label="Offers">
+        {%- if opening -%}
+          <button class="nav-item active" aria-label="{{ shop.name | escape }}">
+            <span class="nav-icon nav-logo"><img src="{{ logo_url }}" alt="" width="52" height="52"></span>
+          </button>
+        {%- endif -%}
+        <button class="nav-item{% unless opening %} active{% endunless %}" aria-label="Offers">
           <span class="nav-icon"><span class="nav-offers">{% render 'icon', name: 'tag', px: 24, color: '#ffffff' %}</span></span>
         </button>
         {%- for c in settings.oka_collections -%}
@@ -45,11 +56,36 @@
   </header>
 
   <div class="feed" data-feed>
-    {%- comment -%} Page 0 — the promo carousel. {%- endcomment -%}
-    <section class="page active" data-i="0">
+    {%- if opening -%}
+      {%- comment -%} The opening screen: the first banner on its own, before the offers slider. {%- endcomment -%}
+      {%- liquid
+        assign first = section.blocks.first
+        if first.settings.image
+          assign hero_src = first.settings.image | image_url: width: 1000
+        elsif first.settings.bundled_image != blank
+          assign hero_src = first.settings.bundled_image | asset_url
+        else
+          assign hero_src = ''
+        endif
+        assign hero_link = first.settings.collection.url | default: routes.collections_url
+        assign hero_variant = first.settings.product.selected_or_first_available_variant
+      -%}
+      <section class="page opening active" {{ first.shopify_attributes }}>
+        <a href="{{ hero_link }}" class="opening-card">{% if hero_src != '' %}<img src="{{ hero_src }}" alt="" width="733" height="1100" loading="eager" fetchpriority="high">{% endif %}</a>
+        <div class="opening-actions">
+          {%- if hero_variant -%}
+            <button class="offer-cta" data-add="{{ hero_variant.id }}">{% render 'bi', en: 'Add to Cart', ar: 'أضف إلى السلة' %}</button>
+          {%- endif -%}
+          <button class="opening-next" data-next-page>{% render 'bi', en: 'See offers', ar: 'شوف العروض' %}<span class="opening-arrow">↓</span></button>
+        </div>
+      </section>
+    {%- endif -%}
+
+    {%- comment -%} The promo carousel. {%- endcomment -%}
+    <section class="page{% unless opening %} active{% endunless %}">
       <h2 class="page-title">{% render 'bi', en: 'Offers', ar: 'العروض' %}</h2>
       <div class="rail offers hscroll" data-rail>
-        {%- for block in section.blocks -%}
+        {%- for block in section.blocks offset: slider_offset -%}
           {%- liquid
             if block.settings.image
               assign src = block.settings.image | image_url: width: 600
@@ -113,6 +149,15 @@
   "tag": "div",
   "class": "home-section",
   "max_blocks": 12,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "opening_screen",
+      "label": "Show the first offer as the opening screen",
+      "info": "The first offer gets a full screen of its own before the offers slider.",
+      "default": true
+    }
+  ],
   "blocks": [
     {
       "type": "offer",
