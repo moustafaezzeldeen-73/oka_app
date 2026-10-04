@@ -6,6 +6,8 @@
 <div class="screen fade-in" data-screen="orders">
   <div data-orders-list>
     <h1 class="big-title">{% render 'bi', en: 'Orders', ar: 'الطلبات' %}</h1>
+    {%- comment -%} TESTING ONLY — the staff order-lookup panel. Remove with snippets/test-lookup.liquid before launch. {%- endcomment -%}
+    {%- if settings.test_panel -%}{% render 'test-lookup' %}{%- endif -%}
     {%- if customer -%}
       {%- paginate customer.orders by 20 -%}
         {%- if customer.orders.size == 0 -%}

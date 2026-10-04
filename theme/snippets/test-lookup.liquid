@@ -1,0 +1,30 @@
+{%- comment -%}
+  ─────────────────────────────────────────────────────────────────────────
+   TESTING ONLY — staff order lookup.  REMOVE BEFORE PUBLISHING.
+  ─────────────────────────────────────────────────────────────────────────
+  Opens any customer's real orders by phone, with the live J&T timeline and
+  the courier's Call / WhatsApp buttons, so the shipping connector can be
+  checked on real orders from the website.
+
+  It uses the order service's test sign-in (server/auth/testLogin.js), which
+  works only with TEST_LOGIN_KEY and never on a production server. Shown only
+  when Theme settings → OKA order service → "Order lookup panel" is on.
+
+  To remove: delete this file, its render line in sections/oka-orders.liquid,
+  the `test_panel` setting, and testLookup() in assets/oka-screens.js.
+{%- endcomment -%}
+<div class="test-panel" data-test-lookup>
+  <div class="test-badge">TESTING — staff only</div>
+  <label class="field-label">Order service address</label>
+  <input class="field-input" data-tl-server type="url" dir="ltr" autocomplete="off" placeholder="https://….trycloudflare.com">
+  <label class="field-label">Test key</label>
+  <input class="field-input" data-tl-key type="password" dir="ltr" autocomplete="off" placeholder="TEST_LOGIN_KEY">
+  <label class="field-label">Customer phone</label>
+  <input class="field-input" data-tl-phone type="tel" dir="ltr" autocomplete="off" placeholder="01X XXXX XXXX">
+  <div class="test-actions">
+    <button class="cta bold" data-tl-go>Show orders</button>
+    <button class="outline-btn" data-tl-clear>Clear</button>
+  </div>
+  <div class="error-txt" data-tl-error hidden></div>
+</div>
+<div data-tl-results></div>

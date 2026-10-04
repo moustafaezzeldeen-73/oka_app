@@ -1753,6 +1753,134 @@
     });
   }
 
+  /* ════════════════════════════════════════════════════════════════════
+   * TESTING ONLY — staff order lookup (snippets/test-lookup.liquid).
+   * REMOVE BEFORE PUBLISHING, with the snippet and the `test_panel` setting.
+   *
+   * Signs in to the order service as the customer with that phone (its
+   * key-gated, non-production test sign-in) and draws their real orders with
+   * the live courier data — the same /customer/orders the app reads. The key
+   * lives only in this tab's sessionStorage; the session token only in memory.
+   * ════════════════════════════════════════════════════════════════════ */
+  function testLookup(panel) {
+    const results = $('[data-tl-results]');
+    const field = (k) => $(`[data-tl-${k}]`, panel);
+    const errEl = field('error');
+    const steps = [['Processing', 'قيد المعالجة'], ['Preparing to Ship', 'التجهيز للشحن'], ['Shipped', 'تم الشحن'], ['Delivered', 'تم التوصيل']];
+    let data = null;
+    let open = null;
+
+    field('server').value = O.store.get('oka.test.server', '') || '';
+    field('key').value = O.store.sget('oka.test.key', '') || '';
+
+    const showError = (msg) => { errEl.hidden = !msg; errEl.textContent = msg || ''; };
+
+    async function call(base, path, { token, body } = {}) {
+      let res;
+      try {
+        res = await fetch(base + path, {
+          method: body ? 'POST' : 'GET',
+          headers: { Accept: 'application/json', ...(body ? { 'Content-Type': 'application/json' } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+          body: body ? JSON.stringify(body) : undefined,
+        });
+      } catch (e) {
+        throw new Error(`Couldn't reach ${base}. Is the server running, and is ALLOWED_ORIGIN=${location.origin} in server/.env?`);
+      }
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+      return json;
+    }
+
+    function orderDetail(o) {
+      const step = o.step ?? 0;
+      const updates = o.updates || [];
+      return `<div class="test-detail">
+        <div class="items" style="padding:0 0 12px">${(o.items || []).map((it) => `
+          <div class="item-row">
+            <div class="item-img">${img(it.image)}</div>
+            <div style="flex:1;min-width:0"><div class="item-title">${esc(it.title)}</div><div class="item-qty">${esc(`${num(it.quantity)} × ${fmtPrice(it.originalPrice ?? it.price ?? 0)}`)}</div></div>
+          </div>`).join('')}</div>
+        <div class="arrives-title" style="font-size:16px">${esc(o.stateLabel || (o.cancelled ? L('Cancelled', 'ملغي') : L(steps[step][0], steps[step][1])))}</div>
+        <div class="steps" style="padding:14px 0 16px">${steps.map((s, i) => `
+          <div class="step-col${i <= step ? ' done' : ''}${i === step ? ' current' : ''}"><div class="step-bar"></div><div class="step-txt">${esc(L(s[0], s[1]))}</div></div>`).join('')}</div>
+        ${updates.length ? `<div class="updates" style="margin:0">${updates.map((u) => `
+          <div class="update-row"><span class="update-dot${u.done ? ' done' : ''}"></span><div style="flex:1"><div class="update-txt">${esc(u.text)}</div><div class="update-time">${esc(u.time)}</div></div></div>`).join('')}</div>`
+          : `<div class="awaiting" style="margin:0">${esc(o.hasAwb ? L('No courier scans yet for this shipment.', 'لسه مفيش تحديثات من شركة الشحن.') : L('No AWB issued yet.', 'لسه ما اتعملش بوليصة شحن.'))}</div>`}
+        ${data.shippingError ? `<div class="ship-err" style="margin:8px 0 0">${esc(`Courier error: ${data.shippingError}`)}</div>` : ''}
+        ${o.courier ? `<div class="courier" style="margin:14px 0 0">
+          <div class="courier-label">${esc(o.carrier === 'jt' ? L('J&T courier', 'مندوب J&T') : L('Delivery courier', 'مندوب التوصيل'))}</div>
+          <div class="courier-name">${esc(o.courier)}</div>
+          ${o.courierPhone ? `<div class="courier-phone"><span class="nums">${esc(o.courierPhone)}</span></div>
+          <div class="courier-btns">
+            <a class="courier-btn call" href="tel:${esc(String(o.courierPhone).replace(/\s/g, ''))}">${esc(L('Call', 'اتصال'))}</a>
+            <a class="courier-btn wa" target="_blank" rel="noopener" href="https://wa.me/${esc(waNumber(o.courierPhone))}">${esc(L('WhatsApp', 'واتساب'))}</a>
+          </div>` : ''}
+        </div>` : ''}
+        ${o.actionNeeded ? `<div class="action-needed" style="margin:14px 0 0"><b>${esc(L('Action needed', 'مطلوب إجراء'))}</b><span>${esc(o.actionNeeded)}</span></div>` : ''}
+        <div class="test-meta">
+          ${o.trackingNumber ? `<div>AWB: <span class="nums">${esc(o.trackingNumber)}</span>${o.carrier ? ` · ${esc(o.carrier)}` : ''}</div>` : ''}
+          <div>Shopify: ${esc(o.fulfillmentStatus || '')} · ${esc(o.financialStatus || '')}</div>
+          ${o.shipTo ? `<div>${esc([o.shipTo.name, o.shipTo.street, o.shipTo.city].filter(Boolean).join(' — '))}</div>` : ''}
+        </div>
+      </div>`;
+    }
+
+    function render() {
+      if (!data) { results.innerHTML = ''; return; }
+      const orders = data.orders || [];
+      results.innerHTML = `
+        <div class="test-who">${esc(data.customer?.name || '')} · <span class="nums">${esc(data.customer?.phone || '')}</span> · ${esc(`${orders.length} orders`)}</div>
+        ${orders.length ? '' : `<div class="empty">${esc(L('No orders for this customer.', 'مفيش طلبات للعميل ده.'))}</div>`}
+        ${orders.map((o) => `
+          <div class="test-order">
+            <button class="order-card" data-tl-open="${esc(o.name)}" style="width:calc(100% - 44px);text-align:start">
+              <div class="order-thumb">${img(o.items?.[0]?.image)}</div>
+              <div style="flex:1;min-width:0">
+                <div class="order-top"><span class="order-name">${esc(o.name)}</span><span class="order-total">${esc(fmtPrice(Math.round(o.total ?? 0)))}</span></div>
+                <div class="order-meta">${esc((o.items || []).map((i) => i.title).join(' · '))}</div>
+                <div class="order-state${o.cancelled ? ' red' : o.step >= 3 ? ' green' : ''}">${esc(o.cancelled ? L('Cancelled', 'ملغي') : o.stateLabel || L(steps[o.step ?? 0][0], steps[o.step ?? 0][1]))}</div>
+              </div>
+            </button>
+            ${open === o.name ? orderDetail(o) : ''}
+          </div>`).join('')}`;
+    }
+
+    async function lookUp() {
+      const base = field('server').value.trim().replace(/\/+$/, '');
+      const key = field('key').value.trim();
+      const phone = field('phone').value.trim();
+      if (!base || !key || !phone) return showError('Fill in the server address, the test key and a phone number.');
+      O.store.set('oka.test.server', base);
+      O.store.sset('oka.test.key', key);
+      showError('');
+      const go = field('go');
+      go.innerHTML = spinner();
+      try {
+        const session = await call(base, '/auth/test-login', { body: { identifier: phone, key } });
+        data = await call(base, `/customer/orders?lang=${O.lang()}`, { token: session.token });
+        open = data.orders?.[0]?.name ?? null;
+        render();
+      } catch (err) {
+        data = null;
+        render();
+        showError(errText(err));
+      } finally {
+        go.textContent = 'Show orders';
+      }
+    }
+
+    field('go').addEventListener('click', lookUp);
+    field('phone').addEventListener('keydown', (e) => { if (e.key === 'Enter') lookUp(); });
+    field('clear').addEventListener('click', () => { data = null; open = null; field('phone').value = ''; showError(''); render(); });
+    results.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-tl-open]');
+      if (!b) return;
+      open = open === b.dataset.tlOpen ? null : b.dataset.tlOpen;
+      render();
+    });
+    onLang(render);
+  }
+
   /* ── boot ────────────────────────────────────────────────────────────── */
   const SCREENS = {
     home, collection, search, product, cart, checkout, orders, account,
@@ -1765,6 +1893,9 @@
       if (!fn) return;
       try { fn(root); } catch (err) { console.error(`[oka] ${root.dataset.screen} failed:`, err); }
     });
+    // TESTING ONLY — the staff order lookup, when the theme setting turns it on.
+    const tl = $('[data-test-lookup]');
+    if (tl) testLookup(tl);
     // Remember the latest order for the WhatsApp greeting.
     const firstOrder = $('[data-open-order]');
     if (firstOrder) O.store.set('oka.lastOrder', firstOrder.dataset.openOrder);

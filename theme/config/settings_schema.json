@@ -165,6 +165,17 @@
         "id": "proxy_path",
         "label": "App proxy path",
         "placeholder": "/apps/oka"
+      },
+      {
+        "type": "header",
+        "content": "TESTING ONLY — remove before publishing"
+      },
+      {
+        "type": "checkbox",
+        "id": "test_panel",
+        "label": "Order lookup panel (staff testing)",
+        "info": "Adds a panel to the Orders page that opens any customer's real orders by phone, with live J&T tracking, through the order service's test sign-in. It needs the service's TEST_LOGIN_KEY and only works on a non-production server. Never turn this on in a published theme.",
+        "default": false
       }
     ]
   }
