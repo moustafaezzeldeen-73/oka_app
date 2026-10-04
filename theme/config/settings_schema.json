@@ -173,9 +173,15 @@
       {
         "type": "checkbox",
         "id": "test_panel",
-        "label": "Order lookup panel (staff testing)",
-        "info": "Adds a panel to the Orders page that opens any customer's real orders by phone, with live J&T tracking, through the order service's test sign-in. It needs the service's TEST_LOGIN_KEY and only works on a non-production server. Never turn this on in a published theme.",
+        "label": "J&T lookup panel (staff testing)",
+        "info": "Adds a panel to the Orders page that finds a customer's J&T shipments by phone, with the live scan history and the courier's Call / WhatsApp, straight from OKA's J&T connector on GCP. The tester types the connector token. Never turn this on in a published theme.",
         "default": false
+      },
+      {
+        "type": "text",
+        "id": "test_connector_url",
+        "label": "J&T connector address (staff testing)",
+        "info": "The GCP connector's base URL, e.g. https://jt-mcp-server-xxxx.run.app — prefills the lookup panel. Not secret; the token is never stored in the theme."
       }
     ]
   }

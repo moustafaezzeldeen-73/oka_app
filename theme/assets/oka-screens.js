@@ -1787,13 +1787,16 @@
   }
 
   /* ════════════════════════════════════════════════════════════════════
-   * TESTING ONLY — staff order lookup (snippets/test-lookup.liquid).
-   * REMOVE BEFORE PUBLISHING, with the snippet and the `test_panel` setting.
+   * TESTING ONLY — staff J&T lookup (snippets/test-lookup.liquid).
+   * REMOVE BEFORE PUBLISHING, with the snippet, its render line in
+   * sections/oka-orders.liquid and the test_* settings.
    *
-   * Signs in to the order service as the customer with that phone (its
-   * key-gated, non-production test sign-in) and draws their real orders with
-   * the live courier data — the same /customer/orders the app reads. The key
-   * lives only in this tab's sessionStorage; the session token only in memory.
+   * Talks straight to OKA's J&T connector on GCP (jt-mcp-server) over MCP
+   * (JSON-RPC tools/call, x-api-key). It lists the shipments J&T created in
+   * the chosen window (7-day pages, J&T's limit), keeps the ones whose
+   * receiver phone matches, then pulls their scan history: status, timeline
+   * and the courier's Call / WhatsApp. The token is typed by the tester and
+   * kept in this tab's sessionStorage only.
    * ════════════════════════════════════════════════════════════════════ */
   function testLookup(panel) {
     const results = $('[data-tl-results]');
@@ -1803,102 +1806,201 @@
     let data = null;
     let open = null;
 
-    field('server').value = O.store.get('oka.test.server', '') || '';
-    field('key').value = O.store.sget('oka.test.key', '') || '';
+    field('server').value = O.store.get('oka.test.connector', '') || panel.dataset.defaultUrl || '';
+    field('key').value = O.store.sget('oka.test.token', '') || '';
 
     const showError = (msg) => { errEl.hidden = !msg; errEl.textContent = msg || ''; };
+    const digits = (v) => String(v ?? '').replace(/\D/g, '');
+    const last10 = (v) => digits(v).slice(-10);
 
-    async function call(base, path, { token, body } = {}) {
+    let rpcId = 0;
+    let sessionId = null;
+    async function rpc(url, token, method, params, notify) {
       let res;
       try {
-        res = await fetch(base + path, {
-          method: body ? 'POST' : 'GET',
-          headers: { Accept: 'application/json', ...(body ? { 'Content-Type': 'application/json' } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-          body: body ? JSON.stringify(body) : undefined,
+        res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json, text/event-stream',
+            'x-api-key': token,
+            ...(sessionId ? { 'Mcp-Session-Id': sessionId } : {}),
+          },
+          body: JSON.stringify(notify ? { jsonrpc: '2.0', method, params } : { jsonrpc: '2.0', id: ++rpcId, method, params }),
         });
       } catch (e) {
-        throw new Error(`Couldn't reach ${base}. Is the server running, and is ALLOWED_ORIGIN=${location.origin} in server/.env?`);
+        throw new Error(`Couldn't reach ${url}. Check the address, and that the connector allows requests from ${location.origin} (CORS).`);
       }
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
-      return json;
+      const text = await res.text();
+      if (res.status === 401 || res.status === 403) throw new Error('The connector rejected the token.');
+      if (!res.ok) { const e = new Error(`Connector HTTP ${res.status}: ${text.slice(0, 160)}`); e.status = res.status; e.body = text; throw e; }
+      const sid = res.headers.get('mcp-session-id');
+      if (sid) sessionId = sid;
+      if (notify) return null;
+      const payload = text.trimStart().startsWith('{') ? text
+        : text.split('\n').filter((l) => l.startsWith('data:')).map((l) => l.slice(5).trim()).join('');
+      const msg = JSON.parse(payload);
+      if (msg.error) throw new Error(`Connector: ${msg.error.message || 'request failed'}`);
+      return msg.result;
+    }
+    // Stateless servers answer tools/call directly; a stateful one wants an
+    // initialize first — done once, on the first refusal that mentions a session.
+    async function tool(url, token, name, args) {
+      let result;
+      try {
+        result = await rpc(url, token, 'tools/call', { name, arguments: args });
+      } catch (err) {
+        if (!err.status || !/session|initiali/i.test(err.body || '')) throw err;
+        sessionId = null;
+        await rpc(url, token, 'initialize', { protocolVersion: '2025-03-26', capabilities: {}, clientInfo: { name: 'oka-theme-test', version: '1' } });
+        await rpc(url, token, 'notifications/initialized', {}, true);
+        result = await rpc(url, token, 'tools/call', { name, arguments: args });
+      }
+      const body = (result?.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('');
+      if (result?.isError) throw new Error(body.slice(0, 200) || `${name} failed`);
+      const json = JSON.parse(body);
+      if (json.code != null && String(json.code) !== '1') throw new Error(`J&T: ${json.msg || 'request failed'} (code ${json.code})`);
+      return json.data ?? [];
+    }
+
+    const pad = (n) => String(n).padStart(2, '0');
+    const jtDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+
+    async function shipmentsFor(url, token, phone, days) {
+      const end = new Date();
+      const windows = [];
+      for (let back = 0; back < days; back += 7) {
+        const to = new Date(end.getTime() - back * 864e5);
+        const from = new Date(to.getTime() - Math.min(7, days - back) * 864e5 + 1000);
+        windows.push([from, to]);
+      }
+      const want = last10(phone);
+      const found = [];
+      for (const [from, to] of windows) {
+        for (let page = 1; page <= 20; page += 1) {
+          const rows = await tool(url, token, 'list_deliveries', { command: 3, startDate: jtDate(from), endDate: jtDate(to), page, pageSize: 100 });
+          const list = Array.isArray(rows) ? rows : rows.records || rows.list || [];
+          list.forEach((r) => { if (last10(r.receiver?.mobile) === want || last10(r.receiver?.phone) === want) found.push(r); });
+          if (list.length < 100) break;
+        }
+      }
+      const seen = new Set();
+      return found.filter((r) => (seen.has(r.billCode) ? false : seen.add(r.billCode)))
+        .sort((x, y) => String(y.createOrderTime).localeCompare(String(x.createOrderTime)));
+    }
+
+    const clean = (desc) => String(desc || '')
+      .replace(/\s*If there is any problem or complaint.*$/s, '')
+      .replace(/[【】]/g, ' ').replace(/\s+([,.，])/g, '$1').replace(/\s+/g, ' ').trim();
+
+    function shape(r, scans) {
+      const sorted = [...(scans || [])].sort((x, y) => String(y.scanTime).localeCompare(String(x.scanTime)));
+      const codes = sorted.map((d) => Number(d.scanTypeCode));
+      let step = 1;
+      if (sorted.length) step = 2;
+      if (codes.includes(100)) step = 3;
+      let courier = null;
+      let courierPhone = null;
+      for (const d of sorted) {
+        const m = /courier\s+(.+?)\s*\((\d{8,})\)/i.exec(d.desc || '');
+        if (m) { courier = m[1].replace(/\s+/g, ' '); courierPhone = m[2]; break; }
+      }
+      const latest = sorted[0];
+      const cancelled = Number(r.orderStatus) === 104;
+      const problem = sorted.find((d) => /problem|return|reject|refus|fail/i.test(`${d.scanType} ${d.desc}`) && Number(d.scanTypeCode) !== 100 && !/If there is any problem/i.test(d.desc));
+      return {
+        name: r.txlogisticId?.startsWith('SHOPIFY') ? `#${r.txlogisticId.slice(7)}` : (r.txlogisticId || r.billCode),
+        awb: r.billCode,
+        cod: r.itemsValue,
+        receiver: r.receiver || {},
+        created: r.createOrderTime,
+        cancelled,
+        step,
+        stateLabel: cancelled ? L('Cancelled', 'ملغي') : step === 3 ? L('Delivered', 'تم التوصيل') : latest ? latest.scanType : L('AWB issued — waiting for pickup', 'البوليصة اتعملت — مستنية المندوب'),
+        updates: sorted.map((d, i) => ({ text: clean(d.desc), time: d.scanTime, done: i === 0 })),
+        courier,
+        courierPhone,
+        actionNeeded: problem && problem === latest ? clean(problem.desc) : null,
+        signature: sorted.find((d) => d.sigPicUrl)?.sigPicUrl || null,
+      };
     }
 
     function orderDetail(o) {
-      const step = o.step ?? 0;
-      const updates = o.updates || [];
       return `<div class="test-detail">
-        <div class="items" style="padding:0 0 12px">${(o.items || []).map((it) => `
-          <div class="item-row">
-            <div class="item-img">${img(it.image)}</div>
-            <div style="flex:1;min-width:0"><div class="item-title">${esc(it.title)}</div><div class="item-qty">${esc(`${num(it.quantity)} × ${fmtPrice(it.originalPrice ?? it.price ?? 0)}`)}</div></div>
-          </div>`).join('')}</div>
-        <div class="arrives-title" style="font-size:16px">${esc(o.stateLabel || (o.cancelled ? L('Cancelled', 'ملغي') : L(steps[step][0], steps[step][1])))}</div>
+        <div class="arrives-title" style="font-size:16px">${esc(o.stateLabel)}</div>
         <div class="steps" style="padding:14px 0 16px">${steps.map((s, i) => `
-          <div class="step-col${i <= step ? ' done' : ''}${i === step ? ' current' : ''}"><div class="step-bar"></div><div class="step-txt">${esc(L(s[0], s[1]))}</div></div>`).join('')}</div>
-        ${updates.length ? `<div class="updates" style="margin:0">${updates.map((u) => `
-          <div class="update-row"><span class="update-dot${u.done ? ' done' : ''}"></span><div style="flex:1"><div class="update-txt">${esc(u.text)}</div><div class="update-time">${esc(u.time)}</div></div></div>`).join('')}</div>`
-          : `<div class="awaiting" style="margin:0">${esc(o.hasAwb ? L('No courier scans yet for this shipment.', 'لسه مفيش تحديثات من شركة الشحن.') : L('No AWB issued yet.', 'لسه ما اتعملش بوليصة شحن.'))}</div>`}
-        ${data.shippingError ? `<div class="ship-err" style="margin:8px 0 0">${esc(`Courier error: ${data.shippingError}`)}</div>` : ''}
+          <div class="step-col${i <= o.step ? ' done' : ''}${i === o.step ? ' current' : ''}"><div class="step-bar"></div><div class="step-txt">${esc(L(s[0], s[1]))}</div></div>`).join('')}</div>
+        ${o.updates.length ? `<div class="updates" style="margin:0">${o.updates.map((u) => `
+          <div class="update-row"><span class="update-dot${u.done ? ' done' : ''}"></span><div style="flex:1"><div class="update-txt">${esc(u.text)}</div><div class="update-time nums">${esc(u.time)}</div></div></div>`).join('')}</div>`
+          : `<div class="awaiting" style="margin:0">${esc(L('No courier scans yet for this shipment.', 'لسه مفيش تحديثات من شركة الشحن.'))}</div>`}
         ${o.courier ? `<div class="courier" style="margin:14px 0 0">
-          <div class="courier-label">${esc(o.carrier === 'jt' ? L('J&T courier', 'مندوب J&T') : L('Delivery courier', 'مندوب التوصيل'))}</div>
+          <div class="courier-label">${esc(L('J&T courier', 'مندوب J&T'))}</div>
           <div class="courier-name">${esc(o.courier)}</div>
           ${o.courierPhone ? `<div class="courier-phone"><span class="nums">${esc(o.courierPhone)}</span></div>
           <div class="courier-btns">
-            <a class="courier-btn call" href="tel:${esc(String(o.courierPhone).replace(/\s/g, ''))}">${esc(L('Call', 'اتصال'))}</a>
+            <a class="courier-btn call" href="tel:${esc(o.courierPhone)}">${esc(L('Call', 'اتصال'))}</a>
             <a class="courier-btn wa" target="_blank" rel="noopener" href="https://wa.me/${esc(waNumber(o.courierPhone))}">${esc(L('WhatsApp', 'واتساب'))}</a>
           </div>` : ''}
         </div>` : ''}
         ${o.actionNeeded ? `<div class="action-needed" style="margin:14px 0 0"><b>${esc(L('Action needed', 'مطلوب إجراء'))}</b><span>${esc(o.actionNeeded)}</span></div>` : ''}
         <div class="test-meta">
-          ${o.trackingNumber ? `<div>AWB: <span class="nums">${esc(o.trackingNumber)}</span>${o.carrier ? ` · ${esc(o.carrier)}` : ''}</div>` : ''}
-          <div>Shopify: ${esc(o.fulfillmentStatus || '')} · ${esc(o.financialStatus || '')}</div>
-          ${o.shipTo ? `<div>${esc([o.shipTo.name, o.shipTo.street, o.shipTo.city].filter(Boolean).join(' — '))}</div>` : ''}
+          <div>AWB: <span class="nums" data-copy="${esc(o.awb)}">${esc(o.awb)}</span> · J&amp;T</div>
+          <div>${esc([o.receiver.name, o.receiver.street, o.receiver.city, o.receiver.prov].filter(Boolean).join(' — '))}</div>
+          <div>COD <span class="nums">${esc(String(o.cod ?? ''))}</span> EGP · created <span class="nums">${esc(String(o.created || '').replace('T', ' '))}</span></div>
+          ${o.signature ? `<div><a href="${esc(o.signature)}" target="_blank" rel="noopener">Delivery photo</a></div>` : ''}
         </div>
       </div>`;
     }
 
     function render() {
       if (!data) { results.innerHTML = ''; return; }
-      const orders = data.orders || [];
+      const orders = data.orders;
       results.innerHTML = `
-        <div class="test-who">${esc(data.customer?.name || '')} · <span class="nums">${esc(data.customer?.phone || '')}</span> · ${esc(`${orders.length} orders`)}</div>
-        ${orders.length ? '' : `<div class="empty">${esc(L('No orders for this customer.', 'مفيش طلبات للعميل ده.'))}</div>`}
+        <div class="test-who"><span class="nums">${esc(data.phone)}</span> · ${esc(`${orders.length} J&T shipments in the last ${data.days} days`)}</div>
+        ${orders.length ? '' : `<div class="empty">${esc(L('No J&T shipments for this phone in that window.', 'مفيش شحنات J&T للرقم ده في الفترة دي.'))}</div>`}
         ${orders.map((o) => `
           <div class="test-order">
-            <button class="order-card" data-tl-open="${esc(o.name)}" style="width:calc(100% - 44px);text-align:start">
-              <div class="order-thumb">${img(o.items?.[0]?.image)}</div>
+            <button class="order-card" data-tl-open="${esc(o.awb)}" style="width:calc(100% - 44px);text-align:start">
               <div style="flex:1;min-width:0">
-                <div class="order-top"><span class="order-name">${esc(o.name)}</span><span class="order-total">${esc(fmtPrice(Math.round(o.total ?? 0)))}</span></div>
-                <div class="order-meta">${esc((o.items || []).map((i) => i.title).join(' · '))}</div>
-                <div class="order-state${o.cancelled ? ' red' : o.step >= 3 ? ' green' : ''}">${esc(o.cancelled ? L('Cancelled', 'ملغي') : o.stateLabel || L(steps[o.step ?? 0][0], steps[o.step ?? 0][1]))}</div>
+                <div class="order-top"><span class="order-name">${esc(o.name)}</span><span class="order-total nums">${esc(String(o.cod ?? ''))} EGP</span></div>
+                <div class="order-meta">${esc(o.receiver.name || '')} · <span class="nums">${esc(o.awb)}</span></div>
+                <div class="order-state${o.cancelled ? ' red' : o.step >= 3 ? ' green' : ''}">${esc(o.stateLabel)}</div>
               </div>
             </button>
-            ${open === o.name ? orderDetail(o) : ''}
+            ${open === o.awb ? orderDetail(o) : ''}
           </div>`).join('')}`;
     }
 
     async function lookUp() {
-      const base = field('server').value.trim().replace(/\/+$/, '');
-      const key = field('key').value.trim();
+      const base = field('server').value.trim().replace(/\/+$/, '').replace(/\/mcp$/, '');
+      const token = field('key').value.trim();
       const phone = field('phone').value.trim();
-      if (!base || !key || !phone) return showError('Fill in the server address, the test key and a phone number.');
-      O.store.set('oka.test.server', base);
-      O.store.sset('oka.test.key', key);
+      const days = Number(field('days').value) || 30;
+      if (!base || !token || !phone) return showError('Fill in the connector address, its token and a phone number.');
+      if (last10(phone).length < 10) return showError('Enter the full mobile number, e.g. 01012345678.');
+      O.store.set('oka.test.connector', base);
+      O.store.sset('oka.test.token', token);
       showError('');
       const go = field('go');
       go.innerHTML = spinner();
+      const url = `${base}/mcp`;
       try {
-        const session = await call(base, '/auth/test-login', { body: { identifier: phone, key } });
-        data = await call(base, `/customer/orders?lang=${O.lang()}`, { token: session.token });
-        open = data.orders?.[0]?.name ?? null;
+        const rows = await shipmentsFor(url, token, phone, days);
+        const scans = new Map();
+        for (let i = 0; i < rows.length; i += 30) {
+          const batch = rows.slice(i, i + 30).map((r) => r.billCode);
+          const traces = await tool(url, token, 'track_delivery', { billCodes: batch });
+          (traces || []).forEach((t) => scans.set(t.billCode, t.details || []));
+        }
+        data = { phone, days, orders: rows.map((r) => shape(r, scans.get(r.billCode))) };
+        open = data.orders[0]?.awb ?? null;
         render();
       } catch (err) {
         data = null;
         render();
         showError(errText(err));
       } finally {
-        go.textContent = 'Show orders';
+        go.textContent = 'Show shipments';
       }
     }
 

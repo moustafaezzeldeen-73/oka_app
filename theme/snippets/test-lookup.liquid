@@ -1,28 +1,35 @@
 {%- comment -%}
   ─────────────────────────────────────────────────────────────────────────
-   TESTING ONLY — staff order lookup.  REMOVE BEFORE PUBLISHING.
+   TESTING ONLY — staff J&T lookup.  REMOVE BEFORE PUBLISHING.
   ─────────────────────────────────────────────────────────────────────────
-  Opens any customer's real orders by phone, with the live J&T timeline and
-  the courier's Call / WhatsApp buttons, so the shipping connector can be
-  checked on real orders from the website.
-
-  It uses the order service's test sign-in (server/auth/testLogin.js), which
-  works only with TEST_LOGIN_KEY and never on a production server. Shown only
-  when Theme settings → OKA order service → "Order lookup panel" is on.
+  Finds a customer's J&T shipments by phone, with the live scan history and
+  the courier's Call / WhatsApp buttons, straight from OKA's J&T connector on
+  GCP (jt-mcp-server) — to check the shipping connector on real orders from
+  the website. The tester types the connector token; it stays in the tab's
+  sessionStorage only. Shown only when Theme settings → OKA order service →
+  "J&T lookup panel" is on.
 
   To remove: delete this file, its render line in sections/oka-orders.liquid,
-  the `test_panel` setting, and testLookup() in assets/oka-screens.js.
+  the test_panel / test_connector_url settings, and testLookup() in
+  assets/oka-screens.js.
 {%- endcomment -%}
-<div class="test-panel" data-test-lookup>
+<div class="test-panel" data-test-lookup data-default-url="{{ settings.test_connector_url | escape }}">
   <div class="test-badge">TESTING — staff only</div>
-  <label class="field-label">Order service address</label>
-  <input class="field-input" data-tl-server type="url" dir="ltr" autocomplete="off" placeholder="https://….trycloudflare.com">
-  <label class="field-label">Test key</label>
-  <input class="field-input" data-tl-key type="password" dir="ltr" autocomplete="off" placeholder="TEST_LOGIN_KEY">
+  <label class="field-label">J&amp;T connector address</label>
+  <input class="field-input" data-tl-server type="url" dir="ltr" autocomplete="off" placeholder="https://jt-mcp-server-….run.app">
+  <label class="field-label">Connector token</label>
+  <input class="field-input" data-tl-key type="password" dir="ltr" autocomplete="off" placeholder="x-api-key">
   <label class="field-label">Customer phone</label>
   <input class="field-input" data-tl-phone type="tel" dir="ltr" autocomplete="off" placeholder="01X XXXX XXXX">
+  <label class="field-label">Look back</label>
+  <select class="field-input" data-tl-days>
+    <option value="7">7 days</option>
+    <option value="14">14 days</option>
+    <option value="30" selected>30 days</option>
+    <option value="60">60 days</option>
+  </select>
   <div class="test-actions">
-    <button class="cta bold" data-tl-go>Show orders</button>
+    <button class="cta bold" data-tl-go>Show shipments</button>
     <button class="outline-btn" data-tl-clear>Clear</button>
   </div>
   <div class="error-txt" data-tl-error hidden></div>
