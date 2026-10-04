@@ -193,8 +193,8 @@
       {
         "type": "checkbox",
         "id": "test_panel",
-        "label": "J&T AWB lookup panel (staff testing)",
-        "info": "Adds a box to the Orders page that tracks any J&T AWB through the tracking service above. Turn it off before publishing.",
+        "label": "J&T lookup panel (staff testing)",
+        "info": "Adds a box to the Orders page that finds a customer's J&T shipments by phone, or tracks AWB numbers, through the tracking service above. Turn it off before publishing.",
         "default": false
       }
     ]

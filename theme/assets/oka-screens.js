@@ -803,37 +803,63 @@
     111: ['Returned to OKA', 'رجعت لـ OKA'],
   };
   let jtRpcId = 0;
-  async function jtTrack(billCodes) {
+  async function jtCall(name, args) {
     const cfg = CFG.jt;
-    if (!cfg || !billCodes.length) return new Map();
     const url = `${String(cfg.url).replace(/\/+$/, '').replace(/\/mcp$/, '')}/mcp`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream', 'x-api-key': cfg.key },
+      body: JSON.stringify({ jsonrpc: '2.0', id: ++jtRpcId, method: 'tools/call', params: { name, arguments: args } }),
+    });
+    const text = await res.text();
+    if (res.status === 401) throw new Error('The tracking service rejected the key.');
+    if (!res.ok) throw new Error(`Tracking service HTTP ${res.status}`);
+    const payload = text.trimStart().startsWith('{') ? text
+      : text.split('\n').filter((l) => l.startsWith('data:')).map((l) => l.slice(5).trim()).join('');
+    const msg = JSON.parse(payload);
+    if (msg.error) throw new Error(msg.error.message || 'tracking failed');
+    const body = (msg.result?.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('');
+    if (msg.result?.isError) throw new Error(body.slice(0, 200) || 'tracking failed');
+    const json = JSON.parse(body);
+    if (json.code != null && String(json.code) !== '1') throw new Error(`J&T: ${json.msg || 'request failed'}`);
+    return json;
+  }
+  /** AWB → J&T scans (track_delivery, 30 per call). */
+  async function jtTrack(billCodes) {
     const out = new Map();
+    if (!CFG.jt || !billCodes.length) return out;
     for (let i = 0; i < billCodes.length; i += 30) {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream', 'x-api-key': cfg.key },
-        body: JSON.stringify({ jsonrpc: '2.0', id: ++jtRpcId, method: 'tools/call', params: { name: 'track_delivery', arguments: { billCodes: billCodes.slice(i, i + 30) } } }),
-      });
-      const text = await res.text();
-      if (res.status === 401) throw new Error('The tracking service rejected the key.');
-      if (!res.ok) throw new Error(`Tracking service HTTP ${res.status}`);
-      const payload = text.trimStart().startsWith('{') ? text
-        : text.split('\n').filter((l) => l.startsWith('data:')).map((l) => l.slice(5).trim()).join('');
-      const msg = JSON.parse(payload);
-      if (msg.error) throw new Error(msg.error.message || 'tracking failed');
-      const body = (msg.result?.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('');
-      if (msg.result?.isError) throw new Error(body.slice(0, 200) || 'tracking failed');
-      const json = JSON.parse(body);
-      if (json.code != null && String(json.code) !== '1') throw new Error(`J&T: ${json.msg || 'request failed'}`);
+      const json = await jtCall('track_delivery', { billCodes: billCodes.slice(i, i + 30) });
       (json.data || []).forEach((t) => out.set(t.billCode, t.details || []));
     }
     return out;
   }
+  /** Phone → that receiver's shipments (track_by_phone), scans in track_delivery's shape. */
+  const JT_TYPE_CODE = { 'Pickup scan': 10, 'Sending scan': 50, 'Arrival Scan': 92, 'Delivery scan': 94, 'Signing scan': 100, 'Abnormal parcels scan': 110, 'Return Sign': 111 };
+  async function jtByPhone(phone, lookbackDays) {
+    const json = await jtCall('track_by_phone', { phone, lookbackDays });
+    return (json.shipments || []).map((sh) => ({
+      awb: sh.billCode,
+      createdAt: sh.createdAt,
+      status: sh.status,
+      scans: (sh.scans || []).map((x) => ({ scanTime: x.time, scanType: x.type, desc: x.description, scanTypeCode: JT_TYPE_CODE[x.type] })),
+    }));
+  }
+  const JT_STATUS = {
+    not_picked_up: ['AWB issued — waiting for the courier to pick it up', 'البوليصة اتعملت — مستنية المندوب يستلمها'],
+    in_transit: ['On the way', 'في الطريق'],
+    out_for_delivery: ['Out for delivery', 'خرجت للتوصيل مع المندوب'],
+    failed_attempt: ['Delivery attempt failed', 'محاولة التوصيل منجحتش'],
+    returning: ['On its way back to OKA', 'راجعة لـ OKA'],
+    returned: ['Returned to OKA', 'رجعت لـ OKA'],
+    delivered: ['Delivered', 'اتسلمت'],
+    cancelled: ['Cancelled', 'ملغية'],
+  };
   const jtText = (desc) => String(desc || '')
     .replace(/\s*If there is any problem or complaint.*$/s, '')
     .replace(/[【】]/g, ' ').replace(/\s+([,.，])/g, '$1').replace(/\s+/g, ' ').trim();
   /** J&T scans → { step, stateLabel, updates, courier, courierPhone, actionNeeded }. */
-  function jtShape(scans, baseStep = 2) {
+  function jtShape(scans, baseStep = 2, status = null) {
     const sorted = [...(scans || [])].sort((x, y) => String(y.scanTime).localeCompare(String(x.scanTime)));
     const latest = sorted[0];
     const code = Number(latest?.scanTypeCode);
@@ -846,8 +872,8 @@
     const st = JT_STATE[code];
     return {
       carrier: 'jt',
-      step: code === 100 ? 3 : sorted.length ? Math.max(baseStep, 2) : baseStep,
-      stateLabel: latest ? (st ? L(st[0], st[1]) : latest.scanType) : null,
+      step: code === 100 || status === 'delivered' ? 3 : sorted.length ? Math.max(baseStep, 2) : baseStep,
+      stateLabel: JT_STATUS[status] ? L(...JT_STATUS[status]) : latest ? (st ? L(st[0], st[1]) : latest.scanType) : null,
       updates: sorted.map((d, i) => ({ text: jtText(d.desc), time: d.scanTime, done: i === 0 })),
       // The courier card matters while the parcel is with them, not once it's back.
       courier: code === 111 ? null : courier,
@@ -1877,8 +1903,9 @@
    * TESTING ONLY — staff J&T AWB lookup (snippets/test-lookup.liquid).
    * REMOVE BEFORE PUBLISHING, with the snippet, its render line in
    * sections/oka-orders.liquid and the test_panel setting.
-   * Tracks any AWB through the website tracking service and shows it the
-   * way a customer's order shows it.
+   * Finds a customer's shipments by phone (track_by_phone) or tracks AWBs
+   * (track_delivery) through the website tracking service, and shows them
+   * the way a customer's order shows them.
    * ════════════════════════════════════════════════════════════════════ */
   function testLookup(panel) {
     const results = $('[data-tl-results]');
@@ -1917,7 +1944,7 @@
         <div class="test-order">
           <button class="order-card" data-tl-open="${esc(o.awb)}" style="width:calc(100% - 44px);text-align:start">
             <div style="flex:1;min-width:0">
-              <div class="order-top"><span class="order-name nums">${esc(o.awb)}</span></div>
+              <div class="order-top"><span class="order-name nums">${esc(o.awb)}</span>${o.createdAt ? `<span class="order-total nums" style="font-weight:500">${esc(String(o.createdAt).slice(0, 10))}</span>` : ''}</div>
               <div class="order-state${o.step >= 3 ? ' green' : ''}">${esc(o.stateLabel || L('No scans yet', 'مفيش تحديثات لسه'))}</div>
             </div>
           </button>
@@ -1926,15 +1953,23 @@
     }
 
     async function lookUp() {
-      const awbs = [...new Set((field('awbs').value.toUpperCase().match(/[A-Z]{2,4}\d{6,}/g) || []))];
+      const raw = field('awbs').value.trim();
+      const awbs = [...new Set((raw.toUpperCase().match(/[A-Z]{2,4}\d{6,}/g) || []))];
+      const phone = !awbs.length && raw.replace(/\D/g, '').length >= 10 ? raw : null;
       if (!CFG.jt) return showError('Fill in Theme settings → Live J&T tracking first.');
-      if (!awbs.length) return showError('Enter one or more J&T AWB numbers, e.g. JEG000547822212.');
+      if (!awbs.length && !phone) return showError('Enter a customer mobile (01012345678) or J&T AWB numbers (JEG…).');
       showError('');
       const go = field('go');
       go.innerHTML = spinner();
       try {
-        const scans = await jtTrack(awbs);
-        data = awbs.map((awb) => ({ awb, ...jtShape(scans.get(awb), 1) }));
+        if (phone) {
+          const found = await jtByPhone(phone, Number(field('days').value) || 30);
+          data = found.map((sh) => ({ awb: sh.awb, createdAt: sh.createdAt, ...jtShape(sh.scans, 1, sh.status) }));
+          if (!data.length) showError(`No J&T shipments for ${phone} in that window.`);
+        } else {
+          const scans = await jtTrack(awbs);
+          data = awbs.map((awb) => ({ awb, ...jtShape(scans.get(awb), 1) }));
+        }
         open = data[0]?.awb ?? null;
         render();
       } catch (err) {

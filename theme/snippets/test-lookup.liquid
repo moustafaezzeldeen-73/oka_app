@@ -1,8 +1,9 @@
 {%- comment -%}
   ─────────────────────────────────────────────────────────────────────────
-   TESTING ONLY — staff J&T AWB lookup.  REMOVE BEFORE PUBLISHING.
+   TESTING ONLY — staff J&T lookup.  REMOVE BEFORE PUBLISHING.
   ─────────────────────────────────────────────────────────────────────────
-  Tracks any J&T AWB through the website tracking service (Theme settings →
+  Finds a customer's J&T shipments by phone, or tracks AWB numbers, through
+  the website tracking service (Theme settings →
   Live J&T tracking): status, scan history and the courier's Call / WhatsApp,
   the same view a customer's order gets. Shown only when Theme settings →
   "J&T AWB lookup panel" is on.
@@ -15,8 +16,15 @@
   {%- if settings.jt_tracking_url == blank or settings.jt_tracking_key == blank -%}
     <div class="error-txt">Fill in Theme settings → Live J&amp;T tracking first.</div>
   {%- endif -%}
-  <label class="field-label">J&amp;T AWB numbers</label>
-  <textarea class="field-input" data-tl-awbs dir="ltr" rows="2" autocomplete="off" placeholder="JEG000547822212, JEG…"></textarea>
+  <label class="field-label">Customer phone or J&amp;T AWB numbers</label>
+  <textarea class="field-input" data-tl-awbs dir="ltr" rows="2" autocomplete="off" placeholder="01012345678 — or — JEG000547822212, JEG…"></textarea>
+  <label class="field-label">Look back (phone search)</label>
+  <select class="field-input" data-tl-days>
+    <option value="7">7 days</option>
+    <option value="14">14 days</option>
+    <option value="30" selected>30 days</option>
+    <option value="60">60 days</option>
+  </select>
   <div class="test-actions">
     <button class="cta bold" data-tl-go>Track</button>
     <button class="outline-btn" data-tl-clear>Clear</button>
