@@ -6,8 +6,6 @@
 <div class="screen fade-in" data-screen="orders">
   <div data-orders-list>
     <h1 class="big-title">{% render 'bi', en: 'Orders', ar: 'طلباتي' %}</h1>
-    {%- comment -%} TESTING ONLY — the staff order-lookup panel. Remove with snippets/test-lookup.liquid before launch. {%- endcomment -%}
-    {%- if settings.test_panel -%}{% render 'test-lookup' %}{%- endif -%}
     {%- if customer -%}
       {%- paginate customer.orders by 20 -%}
         {%- if customer.orders.size == 0 -%}
@@ -56,6 +54,8 @@
         {% render 'bi', en: 'Sign in to see your real orders and track their delivery.', ar: 'سجّل دخولك عشان تشوف طلباتك وتتابع الشحنة.' %}
       </a>
     {%- endif -%}
+    {%- comment -%} TESTING ONLY — the staff J&T lookup, after the customer's own orders. Remove with snippets/test-lookup.liquid before launch. {%- endcomment -%}
+    {%- if settings.test_panel -%}<div style="height:18px"></div>{% render 'test-lookup' %}{%- endif -%}
     <div style="height:26px"></div>
   </div>
 
