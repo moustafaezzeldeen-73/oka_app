@@ -2,7 +2,9 @@
   OrdersScreen.js, the detail view. `order` is a Shopify order.
 
   Without the order service, progress comes from Shopify's fulfillment status
-  and tracking from the fulfillment's tracking number. With it (Theme settings
+  and tracking from the fulfillment's tracking number — and, when Theme
+  settings → Live J&T tracking is filled in, the AWB's live J&T scans and the
+  courier's Call / WhatsApp, read straight from the website tracking service. With it (Theme settings
   → OKA order service), assets/oka-screens.js overlays the live J&T/Bosta
   timeline, the courier's name and number, and enables Edit/Cancel — the
   same /customer/orders the app calls.
@@ -43,7 +45,7 @@
   endif
 -%}
 <div class="order-detail" data-order-detail="{{ o.name | escape }}" data-step="{{ step }}" data-fulfilled="{{ is_fulfilled }}"
-  data-cancelled="{{ o.cancelled }}" data-has-awb="{% if tracking_number != blank %}true{% else %}false{% endif %}"
+  data-cancelled="{{ o.cancelled }}" data-has-awb="{% if tracking_number != blank %}true{% else %}false{% endif %}" data-awb="{{ tracking_number | escape }}"
   data-province="{{ sa.province_code }}" data-lines='[{%- for li in o.line_items -%}{"variantId":{{ li.variant_id | json }},"quantity":{{ li.quantity }},"handle":{{ li.product.handle | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]'
   {% if standalone != true %}hidden{% endif %}>
 

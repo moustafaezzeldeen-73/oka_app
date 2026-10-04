@@ -87,6 +87,7 @@
         defaultLang: {{ settings.default_lang | json }},
         ageGate: {{ settings.age_gate | json }},
         proxy: {{ settings.proxy_path | strip | json }},
+        jt: {% if settings.jt_tracking_url != blank and settings.jt_tracking_key != blank %}{ url: {{ settings.jt_tracking_url | strip | json }}, key: {{ settings.jt_tracking_key | strip | json }} }{% else %}null{% endif %},
         whatsapp: {{ settings.whatsapp | strip | json }},
         minOrder: {{ settings.min_order | default: 0 }},
         tier: {{ settings.tier_threshold | default: 300 }},
