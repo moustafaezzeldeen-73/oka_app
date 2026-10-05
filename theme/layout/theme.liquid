@@ -107,7 +107,10 @@
           checkout: '/checkout',
           search: {{ routes.search_url | json }},
           collections: {{ routes.collections_url | json }},
-          login: {{ routes.account_login_url | json }},
+          // New customer accounts (one-time code / Sign in with Shop): the
+          // storefront route brings the customer back to this site after
+          // signing in, where afterSignIn resumes the page they came from.
+          login: {{ routes.storefront_login_url | default: routes.account_login_url | json }},
           logout: {{ routes.account_logout_url | json }},
           shopifyAccount: {{ routes.account_url | json }},
           shopifyAddresses: {{ routes.account_addresses_url | json }},

@@ -28,7 +28,7 @@
     <div class="section-title">{% render 'bi', en: 'How to earn', ar: 'إزاي تجمّع نقاط' %}</div>
     <div class="earn-list" data-earn></div>
   {%- else -%}
-    <a href="{{ routes.account_login_url }}" class="notice" data-sign-in="/pages/loyalty">{% render 'bi', en: 'Sign in to see your points.', ar: 'سجّل دخولك عشان تشوف نقاطك.' %}</a>
+    <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="notice" data-sign-in="/pages/loyalty">{% render 'bi', en: 'Sign in to see your points.', ar: 'سجّل دخولك عشان تشوف نقاطك.' %}</a>
   {%- endif -%}
   <div style="height:28px"></div>
 </div>

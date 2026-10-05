@@ -50,7 +50,7 @@
       <button type="submit" class="cta bold" style="margin-top:6px" data-save>{% render 'bi', en: 'Save address', ar: 'احفظ العنوان' %}</button>
     {%- endform -%}
   {%- else -%}
-    <a href="{{ routes.account_login_url }}" class="notice" data-sign-in="/pages/addresses?view=oka-add-address">{% render 'bi', en: 'Sign in to save an address on your account.', ar: 'سجّل دخولك عشان تحفظ عنوان على حسابك.' %}</a>
+    <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="notice" data-sign-in="/pages/addresses?view=oka-add-address">{% render 'bi', en: 'Sign in to save an address on your account.', ar: 'سجّل دخولك عشان تحفظ عنوان على حسابك.' %}</a>
   {%- endif -%}
 </div>
 {% schema %}{ "name": "Add address", "tag": "div" }{% endschema %}

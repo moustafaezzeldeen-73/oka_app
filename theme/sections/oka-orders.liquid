@@ -50,7 +50,7 @@
       {%- endpaginate -%}
     {%- else -%}
       <div class="empty" style="padding:60px 22px">{% render 'bi', en: 'No orders yet', ar: 'مفيش طلبات لسه' %}</div>
-      <a href="{{ routes.account_login_url }}" class="notice press s99" data-sign-in="/pages/orders">
+      <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="notice press s99" data-sign-in="/pages/orders">
         {% render 'bi', en: 'Sign in to see your real orders and track their delivery.', ar: 'سجّل دخولك عشان تشوف طلباتك وتتابع الشحنة.' %}
       </a>
     {%- endif -%}

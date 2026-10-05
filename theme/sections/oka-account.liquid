@@ -8,7 +8,7 @@
       {{ customer.name | default: customer.email | default: customer.phone }}
     </div>
   {%- else -%}
-    <a href="{{ routes.account_login_url }}" class="guest press s98" data-sign-in="/pages/account">
+    <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="guest press s98" data-sign-in="/pages/account">
       {% render 'bi', en: 'Sign in to see orders, points & saved addresses', ar: 'سجّل دخولك عشان تشوف طلباتك ونقاطك وعناوينك' %}
     </a>
   {%- endif -%}
@@ -27,7 +27,7 @@
     {%- if customer -%}
       <a href="{{ routes.account_logout_url }}" class="menu-row sign-out" data-sign-out>{% render 'bi', en: 'Sign out', ar: 'اخرج من حسابك' %}</a>
     {%- else -%}
-      <a href="{{ routes.account_login_url }}" class="menu-row sign-out" data-sign-in="/pages/account">{% render 'bi', en: 'Sign in', ar: 'سجّل دخول' %}</a>
+      <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="menu-row sign-out" data-sign-in="/pages/account">{% render 'bi', en: 'Sign in', ar: 'سجّل دخول' %}</a>
     {%- endif -%}
   </div>
   <div class="build-tag">OKA web {{ theme.name | default: '1.0.0' }}</div>

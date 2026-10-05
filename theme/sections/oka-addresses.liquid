@@ -37,7 +37,7 @@
       <a href="/pages/addresses?view=oka-add-address" class="outline-btn">{% render 'icon', name: 'plus', px: 16 %}{% render 'bi', en: 'Add new address', ar: 'ضيف عنوان جديد' %}</a>
     </div>
   {%- else -%}
-    <a href="{{ routes.account_login_url }}" class="notice" data-sign-in="/pages/addresses">{% render 'bi', en: 'Sign in to see your saved addresses.', ar: 'سجّل دخولك عشان تشوف عناوينك المحفوظة.' %}</a>
+    <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="notice" data-sign-in="/pages/addresses">{% render 'bi', en: 'Sign in to see your saved addresses.', ar: 'سجّل دخولك عشان تشوف عناوينك المحفوظة.' %}</a>
   {%- endif -%}
 </div>
 {% schema %}{ "name": "Addresses", "tag": "div" }{% endschema %}
