@@ -885,6 +885,53 @@
     };
   }
 
+  const TRACK_STEPS = [['Processing', 'بنراجعه'], ['Preparing to Ship', 'بيتجهز للشحن'], ['Shipped', 'اتشحن'], ['Delivered', 'وصل']];
+  /** Status, steps, scan timeline, courier card — one shipment's tracking (jtShape output). */
+  function trackingHtml(o) {
+    return `
+      <div class="arrives-title" style="font-size:16px">${esc(o.stateLabel || L('No scans yet', 'مفيش تحديثات لسه'))}</div>
+      <div class="steps" style="padding:14px 0 16px">${TRACK_STEPS.map((s, i) => `
+        <div class="step-col${i <= o.step ? ' done' : ''}${i === o.step ? ' current' : ''}"><div class="step-bar"></div><div class="step-txt">${esc(L(s[0], s[1]))}</div></div>`).join('')}</div>
+      ${o.updates.length ? `<div class="updates" style="margin:0">${o.updates.map((u) => `
+        <div class="update-row"><span class="update-dot${u.done ? ' done' : ''}"></span><div style="flex:1"><div class="update-txt">${esc(u.text)}</div><div class="update-time nums">${esc(u.time)}</div></div></div>`).join('')}</div>`
+        : `<div class="awaiting" style="margin:0">${esc(L('No courier scans for this shipment yet. Updates appear here once J&T picks it up.', 'لسه مفيش تحديثات من شركة الشحن. أول ما J&T تستلم الشحنة هتلاقي التحديثات هنا.'))}</div>`}
+      ${o.courier ? `<div class="courier" style="margin:14px 0 0">
+        <div class="courier-label">${esc(L('J&T courier', 'مندوب J&T'))}</div>
+        <div class="courier-name">${esc(o.courier)}</div>
+        ${o.courierPhone ? `<div class="courier-phone"><span class="nums">${esc(o.courierPhone)}</span></div>
+        <div class="courier-btns">
+          <a class="courier-btn call" href="tel:${esc(o.courierPhone)}">${esc(L('Call', 'كلّمه'))}</a>
+          <a class="courier-btn wa" target="_blank" rel="noopener" href="https://wa.me/${esc(waNumber(o.courierPhone))}">${esc(L('WhatsApp', 'واتساب'))}</a>
+        </div>` : ''}
+      </div>` : ''}
+      ${o.actionNeeded ? `<div class="action-needed" style="margin:14px 0 0"><b>${esc(L('Action needed', 'محتاجين منك حاجة'))}</b><span>${esc(o.actionNeeded)}</span></div>` : ''}
+      ${o.photo ? `<div class="test-meta"><a href="${esc(o.photo)}" target="_blank" rel="noopener">${esc(L('Delivery photo', 'صورة التسليم'))}</a></div>` : ''}`;
+  }
+
+  /* ── Track shipment (/pages/track?awb=…&order=…) ─────────────────────── */
+  function track(root) {
+    const awb = (qs('awb') || '').trim().toUpperCase();
+    const order = qs('order') || '';
+    $('[data-track-order]', root).textContent = order;
+    $('[data-track-awb]', root).textContent = awb ? `AWB ${awb}` : '';
+    const ext = $('[data-track-external]', root);
+    if (ext && awb) ext.href = ext.dataset.trackingTemplate.replace('{number}', encodeURIComponent(awb));
+    const body = $('[data-track-body]', root);
+    const fail = (en, ar) => { body.innerHTML = `<div class="awaiting" style="margin:20px 22px">${esc(L(en, ar))}</div>`; };
+    async function load() {
+      if (!awb) return fail('No shipment number was given.', 'مفيش رقم شحنة.');
+      if (!CFG.jt) return fail('Live tracking isn’t available right now.', 'التتبع المباشر مش متاح دلوقتي.');
+      try {
+        const scans = await jtTrack([awb]);
+        body.innerHTML = `<div class="test-detail track-detail">${trackingHtml({ awb, ...jtShape(scans.get(awb), 2) })}</div>`;
+      } catch (e) {
+        fail('We couldn’t reach J&T just now. Pull down to try again.', 'مقدرناش نوصل لـ J&T دلوقتي. اسحب لتحت وجرّب تاني.');
+      }
+    }
+    load();
+    onLang(load);
+  }
+
   function orders(root) {
     const list = $('[data-orders-list]', root);
     const details = $$('[data-order-detail]', root);
@@ -1912,7 +1959,6 @@
     const results = $('[data-tl-results]');
     const field = (k) => $(`[data-tl-${k}]`, panel);
     const errEl = field('error');
-    const steps = [['Processing', 'بنراجعه'], ['Preparing to Ship', 'بيتجهز للشحن'], ['Shipped', 'اتشحن'], ['Delivered', 'وصل']];
     let data = null;
     let open = null;
     const showError = (msg) => { errEl.hidden = !msg; errEl.textContent = msg || ''; };
@@ -1925,23 +1971,7 @@
             <div class="item-img">${img(it.image)}</div>
             <div style="flex:1;min-width:0"><div class="item-title">${esc(it.title)}</div><div class="item-qty">${esc([it.variant, `× ${num(it.quantity)}`].filter(Boolean).join(' · '))}</div></div>
           </div>`).join('')}</div>` : ''}
-        <div class="arrives-title" style="font-size:16px">${esc(o.stateLabel || L('No scans yet', 'مفيش تحديثات لسه'))}</div>
-        <div class="steps" style="padding:14px 0 16px">${steps.map((s, i) => `
-          <div class="step-col${i <= o.step ? ' done' : ''}${i === o.step ? ' current' : ''}"><div class="step-bar"></div><div class="step-txt">${esc(L(s[0], s[1]))}</div></div>`).join('')}</div>
-        ${o.updates.length ? `<div class="updates" style="margin:0">${o.updates.map((u) => `
-          <div class="update-row"><span class="update-dot${u.done ? ' done' : ''}"></span><div style="flex:1"><div class="update-txt">${esc(u.text)}</div><div class="update-time nums">${esc(u.time)}</div></div></div>`).join('')}</div>`
-          : `<div class="awaiting" style="margin:0">${esc(L('No courier scans for this AWB.', 'مفيش تحديثات من شركة الشحن للبوليصة دي.'))}</div>`}
-        ${o.courier ? `<div class="courier" style="margin:14px 0 0">
-          <div class="courier-label">${esc(L('J&T courier', 'مندوب J&T'))}</div>
-          <div class="courier-name">${esc(o.courier)}</div>
-          ${o.courierPhone ? `<div class="courier-phone"><span class="nums">${esc(o.courierPhone)}</span></div>
-          <div class="courier-btns">
-            <a class="courier-btn call" href="tel:${esc(o.courierPhone)}">${esc(L('Call', 'كلّمه'))}</a>
-            <a class="courier-btn wa" target="_blank" rel="noopener" href="https://wa.me/${esc(waNumber(o.courierPhone))}">${esc(L('WhatsApp', 'واتساب'))}</a>
-          </div>` : ''}
-        </div>` : ''}
-        ${o.actionNeeded ? `<div class="action-needed" style="margin:14px 0 0"><b>${esc(L('Action needed', 'محتاجين منك حاجة'))}</b><span>${esc(o.actionNeeded)}</span></div>` : ''}
-        ${o.photo ? `<div class="test-meta"><a href="${esc(o.photo)}" target="_blank" rel="noopener">Delivery photo</a></div>` : ''}
+        ${trackingHtml(o)}
       </div>`;
     }
 
@@ -2024,7 +2054,7 @@
   const SCREENS = {
     home, collection, search, product, cart, checkout, orders, account,
     addresses: addressesScreen, 'add-address': addAddress, loyalty, subscriptions, subscribe,
-    wishlist: wishlistScreen, login, support,
+    wishlist: wishlistScreen, login, support, track,
   };
   function boot() {
     $$('[data-screen]').forEach((root) => {

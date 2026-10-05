@@ -157,12 +157,20 @@
       {%- if tracking_number != blank -%}
         <div class="field-txt" data-tracking>{% render 'bi', en: 'Tracking: ', ar: 'رقم التتبع: ' %}<span class="nums">{{ tracking_number }}</span></div>
         {%- liquid
-          if tracking_url == blank and settings.tracking_url != blank
+          # Our own tracking page for this shipment when live J&T tracking is
+          # set up; otherwise the courier's site.
+          assign own_page = false
+          if settings.jt_tracking_url != blank and settings.jt_tracking_key != blank
+            assign own_page = true
+            assign enc_awb = tracking_number | url_encode
+            assign enc_order = o.name | url_encode
+            assign tracking_url = '/pages/track?awb=' | append: enc_awb | append: '&order=' | append: enc_order
+          elsif tracking_url == blank and settings.tracking_url != blank
             assign tracking_url = settings.tracking_url | replace: '{number}', tracking_number
           endif
         -%}
         {%- if tracking_url != blank -%}
-          <a class="track-btn" href="{{ tracking_url }}" target="_blank" rel="noopener" data-copy="{% unless settings.tracking_url contains '{number}' %}{{ tracking_number }}{% endunless %}">
+          <a class="track-btn" href="{{ tracking_url }}"{% unless own_page %} target="_blank" rel="noopener" data-copy="{% unless settings.tracking_url contains '{number}' %}{{ tracking_number }}{% endunless %}"{% endunless %}>
             {% render 'icon', name: 'box', px: 16 %}
             {%- if tracking_company != blank -%}<span class="l-en">Track on {{ tracking_company }}</span><span class="l-ar">تابع على {{ tracking_company }}</span>{%- else -%}{% render 'bi', en: 'Track shipment', ar: 'تابع الشحنة' %}{%- endif -%}
           </a>
