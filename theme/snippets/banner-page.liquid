@@ -20,7 +20,7 @@
 {%- if img -%}
   <section class="page banner-page fill-{{ fit }}" data-banner {{ block.shopify_attributes }}>
     {%- if fit == 'contain' -%}
-      <div class="banner-backdrop" style="background-image: url({{ img | image_url: width: 200 }})" aria-hidden="true"></div>
+      <div class="banner-back-wrap" aria-hidden="true"><div class="banner-backdrop" style="background-image: url({{ img | image_url: width: 200 }})"></div></div>
     {%- endif -%}
     {%- if link != blank -%}<a href="{{ link }}" class="banner-fill">{%- else -%}<div class="banner-fill">{%- endif -%}
       {{ img | image_url: width: 1200 | image_tag: alt: img.alt, loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw' }}

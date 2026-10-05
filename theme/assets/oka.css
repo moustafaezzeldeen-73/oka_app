@@ -415,16 +415,21 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .banner-page, .compare-page {
   position: relative; overflow: hidden; padding: 0;
   align-items: center; justify-content: center;
-  background: #111;
+  /* White behind the logo bar, so its black logo and buttons stay readable;
+     the dark stage starts where the banner does. */
+  background: #fff;
 }
-/* The banner starts below the floating logo bar, so the bar never covers its
-   top; the blurred backdrop (or the dark page) fills the strip behind the bar. */
+.banner-page::before, .compare-page::before {
+  content: ""; position: absolute; top: var(--bar-h); right: 0; bottom: 0; left: 0; background: #111;
+}
+/* The banner starts below the floating logo bar, so the bar never covers its top. */
 .banner-fill { position: absolute; top: var(--bar-h); right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; }
 .banner-fill img { display: block; width: 100%; height: 100%; }
 .fill-cover .banner-fill img { object-fit: cover; }
 .fill-contain .banner-fill img { object-fit: contain; position: relative; z-index: 1; }
+.banner-back-wrap { position: absolute; top: var(--bar-h); right: 0; bottom: 0; left: 0; overflow: hidden; }
 .banner-backdrop {
-  position: absolute; inset: -30px;
+  position: absolute; top: -30px; right: -30px; bottom: -30px; left: -30px;
   background-size: cover; background-position: center;
   filter: blur(26px) saturate(1.3) brightness(.85);
   transform: scale(1.15);
