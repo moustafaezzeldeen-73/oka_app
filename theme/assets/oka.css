@@ -463,7 +463,6 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
   display: flex; align-items: center; justify-content: center; gap: 2px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
-.compare-page.nudging .compare-before, .compare-page.nudging .compare-line { transition: clip-path .6s var(--ease), left .6s var(--ease); }
 .compare-range { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .compare-frame:focus-within .compare-knob { outline: 2px solid #fff; outline-offset: 3px; }
 

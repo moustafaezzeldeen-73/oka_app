@@ -118,8 +118,8 @@
       activePage = k;
       pages.forEach((el, j) => el.classList.toggle('active', j === k));
       O.haptic.snapCollection();
-      const cmp = pages[k]?.hasAttribute('data-compare') ? pages[k] : null;
-      if (cmp) nudge(cmp);
+      pages.forEach((el, j) => { if (j !== k && el._raf) stopSwing(el); });
+      if (pages[k]?.hasAttribute('data-compare')) startSwing(pages[k]);
     }
 
     let raf = 0;
@@ -194,19 +194,37 @@
      */
     function setPos(page, pct) {
       const v = Math.max(0, Math.min(100, pct));
+      page._pos = v;
       page.style.setProperty('--pos', `${v}%`);
       const r = $('[data-compare-range]', page);
       if (r) r.value = String(Math.round(v));
     }
-    function nudge(page) {
-      if (page._nudged || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      page._nudged = true;
-      page.classList.add('nudging');
-      setPos(page, 62);
-      setTimeout(() => setPos(page, 38), 650);
-      setTimeout(() => setPos(page, 50), 1300);
-      setTimeout(() => page.classList.remove('nudging'), 1950);
+    /*
+     * The divider keeps sweeping left and right while the slider is on
+     * screen, so the motion catches the eye; a drag takes over, and the
+     * sweep resumes a few seconds after the finger lifts.
+     */
+    const SWING_MS = 3200;  // one full left-right-left
+    const SWING_AMP = 32;   // ± percent around the middle
+    const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function stopSwing(page) {
+      cancelAnimationFrame(page._raf);
+      page._raf = 0;
+      clearTimeout(page._resume);
     }
+    function startSwing(page) {
+      stopSwing(page);
+      if (reduceMotion()) return;
+      // Start from wherever the divider is, so it never jumps.
+      const from = Math.asin(Math.max(-1, Math.min(1, ((page._pos ?? 50) - 50) / SWING_AMP)));
+      const t0 = performance.now() - (from / (2 * Math.PI)) * SWING_MS;
+      const tick = (now) => {
+        setPos(page, 50 + SWING_AMP * Math.sin(((now - t0) / SWING_MS) * 2 * Math.PI));
+        page._raf = requestAnimationFrame(tick);
+      };
+      page._raf = requestAnimationFrame(tick);
+    }
+    const swingIfShown = (page) => { if (pages[activePage] === page) startSwing(page); };
     $$('[data-compare]', feed).forEach((page) => {
       const frame = $('.compare-frame', page);
       const range = $('[data-compare-range]', page);
@@ -224,17 +242,24 @@
           if (dy > dx && dy > 6) { drag = null; return; } // a feed scroll, not ours
           if (dx < 6) return;
           drag.on = true;
-          page.classList.remove('nudging');
+          stopSwing(page);
           frame.setPointerCapture?.(e.pointerId);
         }
         setPos(page, pctAt(e.clientX));
       });
-      const end = () => { drag = null; };
+      const end = () => {
+        if (drag?.on) page._resume = setTimeout(() => swingIfShown(page), 3000);
+        drag = null;
+      };
       frame.addEventListener('pointerup', end);
       frame.addEventListener('pointercancel', end);
-      range?.addEventListener('input', () => setPos(page, Number(range.value)));
+      range?.addEventListener('input', () => {
+        stopSwing(page);
+        setPos(page, Number(range.value));
+        page._resume = setTimeout(() => swingIfShown(page), 3000);
+      });
     });
-    if (pages[0]?.hasAttribute('data-compare')) nudge(pages[0]);
+    if (pages[0]?.hasAttribute('data-compare')) startSwing(pages[0]);
 
     // The feed's own size drives the card sizes (CSS --fh / --fw). Measured
     // here rather than with container queries, which older iPhones lack.
