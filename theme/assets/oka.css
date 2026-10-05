@@ -450,6 +450,46 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
   padding-bottom: calc(18px + env(safe-area-inset-bottom));
 }
 
+/* ── Customer photos: the original site's 3D carousel (snippets/ribbon-page) ── */
+.ribbon-page {
+  position: relative; overflow: hidden; padding: 0;
+  align-items: center; justify-content: center;
+  background: #fff;
+}
+.ribbon-page::before { content: ""; position: absolute; top: var(--bar-h); right: 0; bottom: 0; left: 0; background: var(--stage, #121212); }
+.ribbon-title { position: relative; z-index: 1; margin: calc(var(--bar-h) + 6px) 0 4px; color: #fff; font-size: 22px; font-weight: 800; text-align: center; }
+.ribbon-stage {
+  position: relative; z-index: 1; width: 100%; flex: 1; min-height: 0;
+  display: flex; align-items: center; justify-content: center;
+  perspective: 1100px; perspective-origin: 50% 45%;
+}
+.ribbon-ring {
+  --w: min(44vw, 200px); --h: calc(var(--w) * 1.3);
+  --r: calc(var(--w) * 1.3);
+  position: relative; width: var(--w); height: var(--h);
+  transform-style: preserve-3d;
+  transform: translateZ(calc(var(--r) * -0.5));
+  animation: ribbon-spin var(--spin, 40s) linear infinite;
+}
+/* Exact radius for the photo count where CSS trig is supported. */
+@supports (width: calc(1px * tan(45deg))) {
+  .ribbon-ring { --r: calc(var(--w) * 0.56 / tan(180deg / var(--n))); }
+}
+.ribbon-item {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  padding: 0; border: 0; border-radius: 14px; overflow: hidden; background: #222;
+  transform: rotateY(calc(var(--i) * 360deg / var(--n))) translateZ(var(--r));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+.ribbon-item img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+/* Pushed back half a radius so the front photo isn't in the viewer's face. */
+@keyframes ribbon-spin {
+  from { transform: translateZ(calc(var(--r) * -0.5)) rotateY(0deg); }
+  to { transform: translateZ(calc(var(--r) * -0.5)) rotateY(-360deg); }
+}
+.ribbon-page:not(.active) .ribbon-ring, .ribbon-ring.held { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .ribbon-ring { animation: none; } }
+
 .compare-frame { position: absolute; top: var(--bar-h); right: 0; bottom: 0; left: 0; direction: ltr; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; }
 .compare-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 .compare-before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }

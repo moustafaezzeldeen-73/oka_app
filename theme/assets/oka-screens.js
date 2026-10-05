@@ -261,6 +261,9 @@
     });
     if (pages[0]?.hasAttribute('data-compare')) startSwing(pages[0]);
 
+    // Customer photos carousel: a tap pauses the ring, another lets it turn.
+    $$('[data-ribbon-ring]', feed).forEach((ring) => ring.addEventListener('click', () => ring.classList.toggle('held')));
+
     // The feed's own size drives the card sizes (CSS --fh / --fw). Measured
     // here rather than with container queries, which older iPhones lack.
     const sizeFeed = () => {

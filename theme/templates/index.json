@@ -72,6 +72,23 @@
             "after_image": "shopify://shop_images/2_c998b195-330f-4ccf-8095-157512d0d7dd.png",
             "before": "oka-cobra"
           }
+        },
+        "customer-photos": {
+          "type": "ribbon",
+          "settings": {
+            "title_en": "From our customers",
+            "title_ar": "من عند عملائنا",
+            "seconds": 40,
+            "background": "#121212",
+            "image_1": "shopify://shop_images/ezgif-1-b53db8d7c8.gif",
+            "image_2": "shopify://shop_images/vlcsnap-2023-12-20-19h56m12s766.png",
+            "image_3": "shopify://shop_images/ezgif-2-8893503247.gif",
+            "image_4": "shopify://shop_images/Screenshot_2023-12-20_201651-2.png",
+            "image_5": "shopify://shop_images/Screenshot_2023-12-20_201005-enhanced.png",
+            "image_6": "shopify://shop_images/My_project-2.png",
+            "image_7": "shopify://shop_images/My_project-1.png",
+            "image_8": "shopify://shop_images/WhatsApp_Image_2023-12-20_at_19.17.55_6a1fc70f.jpg"
+          }
         }
       },
       "block_order": [
@@ -83,7 +100,8 @@
         "cobra-slider",
         "banner-dark-tobacco",
         "banner-bowls",
-        "banner-parts"
+        "banner-parts",
+        "customer-photos"
       ],
       "settings": {
         "opening_screen": true

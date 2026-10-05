@@ -144,6 +144,11 @@
         </div>
       </section>
     {%- endfor -%}
+
+    {%- comment -%} Customer photos — the original website's 3D carousel, last in the feed. {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'ribbon' -%}{%- render 'ribbon-page', block: block -%}{%- endif -%}
+    {%- endfor -%}
   </div>
 </div>
 
@@ -197,6 +202,30 @@
         { "type": "image_picker", "id": "after_image", "label": "After image" },
         { "type": "collection", "id": "before", "label": "Show before collection" },
         { "type": "url", "id": "link", "label": "Opens", "info": "Defaults to the collection above." }
+      ]
+    },
+    {
+      "type": "ribbon",
+      "name": "Customer photos carousel",
+      "limit": 2,
+      "settings": [
+        { "type": "paragraph", "content": "A full-screen 3D ring of customer photos and GIFs, turning slowly — the original website's bottom section. Shown at the end of the feed." },
+        { "type": "text", "id": "title_en", "label": "Title (English)", "default": "From our customers" },
+        { "type": "text", "id": "title_ar", "label": "Title (Arabic)", "default": "من عند عملائنا" },
+        { "type": "range", "id": "seconds", "label": "Seconds per turn", "min": 10, "max": 90, "step": 5, "default": 40 },
+        { "type": "color", "id": "background", "label": "Background", "default": "#121212" },
+        { "type": "image_picker", "id": "image_1", "label": "Photo 1" },
+        { "type": "image_picker", "id": "image_2", "label": "Photo 2" },
+        { "type": "image_picker", "id": "image_3", "label": "Photo 3" },
+        { "type": "image_picker", "id": "image_4", "label": "Photo 4" },
+        { "type": "image_picker", "id": "image_5", "label": "Photo 5" },
+        { "type": "image_picker", "id": "image_6", "label": "Photo 6" },
+        { "type": "image_picker", "id": "image_7", "label": "Photo 7" },
+        { "type": "image_picker", "id": "image_8", "label": "Photo 8" },
+        { "type": "image_picker", "id": "image_9", "label": "Photo 9" },
+        { "type": "image_picker", "id": "image_10", "label": "Photo 10" },
+        { "type": "image_picker", "id": "image_11", "label": "Photo 11" },
+        { "type": "image_picker", "id": "image_12", "label": "Photo 12" }
       ]
     }
   ],
