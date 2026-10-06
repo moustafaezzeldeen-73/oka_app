@@ -349,6 +349,52 @@
   }
   document.addEventListener('DOMContentLoaded', () => paintHearts());
 
+  /* ── Back button: come back to the same spot ───────────────────────────
+   * The pages scroll inside their own containers (the home feed, each
+   * screen, the sideways rails), so the browser can't restore them itself.
+   * Their positions are saved per URL when the page is left and put back
+   * when it's reached again with Back/Forward.
+   */
+  const SCROLL_GROUPS = { feed: '[data-feed]', screen: '.screen', rail: '[data-rail], .hscroll' };
+  const scrollKey = () => `oka.scroll:${location.pathname}${location.search}`;
+  function saveScroll() {
+    const pos = {};
+    Object.entries(SCROLL_GROUPS).forEach(([g, sel]) => {
+      $$(sel).forEach((el, i) => {
+        if (el.scrollTop || el.scrollLeft) pos[`${g}${i}`] = [el.scrollTop, el.scrollLeft];
+      });
+    });
+    store.sset(scrollKey(), pos);
+  }
+  function restoreScroll() {
+    const pos = store.sget(scrollKey(), null);
+    if (!pos) return;
+    let pending = Object.keys(pos).length;
+    Object.entries(SCROLL_GROUPS).forEach(([g, sel]) => {
+      $$(sel).forEach((el, i) => {
+        const p = pos[`${g}${i}`];
+        if (!p || el.dataset.okaRestored) return;
+        // Content rendered later (catalogue, cart) may not be tall enough yet.
+        if (el.scrollHeight - el.clientHeight < p[0] - 2 || el.scrollWidth - el.clientWidth < Math.abs(p[1]) - 2) return;
+        el.scrollTop = p[0];
+        el.scrollLeft = p[1];
+        el.dataset.okaRestored = '1';
+        pending -= 1;
+      });
+    });
+    return pending;
+  }
+  const navType = (() => {
+    try { return performance.getEntriesByType('navigation')[0]?.type || ''; } catch (e) { return ''; }
+  })();
+  window.addEventListener('pagehide', saveScroll);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveScroll(); });
+  if (navType === 'back_forward') {
+    // Try a few times: screens and their lists finish rendering at different moments.
+    const tries = [0, 120, 400, 900, 1600];
+    window.addEventListener('load', () => tries.forEach((ms) => setTimeout(() => requestAnimationFrame(restoreScroll), ms)));
+  }
+
   /* ── the OKA order service, through a Shopify App Proxy ──────────────── */
   async function api(path, { method = 'GET', body } = {}) {
     if (!CFG.proxy) throw new Error('service-not-configured');
