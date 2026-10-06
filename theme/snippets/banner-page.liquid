@@ -9,22 +9,43 @@
   Usage: {% render 'banner-page', block: block %}
 {%- endcomment -%}
 {%- liquid
-  assign img = block.settings.image
   assign link = block.settings.link | default: block.settings.before.url
   assign bundle = block.settings.variant_ids | remove: ' '
-  assign fit = 'contain'
-  if img.aspect_ratio < 0.8
-    assign fit = 'cover'
-  endif
+  assign img_en = block.settings.image
+  assign img_ar = block.settings.image_ar
 -%}
-{%- if img -%}
-  <section class="page banner-page fill-{{ fit }}" data-banner {{ block.shopify_attributes }}>
-    {%- if fit == 'contain' -%}
-      <div class="banner-back-wrap" aria-hidden="true"><div class="banner-backdrop" style="background-image: url({{ img | image_url: width: 200 }})"></div></div>
-    {%- endif -%}
-    {%- if link != blank -%}<a href="{{ link }}" class="banner-fill">{%- else -%}<div class="banner-fill">{%- endif -%}
-      {{ img | image_url: width: 1200 | image_tag: alt: img.alt, loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw' }}
-    {%- if link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+{%- if img_en -%}
+  <section class="page banner-page" data-banner {{ block.shopify_attributes }}>
+    {%- comment -%} One layer per language when there's an Arabic picture; the site shows the one that matches. {%- endcomment -%}
+    {%- for k in (1..2) -%}
+      {%- liquid
+        if k == 1
+          assign img = img_en
+          assign lang_class = ''
+          if img_ar
+            assign lang_class = ' l-en'
+          endif
+        else
+          unless img_ar
+            break
+          endunless
+          assign img = img_ar
+          assign lang_class = ' l-ar'
+        endif
+        assign fit = 'contain'
+        if img.aspect_ratio < 0.8
+          assign fit = 'cover'
+        endif
+      -%}
+      <div class="banner-lang fill-{{ fit }}{{ lang_class }}">
+        {%- if fit == 'contain' -%}
+          <div class="banner-back-wrap" aria-hidden="true"><div class="banner-backdrop" style="background-image: url({{ img | image_url: width: 200 }})"></div></div>
+        {%- endif -%}
+        {%- if link != blank -%}<a href="{{ link }}" class="banner-fill">{%- else -%}<div class="banner-fill">{%- endif -%}
+          {{ img | image_url: width: 1200 | image_tag: alt: img.alt, loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw' }}
+        {%- if link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+      </div>
+    {%- endfor -%}
     {%- if bundle != blank -%}
       <button class="offer-cta banner-cta" data-add-bundle="{{ bundle }}">{% render 'bi', en: block.settings.button_en, ar: block.settings.button_ar %}</button>
     {%- endif -%}

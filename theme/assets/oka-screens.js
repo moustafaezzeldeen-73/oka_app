@@ -18,6 +18,13 @@
   const plusIcon = (size = 16, color = 'currentColor') =>
     `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="${color}" stroke-width="2" stroke-linecap="round"/></svg>`;
   const spinner = (dark) => `<span class="spinner${dark ? ' dark' : ''}"></span>`;
+  const heartSvg = (filled) =>
+    `<svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.6-9.2C.9 8 2.6 4 6.4 4c2.3 0 3.9 1.4 5.6 3.5C13.7 5.4 15.3 4 17.6 4c3.8 0 5.5 4 4 7.3-2.1 4.6-9.6 9.2-9.6 9.2z" fill="${filled ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
+  const trashSvg = () =>
+    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M9 7V4.8c0-.4.4-.8.8-.8h4.4c.4 0 .8.4.8.8V7m-9 0 .8 12.2c0 .5.5.8 1 .8h6.4c.5 0 1-.3 1-.8L17 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  /** The wishlist heart on a product card (assets/oka.js wires every [data-heart]). */
+  const heartBtn = (handle) =>
+    `<button class="heart-btn${O.wishlist.has(handle) ? ' on' : ''}" data-heart="${esc(handle)}" aria-label="${esc(L('Save to wishlist', 'احفظ في المفضلة'))}">${heartSvg(false)}</button>`;
   /** QtyStepper — `size` matches the three variants in the app. */
   const stepper = (qty, { size = 32, fs = 16, gap = 10, attrs = '' } = {}) =>
     `<div class="stepper${size < 28 ? ' small' : ''}" style="--sz:${size}px;--fs:${fs}px;--gap:${gap}px">
@@ -29,6 +36,7 @@
   const img = (src, alt = '') => (src ? `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy">` : '');
   const gridCard = (p) => `<div class="gcard">
       <a href="${esc(p.url)}" class="gcard-img">${img(p.img, p.titleEn)}</a>
+      ${heartBtn(p.id)}
       <div class="gcard-body">
         <a href="${esc(p.url)}" class="gcard-title">${esc(O.ptitle(p))}</a>
         <div class="gcard-row">
@@ -261,8 +269,81 @@
     });
     if (pages[0]?.hasAttribute('data-compare')) startSwing(pages[0]);
 
-    // Customer photos carousel: a tap pauses the ring, another lets it turn.
-    $$('[data-ribbon-ring]', feed).forEach((ring) => ring.addEventListener('click', () => ring.classList.toggle('held')));
+    /*
+     * Customer photos carousel. It turns slowly on its own; a finger on it
+     * holds it still, a sideways drag turns it (and a flick keeps it
+     * spinning, easing back to the slow turn), and a tap pauses it until the
+     * next tap. Vertical swipes still scroll the feed.
+     */
+    $$('[data-ribbon]', feed).forEach((page) => {
+      const ring = $('[data-ribbon-ring]', page);
+      const stage = $('.ribbon-stage', page);
+      if (!ring || !stage) return;
+      const secs = parseFloat(page.style.getPropertyValue('--spin')) || 40;
+      const cruise = reduceMotion() ? 0 : -360 / secs; // degrees per second
+      let angle = 0;
+      let vel = cruise;
+      let paused = false;
+      let drag = null;
+      let raf = 0;
+      let last = 0;
+      const paint = () => { ring.style.transform = `translateZ(calc(var(--r) * -0.5)) rotateY(${angle}deg)`; };
+      const tick = (now) => {
+        const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+        last = now;
+        if (!drag && !paused) {
+          vel += (cruise - vel) * Math.min(1, dt * 1.2); // a flick settles back to the slow turn
+          angle += vel * dt;
+          paint();
+        }
+        raf = requestAnimationFrame(tick);
+      };
+      const run = (on) => {
+        cancelAnimationFrame(raf);
+        raf = 0;
+        last = 0;
+        if (on) raf = requestAnimationFrame(tick);
+      };
+      // Only turn while the page is on screen.
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(([en]) => run(en.isIntersecting && en.intersectionRatio > 0.4), { threshold: [0, 0.4, 1] }).observe(page);
+      } else run(true);
+
+      const degPerPx = () => 360 / Math.max(240, stage.clientWidth * 1.6);
+      stage.addEventListener('pointerdown', (e) => {
+        drag = { x: e.clientX, y: e.clientY, a0: angle, on: false, lx: e.clientX, lt: performance.now(), v: 0, id: e.pointerId };
+      });
+      stage.addEventListener('pointermove', (e) => {
+        if (!drag || e.pointerId !== drag.id) return;
+        const dx = e.clientX - drag.x;
+        const dy = e.clientY - drag.y;
+        if (!drag.on) {
+          if (Math.abs(dy) > 8 && Math.abs(dy) > Math.abs(dx)) { drag = null; return; } // the feed's scroll
+          if (Math.abs(dx) < 6) return;
+          drag.on = true;
+          stage.setPointerCapture?.(e.pointerId);
+        }
+        angle = drag.a0 + dx * degPerPx();
+        const now = performance.now();
+        const dtm = Math.max(1, now - drag.lt);
+        drag.v = ((e.clientX - drag.lx) * degPerPx() * 1000) / dtm;
+        drag.lx = e.clientX;
+        drag.lt = now;
+        paint();
+      });
+      const end = (e) => {
+        if (!drag || (e && e.pointerId !== drag.id)) return;
+        const d = drag;
+        drag = null;
+        if (!d.on) { paused = !paused; vel = paused ? 0 : cruise; return; } // a tap: pause / carry on
+        paused = false;
+        // A flick keeps the ring going in that direction; a slow release just carries on.
+        vel = Math.abs(d.v) > 40 ? Math.max(-720, Math.min(720, d.v)) : cruise;
+      };
+      stage.addEventListener('pointerup', end);
+      stage.addEventListener('pointercancel', end);
+      paint();
+    });
 
     // The feed's own size drives the card sizes (CSS --fh / --fw). Measured
     // here rather than with container queries, which older iPhones lack.
@@ -507,14 +588,22 @@
       host.innerHTML = `
         ${items.map((it) => {
           const p = byVariant(it.variant_id);
-          return `<div class="line" data-key="${esc(it.key)}" data-qty="${it.quantity}" data-max="${p ? (p.stock || 50) : 50}">
-            <a href="${esc(it.url)}" class="line-img">${img(it.image)}</a>
-            <div class="line-body">
-              <div class="line-title">${esc(lineTitle(it))}</div>
-              <div class="line-unit">${esc(fmtPrice(it.original_price / 100))}</div>
-              <div class="line-foot">${stepper(it.quantity, { size: 24, fs: 13, gap: 8 })}<span class="line-total">${esc(fmtPrice(it.original_line_price / 100))}</span></div>
+          const hasVariants = !it.product_has_only_default_variant;
+          const saved = O.wishlist.has(it.handle);
+          // iOS-style row: swipe toward the end to delete, toward the start to save.
+          return `<div class="swipe" data-swipe data-key="${esc(it.key)}" data-handle="${esc(it.handle)}">
+            <div class="swipe-act swipe-wish" aria-hidden="true">${heartSvg(true)}<span>${esc(saved ? L('Saved', 'محفوظ') : L('Wishlist', 'المفضلة'))}</span></div>
+            <div class="swipe-act swipe-del" aria-hidden="true">${trashSvg()}<span>${esc(L('Delete', 'امسح'))}</span></div>
+            <div class="line" data-key="${esc(it.key)}" data-qty="${it.quantity}" data-max="${p ? (p.stock || 50) : 50}" data-variant="${it.variant_id}" data-handle="${esc(it.handle)}">
+              <a href="${esc(it.url)}" class="line-img">${img(it.image)}</a>
+              <div class="line-body">
+                <div class="line-title">${esc(lineTitle(it))}</div>
+                ${hasVariants ? `<button class="line-variant" data-replace><span>${esc(it.variant_title || '')}</span><b>${esc(L('Change', 'غيّر'))}</b>${chevron(11)}</button>` : ''}
+                <div class="line-unit">${esc(fmtPrice(it.original_price / 100))}</div>
+                <div class="line-foot">${stepper(it.quantity, { size: 24, fs: 13, gap: 8 })}<span class="line-total">${esc(fmtPrice(it.original_line_price / 100))}</span></div>
+              </div>
+              <button class="line-remove" data-remove aria-label="Remove">✕</button>
             </div>
-            <button class="line-remove" data-remove aria-label="Remove">✕</button>
           </div>`;
         }).join('')}
 
@@ -561,11 +650,161 @@
       $$('[data-drag]', host).forEach(dragScroll);
     }
 
+    /* ── Swipe actions (iOS Mail style) ─────────────────────────────────
+     * Drag a row toward the end edge to reveal Delete, toward the start
+     * edge to reveal Wishlist; a long drag (past ~55%) does it at once,
+     * a shorter one leaves the button showing for a tap. Mirrors in Arabic.
+     * Vertical drags are left to the page.
+     */
+    const swipe = (() => {
+      const OPEN = 116;
+      const rtl = () => document.documentElement.dir === 'rtl';
+      let drag = null;
+      const api = { justMoved: false };
+      const lineOf = (row) => $('.line', row);
+      function setX(row, x, animate) {
+        const line = lineOf(row);
+        line.style.transition = animate ? 'transform .28s cubic-bezier(.2,.8,.2,1)' : 'none';
+        line.style.transform = x ? `translateX(${x}px)` : '';
+        row._x = x;
+        // Which edge is showing: the start edge (wishlist) or the end edge (delete).
+        const lead = x * (rtl() ? -1 : 1);
+        row.classList.toggle('show-wish', lead > 0);
+        row.classList.toggle('show-del', lead < 0);
+        row.classList.toggle('open', Math.abs(x) > 4);
+      }
+      api.close = (row) => setX(row, 0, true);
+      const closeOthers = (keep) => $$('.swipe.open', host).forEach((r) => { if (r !== keep) api.close(r); });
+      api.commit = async (row, kind) => {
+        if (!row) return;
+        const w = row.clientWidth;
+        const sign = (kind === 'del' ? -1 : 1) * (rtl() ? -1 : 1);
+        if (kind === 'del') {
+          setX(row, sign * w, true);
+          O.haptic.selectionTick?.();
+          row.style.transition = 'height .25s ease .18s, margin .25s ease .18s, opacity .2s ease .18s';
+          row.style.height = `${row.offsetHeight}px`;
+          requestAnimationFrame(() => { row.style.height = '0px'; row.style.marginBottom = '0px'; row.style.opacity = '0'; });
+          try { await O.changeLine(row.dataset.key, 0); } catch (err) { O.okaAlert(L('Could not update', 'معرفناش نحدّث'), errText(err)); render(); }
+          return;
+        }
+        // Wishlist: save it (never un-save from here) and slide back.
+        const h = row.dataset.handle;
+        if (h && !O.wishlist.has(h)) O.wishlist.toggle(h);
+        O.haptic.success?.();
+        O.toast(L('Saved to your wishlist', 'اتحفظ في المفضلة'));
+        setX(row, sign * Math.min(w * 0.4, 160), true);
+        setTimeout(() => api.close(row), 260);
+        O.paintHearts?.();
+      };
+      host.addEventListener('pointerdown', (e) => {
+        const row = e.target.closest('.swipe');
+        if (!row || e.button > 0) return;
+        drag = { row, x0: e.clientX, y0: e.clientY, base: row._x || 0, on: false, id: e.pointerId };
+      });
+      host.addEventListener('pointermove', (e) => {
+        if (!drag || e.pointerId !== drag.id) return;
+        const dx = e.clientX - drag.x0;
+        const dy = e.clientY - drag.y0;
+        if (!drag.on) {
+          if (Math.abs(dy) > 8 && Math.abs(dy) > Math.abs(dx)) { drag = null; return; } // a scroll
+          if (Math.abs(dx) < 8) return;
+          drag.on = true;
+          closeOthers(drag.row);
+          drag.row.setPointerCapture?.(e.pointerId);
+        }
+        const w = drag.row.clientWidth;
+        let x = drag.base + dx;
+        // Rubber-band past the row's width.
+        if (Math.abs(x) > w) x = Math.sign(x) * (w + (Math.abs(x) - w) * 0.2);
+        setX(drag.row, x, false);
+      });
+      const end = () => {
+        if (!drag) return;
+        const { row, on } = drag;
+        drag = null;
+        if (!on) return;
+        api.justMoved = true;
+        setTimeout(() => { api.justMoved = false; }, 60);
+        const x = row._x || 0;
+        const w = row.clientWidth;
+        const lead = x * (rtl() ? -1 : 1);
+        if (Math.abs(x) > w * 0.55) return api.commit(row, lead < 0 ? 'del' : 'wish');
+        if (Math.abs(x) > 56) return setX(row, Math.sign(x) * OPEN, true);
+        api.close(row);
+      };
+      host.addEventListener('pointerup', end);
+      host.addEventListener('pointercancel', end);
+      // A mouse would otherwise start a native drag of the photo or link.
+      host.addEventListener('dragstart', (e) => { if (e.target.closest('.swipe')) e.preventDefault(); });
+      return api;
+    })();
+
+    /* ── Replace: pick another variant (flavour, colour…) of a cart line ── */
+    async function openVariants(line) {
+      const handle = line.dataset.handle;
+      const qty = Number(line.dataset.qty) || 1;
+      const current = String(line.dataset.variant);
+      let product;
+      try {
+        const res = await fetch(`${(window.Shopify?.routes?.root || '/')}products/${encodeURIComponent(handle)}.js`);
+        product = await res.json();
+      } catch (e) { return; }
+      const variants = product.variants || [];
+      if (variants.length < 2) return;
+      const app = $('#app');
+      const scrim = document.createElement('div');
+      scrim.className = 'scrim';
+      const sheet = document.createElement('div');
+      sheet.className = 'sheet variant-sheet';
+      const optName = (product.options || []).map((o) => o.name || o).filter((n) => n && n !== 'Title').join(' / ');
+      sheet.innerHTML = `
+        <div class="grabber"></div>
+        <div class="sheet-head"><span class="sheet-title">${esc(L('Choose', 'اختار'))} ${esc(optName || L('a variant', 'نوع'))}</span>
+          <button class="sheet-close" data-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+        <div class="sheet-body" style="padding-top:12px">${variants.map((v) => {
+          const pic = v.featured_image?.src || product.featured_image;
+          const on = String(v.id) === current;
+          return `<button class="sheet-item variant-pick${on ? ' on' : ''}" data-pick="${v.id}"${v.available ? '' : ' disabled'}>
+            <span class="cat-item-img">${pic ? `<img src="${esc(pic)}${String(pic).includes('?') ? '&' : '?'}width=120" alt="" loading="lazy">` : ''}</span>
+            <span style="flex:1;min-width:0;text-align:start"><b class="variant-name">${esc(v.title)}</b>
+              <span class="variant-price">${esc(fmtPrice(v.price / 100))}${v.available ? '' : ` · ${esc(L('Sold out', 'خلص'))}`}</span></span>
+            <span class="variant-check">${on ? '✓' : ''}</span>
+          </button>`;
+        }).join('')}</div>`;
+      app.append(scrim, sheet);
+      const close = () => { scrim.remove(); sheet.remove(); };
+      scrim.addEventListener('click', close);
+      sheet.addEventListener('click', async (e) => {
+        if (e.target.closest('[data-close]')) return close();
+        const pick = e.target.closest('[data-pick]');
+        if (!pick || pick.disabled) return;
+        if (pick.dataset.pick === current) return close();
+        pick.classList.add('busy');
+        try {
+          // Add the new one first so the cart is never empty in between.
+          await O.addToCart(pick.dataset.pick, qty, { silent: true });
+          await O.changeLine(line.dataset.key, 0);
+          O.toast(L('Replaced', 'اتغيّر'));
+          close();
+        } catch (err) {
+          pick.classList.remove('busy');
+        }
+      });
+    }
+
     let lastCart = null;
     const currentCart = () => lastCart;
 
     host.addEventListener('click', async (e) => {
+      if (swipe.justMoved) { e.preventDefault(); e.stopPropagation(); return; }
+      // A tap on an opened row closes it instead of acting.
+      const openRow = e.target.closest('.swipe.open');
+      if (openRow && !e.target.closest('.swipe-act')) { e.preventDefault(); swipe.close(openRow); return; }
+      const act = e.target.closest('.swipe-act');
+      if (act) { swipe.commit(act.closest('.swipe'), act.classList.contains('swipe-del') ? 'del' : 'wish'); return; }
       const line = e.target.closest('.line');
+      if (line && e.target.closest('[data-replace]')) { openVariants(line); return; }
       const step = e.target.closest('[data-step]');
       if (line && step) {
         const q = Number(line.dataset.qty) + Number(step.dataset.step);

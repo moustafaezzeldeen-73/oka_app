@@ -4,6 +4,7 @@
   <a href="{{ p.url }}" class="gcard-img">
     {%- if p.featured_image -%}{{ p.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: p.title, sizes: '50vw' }}{%- endif -%}
   </a>
+  {% render 'heart-btn', handle: p.handle %}
   <div class="gcard-body">
     <a href="{{ p.url }}" class="gcard-title">{% render 'ptitle', p: p %}</a>
     <div class="gcard-row">

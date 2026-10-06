@@ -317,6 +317,38 @@
     },
   };
 
+  /** Fill every [data-heart] whose product is saved; empty the rest. */
+  function paintHearts(root = document) {
+    $$('[data-heart]', root).forEach((b) => {
+      const on = wishlist.has(b.dataset.heart);
+      b.classList.toggle('on', on);
+      const path = b.querySelector('path');
+      if (path) path.setAttribute('fill', on ? 'currentColor' : 'none');
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-heart]');
+    if (!b) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const on = wishlist.toggle(b.dataset.heart);
+    haptic.selectionTick?.();
+    paintHearts();
+    b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+    toast(on ? L('Saved to your wishlist', 'اتحفظ في المفضلة') : L('Removed from your wishlist', 'اتشال من المفضلة'));
+  }, true);
+  // Cards rendered later (search, wishlist, cart) get painted as they appear.
+  if ('MutationObserver' in window) {
+    let queued = false;
+    new MutationObserver(() => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; paintHearts(); });
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
+  document.addEventListener('DOMContentLoaded', () => paintHearts());
+
   /* ── the OKA order service, through a Shopify App Proxy ──────────────── */
   async function api(path, { method = 'GET', body } = {}) {
     if (!CFG.proxy) throw new Error('service-not-configured');
@@ -638,7 +670,7 @@
     PROVINCES, provinceOf, provinceName, addresses, selectedAddress, selectAddress, customer,
     zoneFees, shippingFor, shipBar, etaFor, days,
     getCart, setCart, addToCart, addManyToCart, changeLine, applyDiscount, cartCount, cartQtyOf, cartTotals, toast,
-    loadCatalogue, ptitle, pdesc, searchProducts, wishlist,
+    loadCatalogue, ptitle, pdesc, searchProducts, wishlist, paintHearts,
     api, hasService, requireSignIn, goBack, whatsappUrl, okaAlert, openAr,
     openMenu, closeMenu,
   };

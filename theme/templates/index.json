@@ -10,7 +10,8 @@
             "collection": "hookahs",
             "variant_ids": "47026198217002,49400093081898,49400060805418,46037718303018",
             "button_en": "Add bundle to cart",
-            "button_ar": "عبيلي العرض فالشنطة"
+            "button_ar": "عبيلي العرض فالشنطة",
+            "image_ar": "shopify://shop_images/4_93108f1f-34f9-4224-a8b8-eedd7f5e3b73.png"
           }
         },
         "bundle-2": {
@@ -20,7 +21,8 @@
             "collection": "hookahs",
             "variant_ids": "47026198217002,49371416363306,49400093081898,49400060805418,46037718303018",
             "button_en": "Add bundle to cart",
-            "button_ar": "عبيلي العرض فالشنطة"
+            "button_ar": "عبيلي العرض فالشنطة",
+            "image_ar": "shopify://shop_images/6.png"
           }
         },
         "banner-premium": {
@@ -34,35 +36,40 @@
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/1_7afffa90-7771-481e-b8df-384590df3f7e.png",
-            "before": "oka-parties"
+            "before": "oka-parties",
+            "image_ar": "shopify://shop_images/2_87ac362f-513f-4cbf-91b0-ae1c3e536601.png"
           }
         },
         "banner-parties-2": {
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/2_91efa2d1-41e9-4649-83ec-e145bdb9b254.png",
-            "before": "oka-parties"
+            "before": "oka-parties",
+            "image_ar": "shopify://shop_images/5_30e221f5-048a-4e07-a869-102f2f77eb09.png"
           }
         },
         "banner-dark-tobacco": {
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/1_bbc68db1-54d8-4cd1-84a8-e4c90af8a693.png",
-            "before": "dark-tobacco"
+            "before": "dark-tobacco",
+            "image_ar": "shopify://shop_images/2_582d8f7a-2d57-40c3-8e4a-07275d2f0b09.png"
           }
         },
         "banner-bowls": {
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/Copy_of_OKA_-_1.png",
-            "before": "ready-to-smoke-bowls"
+            "before": "ready-to-smoke-bowls",
+            "image_ar": "shopify://shop_images/Copy_of_OKA_-_2.png"
           }
         },
         "banner-parts": {
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/1_e3f61bcf-4efd-419c-9a50-0efcb0f264fe.png",
-            "before": "oka-parts"
+            "before": "oka-parts",
+            "image_ar": "shopify://shop_images/2_a9fdbefc-6b0c-4276-84c4-d2e915cfc9f5.png"
           }
         },
         "cobra-slider": {

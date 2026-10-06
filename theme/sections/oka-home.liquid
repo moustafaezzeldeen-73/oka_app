@@ -66,7 +66,20 @@
           assign link = block.settings.collection.url | default: routes.collections_url
         -%}
         <div class="offer-slot{% if offer_n == 1 %} active{% endif %}" data-slot style="--ratio: {{ ratio }}" {{ block.shopify_attributes }}>
-          <a href="{{ link }}" class="offer-card">{% if src != '' %}<img src="{{ src }}" alt="" width="{{ iw }}" height="{{ ih }}" loading="{% if offer_n < 3 %}eager{% else %}lazy{% endif %}">{% endif %}</a>
+          {%- liquid
+            assign load = 'lazy'
+            if offer_n < 3
+              assign load = 'eager'
+            endif
+            assign img_class = ''
+            if block.settings.image_ar
+              assign img_class = 'l-en'
+            endif
+          -%}
+          <a href="{{ link }}" class="offer-card">
+            {%- if src != '' -%}<img src="{{ src }}" alt="" width="{{ iw }}" height="{{ ih }}" loading="{{ load }}"{% if img_class != '' %} class="{{ img_class }}"{% endif %}>{%- endif -%}
+            {%- if block.settings.image_ar -%}<img src="{{ block.settings.image_ar | image_url: width: 700 }}" alt="" width="{{ block.settings.image_ar.width }}" height="{{ block.settings.image_ar.height }}" loading="{{ load }}" class="l-ar">{%- endif -%}
+          </a>
           {%- if bundle != blank -%}
             <button class="offer-cta" data-add-bundle="{{ bundle }}">{% render 'bi', en: block.settings.button_en, ar: block.settings.button_ar %}</button>
           {%- else -%}
@@ -119,6 +132,7 @@
               <a href="{{ p.url }}" class="prod-card" data-tap data-variant="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %}>
                 {%- if p.featured_image -%}{{ p.featured_image | image_url: width: 500 | image_tag: alt: p.title, loading: 'lazy', draggable: 'false' }}{%- endif -%}
               </a>
+              {% render 'heart-btn', handle: p.handle %}
               <div class="prod-meta">
                 <div class="prod-title">{% render 'ptitle', p: p %}</div>
                 <div class="prod-price">{% render 'price', cents: v.price %}</div>
@@ -174,6 +188,7 @@
       "settings": [
         { "type": "paragraph", "content": "Only offers that can be bought appear: set bundle variant IDs or a product. A picture alone belongs in a Banner block." },
         { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "image_picker", "id": "image_ar", "label": "Arabic image", "info": "Shown on the Arabic site instead. Leave empty to use the same image." },
         { "type": "text", "id": "bundled_image", "label": "Bundled image (theme asset)", "info": "Used when no image is picked, e.g. promo1.jpg" },
         { "type": "collection", "id": "collection", "label": "Opens collection" },
         { "type": "product", "id": "product", "label": "Add to Cart adds", "info": "One product. Ignored when bundle variant IDs are set." },
@@ -187,6 +202,7 @@
       "name": "Banner",
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Image", "info": "Shown full screen." },
+        { "type": "image_picker", "id": "image_ar", "label": "Arabic image", "info": "Shown on the Arabic site instead. Leave empty to use the same image." },
         { "type": "collection", "id": "before", "label": "Show before collection", "info": "The banner gets its own page just before this collection. Not shown: it follows the Offers page." },
         { "type": "url", "id": "link", "label": "Opens", "info": "Defaults to the collection above." },
         { "type": "text", "id": "variant_ids", "label": "Bundle variant IDs (optional)", "info": "Comma-separated. Adds a button that puts all of them in the cart." },
@@ -200,6 +216,8 @@
       "settings": [
         { "type": "image_picker", "id": "before_image", "label": "Before image" },
         { "type": "image_picker", "id": "after_image", "label": "After image" },
+        { "type": "image_picker", "id": "before_image_ar", "label": "Before image (Arabic)", "info": "Optional — for the Arabic site." },
+        { "type": "image_picker", "id": "after_image_ar", "label": "After image (Arabic)", "info": "Optional — for the Arabic site." },
         { "type": "collection", "id": "before", "label": "Show before collection" },
         { "type": "url", "id": "link", "label": "Opens", "info": "Defaults to the collection above." }
       ]
