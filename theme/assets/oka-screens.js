@@ -546,6 +546,12 @@
     let checking = false;
 
     const byVariant = (id) => catalogue.products.find((p) => String(p.variantId) === String(id));
+    /** Other products in the same collection, e.g. the other tobacco-bowl flavours. */
+    const siblingsOf = (handle) => {
+      const me = catalogue.products.find((p) => p.id === handle);
+      if (!me || !me.cat) return [];
+      return catalogue.products.filter((p) => p.cat === me.cat && p.id !== handle && p.available !== false && p.stock !== 0);
+    };
     const lineTitle = (item) => {
       const p = byVariant(item.variant_id);
       return p ? O.ptitle(p) : item.product_title;
@@ -589,16 +595,17 @@
         ${items.map((it) => {
           const p = byVariant(it.variant_id);
           const hasVariants = !it.product_has_only_default_variant;
+          const canSwap = hasVariants || siblingsOf(it.handle).length > 0;
           const saved = O.wishlist.has(it.handle);
           // iOS-style row: swipe toward the end to delete, toward the start to save.
           return `<div class="swipe" data-swipe data-key="${esc(it.key)}" data-handle="${esc(it.handle)}">
             <div class="swipe-act swipe-wish" aria-hidden="true">${heartSvg(true)}<span>${esc(saved ? L('Saved', 'محفوظ') : L('Wishlist', 'المفضلة'))}</span></div>
             <div class="swipe-act swipe-del" aria-hidden="true">${trashSvg()}<span>${esc(L('Delete', 'امسح'))}</span></div>
-            <div class="line" data-key="${esc(it.key)}" data-qty="${it.quantity}" data-max="${p ? (p.stock || 50) : 50}" data-variant="${it.variant_id}" data-handle="${esc(it.handle)}">
+            <div class="line" data-key="${esc(it.key)}" data-qty="${it.quantity}" data-max="${p ? (p.stock || 50) : 50}" data-variant="${it.variant_id}" data-handle="${esc(it.handle)}" data-has-variants="${hasVariants}">
               <a href="${esc(it.url)}" class="line-img">${img(it.image)}</a>
               <div class="line-body">
                 <div class="line-title">${esc(lineTitle(it))}</div>
-                ${hasVariants ? `<button class="line-variant" data-replace><span>${esc(it.variant_title || '')}</span><b>${esc(L('Change', 'غيّر'))}</b>${chevron(11)}</button>` : ''}
+                ${canSwap ? `<button class="line-variant" data-replace>${hasVariants && it.variant_title ? `<span>${esc(it.variant_title)}</span>` : ''}<b>${esc(L('Change', 'غيّر'))}</b>${chevron(11)}</button>` : ''}
                 <div class="line-unit">${esc(fmtPrice(it.original_price / 100))}</div>
                 <div class="line-foot">${stepper(it.quantity, { size: 24, fs: 13, gap: 8 })}<span class="line-total">${esc(fmtPrice(it.original_line_price / 100))}</span></div>
               </div>
@@ -740,38 +747,48 @@
       return api;
     })();
 
-    /* ── Replace: pick another variant (flavour, colour…) of a cart line ── */
+    /* ── Change: another variant (flavour, colour…) of a cart line, or
+     *    another product from the same collection (another bowl flavour). ── */
     async function openVariants(line) {
       const handle = line.dataset.handle;
       const qty = Number(line.dataset.qty) || 1;
       const current = String(line.dataset.variant);
-      let product;
-      try {
-        const res = await fetch(`${(window.Shopify?.routes?.root || '/')}products/${encodeURIComponent(handle)}.js`);
-        product = await res.json();
-      } catch (e) { return; }
-      const variants = product.variants || [];
-      if (variants.length < 2) return;
+      let product = null;
+      if (line.dataset.hasVariants === 'true') {
+        try {
+          const res = await fetch(`${(window.Shopify?.routes?.root || '/')}products/${encodeURIComponent(handle)}.js`);
+          product = await res.json();
+        } catch (e) { product = null; }
+      }
+      const variants = (product?.variants || []).length > 1 ? product.variants : [];
+      const siblings = siblingsOf(handle);
+      if (!variants.length && !siblings.length) return;
       const app = $('#app');
       const scrim = document.createElement('div');
       scrim.className = 'scrim';
       const sheet = document.createElement('div');
       sheet.className = 'sheet variant-sheet';
-      const optName = (product.options || []).map((o) => o.name || o).filter((n) => n && n !== 'Title').join(' / ');
+      const optName = (product?.options || []).map((o) => o.name || o).filter((n) => n && n !== 'Title').join(' / ');
+      const me = catalogue.products.find((p) => p.id === handle);
+      const catTitle = me ? (catalogue.cats || []).find((c) => c.id === me.cat) : null;
+      const sizedImg = (src) => (src ? `<img src="${esc(src)}${String(src).includes('?') ? '&' : '?'}width=120" alt="" loading="lazy">` : '');
+      const row = ({ id, pic, name, price, on, soldOut }) => `
+        <button class="sheet-item variant-pick${on ? ' on' : ''}" data-pick="${id}"${soldOut ? ' disabled' : ''}>
+          <span class="cat-item-img">${sizedImg(pic)}</span>
+          <span style="flex:1;min-width:0;text-align:start"><b class="variant-name">${esc(name)}</b>
+            <span class="variant-price">${esc(fmtPrice(price))}${soldOut ? ` · ${esc(L('Sold out', 'خلص'))}` : ''}</span></span>
+          <span class="variant-check">${on ? '✓' : ''}</span>
+        </button>`;
       sheet.innerHTML = `
         <div class="grabber"></div>
-        <div class="sheet-head"><span class="sheet-title">${esc(L('Choose', 'اختار'))} ${esc(optName || L('a variant', 'نوع'))}</span>
+        <div class="sheet-head"><span class="sheet-title">${esc(L('Change', 'غيّر'))}</span>
           <button class="sheet-close" data-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
-        <div class="sheet-body" style="padding-top:12px">${variants.map((v) => {
-          const pic = v.featured_image?.src || product.featured_image;
-          const on = String(v.id) === current;
-          return `<button class="sheet-item variant-pick${on ? ' on' : ''}" data-pick="${v.id}"${v.available ? '' : ' disabled'}>
-            <span class="cat-item-img">${pic ? `<img src="${esc(pic)}${String(pic).includes('?') ? '&' : '?'}width=120" alt="" loading="lazy">` : ''}</span>
-            <span style="flex:1;min-width:0;text-align:start"><b class="variant-name">${esc(v.title)}</b>
-              <span class="variant-price">${esc(fmtPrice(v.price / 100))}${v.available ? '' : ` · ${esc(L('Sold out', 'خلص'))}`}</span></span>
-            <span class="variant-check">${on ? '✓' : ''}</span>
-          </button>`;
-        }).join('')}</div>`;
+        <div class="sheet-body" style="padding-bottom:16px">
+          ${variants.length ? `<div class="sec-label">${esc(optName || L('Options', 'الأنواع'))}</div>
+          ${variants.map((v) => row({ id: v.id, pic: v.featured_image?.src || product.featured_image, name: v.title, price: v.price / 100, on: String(v.id) === current, soldOut: !v.available })).join('')}` : ''}
+          ${siblings.length ? `<div class="sec-label">${esc(catTitle ? L(`More from ${catTitle.en}`, `كمان من ${catTitle.ar || catTitle.en}`) : L('From the same collection', 'من نفس القسم'))}</div>
+          ${siblings.map((p) => row({ id: p.variantId, pic: p.img, name: O.ptitle(p), price: p.price, on: false, soldOut: false })).join('')}` : ''}
+        </div>`;
       app.append(scrim, sheet);
       const close = () => { scrim.remove(); sheet.remove(); };
       scrim.addEventListener('click', close);
@@ -785,7 +802,7 @@
           // Add the new one first so the cart is never empty in between.
           await O.addToCart(pick.dataset.pick, qty, { silent: true });
           await O.changeLine(line.dataset.key, 0);
-          O.toast(L('Replaced', 'اتغيّر'));
+          O.toast(L('Changed', 'اتغيّر'));
           close();
         } catch (err) {
           pick.classList.remove('busy');
