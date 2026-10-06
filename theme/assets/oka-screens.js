@@ -546,11 +546,12 @@
     let checking = false;
 
     const byVariant = (id) => catalogue.products.find((p) => String(p.variantId) === String(id));
-    /** Other products in the same collection, e.g. the other tobacco-bowl flavours. */
+    /** Other products in the same collection at the same price, e.g. the other tobacco-bowl flavours. */
     const siblingsOf = (handle) => {
       const me = catalogue.products.find((p) => p.id === handle);
       if (!me || !me.cat) return [];
-      return catalogue.products.filter((p) => p.cat === me.cat && p.id !== handle && p.available !== false && p.stock !== 0);
+      // Same collection and same price, so a swap never changes the total.
+      return catalogue.products.filter((p) => p.cat === me.cat && p.id !== handle && Number(p.price) === Number(me.price) && p.available !== false && p.stock !== 0);
     };
     const lineTitle = (item) => {
       const p = byVariant(item.variant_id);
@@ -589,7 +590,8 @@
       }
 
       const inCart = new Set(items.map((i) => String(i.variant_id)));
-      const crossSell = catalogue.products.filter((p) => !inCart.has(String(p.variantId))).slice(0, 8);
+      // Easy add-ons: products under 100 EGP that aren't in the cart yet.
+      const crossSell = catalogue.products.filter((p) => !inCart.has(String(p.variantId)) && Number(p.price) < 100 && p.available !== false && p.stock !== 0).slice(0, 10);
 
       host.innerHTML = `
         ${items.map((it) => {
