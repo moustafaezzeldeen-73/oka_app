@@ -1,6 +1,8 @@
 {%- comment -%}
-  The feed's last page: the store's policies (Settings → Policies in Shopify
-  admin) and the refused-delivery notice from the OKA feed's Policies block.
+  The feed's last page: links to the store's policies (Settings → Policies in
+  Shopify admin), each in the shopper's language. Terms such as refused
+  deliveries live in the policies themselves; the optional notice below is
+  for short announcements only.
   Usage: {% render 'policies-page', block: block %}
 {%- endcomment -%}
 <section class="page policies-page" {{ block.shopify_attributes }}>
@@ -14,8 +16,14 @@
     {%- for key in keys -%}
       {%- assign pol = shop[key] -%}
       {%- if pol and pol.url -%}
-        <a class="pol-row press s98" href="{{ pol.url }}">
-          <span>{% render 'bi', en: en_names[forloop.index0], ar: ar_names[forloop.index0] %}</span>
+        {%- comment -%} The same policy in each language: Shopify serves the Arabic translation under /ar. {%- endcomment -%}
+        {%- assign base = pol.url | remove_first: '/ar/' | prepend: '/' | replace: '//', '/' -%}
+        <a class="pol-row press s98 l-en" href="{{ base }}">
+          <span>{{ en_names[forloop.index0] }}</span>
+          <span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right', px: 15 %}</span>
+        </a>
+        <a class="pol-row press s98 l-ar" href="/ar{{ base }}">
+          <span>{{ ar_names[forloop.index0] }}</span>
           <span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right', px: 15 %}</span>
         </a>
       {%- endif -%}
