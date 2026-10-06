@@ -49,6 +49,10 @@
         var l = null;
         try { l = localStorage.getItem('oka.lang'); } catch (e) {}
         if (l !== 'ar' && l !== 'en') l = {{ settings.default_lang | json }};
+        // A language URL (okaegypt.com/ar/…) wins, so Arabic links open in Arabic.
+        {%- unless request.locale.primary %}
+        if ({{ request.locale.iso_code | json }} === 'ar' || {{ request.locale.iso_code | json }} === 'en') l = {{ request.locale.iso_code | json }};
+        {%- endunless %}
         var h = document.documentElement;
         h.lang = l;
         h.dir = l === 'ar' ? 'rtl' : 'ltr';
