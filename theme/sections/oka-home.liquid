@@ -163,6 +163,11 @@
     {%- for block in section.blocks -%}
       {%- if block.type == 'ribbon' -%}{%- render 'ribbon-page', block: block -%}{%- endif -%}
     {%- endfor -%}
+
+    {%- comment -%} Policies and the refused-delivery notice — the very last page. {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'policies' -%}{%- render 'policies-page', block: block -%}{%- endif -%}
+    {%- endfor -%}
   </div>
 </div>
 
@@ -220,6 +225,20 @@
         { "type": "image_picker", "id": "after_image_ar", "label": "After image (Arabic)", "info": "Optional — for the Arabic site." },
         { "type": "collection", "id": "before", "label": "Show before collection" },
         { "type": "url", "id": "link", "label": "Opens", "info": "Defaults to the collection above." }
+      ]
+    },
+    {
+      "type": "policies",
+      "name": "Policies",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "The feed's last page: links to the store policies (Settings → Policies in Shopify admin) and a notice. Keep the notice in line with your Terms of service and Privacy policy." },
+        { "type": "text", "id": "title_en", "label": "Title (English)", "default": "Policies" },
+        { "type": "text", "id": "title_ar", "label": "Title (Arabic)", "default": "السياسات" },
+        { "type": "text", "id": "note_title_en", "label": "Notice heading (English)", "default": "Refused deliveries" },
+        { "type": "text", "id": "note_title_ar", "label": "Notice heading (Arabic)", "default": "رفض الاستلام" },
+        { "type": "textarea", "id": "note_en", "label": "Notice (English)" },
+        { "type": "textarea", "id": "note_ar", "label": "Notice (Arabic)" }
       ]
     },
     {

@@ -1236,3 +1236,12 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .variant-name { display: block; font-size: 14px; font-weight: 700; }
 .variant-price { display: block; margin-top: 2px; font-size: 12.5px; color: var(--ink-soft); }
 .variant-check { width: 22px; font-weight: 900; font-size: 16px; }
+
+/* ── Feed's last page: policies (snippets/policies-page) ─────────────── */
+.policies-page { justify-content: flex-start; overflow-y: auto; }
+.pol-list { margin: 6px 22px 0; border-radius: 18px; background: #fff; border: 1px solid var(--card-border); overflow: hidden; }
+.pol-row { display: flex; align-items: center; justify-content: space-between; padding: 15px 16px; font-size: 14.5px; font-weight: 700; border-bottom: 1px solid var(--hairline-soft, rgba(0,0,0,0.06)); }
+.pol-row:last-child { border-bottom: 0; }
+.pol-note { margin: 16px 22px 0; padding: 14px 16px; border-radius: 18px; background: #fff6f0; border: 1px solid #f3d6c2; font-size: 13px; line-height: 20px; color: var(--ink); }
+.pol-note b { display: block; margin-bottom: 4px; font-size: 14px; }
+.pol-note p { margin: 0; }
