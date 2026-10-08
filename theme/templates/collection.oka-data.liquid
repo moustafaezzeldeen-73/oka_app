@@ -87,5 +87,7 @@
       }
     {%- endfor -%}
   ],
-  "products": [{{ products_json | strip | remove_last: ',' }}]
+  "products": [{{ products_json | strip | remove_last: ',' }}],
+  {%- comment -%} Bought-together model, rebuilt nightly by server/services/recs.js. {%- endcomment -%}
+  "recs": {{ shop.metafields.oka.recs.value | json | default: 'null' }}
 }

@@ -511,22 +511,33 @@
       if (q > 0) O.addToCart(variant, q);
     });
 
-    O.loadCatalogue().then(({ products }) => {
-      const me = products.find((p) => p.id === d.handle);
-      const related = me ? products.filter((p) => p.cat === me.cat && p.id !== me.id).slice(0, 4) : [];
-      if (!related.length) return;
+    O.viewed.add(d.handle);
+    O.loadCatalogue().then((catalogue) => {
+      const me = catalogue.products.find((p) => p.id === d.handle);
       const wrap = $('[data-related]', root);
+      if (!me || !wrap) return;
+      // Frequently bought together, with one "step up" in the same collection first.
       const draw = () => {
-        $('[data-related-list]', root).innerHTML = related.map((r) => `
-          <a href="${esc(r.url)}" class="rcard">
-            <div class="rcard-img">${img(r.img)}</div>
-            <div class="rcard-body"><div class="rcard-title">${esc(O.ptitle(r))}</div><div class="rcard-price">${esc(fmtPrice(r.price))}</div></div>
-          </a>`).join('');
+        const recs = O.recommend(catalogue, { moment: 'product', anchor: me.id, limit: 6 });
+        const up = O.recommend(catalogue, { moment: 'upgrade', anchor: me.id, limit: 1 })[0];
+        const list = (up ? [up, ...recs.filter((r) => r.p.id !== up.p.id)] : recs).slice(0, 6);
+        if (!list.length) { wrap.hidden = true; return; }
+        $('[data-related-list]', root).innerHTML = list.map((r) => `
+          <div class="rcard">
+            <a href="${esc(r.p.url)}" class="rcard-img">${img(r.p.img)}</a>
+            <div class="rcard-body">
+              <div class="rcard-why${r.why === 'upgrade' ? ' up' : ''}">${esc(O.recReason(r))}</div>
+              <a href="${esc(r.p.url)}" class="rcard-title">${esc(O.ptitle(r.p))}</a>
+              <div class="rcard-foot"><span class="rcard-price">${esc(fmtPrice(r.p.price))}</span>
+                <button class="rcard-add press" data-add="${r.p.variantId}" aria-label="${esc(t('add'))}">+</button></div>
+            </div>
+          </div>`).join('');
+        wrap.hidden = false;
       };
       draw();
-      wrap.hidden = false;
       dragScroll($('[data-related-list]', root));
       onLang(draw);
+      onCart(draw);
     });
 
     paint();
@@ -590,8 +601,9 @@
       }
 
       const inCart = new Set(items.map((i) => String(i.variant_id)));
-      // Easy add-ons: products under 100 EGP that aren't in the cart yet.
-      const crossSell = catalogue.products.filter((p) => !inCart.has(String(p.variantId)) && Number(p.price) < 100 && p.available !== false && p.stock !== 0).slice(0, 10);
+      // Easy add-ons under 100 EGP, ranked by what goes with this basket (O.recommend).
+      const crossSell = O.recommend(catalogue, { moment: 'cart', cart: cartData, maxPrice: 100, limit: 10 })
+        .filter((r) => !inCart.has(String(r.p.variantId)));
 
       host.innerHTML = `
         ${items.map((it) => {
@@ -636,9 +648,10 @@
         </div>
 
         ${crossSell.length ? `<div class="rail-title">${esc(L('Complete your setup', 'كمّل جلستك'))}</div>
-        <div class="xrail hscroll" data-drag>${crossSell.map((p) => `
+        <div class="xrail hscroll" data-drag>${crossSell.map(({ p, why }) => `
           <div class="cs-slot">
             <a href="${esc(p.url)}" class="cs-card">${img(p.img)}</a>
+            ${why === 'ship' || why === 'again' || why === 'with' ? `<div class="cs-why${why === 'ship' ? ' ship' : ''}">${esc(O.recReason({ why }))}</div>` : ''}
             <div class="cs-title">${esc(O.ptitle(p))}</div>
             <div class="cs-price">${esc(fmtPrice(p.price))}</div>
             <button class="cs-add" data-add="${p.variantId}"${p.stock === 0 ? ' data-soldout' : ''}>${esc(t('add'))}</button>
@@ -1012,6 +1025,7 @@
         </div>
         <div class="divider top"></div>
 
+        ${lastChance(merch)}
         <div class="field" style="padding-bottom:110px">
           <div class="field-k">${esc(t('total'))}</div>
           <div class="field-v" style="display:flex;flex-direction:column;gap:4px">
@@ -1035,9 +1049,29 @@
       bar.dataset.ok = addr && !belowMinimum ? '1' : '';
     }
 
+    /** At the till, only a confident add-on or one that cuts the shipping fee — one or two, never a wall. */
+    function lastChance() {
+      if (!catalogue.products.length) return '';
+      const picks = O.recommend(catalogue, { moment: 'checkout', cart: cartData, maxPrice: 100, limit: 4 })
+        .filter((r) => r.why === 'ship' || r.why === 'again' || (r.why === 'with' && r.score >= 0.2))
+        .slice(0, 2);
+      if (!picks.length) return '';
+      return `<div class="field last-chance">
+          <div class="field-k">${esc(L('Add before you go', 'ضيف قبل ما تطلب'))}</div>
+          <div class="field-v">${picks.map((r) => `
+            <div class="lc-row">
+              <span class="lc-img">${img(r.p.img)}</span>
+              <span class="lc-body"><b>${esc(O.ptitle(r.p))}</b><span>${esc(O.recReason(r))} · ${esc(fmtPrice(r.p.price))}</span></span>
+              <button class="lc-add press" data-add="${r.p.variantId}">${esc(t('add'))}</button>
+            </div>`).join('')}</div>
+        </div>
+        <div class="divider top"></div>`;
+    }
+
     host.addEventListener('click', (e) => {
       if (e.target.closest('[data-add-address]')) O.store.set('oka.afterAddress', CFG.routes.checkoutReview);
     });
+    onCart((e) => { cartData = e.detail || cartData; render(); });
     $('[data-place]', bar).addEventListener('click', () => {
       if (!bar.dataset.ok) return;
       const btn = $('[data-place]', bar);
@@ -2335,6 +2369,71 @@
     });
     onLang(() => { if (data) lookUp(); });
   }
+
+  /* ── "Goes well with it" — right after something is added ─────────────
+   * The moment of highest intent: the shopper just decided. Shown only when
+   * the model is confident (bought-together, restock or wishlist), at most
+   * once per product per visit and not twice within 45 s, and never on the
+   * cart or checkout screens, which have their own add-on rails.
+   */
+  const REC_GAP_MS = 45000;
+  let recLastAt = 0;
+  document.addEventListener('oka:added', async (e) => {
+    if ($('[data-screen="cart"], [data-screen="checkout"]') || $('.rec-sheet, .sheet')) return;
+    if (Date.now() - recLastAt < REC_GAP_MS) return;
+    const catalogue = await O.loadCatalogue();
+    const me = catalogue.products.find((p) => String(p.variantId) === String(e.detail?.variantId));
+    if (!me) return;
+    const shown = O.store.sget('oka.recShown') || [];
+    if (shown.includes(me.id)) return;
+    const picks = O.recommend(catalogue, { moment: 'added', anchor: me.id, limit: 6 })
+      .filter((r) => (r.why === 'with' || r.why === 'again' || r.why === 'saved') && r.score >= 0.12)
+      .slice(0, 3);
+    if (!picks.length) return;
+    O.store.sset('oka.recShown', [...shown, me.id].slice(-30));
+    recLastAt = Date.now();
+    await new Promise((r) => setTimeout(r, 650));
+    if ($('.sheet')) return;
+    const app = $('#app');
+    if (!app) return;
+    const scrim = document.createElement('div');
+    scrim.className = 'scrim';
+    const sheet = document.createElement('div');
+    sheet.className = 'sheet rec-sheet';
+    const title = O.ptitle(me);
+    sheet.innerHTML = `
+      <div class="grabber"></div>
+      <div class="sheet-head"><span class="sheet-title">${esc(L('Added ✓', 'اتضاف ✓'))}</span>
+        <button class="sheet-close" data-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+      <div class="sheet-body" style="padding-bottom:12px">
+        <div class="rec-lead">${esc(L(`People who buy ${title} usually add:`, `اللي بيشتروا ${title} غالبًا بيضيفوا:`))}</div>
+        ${picks.map((r) => `
+          <div class="sheet-item rec-row">
+            <a href="${esc(r.p.url)}" class="cat-item-img">${img(r.p.img)}</a>
+            <span style="flex:1;min-width:0"><b>${esc(O.ptitle(r.p))}</b>
+              <span class="rec-why">${esc(O.recReason(r, title))} · ${esc(fmtPrice(r.p.price))}</span></span>
+            <button class="rec-add press" data-rec-add="${r.p.variantId}">${esc(t('add'))}</button>
+          </div>`).join('')}
+        <div style="display:flex;gap:10px;padding:6px 20px 4px">
+          <button class="cta" style="flex:1;background:rgba(0,0,0,0.06);color:#1d1d1f" data-close>${esc(L('Keep shopping', 'كمّل تسوق'))}</button>
+          <a class="cta" style="flex:1;text-align:center" href="${esc(CFG.routes.cart)}">${esc(L('View cart', 'روح للسلة'))}</a>
+        </div>
+      </div>`;
+    app.append(scrim, sheet);
+    const close = () => { scrim.remove(); sheet.remove(); };
+    scrim.addEventListener('click', close);
+    sheet.addEventListener('click', async (ev) => {
+      if (ev.target.closest('[data-close]')) return close();
+      const add = ev.target.closest('[data-rec-add]');
+      if (!add || add.classList.contains('done')) return;
+      add.disabled = true;
+      try {
+        await O.addToCart(add.dataset.recAdd, 1, { silent: true });
+        add.classList.add('done');
+        add.textContent = L('Added', 'اتضاف');
+      } catch (err) { add.disabled = false; }
+    });
+  });
 
   /* ── boot ────────────────────────────────────────────────────────────── */
   const SCREENS = {

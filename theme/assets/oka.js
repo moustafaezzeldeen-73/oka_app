@@ -213,7 +213,10 @@
       await cartFetch('/cart/add.js', { items: [{ id: Number(variantId), quantity: qty }] });
       const c = setCart(await cartFetch('/cart.js'));
       haptic.success();
-      if (!silent) addedFeedback();
+      if (!silent) {
+        addedFeedback();
+        document.dispatchEvent(new CustomEvent('oka:added', { detail: { variantId: String(variantId), qty } }));
+      }
       return c;
     } catch (err) {
       okaAlert(L('Could not add', 'معرفناش نضيفه'), String(err.message || err));
@@ -303,6 +306,134 @@
       });
     return cataloguePromise;
   }
+  /* ── recommendations (cross-sell / upsell) ─────────────────────────────
+   * The bought-together model (catalogue.recs) is rebuilt nightly from the
+   * store's orders by server/services/recs.js. Here it is combined with
+   * what this shopper is doing right now:
+   *
+   *   association   1 − Π(1 − conf(anchor→p)) over everything in the cart
+   *                 (plus the product on screen): the chance p joins this
+   *                 basket, given what is already in it ("noisy-OR")
+   *   popularity    recency-weighted share of baskets — the cold-start fallback
+   *   substitutes   a second hookah/party next to one already chosen is
+   *                 almost never bought, so durables are held back
+   *   gap closer    an add-on that lifts the cart over the cheaper-shipping
+   *                 tier pays for itself, so it is ranked first and says so
+   *   replenish     a bowl/tobacco the customer bought about one usual
+   *                 re-buy interval ago (rebuy days per product)
+   *   intent        on the wishlist or viewed this session
+   *
+   * The list is then diversified (at most a couple per collection near the
+   * top) so one collection of flavours doesn't fill the rail.
+   */
+  const DURABLE = /hookah|cobra|part(y|ies)/i;
+  const CONSUMABLE = /ready-to-smoke|tobacco|coal|bowl/i;
+  const viewed = {
+    list: () => store.sget('oka.viewed') || [],
+    add(handle) {
+      if (!handle) return;
+      const l = viewed.list().filter((h) => h !== handle);
+      l.unshift(handle);
+      store.sset('oka.viewed', l.slice(0, 20));
+    },
+  };
+  /**
+   * Ranks catalogue products for one moment of the journey.
+   *   moment   'product' | 'added' | 'cart' | 'checkout' | 'upgrade'
+   *   anchor   handle of the product on screen / just added (optional)
+   *   cart     Shopify cart (defaults to the current one)
+   *   maxPrice only items under this price (the add-on rails use 100)
+   * Returns [{ p, score, why }] best first; why ∈ ship|again|with|saved|popular|upgrade.
+   */
+  function recommend(catalogue, { moment = 'cart', anchor = null, cart = cartState, limit = 10, maxPrice = Infinity } = {}) {
+    const products = catalogue?.products || [];
+    const model = catalogue?.recs || {};
+    const pairs = model.pairs || {};
+    const pop = model.pop || {};
+    const rebuy = model.rebuy || {};
+    const byHandle = new Map(products.map((p) => [p.id, p]));
+    const items = cart?.items || [];
+    const inCart = new Set(items.map((i) => i.handle));
+    const anchors = [...new Set([anchor, ...inCart].filter(Boolean))];
+    const anchorP = anchor ? byHandle.get(anchor) : null;
+    const durableCats = new Set(anchors.map((h) => byHandle.get(h)).filter((p) => p && DURABLE.test(p.cat)).map((p) => p.cat));
+    const hasDurable = durableCats.size > 0;
+    const maxPop = Math.max(1e-6, ...Object.values(pop));
+    const merch = cart ? cart.total_price / 100 : 0;
+    const tier = Number(CFG.tier) || 300;
+    const saved = wishlist.all();
+    const seen = new Set(viewed.list());
+    const lastBought = {};
+    for (const [h, ts] of customer?.bought || []) lastBought[h] = Math.max(lastBought[h] || 0, ts * 1000);
+    // conf(a→b) lookup, built once per call
+    const conf = (a, b) => {
+      const row = pairs[a];
+      if (!row) return 0;
+      for (const [h, c] of row) if (h === b) return c;
+      return 0;
+    };
+
+    const out = [];
+    for (const p of products) {
+      if (p.available === false || p.stock === 0) continue;
+      if (inCart.has(p.id) || p.id === anchor) continue;
+      if (Number(p.price) >= maxPrice) continue;
+      let why = 'popular';
+      let score;
+      if (moment === 'upgrade') {
+        // Same collection, a step up in price (1.1–1.8×), the more popular the better.
+        if (!anchorP || p.cat !== anchorP.cat) continue;
+        const r = Number(p.price) / Math.max(1, Number(anchorP.price));
+        if (r < 1.1 || r > 1.8) continue;
+        score = 0.5 + 0.5 * ((pop[p.id] || 0) / maxPop) - Math.abs(r - 1.35) * 0.3;
+        out.push({ p, score, why: 'upgrade' });
+        continue;
+      }
+      let miss = 1;
+      for (const a of anchors) miss *= 1 - conf(a, p.id);
+      const assoc = 1 - miss;
+      score = assoc + 0.15 * ((pop[p.id] || 0) / maxPop);
+      if (assoc >= 0.08) why = 'with';
+      // A second durable beside one already chosen is a substitute, not an add-on.
+      if (DURABLE.test(p.cat) && (hasDurable || durableCats.has(p.cat))) score *= 0.15;
+      // Nobody needs a hookah suggested on top of a bowl at the till.
+      if ((moment === 'cart' || moment === 'checkout') && DURABLE.test(p.cat)) score *= 0.3;
+      if (saved[p.id]) { score += 0.2; if (why === 'popular') why = 'saved'; }
+      if (seen.has(p.id)) score += 0.08;
+      const last = lastBought[p.id];
+      if (last && CONSUMABLE.test(p.cat)) {
+        const due = rebuy[p.id] || 21;
+        const ratio = (Date.now() - last) / 86400000 / due;
+        if (ratio >= 0.7 && ratio <= 2.5) { score += 0.4; why = 'again'; }
+        else score += 0.05;
+      }
+      if ((moment === 'cart' || moment === 'checkout') && merch > 0 && merch < tier && merch + Number(p.price) >= tier) {
+        score += 0.35;
+        why = 'ship';
+      }
+      out.push({ p, score, why });
+    }
+    out.sort((a, b) => b.score - a.score);
+    // Diversify: each further pick from the same collection counts for less.
+    const perCat = {};
+    const ranked = out.map((r) => {
+      const k = perCat[r.p.cat] = (perCat[r.p.cat] || 0) + 1;
+      return { ...r, score: r.score * 0.72 ** (k - 1) };
+    }).sort((a, b) => b.score - a.score);
+    return ranked.slice(0, limit);
+  }
+  /** One short line saying why an item is suggested, for under its card. */
+  function recReason(r, anchorTitle) {
+    switch (r.why) {
+      case 'ship': return L('Unlocks cheaper shipping', 'يوصّلك لشحن أرخص');
+      case 'again': return L('Time to restock', 'وقت تجدد');
+      case 'with': return anchorTitle ? L(`Goes with ${anchorTitle}`, `بيتاخد مع ${anchorTitle}`) : L('Often bought together', 'بيتشروا مع بعض');
+      case 'saved': return L('On your wishlist', 'في المفضلة');
+      case 'upgrade': return L('A step up', 'درجة أعلى');
+      default: return L('Popular now', 'مطلوب دلوقتي');
+    }
+  }
+
   const ptitle = (p) => (p ? L(p.titleEn, p.titleAr) : '');
   const pdesc = (p) => (p ? L(p.descEn, p.descAr) : '');
 
@@ -732,7 +863,7 @@
     PROVINCES, provinceOf, provinceName, addresses, selectedAddress, selectAddress, customer,
     zoneFees, shippingFor, shipBar, etaFor, days,
     getCart, setCart, addToCart, addManyToCart, changeLine, swapLine, applyDiscount, cartCount, cartQtyOf, cartTotals, toast,
-    loadCatalogue, ptitle, pdesc, searchProducts, wishlist, paintHearts,
+    loadCatalogue, ptitle, pdesc, searchProducts, wishlist, paintHearts, recommend, recReason, viewed,
     api, hasService, requireSignIn, goBack, whatsappUrl, okaAlert, openAr,
     openMenu, closeMenu,
   };

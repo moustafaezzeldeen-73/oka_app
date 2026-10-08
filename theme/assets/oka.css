@@ -1245,3 +1245,32 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .pol-note { margin: 16px 22px 0; padding: 14px 16px; border-radius: 18px; background: #fff6f0; border: 1px solid #f3d6c2; font-size: 13px; line-height: 20px; color: var(--ink); }
 .pol-note b { display: block; margin-bottom: 4px; font-size: 14px; }
 .pol-note p { margin: 0; }
+
+/* ── Recommendations: why-lines, bought-together cards, after-add sheet, last chance ── */
+.rcard { display: flex; flex-direction: column; }
+.rcard-img { display: block; }
+.rcard-body { display: flex; flex-direction: column; flex: 1; }
+.rcard-why { font-size: 10px; font-weight: 700; color: var(--green); line-height: 13px; margin-bottom: 3px; }
+.rcard-why.up { color: #8a5a00; }
+.rcard-title { display: block; }
+.rcard-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 4px; }
+.rcard-foot .rcard-price { margin-top: 0; }
+.rcard-add { width: 26px; height: 26px; border-radius: 13px; background: var(--dark-grad); color: #fff; font-size: 17px; font-weight: 600; line-height: 26px; text-align: center; }
+.cs-why { font-size: 10.5px; font-weight: 700; color: var(--green); margin-top: 8px; line-height: 13px; }
+.cs-why.ship { color: #b05a00; }
+.cs-why + .cs-title { margin-top: 2px; }
+.rec-sheet { top: auto; max-height: 70%; }
+.rec-sheet .rec-lead { padding: 4px 20px 10px; font-size: 13px; color: rgba(0,0,0,0.55); }
+.rec-row { width: calc(100% - 40px); }
+.rec-row .cat-item-img { width: 52px; height: 52px; border-radius: 10px; background: #f2f2f2; display: flex; }
+.rec-row b { display: block; font-size: 14px; }
+.rec-row .rec-why { display: block; font-size: 11.5px; color: var(--green); font-weight: 700; margin-top: 2px; }
+.rec-row .rec-add { padding: 8px 14px; border-radius: 999px; background: var(--dark-grad); color: #fff; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.rec-row .rec-add.done { background: var(--green); }
+.last-chance .lc-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.last-chance .lc-img { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; background: #f2f2f2; flex-shrink: 0; display: flex; }
+.last-chance .lc-img img { width: 100%; height: 100%; object-fit: contain; }
+.last-chance .lc-body { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: 12px; }
+.last-chance .lc-body b { font-size: 13px; }
+.last-chance .lc-body span { color: rgba(0,0,0,0.55); }
+.last-chance .lc-add { padding: 7px 13px; border-radius: 999px; background: var(--dark-grad); color: #fff; font-size: 12px; font-weight: 700; }

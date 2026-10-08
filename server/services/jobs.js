@@ -5,6 +5,7 @@ import { schemeOrNull } from './shipping.js';
 import { POLICY } from '../config/policy.js';
 import { calculateWithShopify, createOrder, fetchVariants, hasShopify } from '../integrations/shopify.js';
 import { dueSubscriptions, markCycleResult } from './subscriptions.js';
+import { refreshRecs } from './recs.js';
 
 /**
  * Background jobs, run in this process on plain intervals:
@@ -12,6 +13,7 @@ import { dueSubscriptions, markCycleResult } from './subscriptions.js';
  *   subscriptions  hourly     — turn due subscriptions into COD orders
  *   notifications  30 min     — push shipment progress to customers' phones
  *   loyalty        6 hours    — credit points for delivered orders
+ *   recs           24 hours   — rebuild the bought-together model (shop metafield oka.recs)
  *
  * Run exactly ONE server instance with JOBS_ENABLED unset (or "true"); set
  * JOBS_ENABLED=false on any others, or two schedulers would place every
@@ -111,4 +113,5 @@ export function startJobs() {
   every(HOUR, 'subscriptions', runDueSubscriptions);
   every(HOUR / 2, 'notifications', notifyShipmentUpdates);
   every(6 * HOUR, 'loyalty', creditDeliveredOrders);
+  every(24 * HOUR, 'recs', refreshRecs);
 }
