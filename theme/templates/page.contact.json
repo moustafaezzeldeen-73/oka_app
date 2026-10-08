@@ -1,0 +1,11 @@
+{
+ "sections": {
+  "main": {
+   "type": "oka-contact",
+   "settings": {}
+  }
+ },
+ "order": [
+  "main"
+ ]
+}

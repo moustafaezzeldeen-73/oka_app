@@ -1,0 +1,71 @@
+{%- comment -%}
+  A simple content page: image + heading + text rows, and videos. Used by
+  the how-to-use and about-us pages (ported from the old Dawn theme's
+  multirow / video sections). Each text has an English and an Arabic side.
+{%- endcomment -%}
+<div class="screen fade-in" data-screen="page">
+  {%- assign t_en = section.settings.title_en | default: page.title -%}
+  {%- assign t_ar = section.settings.title_ar | default: t_en -%}
+  {% render 'screen-header', en: t_en, ar: t_ar %}
+  {%- if page.content != blank -%}<div class="rte">{{ page.content }}</div>{%- endif -%}
+  <div class="rows">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'row' -%}
+          <div class="row-card" {{ block.shopify_attributes }}>
+            {%- if block.settings.image -%}
+              <div class="row-img">{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: block.settings.heading_en, sizes: '(min-width: 600px) 560px, 100vw' }}</div>
+            {%- endif -%}
+            {%- assign h_ar = block.settings.heading_ar | default: block.settings.heading_en -%}
+            {%- if block.settings.heading_en != blank -%}<h2 class="row-title">{% render 'bi', en: block.settings.heading_en, ar: h_ar %}</h2>{%- endif -%}
+            {%- if block.settings.text_en != blank -%}
+              <div class="row-text"><div class="l-en">{{ block.settings.text_en }}</div><div class="l-ar">{{ block.settings.text_ar | default: block.settings.text_en }}</div></div>
+            {%- endif -%}
+          </div>
+        {%- when 'video' -%}
+          <div class="row-card" {{ block.shopify_attributes }}>
+            {%- assign h_ar = block.settings.heading_ar | default: block.settings.heading_en -%}
+            {%- if block.settings.heading_en != blank -%}<h2 class="row-title">{% render 'bi', en: block.settings.heading_en, ar: h_ar %}</h2>{%- endif -%}
+            {%- if block.settings.video -%}
+              <div class="row-video">{{ block.settings.video | video_tag: controls: true, preload: 'metadata', playsinline: true }}</div>
+            {%- elsif block.settings.video_url != blank -%}
+              <a class="cta" href="{{ block.settings.video_url }}" target="_blank" rel="noopener">{% render 'bi', en: 'Watch the video', ar: 'شوف الفيديو' %}</a>
+            {%- endif -%}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+  <div style="padding:6px 22px 40px"><a class="cta" href="{{ routes.root_url }}">{% render 'bi', en: 'Shop OKA', ar: 'تسوّق أوكا' %}</a></div>
+</div>
+{% schema %}
+{
+  "name": "Content rows",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title_en", "label": "Title (English)" },
+    { "type": "text", "id": "title_ar", "label": "Title (Arabic)" }
+  ],
+  "blocks": [
+    {
+      "type": "row", "name": "Row",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "heading_en", "label": "Heading (English)" },
+        { "type": "text", "id": "heading_ar", "label": "Heading (Arabic)" },
+        { "type": "richtext", "id": "text_en", "label": "Text (English)" },
+        { "type": "richtext", "id": "text_ar", "label": "Text (Arabic)" }
+      ]
+    },
+    {
+      "type": "video", "name": "Video",
+      "settings": [
+        { "type": "text", "id": "heading_en", "label": "Heading (English)" },
+        { "type": "text", "id": "heading_ar", "label": "Heading (Arabic)" },
+        { "type": "video", "id": "video", "label": "Video" },
+        { "type": "url", "id": "video_url", "label": "Or a video link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Content rows" }]
+}
+{% endschema %}

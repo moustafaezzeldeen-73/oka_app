@@ -268,9 +268,23 @@
     });
   }
   /** Stands in for the success haptic where there is none (desktop, iOS Safari). */
+  /**
+   * After an add: a bar under the header with the next steps, as the old
+   * theme's cart notification had (View cart / Check out). Not on the cart
+   * page itself, where the new line is already in view.
+   */
   function addedFeedback() {
-    if (canVibrate && matchMedia('(pointer: coarse)').matches) return;
-    toast(L('Added to cart', 'اتضاف للسلة'));
+    const app = $('#app');
+    if (!app || $('[data-screen="cart"]')) { toast(L('Added to cart', 'اتضاف للسلة')); return; }
+    $$('.added-bar', app).forEach((x) => x.remove());
+    const el = document.createElement('div');
+    el.className = 'added-bar';
+    el.innerHTML = `<span class="added-tick">✓</span><span class="added-txt">${esc(L('Added to cart', 'اتضاف للسلة'))}</span>
+      <a href="${esc(CFG.routes.cart)}" class="added-btn ghost">${esc(L('View cart', 'السلة'))}</a>
+      ${cartTotals().merch >= (Number(CFG.minOrder) || 0) ? `<a href="${esc(CFG.routes.checkout)}" class="added-btn">${esc(L('Check out', 'اطلب'))}</a>` : ''}`;
+    app.appendChild(el);
+    clearTimeout(addedFeedback.t);
+    addedFeedback.t = setTimeout(() => el.remove(), 4000);
   }
   function toast(text) {
     const app = $('#app');

@@ -1,0 +1,84 @@
+{
+ "sections": {
+  "main": {
+   "type": "oka-rows",
+   "settings": {
+    "title_en": "About us",
+    "title_ar": "عن أوكا"
+   },
+   "blocks": {
+    "b0": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/Pngtree_egypt_flag_transparent_watercolor_painted_5326754.webp",
+      "heading_en": "Started 2022",
+      "heading_ar": "بدأنا ٢٠٢٢",
+      "text_en": "<p>Fully designed, tested and manufactured in Egypt. <strong>OKA</strong> started in 2022 with its main investment in science: making smoking more economical, safer and a little more enjoyable. If each breath of our hookah is a little safer and costs less, together that saves Egyptians a lot of risk and money. Thank you for supporting our research team by shopping with us.</p>",
+      "text_ar": "<p>متصممة ومتجرّبة ومتصنّعة بالكامل في مصر. <strong>أوكا</strong> بدأت سنة ٢٠٢٢ واستثمارها الأساسي في العلم: إن تجربة الشيشة تبقى أوفر وأأمن وممتعة أكتر. لو كل نَفَس من شيشتنا بقى أأمن شوية وأرخص، ده في الآخر بيوفّر على المصريين مخاطر وفلوس كتير. شكرًا إنك بتدعم فريق البحث بتاعنا لما تشتري مننا.</p>"
+     }
+    },
+    "b1": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/VF_analysis.webp",
+      "heading_en": "Engineered to perfection",
+      "heading_ar": "هندسة مضبوطة",
+      "text_en": "<p>OKA spent months engineering this experience to match the performance of the world’s top hookahs.</p>",
+      "text_ar": "<p>أوكا اشتغلت شهور على هندسة التجربة دي عشان توصل لأداء أحسن الشيش في العالم.</p>"
+     }
+    },
+    "b2": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/CO_0.5x.webp",
+      "heading_en": "Less carbon and sulfur oxides",
+      "heading_ar": "أكاسيد كربون وكبريت أقل",
+      "text_en": "<p>We work to reduce sulfur oxides and carbon monoxide for a safer experience.</p>",
+      "text_ar": "<p>بنشتغل على تقليل أكاسيد الكبريت وأول أكسيد الكربون لتجربة أأمن.</p>"
+     }
+    },
+    "b3": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/ezgif-4-e1681849a6_6b0201ef-cff6-4285-b844-2c1062aa5492.webp",
+      "heading_en": "Thermally optimized",
+      "heading_ar": "تصميم حراري",
+      "text_en": "<p>Designed for the coolest smoke with the least water — lighter and easier to carry.</p>",
+      "text_ar": "<p>متصممة لأبرد سحبة بأقل كمية مية — أخف وأسهل في الشيل.</p>"
+     }
+    },
+    "b4": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/OKA-Stem_2023-Jul-01_12-09-57AM-000_CustomizedView44256720025.webp",
+      "heading_en": "OKA-STEM",
+      "heading_ar": "أوكا ستيم",
+      "text_en": "<p>OKA STEM is made of water-resistant paper that keeps the flavour fresh and resists heat.</p>",
+      "text_ar": "<p>أوكا ستيم معمول من ورق مقاوم للمية بيحافظ على الطعم ويستحمل الحرارة.</p>"
+     }
+    },
+    "b5": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/ezgif-1-b8c4e509dc.webp",
+      "heading_en": "Continuous purging orifice",
+      "heading_ar": "فتحة تنفيس مستمرة",
+      "text_en": "<p>No need to purge (blow into the hookah) while smoking — the orifice keeps the taste fresh and the heat regulated.</p>",
+      "text_ar": "<p>مش محتاج تنفخ في الشيشة وانت بتشرب — الفتحة بتحافظ على الطعم وبتظبط الحرارة.</p>"
+     }
+    }
+   },
+   "block_order": [
+    "b0",
+    "b1",
+    "b2",
+    "b3",
+    "b4",
+    "b5"
+   ]
+  }
+ },
+ "order": [
+  "main"
+ ]
+}

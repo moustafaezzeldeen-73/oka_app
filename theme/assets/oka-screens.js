@@ -853,10 +853,12 @@
       if (e.target.closest('[data-checkout]')) {
         const { merch } = O.cartTotals(lastCart);
         if (Number(CFG.minOrder) > 0 && merch < Number(CFG.minOrder)) return;
-        // An account is optional: a guest is offered the reasons to sign in
-        // (live tracking, points on this order) and can carry on without one.
-        if (!O.customer) joinPrompt(Math.floor(Math.max(0, merch) * (CFG.earnPointsPerEgp || 1)));
-        else go(CFG.routes.checkoutReview);
+        // Straight to Shopify's checkout, as the old theme did: no sign-in
+        // sheet or review page in between (the cart already shows the
+        // sign-in nudge with its points, for whoever wants it).
+        const btn = e.target.closest('[data-checkout]');
+        btn.innerHTML = spinner();
+        go(CFG.routes.checkout);
       }
     });
     host.addEventListener('input', (e) => {
@@ -936,19 +938,7 @@
       <div class="join-fine">${esc(L('Takes a few seconds. You can also sign in after ordering — your points still count.', 'بتاخد ثواني. وتقدر تسجّل بعد الطلب كمان ونقاطك محسوبة.'))}</div>
     </div>`;
   }
-  function joinPrompt(points) {
-    const app = $('#app');
-    const scrim = document.createElement('div');
-    scrim.className = 'scrim';
-    const sheet = document.createElement('div');
-    sheet.className = 'join-sheet';
-    sheet.innerHTML = `<div class="grabber"></div>${joinCard(points)}`;
-    const close = () => { scrim.remove(); sheet.remove(); };
-    scrim.addEventListener('click', close);
-    app.appendChild(scrim);
-    app.appendChild(sheet);
-  }
-  // Both the sheet (cart) and the inline card (checkout review) answer here.
+  // The inline card on the checkout review page answers here.
   document.addEventListener('click', (e) => {
     if (e.target.closest('[data-join-signin]')) { e.preventDefault(); O.requireSignIn(CFG.routes.checkoutReview); }
     if (e.target.closest('[data-join-guest]')) { e.preventDefault(); e.target.closest('[data-join-guest]').innerHTML = spinner(true); go(CFG.routes.checkout); }
