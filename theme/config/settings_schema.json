@@ -108,7 +108,7 @@
         "id": "min_order",
         "label": "Minimum order (EGP)",
         "info": "0 turns it off. The checkout button stays disabled below it.",
-        "default": 150
+        "default": 0
       }
     ]
   },

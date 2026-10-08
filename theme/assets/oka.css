@@ -1294,3 +1294,8 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .added-txt { flex: 1; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .added-btn { padding: 8px 12px; border-radius: 999px; background: #fff; color: #1d1d1f; font-size: 12.5px; font-weight: 800; white-space: nowrap; }
 .added-btn.ghost { background: rgba(255,255,255,0.14); color: #fff; }
+
+/* ── Opening screen: "swipe up" cue ── */
+.swipe-up { position: absolute; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 14px 9px; border-radius: 999px; background: rgba(0,0,0,0.45); color: #fff; font-size: 11.5px; font-weight: 700; pointer-events: none; animation: okaSwipeUp 1.6s ease-in-out infinite; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+@keyframes okaSwipeUp { 0%, 100% { transform: translate(-50%, 0); opacity: .85; } 50% { transform: translate(-50%, -7px); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .swipe-up { animation: none; } }

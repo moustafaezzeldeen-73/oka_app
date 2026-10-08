@@ -21,7 +21,7 @@
     "fee_delta_over": 46,
     "fee_far_under": 80,
     "fee_far_over": 56,
-    "min_order": 150,
+    "min_order": 0,
     "points_per_egp": 10,
     "earn_points_per_egp": 1,
     "subscription_discount": 5,
@@ -33,7 +33,7 @@
     "Default": {
       "default_lang": "ar",
       "age_gate": true,
-      "min_order": 150
+      "min_order": 0
     }
   }
 }

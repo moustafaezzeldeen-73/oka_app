@@ -17,7 +17,7 @@
     <a href="/pages/addresses" class="menu-row"{% unless customer %} data-sign-in="/pages/addresses"{% endunless %}>{% render 'bi', en: 'My addresses', ar: 'عناويني' %}{{ chev }}</a>
     <a href="/pages/wishlist" class="menu-row">{% render 'bi', en: 'Wishlist', ar: 'المفضلة' %}{{ chev }}</a>
     <a href="/pages/loyalty" class="menu-row"{% unless customer %} data-sign-in="/pages/loyalty"{% endunless %}>{% render 'bi', en: 'Loyalty points', ar: 'نقاطي' %}{{ chev }}</a>
-    <a href="/pages/subscriptions" class="menu-row"{% unless customer %} data-sign-in="/pages/subscriptions"{% endunless %}>{% render 'bi', en: 'My Subscriptions', ar: 'اشتراكاتي' %}{{ chev }}</a>
+    {%- if settings.proxy_path != blank -%}<a href="/pages/subscriptions" class="menu-row"{% unless customer %} data-sign-in="/pages/subscriptions"{% endunless %}>{% render 'bi', en: 'My Subscriptions', ar: 'اشتراكاتي' %}{{ chev }}</a>{%- endif -%}
     <button class="menu-row" data-toggle-lang>{% render 'bi', en: 'Language', ar: 'اللغة' %}<span data-lang-label style="font-size:14px;font-weight:600">EN</span></button>
     <a href="/pages/support" class="menu-row">{% render 'bi', en: 'Help & support', ar: 'محتاج مساعدة؟' %}{{ chev }}</a>
     <a href="/pages/support#legal" class="menu-row">{% render 'bi', en: 'Policies', ar: 'الشروط والسياسات' %}{{ chev }}</a>

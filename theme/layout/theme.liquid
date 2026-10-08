@@ -231,7 +231,14 @@
         </div>
         <div class="side-links">
           {%- liquid
-            assign links = 'home|categories|search|cart|orders|account|loyalty|subscriptions|wishlist|support' | split: '|'
+            assign links = 'home|categories|search|cart|orders|account|loyalty|subscriptions|wishlist|support'
+            comment
+              Subscribe & Save needs the order service; without it the page is a dead end.
+            endcomment
+            if settings.proxy_path == blank
+              assign links = links | remove: '|subscriptions'
+            endif
+            assign links = links | split: '|'
           -%}
           {%- for l in links -%}
             {%- liquid

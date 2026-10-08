@@ -28,7 +28,7 @@
       {%- for block in section.blocks -%}
         {%- if block.type == 'banner' and block.settings.image -%}
           {%- assign opening_id = block.id -%}
-          {%- render 'banner-page', block: block -%}
+          {%- render 'banner-page', block: block, eager: true -%}
           {%- break -%}
         {%- endif -%}
       {%- endfor -%}
