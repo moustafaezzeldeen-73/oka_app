@@ -801,13 +801,13 @@
         if (pick.dataset.pick === current) return close();
         pick.classList.add('busy');
         try {
-          // Add the new one first so the cart is never empty in between.
-          await O.addToCart(pick.dataset.pick, qty, { silent: true });
-          await O.changeLine(line.dataset.key, 0);
+          await O.swapLine(current, pick.dataset.pick, qty);
+          O.haptic.success?.();
           O.toast(L('Changed', 'اتغيّر'));
           close();
         } catch (err) {
           pick.classList.remove('busy');
+          O.okaAlert(L('Could not change it', 'معرفناش نغيّره'), errText(err));
         }
       });
     }

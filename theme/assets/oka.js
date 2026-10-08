@@ -227,6 +227,22 @@
   async function changeLine(key, quantity) {
     return setCart(await cartFetch('/cart/change.js', { id: key, quantity }));
   }
+  /**
+   * Replace one product/variant in the cart with another, in one request so
+   * the old line can't survive a key change between an add and a remove.
+   * Keeps the quantity; merges into the new variant if it's already there.
+   */
+  async function swapLine(oldVariantId, newVariantId, qty) {
+    const cur = await getCart(true);
+    const have = (cur.items || []).filter((i) => String(i.variant_id) === String(newVariantId)).reduce((a, i) => a + i.quantity, 0);
+    await cartFetch('/cart/update.js', { updates: { [oldVariantId]: 0, [newVariantId]: have + qty } });
+    let c = await cartFetch('/cart.js');
+    // Belt and braces: if any line of the old variant is still there, remove it by its current key.
+    for (const it of (c.items || []).filter((i) => String(i.variant_id) === String(oldVariantId))) {
+      c = await cartFetch('/cart/change.js', { id: it.key, quantity: 0 });
+    }
+    return setCart(c);
+  }
   async function applyDiscount(code) {
     return setCart(await cartFetch('/cart/update.js', { discount: code }));
   }
@@ -715,7 +731,7 @@
     arDigits, num, fmtPrice, fold, haptic,
     PROVINCES, provinceOf, provinceName, addresses, selectedAddress, selectAddress, customer,
     zoneFees, shippingFor, shipBar, etaFor, days,
-    getCart, setCart, addToCart, addManyToCart, changeLine, applyDiscount, cartCount, cartQtyOf, cartTotals, toast,
+    getCart, setCart, addToCart, addManyToCart, changeLine, swapLine, applyDiscount, cartCount, cartQtyOf, cartTotals, toast,
     loadCatalogue, ptitle, pdesc, searchProducts, wishlist, paintHearts,
     api, hasService, requireSignIn, goBack, whatsappUrl, okaAlert, openAr,
     openMenu, closeMenu,
