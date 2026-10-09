@@ -167,6 +167,19 @@
         "placeholder": "/apps/oka"
       },
       {
+        "type": "text",
+        "id": "service_url",
+        "label": "Order service URL (without an App proxy)",
+        "placeholder": "https://oka-order-service.onrender.com",
+        "info": "Lets signed-in customers edit and cancel unshipped orders, see points and more. Needs the key below."
+      },
+      {
+        "type": "text",
+        "id": "service_key",
+        "label": "Storefront key",
+        "info": "The order service's STOREFRONT_TOKEN_SECRET (32+ characters). Never shown to shoppers — the page only carries a signature made with it."
+      },
+      {
         "type": "header",
         "content": "Live J&T tracking"
       },

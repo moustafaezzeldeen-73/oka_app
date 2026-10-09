@@ -116,6 +116,18 @@
         defaultLang: {{ settings.default_lang | json }},
         ageGate: {{ settings.age_gate | json }},
         proxy: {{ settings.proxy_path | strip | json }},
+        {%- comment -%}
+          Without an App proxy: the order service's URL, and for a signed-in
+          customer a short-lived token "<id>.<time>.<signature>" signed here on
+          Shopify's servers with the Storefront key (server/auth/storefront.js).
+        {%- endcomment -%}
+        service: {{ settings.service_url | strip | json }},
+        serviceToken: {% if customer and settings.service_key != blank and settings.service_url != blank -%}
+          {%- assign sf_ts = 'now' | date: '%s' -%}
+          {%- capture sf_msg -%}{{ customer.id }}.{{ sf_ts }}{%- endcapture -%}
+          {%- assign sf_sig = sf_msg | hmac_sha256: settings.service_key -%}
+          {{ sf_msg | append: '.' | append: sf_sig | json }}
+        {%- else -%}null{%- endif %},
         jt: {% if settings.jt_tracking_url != blank and settings.jt_tracking_key != blank %}{ url: {{ settings.jt_tracking_url | strip | json }}, key: {{ settings.jt_tracking_key | strip | json }} }{% else %}null{% endif %},
         whatsapp: {{ settings.whatsapp | strip | json }},
         minOrder: {{ settings.min_order | default: 0 }},

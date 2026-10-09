@@ -182,12 +182,12 @@
   <div class="divider top"></div>
 
   {%- if is_fulfilled -%}
-    <div class="awaiting" style="margin-top:20px">{% render 'bi', en: 'This order has shipped and is on its way, so its items and address can no longer be changed. Contact the courier or support if you need a change.', ar: 'الطلب اتشحن خلاص وفي الطريق ليك، فمينفعش تغيّر منتجاته أو عنوانه. لو محتاج تغيير كلّم المندوب أو خدمة العملاء.' %}</div>
+    <div class="shipped-note"><b>{% render 'bi', en: 'This order has been shipped', ar: 'الطلب ده اتشحن' %}</b><span>{% render 'bi', en: 'It’s on its way, so it can no longer be edited or cancelled. Contact support if you need a change.', ar: 'هو في الطريق ليك، فمينفعش يتعدّل أو يتلغي دلوقتي. لو محتاج تغيير كلّم خدمة العملاء.' %}</span></div>
   {%- endif -%}
 
   <div class="order-actions">
-    <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order>{% render 'bi', en: 'Edit', ar: 'عدّل' %}</button>
-    <button class="cancel-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-cancel-order>
+    <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>{% render 'bi', en: 'Edit', ar: 'عدّل' %}</button>
+    <button class="cancel-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-cancel-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>
       {%- if o.cancelled -%}{% render 'bi', en: 'Cancelled', ar: 'ملغي' %}{%- else -%}{% render 'bi', en: 'Cancel Order', ar: 'الغي الطلب' %}{%- endif -%}
     </button>
   </div>

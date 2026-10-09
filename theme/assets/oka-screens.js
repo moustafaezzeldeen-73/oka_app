@@ -1291,7 +1291,7 @@
       if (det) {
         det.dataset.cancelled = 'true';
         $('[data-cancelled-banner]', det).hidden = false;
-        $$('.edit-btn, .cancel-btn', det).forEach((b) => b.classList.add('disabled'));
+        $$('.edit-btn, .cancel-btn', det).forEach((b) => { b.classList.add('disabled'); b.disabled = true; });
         $('[data-cancel-order]', det).textContent = L('Cancelled', 'ملغي');
       }
       const st = $(`[data-order-state="${CSS.escape(name)}"]`, root);
@@ -1305,7 +1305,9 @@
     /* Live courier status — the order service's /customer/orders. */
     const live = {};
     async function loadLive() {
-      if (!O.hasService() && CFG.jt) return loadJt();
+      // J&T's website tracking service answers directly and is the tested
+      // path, so it stays in charge of tracking even with the order service.
+      if (CFG.jt) return loadJt();
       if (!O.hasService() || !O.customer) return;
       try {
         const r = await O.api(`/customer/orders?lang=${O.lang()}`);

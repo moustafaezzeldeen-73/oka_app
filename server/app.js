@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { assertAuthConfig } from './auth/session.js';
+import { storefrontAuth } from './auth/storefront.js';
 import { appProxy } from './auth/appProxy.js';
 import authRoutes from './routes/auth.js';
 import checkoutRoutes from './routes/checkout.js';
@@ -48,8 +49,15 @@ export function createApp() {
   app.use(express.json({ limit: '256kb' }));
 
   app.use((req, res, next) => {
-    const origin = process.env.ALLOWED_ORIGIN;
-    if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
+    // ALLOWED_ORIGIN may list several origins, comma-separated (e.g. the
+    // store's www and bare domains); the matching one is echoed back.
+    const allowed = String(process.env.ALLOWED_ORIGIN ?? '').split(',').map((o) => o.trim()).filter(Boolean);
+    const origin = req.headers.origin;
+    if (allowed.includes('*')) res.setHeader('Access-Control-Allow-Origin', '*');
+    else if (origin && allowed.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Vary', 'Origin');
+    }
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
     if (req.method === 'OPTIONS') return res.sendStatus(204);
@@ -59,6 +67,9 @@ export function createApp() {
   // The website: /proxy/* is Shopify's App Proxy (auth/appProxy.js). It is
   // verified, stripped of its prefix and handed to the same routes below.
   app.use(appProxy);
+  // The website without an App Proxy: a token the theme signs for the
+  // signed-in customer (auth/storefront.js).
+  app.use(storefrontAuth);
 
   storeRoutes(app);
   authRoutes(app);

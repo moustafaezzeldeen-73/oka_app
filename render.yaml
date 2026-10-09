@@ -40,6 +40,14 @@ services:
         sync: false
       - key: SESSION_SECRET
         generateValue: true
+      # The website signs each signed-in customer with this (auth/storefront.js).
+      # Copy the generated value into Theme settings → Order service →
+      # Storefront key.
+      - key: STOREFRONT_TOKEN_SECRET
+        generateValue: true
+      # The storefront origins allowed to call this service from the browser.
+      - key: ALLOWED_ORIGIN
+        value: https://www.okaegypt.com,https://okaegypt.com,https://756009.myshopify.com
       # One instance runs the background jobs (subscriptions, notifications,
       # loyalty). Leave false until you mean this deployment to be that one.
       - key: JOBS_ENABLED

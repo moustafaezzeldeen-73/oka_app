@@ -557,13 +557,24 @@
   }
 
   /* ── the OKA order service, through a Shopify App Proxy ──────────────── */
+  /**
+   * The order service: through Shopify's App Proxy (CFG.proxy, same origin,
+   * Shopify vouches for the customer), or directly (CFG.service) with the
+   * token Shopify signed for the signed-in customer in layout/theme.liquid.
+   */
+  const viaProxy = () => Boolean(CFG.proxy);
+  const viaDirect = () => Boolean(CFG.service && CFG.serviceToken);
   async function api(path, { method = 'GET', body } = {}) {
-    if (!CFG.proxy) throw new Error('service-not-configured');
-    const base = CFG.proxy.replace(/\/$/, '');
+    if (!viaProxy() && !viaDirect()) throw new Error('service-not-configured');
+    const base = (viaProxy() ? CFG.proxy : CFG.service).replace(/\/$/, '');
     const res = await fetch(base + path, {
       method,
-      credentials: 'same-origin',
-      headers: { Accept: 'application/json', ...(body ? { 'Content-Type': 'application/json' } : {}) },
+      credentials: viaProxy() ? 'same-origin' : 'omit',
+      headers: {
+        Accept: 'application/json',
+        ...(body ? { 'Content-Type': 'application/json' } : {}),
+        ...(viaProxy() ? {} : { Authorization: `Storefront ${CFG.serviceToken}` }),
+      },
       body: body ? JSON.stringify(body) : undefined,
     });
     const txt = await res.text();
@@ -576,7 +587,7 @@
     }
     return json;
   }
-  const hasService = () => Boolean(CFG.proxy);
+  const hasService = () => viaProxy() || viaDirect();
 
   /* ── sign-in routing (requireSignIn / afterSignIn) ───────────────────── */
   function requireSignIn(next) {
