@@ -53,7 +53,7 @@
       <div data-guest-last hidden></div>
       <div class="empty" data-guest-empty style="padding:60px 22px">{% render 'bi', en: 'No orders yet', ar: 'مفيش طلبات لسه' %}</div>
       <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="notice press s99" data-sign-in="/pages/orders">
-        {% render 'bi', en: 'Sign in to see your real orders and track their delivery.', ar: 'سجّل دخولك عشان تشوف طلباتك وتتابع الشحنة.' %}
+        {% render 'bi', en: 'Sign in to see all your orders and track their delivery.', ar: 'سجّل دخولك عشان تشوف طلباتك وتتابع الشحنة.' %}
       </a>
     {%- endif -%}
     {%- comment -%} TESTING ONLY — the staff J&T lookup, after the customer's own orders. Remove with snippets/test-lookup.liquid before launch. {%- endcomment -%}

@@ -1039,6 +1039,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .sheet-foot .sum-row { font-size: 13px; color: var(--ink-90); padding: 3px 0; }
 .sheet-foot .sum-row.total { font-size: 15px; font-weight: 800; color: var(--ink); padding: 5px 0 12px; }
 .accept { display: flex; justify-content: center; width: 100%; padding: 15px 0; border-radius: 999px; background: #1a1a1a; color: #fff; font-weight: 700; font-size: 14.5px; }
+.accept.dim { background: #d9d9de; color: #8e8e93; pointer-events: none; }
 
 /* iOS-style alert (Alert.alert) */
 .alert-scrim { position: absolute; inset: 0; z-index: 50; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; animation: okaFade .2s var(--ease) both; }
@@ -1351,3 +1352,35 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .guest-add-row { display: flex; gap: 8px; margin-top: 8px; }
 .guest-add-row input { flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 9px 12px; border-radius: 12px; border: 1px solid var(--card-border); background: #fff; }
 .guest-add-row .cs-add { width: auto; margin: 0; padding: 9px 16px; }
+
+/* ── Edit order: items, add products, delivery, live total ── */
+.edit-order { top: 4%; }
+.edit-order .sheet-body { padding-bottom: 6px; }
+.eo-sec { padding: 16px 20px 8px; font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
+.eo-item, .eo-pick-row { display: flex; align-items: center; gap: 12px; margin: 0 20px 10px; padding: 10px; border-radius: 16px; background: #fff; border: 1px solid var(--card-border); }
+.eo-item.removed { opacity: .5; }
+.eo-item .cat-item-img, .eo-pick-row .cat-item-img { width: 52px; height: 52px; border-radius: 10px; overflow: hidden; flex-shrink: 0; background: #f2f2f2; display: flex; }
+.eo-item .cat-item-img img, .eo-pick-row .cat-item-img img { width: 100%; height: 100%; object-fit: contain; }
+.eo-item-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.eo-item-title { font-size: 13.5px; font-weight: 700; line-height: 18px; }
+.eo-item-sub { font-size: 12px; color: var(--ink-soft); }
+.eo-item-price { font-size: 12.5px; font-weight: 700; }
+.eo-item-price span { color: #c0392b; }
+.eo-addbtn { display: block; width: calc(100% - 40px); margin: 2px 20px 4px; padding: 12px 0; border-radius: 14px; border: 1.5px dashed rgba(0,0,0,0.22); font-size: 14px; font-weight: 800; text-align: center; }
+.eo-form { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; }
+.eo-form select { font: inherit; font-size: 16px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--card-border); background: #fff; }
+.eo-foot { display: flex; flex-direction: column; gap: 4px; }
+.eo-quoting { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 8px 0; font-size: 13px; color: var(--ink-soft); }
+.eo-quoting.small { padding: 2px 0; }
+.eo-diff { align-self: flex-end; font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
+.eo-diff.up { background: rgba(255,149,0,0.14); color: #b25d00; }
+.eo-diff.down { background: rgba(52,199,89,0.14); color: var(--green); }
+.eo-note { font-size: 12px; line-height: 17px; color: #b25d00; }
+.eo-picker { padding: 6px 0 16px; }
+.eo-picker-head { position: sticky; top: 0; z-index: 2; display: flex; gap: 10px; align-items: center; padding: 8px 20px 12px; background: var(--sheet-bg); }
+.eo-picker-head input { flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 11px 14px; border-radius: 14px; border: 1px solid var(--card-border); background: #fff; }
+.eo-link { font-weight: 800; font-size: 15px; padding: 8px 4px; }
+.eo-add { min-width: 44px; height: 36px; padding: 0 12px; border-radius: 999px; background: var(--dark-grad); color: #fff; font-size: 18px; font-weight: 700; flex-shrink: 0; }
+.eo-add.on { background: var(--green); font-size: 13px; }
+.guest-order { margin: 6px 22px 18px; padding: 16px; border-radius: 20px; background: var(--card-bg); border: 1px solid var(--card-border); }
+.guest-addr { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-top: 1px solid var(--card-border); font-size: 13px; line-height: 19px; }

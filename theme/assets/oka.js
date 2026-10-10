@@ -246,6 +246,20 @@
     }
     return setCart(c);
   }
+  /**
+   * The guest's last order, kept like the cart: when they head to checkout the
+   * cart's token is saved here, and the checkout pixel (docs/checkout-pixel.js)
+   * adds the checkout's token once the order is placed. The orders API finds
+   * that one order by these tokens — nothing else is reachable from them.
+   */
+  function rememberCheckout() {
+    const token = cartState?.token;
+    if (!token) return;
+    const prev = store.get('oka.lastCheckout', {}) || {};
+    // A new cart means a new checkout: the old checkout token belongs to an earlier order.
+    const next = prev.cartToken === token ? { ...prev, at: Date.now() } : { cartToken: token, at: Date.now() };
+    store.set('oka.lastCheckout', next);
+  }
   async function applyDiscount(code) {
     return setCart(await cartFetch('/cart/update.js', { discount: code }));
   }
@@ -821,6 +835,13 @@
 
   /* ── global wiring ───────────────────────────────────────────────────── */
   function wire() {
+    // Any way into checkout (cart button, "Check out" bar, links) remembers the cart's token first.
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href], [data-checkout], [data-join-guest]');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      if (a.matches('[data-checkout], [data-join-guest]') || /\/checkout(?:$|[?#/])/.test(href)) rememberCheckout();
+    }, true);
     wireMenu();
     wireTopBar();
     document.addEventListener('click', (e) => {
@@ -887,7 +908,7 @@
     arDigits, num, fmtPrice, fold, haptic,
     PROVINCES, provinceOf, provinceName, addresses, selectedAddress, selectAddress, customer,
     zoneFees, shippingFor, shipBar, etaFor, days,
-    getCart, setCart, addToCart, addManyToCart, changeLine, swapLine, applyDiscount, cartCount, cartQtyOf, cartTotals, toast,
+    getCart, setCart, addToCart, addManyToCart, changeLine, swapLine, applyDiscount, rememberCheckout, cartCount, cartQtyOf, cartTotals, toast,
     loadCatalogue, ptitle, pdesc, searchProducts, wishlist, paintHearts, recommend, recReason, viewed,
     api, hasService, requireSignIn, goBack, whatsappUrl, okaAlert, openAr,
     openMenu, closeMenu,
