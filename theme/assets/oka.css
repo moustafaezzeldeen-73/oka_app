@@ -1333,3 +1333,9 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .rate-done b { font-size: 15px; }
 .rate-done p { margin: 0; font-size: 13px; color: var(--ink-soft); }
 .rate-stars.static svg { width: 24px; height: 24px; }
+.guest-who { display: flex; align-items: center; justify-content: space-between; margin: 0 22px 12px; font-size: 13px; color: var(--ink-soft); }
+.guest-who button { font-weight: 700; color: var(--ink); text-decoration: underline; }
+.guest-list { display: flex; flex-direction: column; gap: 10px; margin: 0 22px 18px; }
+.guest-detail { margin: 0 22px 18px; }
+.guest-track { margin-top: 8px; }
+.guest-loading { display: flex; justify-content: center; padding: 40px 0; }

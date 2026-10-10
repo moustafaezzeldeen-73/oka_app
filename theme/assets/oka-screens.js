@@ -1369,112 +1369,161 @@
   }
 
   /**
-   * Not signed in: change the address or cancel an order with its number
-   * and phone, through the orders API. Pre-filled with the last order this
-   * browser saw (saved when a signed-in customer opened Orders, or after a
-   * successful lookup here); otherwise the customer types them in.
+   * Not signed in: the orders for the phone this browser knows — saved by
+   * the checkout pixel when an order is placed (see docs/checkout-pixel.js),
+   * by a signed-in visit, or typed here once. J&T's track_by_phone lists
+   * them with the Shopify order and live tracking; each one can have its
+   * address changed or be cancelled through the orders API until the
+   * courier picks it up.
    */
   function guestLastOrder(root) {
     const box = $('[data-guest-last]', root);
     if (!box || O.customer) return;
-    const stored = lastOrderStored() || { name: '', phone: '' };
-    // No phone saved yet: the one on a delivery address saved in this browser.
-    const last = { name: stored.name || '', phone: stored.phone || O.selectedAddress?.()?.phone || '' };
-    box.innerHTML = `
-      <div class="guest-last">
-        <div class="guest-last-k">${esc(last.name ? L('Your last order', 'آخر طلب ليك') : L('Change or cancel an order', 'غيّر أو الغي طلب'))}</div>
-        <label class="contact-field"><span>${esc(L('Order number', 'رقم الطلب'))}</span>
-          <input data-g-order inputmode="numeric" autocomplete="off" maxlength="20" placeholder="2832521" value="${esc(String(last.name || '').replace(/^#/, ''))}"></label>
-        <label class="contact-field"><span>${esc(L('Phone number used on the order', 'رقم الموبايل اللي على الطلب'))}</span>
-          <input data-g-phone type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="01012345678" value="${esc(last.phone || '')}"></label>
-        <div class="guest-last-note" data-guest-note>${esc(L('You can change the address or cancel until the courier picks it up.', 'تقدر تغيّر العنوان أو تلغي الطلب لحد ما المندوب يستلمه.'))}</div>
-        <div class="code-error" data-g-error hidden></div>
-        <div class="order-actions" style="padding:12px 0 0">
-          <button class="edit-btn" data-guest-edit>${esc(L('Change address', 'غيّر العنوان'))}</button>
-          <button class="cancel-btn" data-guest-cancel>${esc(L('Cancel Order', 'الغي الطلب'))}</button>
-        </div>
-        ${last.name ? `<button class="guest-forget" data-guest-forget>${esc(L('Not your order? Forget it on this device', 'مش طلبك؟ امسحه من الجهاز ده'))}</button>` : ''}
-      </div>`;
-    box.hidden = false;
     const empty = $('[data-guest-empty]', root);
-    if (empty) empty.hidden = true;
-    const errBox = $('[data-g-error]', box);
-    const showErr = (t) => { errBox.textContent = t || ''; errBox.hidden = !t; };
-    const note = $('[data-guest-note]', box);
-    const setNote = (t, tone) => { note.textContent = t; note.className = `guest-last-note ${tone || ''}`; };
-    // Read and check the two fields (the API's limits) — null when not valid.
-    const who = () => {
-      const raw = $('[data-g-order]', box).value.trim();
-      const phone = $('[data-g-phone]', box).value.trim();
-      if (raw.length < 4 || raw.length > 20 || !/\d{4,}/.test(raw)) { showErr(L('Enter your order number, e.g. 2832521', 'اكتب رقم الطلب، مثلاً ٢٨٣٢٥٢١')); return null; }
-      if (phone.length < 6 || phone.replace(/\D/g, '').length < 10) { showErr(L('Enter a full mobile number, e.g. 01012345678', 'اكتب رقم الموبايل كامل، مثلاً 01012345678')); return null; }
-      showErr('');
-      return { orderNumber: /^\d+$/.test(raw) ? `#${raw}` : raw, phone };
+    const stored = lastOrderStored() || { name: '', phone: '' };
+    let phone = stored.phone || O.selectedAddress?.()?.phone || '';
+    let shipments = null; // [{ awb, createdAt, order, step, stateLabel, updates, status, … }]
+    let open = null;      // awb of the order shown in full
+    const local = {};     // per awb: 'cancelled' after a cancel from here
+    const masked = (p) => { const d = String(p).replace(/\D/g, ''); return d.length > 5 ? `•••• ${d.slice(-4)}` : d; };
+    const canChange = (o) => !local[o.awb] && o.order?.name && (o.status ? o.status === 'not_picked_up' : o.step < 2);
+
+    function phoneForm(msg) {
+      return `<div class="guest-last">
+          <div class="guest-last-k">${esc(L('Your orders', 'طلباتك'))}</div>
+          <label class="contact-field"><span>${esc(L('Phone number used on your order', 'رقم الموبايل اللي طلبت بيه'))}</span>
+            <input data-g-phone type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="01012345678" value="${esc(phone)}"></label>
+          <div class="code-error" data-g-error ${msg ? '' : 'hidden'}>${esc(msg || '')}</div>
+          <button class="cta" data-g-find>${esc(L('Show my orders', 'وريني طلباتي'))}</button>
+        </div>`;
+    }
+    const card = (o) => {
+      const items = o.order?.items || [];
+      const thumbs = items.slice(0, 4).map((it) => `<span class="tl-thumb">${img(it.image)}${it.quantity > 1 ? `<b>×${esc(num(it.quantity))}</b>` : ''}</span>`).join('');
+      const state = local[o.awb] === 'cancelled' ? L('Cancelled', 'ملغي') : (o.stateLabel || L('Preparing', 'بيتجهز'));
+      return `<button class="order-card" data-g-open="${esc(o.awb)}" style="width:100%;margin:0;text-align:start">
+          <div style="flex:1;min-width:0">
+            <div class="order-top"><span class="order-name nums">${esc(o.order?.name || o.awb)}</span>${o.createdAt ? `<span class="order-total nums" style="font-weight:500">${esc(String(o.createdAt).slice(0, 10))}</span>` : ''}</div>
+            ${items.length ? `<div class="tl-thumbs">${thumbs}${items.length > 4 ? `<span class="tl-more nums">+${esc(num(items.length - 4))}</span>` : ''}</div>
+            <div class="order-meta">${esc(items.map((it) => it.title).join(' · '))}</div>` : ''}
+            <div class="order-state${o.step >= 3 ? ' green' : ''}${local[o.awb] ? ' red' : ''}">${esc(state)}</div>
+          </div>
+          <span class="flip" style="display:flex;opacity:.4">›</span>
+        </button>`;
     };
-    const remember = (w) => O.store.set('oka.lastOrder', { name: w.orderNumber, phone: w.phone });
-    const onErr = (title, err) => {
-      if (/already been shipped/i.test(errText(err))) setNote(L('This order has been shipped, so it can no longer be changed or cancelled.', 'الطلب ده اتشحن، فمينفعش يتغيّر أو يتلغي دلوقتي.'), 'shipped');
-      else if (/already cancelled/i.test(errText(err))) setNote(L('This order is cancelled.', 'الطلب ده ملغي.'), 'cancelled');
-      return ordersApiFail(title, err);
-    };
-    // Whatever is typed is kept in this browser straight away, so the
-    // fields are filled in next time. Typing another order also clears the
-    // verdict on the previous one.
-    box.addEventListener('input', () => {
-      const raw = $('[data-g-order]', box).value.trim();
-      const phone = $('[data-g-phone]', box).value.trim();
-      if (raw || phone) O.store.set('oka.lastOrder', { name: /^\d+$/.test(raw) ? `#${raw}` : raw, phone });
-      else O.store.del('oka.lastOrder');
-      showErr('');
-      setNote(L('You can change the address or cancel until the courier picks it up.', 'تقدر تغيّر العنوان أو تلغي الطلب لحد ما المندوب يستلمه.'));
-    });
-    box.addEventListener('click', async (e) => {
-      const forget = e.target.closest('[data-guest-forget]');
-      if (forget) {
-        O.store.del('oka.lastOrder');
-        $('[data-g-order]', box).value = '';
-        $('[data-g-phone]', box).value = '';
-        $('.guest-last-k', box).textContent = L('Change or cancel an order', 'غيّر أو الغي طلب');
-        forget.remove();
-        showErr('');
+    function detail(o) {
+      const items = o.order?.items || [];
+      const change = canChange(o);
+      const cancelledHere = local[o.awb] === 'cancelled' || o.status === 'cancelled';
+      const delivered = o.step >= 3 && !cancelledHere;
+      return `
+        <button class="outline-btn test-back" data-g-back>${esc(L('‹ All my orders', '‹ كل طلباتي'))}</button>
+        <div class="guest-detail" data-order-detail="${esc(o.order?.name || o.awb)}" data-phone="${esc(phone)}">
+          ${card(o).replace('data-g-open', 'data-x')}
+          ${items.length ? `<div class="items" style="padding:12px 0">${items.map((it) => `
+            <div class="item-row"><div class="item-img">${img(it.image)}</div>
+              <div style="flex:1;min-width:0"><div class="item-title">${esc(it.title)}</div><div class="item-qty">${esc([it.variant, `× ${num(it.quantity)}`].filter(Boolean).join(' · '))}</div></div></div>`).join('')}</div>` : ''}
+          <div class="guest-track">${trackingHtml(o)}</div>
+          ${cancelledHere ? `<div class="cancelled-banner" style="margin:16px 0 0"><b>${esc(L('Order cancelled', 'الطلب اتلغى'))}</b></div>`
+            : delivered ? `<div class="rate-box" data-rate hidden style="margin:16px 0 0"></div>`
+            : change ? `<div class="order-actions" style="padding:16px 0 0">
+                <button class="edit-btn" data-g-edit>${esc(L('Change address', 'غيّر العنوان'))}</button>
+                <button class="cancel-btn" data-g-cancel>${esc(L('Cancel Order', 'الغي الطلب'))}</button></div>
+              <div class="order-actions-hint" style="margin:10px 0 0">${esc(L('You can change the address or cancel until the courier picks it up.', 'تقدر تغيّر العنوان أو تلغي الطلب لحد ما المندوب يستلمه.'))}</div>`
+            : o.order?.name ? `<div class="shipped-note" style="margin:16px 0 0"><b>${esc(L('This order has been shipped', 'الطلب ده اتشحن'))}</b><span>${esc(L('It’s on its way, so it can no longer be edited or cancelled.', 'هو في الطريق ليك، فمينفعش يتعدّل أو يتلغي دلوقتي.'))}</span></div>` : ''}
+        </div>`;
+    }
+    function render(msg) {
+      if (empty) empty.hidden = true;
+      box.hidden = false;
+      if (!phone || !shipments) { box.innerHTML = phoneForm(msg); return; }
+      const o = open && shipments.find((x) => x.awb === open);
+      if (o) {
+        box.innerHTML = detail(o);
+        const det = $('.guest-detail', box);
+        if ($('[data-rate]', det)) rateBox(det);
         return;
       }
-      const edit = e.target.closest('[data-guest-edit]');
-      const cancel = e.target.closest('[data-guest-cancel]');
+      box.innerHTML = `
+        <div class="guest-who"><span>${esc(L(`Orders for ${masked(phone)}`, `طلبات ${masked(phone)}`))}</span>
+          <button data-g-change>${esc(L('Change number', 'غيّر الرقم'))}</button></div>
+        ${shipments.length ? `<div class="guest-list">${shipments.map(card).join('')}</div>`
+          : `<div class="empty" style="padding:30px 0">${esc(L('No orders with the courier for this number yet. New orders show here once they’re handed to J&T.', 'لسه مفيش طلبات مع شركة الشحن على الرقم ده. الطلبات الجديدة بتظهر هنا أول ما تتسلّم لـ J&T.'))}</div>`}`;
+    }
+    async function find() {
+      if (!CFG.jt) { shipments = null; return render(L('Order tracking isn’t switched on yet.', 'تتبّع الطلبات لسه مش متفعّل.')); }
+      if (String(phone).replace(/\D/g, '').length < 10) { shipments = null; return render(phone ? L('Enter a full mobile number, e.g. 01012345678', 'اكتب رقم الموبايل كامل، مثلاً 01012345678') : ''); }
+      box.hidden = false;
+      if (empty) empty.hidden = true;
+      box.innerHTML = `<div class="guest-loading">${spinner(true)}</div>`;
+      try {
+        const found = await jtByPhone(phone, 90);
+        shipments = found
+          .map((sh) => ({ awb: sh.awb, createdAt: sh.createdAt, order: sh.order, status: sh.status, ...jtShape(sh.scans, 1, sh.status) }))
+          .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+        O.store.set('oka.lastOrder', { name: shipments[0]?.order?.name || stored.name || '', phone });
+        render();
+      } catch (err) {
+        shipments = null;
+        render(L('Couldn’t load your orders just now. Please try again.', 'معرفناش نجيب طلباتك دلوقتي. جرّب تاني.'));
+      }
+    }
+
+    box.addEventListener('input', (e) => {
+      if (!e.target.matches('[data-g-phone]')) return;
+      phone = e.target.value.trim();
+      O.store.set('oka.lastOrder', { name: stored.name || '', phone });
+      const err = $('[data-g-error]', box);
+      if (err) err.hidden = true;
+    });
+    box.addEventListener('keydown', (e) => { if (e.target.matches('[data-g-phone]') && e.key === 'Enter') find(); });
+    box.addEventListener('click', async (e) => {
+      if (e.target.closest('[data-g-find]')) return find();
+      if (e.target.closest('[data-g-change]')) { shipments = null; open = null; return render(); }
+      const op = e.target.closest('[data-g-open]');
+      if (op) { open = op.dataset.gOpen; render(); box.scrollIntoView({ block: 'start' }); return; }
+      if (e.target.closest('[data-g-back]')) { open = null; return render(); }
+      const o = open && shipments?.find((x) => x.awb === open);
+      if (!o) return;
+      const who = { orderNumber: o.order.name, phone };
+      const edit = e.target.closest('[data-g-edit]');
+      const cancel = e.target.closest('[data-g-cancel]');
       if (!edit && !cancel) return;
       if (!hasOrdersApi()) return changesUnavailable();
-      const w = who();
-      if (!w) return;
-      if (edit && !edit.classList.contains('busy')) {
+      const shippedNow = (err) => {
+        if (/already been shipped/i.test(errText(err))) { o.status = 'in_transit'; o.step = Math.max(o.step, 2); render(); }
+        if (/already cancelled/i.test(errText(err))) { local[o.awb] = 'cancelled'; render(); }
+      };
+      if (edit) {
+        if (edit.classList.contains('busy')) return;
         edit.classList.add('busy');
         try {
-          const order = await ordersApi('customer_get_order', w);
-          remember(w);
-          if (order.canEdit === false) return onErr(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped'));
-          openAddressSheet(order.orderNumber || w.orderNumber, w, order);
-        } catch (err) { onErr(L('Can’t change it', 'مينفعش يتغيّر'), err); } finally { edit.classList.remove('busy'); }
+          const order = await ordersApi('customer_get_order', who);
+          if (order.canEdit === false) { shippedNow(new Error('already been shipped')); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped')); }
+          openAddressSheet(order.orderNumber || who.orderNumber, who, order);
+        } catch (err) { shippedNow(err); ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), err); } finally { edit.classList.remove('busy'); }
         return;
       }
-      if (cancel && !cancel.classList.contains('busy')) {
-        O.okaAlert(L('Cancel order?', 'تلغي الطلب؟'), L(`Are you sure? Order ${w.orderNumber} will be cancelled and this can’t be undone.`, `متأكد؟ الطلب ${w.orderNumber} هيتلغي ومينفعش نرجّعه.`), [
-          { text: L('Back', 'ارجع'), style: 'cancel' },
-          {
-            text: L('Cancel order', 'الغي الطلب'),
-            style: 'destructive',
-            onPress: async () => {
-              cancel.classList.add('busy');
-              try {
-                await ordersApi('customer_cancel_order', { ...w, reason: 'Cancelled on website' });
-                remember(w);
-                setNote(L('This order is cancelled.', 'الطلب ده ملغي.'), 'cancelled');
-                O.haptic.success();
-                O.okaAlert(L('Order cancelled', 'الطلب اتلغى'), L(`Your order ${w.orderNumber} has been cancelled.`, `طلبك ${w.orderNumber} اتلغى.`));
-              } catch (err) { onErr(L('Could not cancel', 'معرفناش نلغيه'), err); } finally { cancel.classList.remove('busy'); }
-            },
+      O.okaAlert(L('Cancel order?', 'تلغي الطلب؟'), L(`Are you sure? Order ${who.orderNumber} will be cancelled and this can’t be undone.`, `متأكد؟ الطلب ${who.orderNumber} هيتلغي ومينفعش نرجّعه.`), [
+        { text: L('Back', 'ارجع'), style: 'cancel' },
+        {
+          text: L('Cancel order', 'الغي الطلب'),
+          style: 'destructive',
+          onPress: async () => {
+            cancel.classList.add('busy');
+            try {
+              await ordersApi('customer_cancel_order', { ...who, reason: 'Cancelled on website' });
+              local[o.awb] = 'cancelled';
+              render();
+              O.haptic.success();
+              O.okaAlert(L('Order cancelled', 'الطلب اتلغى'), L(`Your order ${who.orderNumber} has been cancelled.`, `طلبك ${who.orderNumber} اتلغى.`));
+            } catch (err) { shippedNow(err); ordersApiFail(L('Could not cancel', 'معرفناش نلغيه'), err); } finally { cancel.classList.remove('busy'); }
           },
-        ]);
-      }
+        },
+      ]);
     });
+
+    if (phone) find(); else render();
   }
 
   function orders(root) {
