@@ -123,7 +123,7 @@
         {%- endcomment -%}
         {%- comment -%} The J&T orders API: address change and cancel before pickup (oka-screens.js → ordersApi). {%- endcomment -%}
         orders: {% if settings.orders_api_key != blank -%}
-          { url: {{ settings.orders_api_url | strip | json }}, key: {{ settings.orders_api_key | strip | json }}, ratings: {{ settings.order_ratings | json }} }
+          { url: {{ settings.orders_api_url | strip | json }}, key: {{ settings.orders_api_key | strip | json }}, ratings: {{ settings.order_ratings | json }}, items: {{ settings.order_item_edits | json }} }
         {%- else -%}null{%- endif %},
         service: {{ settings.service_url | strip | json }},
         serviceToken: {% if customer and settings.service_key != blank and settings.service_url != blank -%}

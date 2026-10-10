@@ -187,6 +187,13 @@
       },
       {
         "type": "checkbox",
+        "id": "order_item_edits",
+        "label": "Let customers change items",
+        "info": "Adds \"Change items\" (remove, change quantities, add products) next to Change address, sent to the orders API as customer_edit_items. Turn on once the API has that action.",
+        "default": false
+      },
+      {
+        "type": "checkbox",
         "id": "order_ratings",
         "label": "Ask delivered orders for a rating",
         "info": "5 stars and a comment on each delivered order, sent to the orders API as customer_rate_order. Turn on once the API has that action.",

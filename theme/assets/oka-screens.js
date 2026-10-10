@@ -1385,6 +1385,27 @@
     let shipments = null; // [{ awb, createdAt, order, step, stateLabel, updates, status, … }]
     let open = null;      // awb of the order shown in full
     const local = {};     // per awb: 'cancelled' after a cancel from here
+    // Orders the checkout pixel kept in this browser (docs/checkout-pixel.js).
+    const saved = (O.store.get('oka.guestOrders', []) || []).filter((x) => x && x.items);
+    if (!phone) phone = saved.find((x) => x.phone)?.phone || '';
+    const titles = (items) => new Set((items || []).map((it) => String(it.title || '').trim().toLowerCase()));
+    // A saved order J&T already lists (shipment made after it, same products) shows once, as J&T's.
+    const waiting = () => saved.filter((sv) => !(shipments || []).some((sh) => {
+      if (String(sh.createdAt || '') < String(sv.at || '').slice(0, 10)) return false;
+      const a = titles(sv.items);
+      return [...titles(sh.order?.items)].some((t) => a.has(t));
+    }));
+    const savedCard = (sv) => {
+      const thumbs = sv.items.slice(0, 4).map((it) => `<span class="tl-thumb">${img(it.image)}${it.quantity > 1 ? `<b>×${esc(num(it.quantity))}</b>` : ''}</span>`).join('');
+      return `<div class="order-card" style="width:100%;margin:0">
+          <div style="flex:1;min-width:0">
+            <div class="order-top"><span class="order-name">${esc(L('Order received', 'الطلب وصلنا'))}</span><span class="order-total nums" style="font-weight:500">${esc(String(sv.at || '').slice(0, 10))}</span></div>
+            <div class="tl-thumbs">${thumbs}</div>
+            <div class="order-meta">${esc(sv.items.map((it) => it.title).join(' · '))}${sv.total != null ? ` · ${esc(fmtPrice(sv.total))}` : ''}</div>
+            <div class="order-state">${esc(L('We’re preparing it — tracking, changes and cancelling open here once it’s with J&T.', 'بنجهّزه — التتبع والتعديل والإلغاء بيفتحوا هنا أول ما يتسلّم لـ J&T.'))}</div>
+          </div>
+        </div>`;
+    };
     const masked = (p) => { const d = String(p).replace(/\D/g, ''); return d.length > 5 ? `•••• ${d.slice(-4)}` : d; };
     const canChange = (o) => !local[o.awb] && o.order?.name && (o.status ? o.status === 'not_picked_up' : o.step < 2);
 
@@ -1427,7 +1448,7 @@
           ${cancelledHere ? `<div class="cancelled-banner" style="margin:16px 0 0"><b>${esc(L('Order cancelled', 'الطلب اتلغى'))}</b></div>`
             : delivered ? `<div class="rate-box" data-rate hidden style="margin:16px 0 0"></div>`
             : change ? `<div class="order-actions" style="padding:16px 0 0">
-                <button class="edit-btn" data-g-edit>${esc(L('Change address', 'غيّر العنوان'))}</button>
+                <button class="edit-btn" data-g-edit>${esc(CFG.orders && CFG.orders.items ? L('Edit', 'عدّل') : L('Change address', 'غيّر العنوان'))}</button>
                 <button class="cancel-btn" data-g-cancel>${esc(L('Cancel Order', 'الغي الطلب'))}</button></div>
               <div class="order-actions-hint" style="margin:10px 0 0">${esc(L('You can change the address or cancel until the courier picks it up.', 'تقدر تغيّر العنوان أو تلغي الطلب لحد ما المندوب يستلمه.'))}</div>`
             : o.order?.name ? `<div class="shipped-note" style="margin:16px 0 0"><b>${esc(L('This order has been shipped', 'الطلب ده اتشحن'))}</b><span>${esc(L('It’s on its way, so it can no longer be edited or cancelled.', 'هو في الطريق ليك، فمينفعش يتعدّل أو يتلغي دلوقتي.'))}</span></div>` : ''}
@@ -1436,7 +1457,10 @@
     function render(msg) {
       if (empty) empty.hidden = true;
       box.hidden = false;
-      if (!phone || !shipments) { box.innerHTML = phoneForm(msg); return; }
+      if (!phone || !shipments) {
+        box.innerHTML = (saved.length ? `<div class="guest-list">${saved.map(savedCard).join('')}</div>` : '') + phoneForm(msg);
+        return;
+      }
       const o = open && shipments.find((x) => x.awb === open);
       if (o) {
         box.innerHTML = detail(o);
@@ -1447,7 +1471,7 @@
       box.innerHTML = `
         <div class="guest-who"><span>${esc(L(`Orders for ${masked(phone)}`, `طلبات ${masked(phone)}`))}</span>
           <button data-g-change>${esc(L('Change number', 'غيّر الرقم'))}</button></div>
-        ${shipments.length ? `<div class="guest-list">${shipments.map(card).join('')}</div>`
+        ${shipments.length || waiting().length ? `<div class="guest-list">${waiting().map(savedCard).join('')}${shipments.map(card).join('')}</div>`
           : `<div class="empty" style="padding:30px 0">${esc(L('No orders with the courier for this number yet. New orders show here once they’re handed to J&T.', 'لسه مفيش طلبات مع شركة الشحن على الرقم ده. الطلبات الجديدة بتظهر هنا أول ما تتسلّم لـ J&T.'))}</div>`}`;
     }
     async function find() {
@@ -1496,13 +1520,18 @@
       };
       if (edit) {
         if (edit.classList.contains('busy')) return;
-        edit.classList.add('busy');
-        try {
-          const order = await ordersApi('customer_get_order', who);
-          if (order.canEdit === false) { shippedNow(new Error('already been shipped')); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped')); }
-          openAddressSheet(order.orderNumber || who.orderNumber, who, order);
-        } catch (err) { shippedNow(err); ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), err); } finally { edit.classList.remove('busy'); }
-        return;
+        const lookup = async (then) => {
+          edit.classList.add('busy');
+          try {
+            const order = await ordersApi('customer_get_order', who);
+            if (order.canEdit === false) { shippedNow(new Error('already been shipped')); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped')); }
+            then(order);
+          } catch (err) { shippedNow(err); ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), err); } finally { edit.classList.remove('busy'); }
+        };
+        return chooseEdit(
+          () => lookup((order) => openAddressSheet(order.orderNumber || who.orderNumber, who, order)),
+          () => lookup(() => openItemsSheet(who.orderNumber, who, (o.order.items || []).map((it) => ({ title: it.title, quantity: it.quantity })))),
+        );
       }
       O.okaAlert(L('Cancel order?', 'تلغي الطلب؟'), L(`Are you sure? Order ${who.orderNumber} will be cancelled and this can’t be undone.`, `متأكد؟ الطلب ${who.orderNumber} هيتلغي ومينفعش نرجّعه.`), [
         { text: L('Back', 'ارجع'), style: 'cancel' },
@@ -1717,15 +1746,20 @@
         };
         if (btn.hasAttribute('data-edit-order')) {
           if (btn.classList.contains('busy')) return;
-          btn.classList.add('busy');
-          try {
-            const order = await ordersApi('customer_get_order', who);
-            if (order.canEdit === false) { markShipped(name); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped')); }
-            openAddressSheet(name, who, order);
-          } catch (err) {
-            onApiError(L('Can’t change it', 'مينفعش يتغيّر'), err);
-          } finally { btn.classList.remove('busy'); }
-          return;
+          const lookup = async (then) => {
+            btn.classList.add('busy');
+            try {
+              const order = await ordersApi('customer_get_order', who);
+              if (order.canEdit === false) { markShipped(name); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped')); }
+              then(order);
+            } catch (err) {
+              onApiError(L('Can’t change it', 'مينفعش يتغيّر'), err);
+            } finally { btn.classList.remove('busy'); }
+          };
+          return chooseEdit(
+            () => lookup((order) => openAddressSheet(name, who, order)),
+            () => lookup(() => openItemsSheet(name, who, lines)),
+          );
         }
         return O.okaAlert(L('Cancel order?', 'تلغي الطلب؟'), L(`Are you sure? Order ${name} will be cancelled and this can’t be undone.`, `متأكد؟ الطلب ${name} هيتلغي ومينفعش نرجّعه.`), [
           { text: L('Back', 'ارجع'), style: 'cancel' },
@@ -1782,6 +1816,124 @@
         }
       }
     });
+  }
+
+  /**
+   * Change items (orders API → customer_edit_items, Theme settings →
+   * "Let customers change items"). The order's items with steppers, then the
+   * whole catalogue to add from; the new subtotal and total are shown. The
+   * end state is sent: [{ variantId, title, quantity }] (quantity 0 = removed).
+   * `lines`: [{ variantId?, title?, quantity }] — guests' come from J&T with
+   * titles only, so they're matched to the catalogue by name.
+   */
+  async function openItemsSheet(orderName, who, lines) {
+    const { products, cats } = await O.loadCatalogue();
+    const norm = (x) => String(x || '').trim().toLowerCase();
+    const seed = {};
+    lines.forEach((l) => {
+      const p = products.find((pp) => (l.variantId && String(pp.variantId) === String(l.variantId))
+        || (l.title && (norm(pp.titleEn) === norm(l.title) || norm(pp.titleAr) === norm(l.title))));
+      if (p) seed[p.id] = (seed[p.id] || 0) + Number(l.quantity || 1);
+    });
+    const unmatched = lines.filter((l) => !products.some((pp) => (l.variantId && String(pp.variantId) === String(l.variantId))
+      || (l.title && (norm(pp.titleEn) === norm(l.title) || norm(pp.titleAr) === norm(l.title)))));
+    const original = { ...seed };
+    const edit = { ...seed };
+    let saving = false;
+    const app = $('#app');
+    const scrim = document.createElement('div');
+    scrim.className = 'scrim';
+    const sheet = document.createElement('div');
+    sheet.className = 'sheet';
+    const close = () => { scrim.remove(); sheet.remove(); };
+    scrim.addEventListener('click', close);
+    function render() {
+      const entries = Object.keys(edit).map((id) => ({ p: products.find((x) => x.id === id), qty: edit[id] })).filter((e) => e.p);
+      const subtotal = entries.reduce((a, e) => a + e.p.price * e.qty, 0);
+      const total = subtotal + O.shippingFor(subtotal);
+      const scrollTop = $('.sheet-body', sheet)?.scrollTop || 0;
+      sheet.innerHTML = `
+        <div class="grabber"></div>
+        <div class="sheet-head"><span class="sheet-title">${esc(L('Change items', 'غيّر المنتجات'))}</span>
+          <button class="sheet-close" data-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+        <div class="sheet-body">
+          <div class="sec-label">${esc(L(`ORDER ${orderName}`, `الطلب ${orderName}`))}</div>
+          ${entries.length ? entries.map((e) => `
+            <div class="sheet-item" data-pid="${esc(e.p.id)}">
+              <div class="cat-item-img">${img(e.p.img)}</div>
+              <div class="cat-item-meta" style="gap:4px"><div class="cat-item-title" style="font-size:13.5px;line-height:18px">${esc(O.ptitle(e.p))}</div><div class="sheet-item-total">${esc(fmtPrice(e.p.price * e.qty))}</div></div>
+              ${stepper(e.qty, { size: 26, fs: 14, gap: 8 })}
+            </div>`).join('')
+            : `<div class="awaiting" style="margin:0 20px 8px;text-align:center">${esc(L('No items — add some below, or cancel the order instead.', 'مفيش منتجات — ضيف من تحت، أو الغي الطلب.'))}</div>`}
+          ${unmatched.length ? `<div class="addr-note" style="margin:0 20px 8px">${esc(L(`Also in this order (unchanged): ${unmatched.map((u) => `${u.title} ×${u.quantity}`).join(', ')}`, `كمان في الطلب (من غير تغيير): ${unmatched.map((u) => `${u.title} ×${u.quantity}`).join('، ')}`))}</div>` : ''}
+          <div class="sheet-rule"></div>
+          <div class="sec-label">${esc(L('ADD PRODUCTS', 'ضيف منتجات'))}</div>
+          ${[...cats, { id: null, en: 'More', ar: 'كمان' }].map((c) => {
+            // The last group holds products whose collection isn't in the list, so nothing is left out.
+            const known = new Set(cats.map((x) => x.id));
+            const group = products.filter((p) => (c.id ? p.cat === c.id : !known.has(p.cat)) && p.available !== false && p.stock !== 0);
+            if (!group.length) return '';
+            return `<div class="group-label">${esc(L(c.en, c.ar))}</div>${group.map((p) => `
+              <div class="cat-item" data-pid="${esc(p.id)}">
+                <div class="cat-item-img">${img(p.img)}</div>
+                <div class="cat-item-meta"><div class="cat-item-title">${esc(O.ptitle(p))}</div><div class="cat-item-price">${esc(fmtPrice(p.price))}</div></div>
+                ${stepper(edit[p.id] || 0, { size: 24, fs: 13, gap: 7 })}
+              </div>`).join('')}`;
+          }).join('')}
+          <div style="height:16px"></div>
+        </div>
+        <div class="sheet-foot">
+          ${sumRow(t('subtotal'), fmtPrice(subtotal))}
+          ${sumRow(unmatched.length ? L('New total + unchanged items', 'الإجمالي الجديد + المنتجات اللي متغيّرتش') : L('New total (cash on delivery)', 'الإجمالي الجديد (كاش عند الاستلام)'), fmtPrice(total), 'total')}
+          <button class="accept" data-accept>${saving ? spinner() : esc(L('Save changes', 'احفظ التعديلات'))}</button>
+        </div>`;
+      $('.sheet-body', sheet).scrollTop = scrollTop;
+    }
+    sheet.addEventListener('click', async (e) => {
+      if (e.target.closest('[data-close]')) return close();
+      const step = e.target.closest('[data-step]');
+      if (step) {
+        const id = step.closest('[data-pid]').dataset.pid;
+        const q = Math.max(0, (edit[id] || 0) + Number(step.dataset.step));
+        if (q === 0) delete edit[id]; else edit[id] = q;
+        return render();
+      }
+      if (!e.target.closest('[data-accept]') || saving) return;
+      const ids = new Set([...Object.keys(original), ...Object.keys(edit)]);
+      const changed = [...ids].some((id) => (original[id] || 0) !== (edit[id] || 0));
+      if (!changed) return close();
+      if (!Object.keys(edit).length && !unmatched.length) {
+        return O.okaAlert(L('Nothing left', 'مفيش منتجات'), L('To remove everything, cancel the order instead.', 'لو عايز تشيل كل حاجة، الغي الطلب.'));
+      }
+      const items = [...ids].map((id) => {
+        const p = products.find((x) => x.id === id);
+        return { variantId: String(p.variantId), title: p.titleEn, quantity: edit[id] || 0 };
+      });
+      saving = true;
+      render();
+      try {
+        await ordersApi('customer_edit_items', { ...who, items });
+        close();
+        O.haptic.success?.();
+        O.okaAlert(L('Order updated', 'الطلب اتعدّل'), L(`Order ${orderName} now has the new items. You’ll pay the new total on delivery.`, `الطلب ${orderName} اتعدّل بالمنتجات الجديدة. هتدفع الإجمالي الجديد عند الاستلام.`));
+      } catch (err) {
+        saving = false;
+        render();
+        ordersApiFail(L('Could not save the changes', 'معرفناش نحفظ التعديلات'), err);
+      }
+    });
+    render();
+    app.append(scrim, sheet);
+  }
+
+  /** "Edit": address, or items too when the orders API takes item changes. */
+  function chooseEdit(onAddress, onItems) {
+    if (!(CFG.orders && CFG.orders.items)) return onAddress();
+    return O.okaAlert(L('What do you want to change?', 'عايز تغيّر إيه؟'), L('You can change it until the courier picks it up.', 'تقدر تغيّر لحد ما المندوب يستلم الطلب.'), [
+      { text: L('Back', 'ارجع'), style: 'cancel' },
+      { text: L('Change address', 'غيّر العنوان'), onPress: onAddress },
+      { text: L('Change items', 'غيّر المنتجات'), onPress: onItems },
+    ]);
   }
 
   /**
