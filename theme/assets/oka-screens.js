@@ -1089,8 +1089,8 @@
   function friendlyError(err) {
     const msg = errText(err);
     if (/already (shipped|with the courier)/i.test(msg)) {
-      return L('This order has already shipped and can no longer be cancelled. Contact support if you need to return it.',
-        'الطلب اتشحن بالفعل ومش ممكن يتلغي دلوقتي. كلّم خدمة العملاء لو محتاج ترجعه.');
+      return L('This order has already shipped and can no longer be cancelled.',
+        'الطلب اتشحن بالفعل ومش ممكن يتلغي دلوقتي.');
     }
     if (/not signed in|session/i.test(msg)) return L('Sign in with the account that placed this order.', 'سجّل دخولك بالحساب اللي عمل الطلب ده.');
     if (/timed out|network|failed to fetch|aborted/i.test(msg)) return L("Couldn't reach the server. Please try again.", 'مفيش اتصال بالسيرفر دلوقتي. جرّب تاني.');
@@ -1278,25 +1278,20 @@
   function ordersApiMessage(err) {
     const m = errText(err);
     const known = [
-      [/couldn.t find an order/i, "We can't change this order online yet — it may not be with the courier yet. Contact us and we'll do it for you.", 'مش قادرين نغيّر الطلب ده أونلاين دلوقتي — ممكن يكون لسه متسجّلش مع شركة الشحن. كلّمنا وإحنا نعملهولك.'],
-      [/already been shipped/i, 'This order has already been shipped, so it can’t be changed online. Please contact us.', 'الطلب ده اتشحن خلاص، فمينفعش يتغيّر أونلاين. كلّمنا لو محتاج حاجة.'],
+      [/couldn.t find an order/i, "This order can't be changed online yet — it isn't with the courier yet. Please try again later.", 'مينفعش نغيّر الطلب ده أونلاين لسه — لسه متسجّلش مع شركة الشحن. جرّب تاني بعد شوية.'],
+      [/already been shipped/i, 'This order has already been shipped, so it can no longer be changed or cancelled.', 'الطلب ده اتشحن خلاص، فمينفعش يتغيّر أو يتلغي دلوقتي.'],
       [/already cancelled/i, 'This order is already cancelled.', 'الطلب ده ملغي بالفعل.'],
-      [/too many attempts/i, 'Too many attempts. Please try again in an hour or contact us.', 'محاولات كتير. جرّب تاني بعد ساعة أو كلّمنا.'],
+      [/too many attempts/i, 'Too many attempts. Please try again in an hour.', 'محاولات كتير. جرّب تاني بعد ساعة.'],
       [/nothing to change/i, 'Nothing to change.', 'مفيش حاجة اتغيّرت.'],
       [/check the details/i, 'Please check the details you entered and try again.', 'راجع البيانات اللي كتبتها وجرّب تاني.'],
-      [/went wrong/i, 'Something went wrong updating your order. Please try again or contact us.', 'حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني أو كلّمنا.'],
+      [/went wrong/i, 'Something went wrong updating your order. Please try again.', 'حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني.'],
     ];
     const hit = known.find(([re]) => re.test(m));
     return hit ? L(hit[1], hit[2]) : m;
   }
-  /** An error alert with a way to reach the team (WhatsApp when set). */
-  function ordersApiFail(title, err, orderName) {
-    const text = ordersApiMessage(err);
-    if (!CFG.whatsapp) return O.okaAlert(title, text);
-    return O.okaAlert(title, text, [
-      { text: L('OK', 'تمام'), style: 'cancel' },
-      { text: L('WhatsApp us', 'كلّمنا واتساب'), onPress: () => window.open(O.whatsappUrl(L(`Hi, about order ${orderName}`, `أهلاً، بخصوص الطلب ${orderName}`)), '_blank', 'noopener') },
-    ]);
+  /** Orders are changed only through the orders API: an error just says why. */
+  function ordersApiFail(title, err) {
+    return O.okaAlert(title, ordersApiMessage(err));
   }
   const ADDR_LIMITS = {
     name: [2, 60], prov: [0, 60], city: [0, 60], area: [0, 60], street: [5, 200], building: [0, 30], floor: [0, 30], flats: [0, 30],
@@ -1342,7 +1337,7 @@
     const onErr = (title, err) => {
       if (/already been shipped/i.test(errText(err))) disable(L('This order has been shipped, so it can no longer be changed or cancelled.', 'الطلب ده اتشحن، فمينفعش يتغيّر أو يتلغي دلوقتي.'), 'shipped');
       if (/already cancelled/i.test(errText(err))) disable(L('This order is cancelled.', 'الطلب ده ملغي.'), 'cancelled');
-      return ordersApiFail(title, err, last.name);
+      return ordersApiFail(title, err);
     };
     box.addEventListener('click', async (e) => {
       if (e.target.closest('[data-guest-forget]')) {
@@ -1449,7 +1444,7 @@
       $$('.edit-btn, .cancel-btn', det).forEach((b) => { b.classList.add('disabled'); b.disabled = true; });
       $('[data-actions-hint]', det)?.remove();
       if (!$('.shipped-note', det)) {
-        $('.order-actions', det).insertAdjacentHTML('beforebegin', `<div class="shipped-note"><b>${esc(L('This order has been shipped', 'الطلب ده اتشحن'))}</b><span>${esc(L('It’s on its way, so it can no longer be edited or cancelled. Contact support if you need a change.', 'هو في الطريق ليك، فمينفعش يتعدّل أو يتلغي دلوقتي. لو محتاج تغيير كلّم خدمة العملاء.'))}</span></div>`);
+        $('.order-actions', det).insertAdjacentHTML('beforebegin', `<div class="shipped-note"><b>${esc(L('This order has been shipped', 'الطلب ده اتشحن'))}</b><span>${esc(L('It’s on its way, so it can no longer be edited or cancelled.', 'هو في الطريق ليك، فمينفعش يتعدّل أو يتلغي دلوقتي.'))}</span></div>`);
       }
     }
     Object.keys(cancelledHere).forEach((name) => {
@@ -1557,14 +1552,14 @@
         const onApiError = (title, err) => {
           if (/already been shipped/i.test(errText(err))) markShipped(name);
           if (/already cancelled/i.test(errText(err))) markCancelled(name);
-          return ordersApiFail(title, err, name);
+          return ordersApiFail(title, err);
         };
         if (btn.hasAttribute('data-edit-order')) {
           if (btn.classList.contains('busy')) return;
           btn.classList.add('busy');
           try {
             const order = await ordersApi('customer_get_order', who);
-            if (order.canEdit === false) { markShipped(name); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped'), name); }
+            if (order.canEdit === false) { markShipped(name); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped')); }
             openAddressSheet(name, who, order);
           } catch (err) {
             onApiError(L('Can’t change it', 'مينفعش يتغيّر'), err);
@@ -1596,35 +1591,13 @@
         if (shipped) {
           return O.okaAlert(L('Not available', 'مش متاح'), L('This order has already shipped, so its items and address can no longer be changed.', 'الطلب اتشحن خلاص، فمينفعش تغيّر منتجاته أو عنوانه.'));
         }
-        if (O.hasService()) return openEditSheet(name, lines);
-        return askOnWhatsApp(L(`Hi, I'd like to change order ${name}.`, `أهلاً، عايز أعدّل الطلب ${name}.`));
+        return changesUnavailable();
       }
 
       if (e.target.closest('[data-cancel-order]')) {
         if (cancelled) return O.okaAlert(L('Already cancelled', 'الطلب ملغي'), L('This order has already been cancelled.', 'الطلب ده اتلغى خلاص.'));
         if (shipped) return O.okaAlert(L('Not available', 'مش متاح'), friendlyError('already shipped'));
-        if (!O.hasService()) {
-          return askOnWhatsApp(L(`Hi, please cancel order ${name}.`, `أهلاً، لو سمحت الغوا الطلب ${name}.`));
-        }
-        return O.okaAlert(L('Cancel order', 'الغي الطلب'), L(`Order ${name} will be cancelled.`, `الطلب ${name} هيتلغي خالص.`), [
-          { text: L('Back', 'ارجع'), style: 'cancel' },
-          {
-            text: L('Cancel order', 'الغي الطلب'),
-            style: 'destructive',
-            onPress: async () => {
-              try {
-                const r = await O.api(`/orders/${encodeURIComponent(name)}/cancel`, { method: 'POST', body: {} });
-                cancelledHere[name] = r?.cancelledAt || new Date().toISOString();
-                O.store.set('oka.cancelled', cancelledHere);
-                markCancelled(name);
-                O.haptic.success();
-                O.okaAlert(L('Order cancelled', 'الطلب اتلغى'), L(`Order ${name} has been cancelled. It won't be shipped and you won't be charged.`, `الطلب ${name} اتلغى. مش هيتشحن ومش هتدفع حاجة.`));
-              } catch (err) {
-                O.okaAlert(L('Could not cancel', 'معرفناش نلغيه'), friendlyError(err));
-              }
-            },
-          },
-        ]);
+        return changesUnavailable();
       }
 
       if (e.target.closest('[data-reorder]')) {
@@ -1725,18 +1698,9 @@
     });
   }
 
-  function askOnWhatsApp(text) {
-    if (!CFG.whatsapp) {
-      return O.okaAlert(L('Not available', 'مش متاح'), L('Contact support to change or cancel this order.', 'كلّم خدمة العملاء عشان تعدّل أو تلغي الطلب ده.'));
-    }
-    return O.okaAlert(
-      L('We’ll do it for you', 'إحنا نعملهالك'),
-      L('Send us this request on WhatsApp and the team will update your order before it ships.', 'ابعتلنا الطلب ده على واتساب والفريق هيعدّل طلبك قبل ما يتشحن.'),
-      [
-        { text: L('Back', 'ارجع'), style: 'cancel' },
-        { text: L('WhatsApp', 'واتساب'), onPress: () => window.open(O.whatsappUrl(text), '_blank', 'noopener') },
-      ],
-    );
+  /** Orders change only through the orders API; without its key in Theme settings there's no other route. */
+  function changesUnavailable() {
+    return O.okaAlert(L('Not available yet', 'مش متاح لسه'), L('Changing or cancelling orders online isn’t switched on yet.', 'تعديل وإلغاء الطلبات أونلاين لسه مش متفعّل.'));
   }
 
   /* ── service-side addresses (their ids are Admin API gids) ───────────── */
