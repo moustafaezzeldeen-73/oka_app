@@ -1377,7 +1377,9 @@
   function guestLastOrder(root) {
     const box = $('[data-guest-last]', root);
     if (!box || O.customer) return;
-    const last = lastOrderStored() || { name: '', phone: '' };
+    const stored = lastOrderStored() || { name: '', phone: '' };
+    // No phone saved yet: the one on a delivery address saved in this browser.
+    const last = { name: stored.name || '', phone: stored.phone || O.selectedAddress?.()?.phone || '' };
     box.innerHTML = `
       <div class="guest-last">
         <div class="guest-last-k">${esc(last.name ? L('Your last order', 'آخر طلب ليك') : L('Change or cancel an order', 'غيّر أو الغي طلب'))}</div>
@@ -1415,8 +1417,17 @@
       else if (/already cancelled/i.test(errText(err))) setNote(L('This order is cancelled.', 'الطلب ده ملغي.'), 'cancelled');
       return ordersApiFail(title, err);
     };
-    // Typing another order clears the verdict on the previous one.
-    box.addEventListener('input', () => { showErr(''); setNote(L('You can change the address or cancel until the courier picks it up.', 'تقدر تغيّر العنوان أو تلغي الطلب لحد ما المندوب يستلمه.')); });
+    // Whatever is typed is kept in this browser straight away, so the
+    // fields are filled in next time. Typing another order also clears the
+    // verdict on the previous one.
+    box.addEventListener('input', () => {
+      const raw = $('[data-g-order]', box).value.trim();
+      const phone = $('[data-g-phone]', box).value.trim();
+      if (raw || phone) O.store.set('oka.lastOrder', { name: /^\d+$/.test(raw) ? `#${raw}` : raw, phone });
+      else O.store.del('oka.lastOrder');
+      showErr('');
+      setNote(L('You can change the address or cancel until the courier picks it up.', 'تقدر تغيّر العنوان أو تلغي الطلب لحد ما المندوب يستلمه.'));
+    });
     box.addEventListener('click', async (e) => {
       const forget = e.target.closest('[data-guest-forget]');
       if (forget) {
