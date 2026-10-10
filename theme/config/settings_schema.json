@@ -167,6 +167,25 @@
         "placeholder": "/apps/oka"
       },
       {
+        "type": "header",
+        "content": "Order changes (J&T orders API)"
+      },
+      {
+        "type": "paragraph",
+        "content": "Lets signed-in customers change the delivery address or cancel an order until the courier picks it up. The key can only reach those customer actions, so it is safe in the page."
+      },
+      {
+        "type": "text",
+        "id": "orders_api_url",
+        "label": "Orders API URL",
+        "default": "https://jt-mcp-orders-649584328410.europe-west1.run.app/mcp"
+      },
+      {
+        "type": "text",
+        "id": "orders_api_key",
+        "label": "Orders API key (ORDERS_AUTH_TOKEN)"
+      },
+      {
         "type": "text",
         "id": "service_url",
         "label": "Order service URL (without an App proxy)",

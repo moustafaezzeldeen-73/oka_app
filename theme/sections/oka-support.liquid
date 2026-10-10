@@ -13,7 +13,7 @@
   {% render 'screen-header', en: 'Help & support', ar: 'محتاج مساعدة؟', back: '/pages/account' %}
 
   {%- if settings.whatsapp != blank -%}
-    <a class="wa-btn" data-wa-chat href="https://wa.me/{{ settings.whatsapp | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener">
+    <a class="wa-btn" data-wa-chat{% if customer and customer.orders.first %} data-last-order="{{ customer.orders.first.name | escape }}"{% endif %} href="https://wa.me/{{ settings.whatsapp | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener">
       {% render 'icon', name: 'whatsapp', px: 18 %}
       {% render 'bi', en: 'Chat with us on WhatsApp', ar: 'كلّمنا على واتساب' %}
     </a>

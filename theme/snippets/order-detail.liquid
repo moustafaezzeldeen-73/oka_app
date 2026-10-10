@@ -45,7 +45,7 @@
   endif
 -%}
 <div class="order-detail" data-order-detail="{{ o.name | escape }}" data-step="{{ step }}" data-fulfilled="{{ is_fulfilled }}"
-  data-cancelled="{{ o.cancelled }}" data-has-awb="{% if tracking_number != blank %}true{% else %}false{% endif %}" data-awb="{{ tracking_number | escape }}"
+  data-cancelled="{{ o.cancelled }}" data-phone="{{ sa.phone | default: o.billing_address.phone | default: o.phone | default: customer.phone | escape }}" data-has-awb="{% if tracking_number != blank %}true{% else %}false{% endif %}" data-awb="{{ tracking_number | escape }}"
   data-province="{{ sa.province_code }}" data-lines='[{%- for li in o.line_items -%}{"variantId":{{ li.variant_id | json }},"quantity":{{ li.quantity }},"handle":{{ li.product.handle | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]'
   {% if standalone != true %}hidden{% endif %}>
 
@@ -186,11 +186,16 @@
   {%- endif -%}
 
   <div class="order-actions">
-    <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>{% render 'bi', en: 'Edit', ar: 'عدّل' %}</button>
+    <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>{%- if settings.orders_api_key != blank -%}{% render 'bi', en: 'Change address', ar: 'غيّر العنوان' %}{%- else -%}{% render 'bi', en: 'Edit', ar: 'عدّل' %}{%- endif -%}</button>
     <button class="cancel-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-cancel-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>
       {%- if o.cancelled -%}{% render 'bi', en: 'Cancelled', ar: 'ملغي' %}{%- else -%}{% render 'bi', en: 'Cancel Order', ar: 'الغي الطلب' %}{%- endif -%}
     </button>
   </div>
+  {%- unless is_fulfilled or o.cancelled -%}
+    {%- if settings.orders_api_key != blank -%}
+      <div class="order-actions-hint" data-actions-hint>{% render 'bi', en: 'You can change the address or cancel until the courier picks it up.', ar: 'تقدر تغيّر العنوان أو تلغي الطلب لحد ما المندوب يستلمه.' %}</div>
+    {%- endif -%}
+  {%- endunless -%}
   <button class="reorder-btn" data-reorder>{% render 'bi', en: 'Order again', ar: 'اطلب تاني' %}</button>
   <div style="height:30px"></div>
 </div>

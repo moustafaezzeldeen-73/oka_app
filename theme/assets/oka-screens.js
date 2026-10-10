@@ -1242,6 +1242,66 @@
     onLang(load);
   }
 
+  /* ── J&T orders API: change the address or cancel before pickup ─────────
+   * Theme settings → Order changes. One HTTPS endpoint speaking JSON-RPC
+   * tools/call; every call carries the order number and the phone on the
+   * order, which the server re-checks. The customer is signed in, so both
+   * come from their own order — nothing to type, nothing stored.
+   * Never retried automatically: a failure is retried by pressing again.
+   */
+  const hasOrdersApi = () => Boolean(CFG.orders && CFG.orders.url && CFG.orders.key);
+  let ordersRpcId = 0;
+  async function ordersApi(action, args) {
+    let res;
+    try {
+      res = await fetch(CFG.orders.url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream', 'x-api-key': CFG.orders.key },
+        body: JSON.stringify({ jsonrpc: '2.0', id: ++ordersRpcId, method: 'tools/call', params: { name: action, arguments: args } }),
+      });
+    } catch (e) {
+      throw new Error('Something went wrong. Please try again or contact us.');
+    }
+    if (!res.ok) throw new Error('Something went wrong. Please try again or contact us.');
+    const raw = await res.text();
+    const line = raw.split('\n').find((l) => l.startsWith('data: '));
+    let msg;
+    try { msg = JSON.parse(line ? line.slice(6) : raw); } catch (e) { throw new Error('Something went wrong. Please try again or contact us.'); }
+    const text = msg.result?.content?.[0]?.text ?? '';
+    if (msg.error || msg.result?.isError) {
+      // Input-validation errors start with "MCP error"; never shown raw.
+      throw new Error(!text || text.startsWith('MCP error') ? 'Please check the details you entered and try again.' : text);
+    }
+    return JSON.parse(text);
+  }
+  /** The API's messages are written for customers in English; this is the Arabic for each. */
+  function ordersApiMessage(err) {
+    const m = errText(err);
+    const known = [
+      [/couldn.t find an order/i, "We can't change this order online yet — it may not be with the courier yet. Contact us and we'll do it for you.", 'مش قادرين نغيّر الطلب ده أونلاين دلوقتي — ممكن يكون لسه متسجّلش مع شركة الشحن. كلّمنا وإحنا نعملهولك.'],
+      [/already been shipped/i, 'This order has already been shipped, so it can’t be changed online. Please contact us.', 'الطلب ده اتشحن خلاص، فمينفعش يتغيّر أونلاين. كلّمنا لو محتاج حاجة.'],
+      [/already cancelled/i, 'This order is already cancelled.', 'الطلب ده ملغي بالفعل.'],
+      [/too many attempts/i, 'Too many attempts. Please try again in an hour or contact us.', 'محاولات كتير. جرّب تاني بعد ساعة أو كلّمنا.'],
+      [/nothing to change/i, 'Nothing to change.', 'مفيش حاجة اتغيّرت.'],
+      [/check the details/i, 'Please check the details you entered and try again.', 'راجع البيانات اللي كتبتها وجرّب تاني.'],
+      [/went wrong/i, 'Something went wrong updating your order. Please try again or contact us.', 'حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني أو كلّمنا.'],
+    ];
+    const hit = known.find(([re]) => re.test(m));
+    return hit ? L(hit[1], hit[2]) : m;
+  }
+  /** An error alert with a way to reach the team (WhatsApp when set). */
+  function ordersApiFail(title, err, orderName) {
+    const text = ordersApiMessage(err);
+    if (!CFG.whatsapp) return O.okaAlert(title, text);
+    return O.okaAlert(title, text, [
+      { text: L('OK', 'تمام'), style: 'cancel' },
+      { text: L('WhatsApp us', 'كلّمنا واتساب'), onPress: () => window.open(O.whatsappUrl(L(`Hi, about order ${orderName}`, `أهلاً، بخصوص الطلب ${orderName}`)), '_blank', 'noopener') },
+    ]);
+  }
+  const ADDR_LIMITS = {
+    name: [2, 60], prov: [0, 60], city: [0, 60], area: [0, 60], street: [5, 200], building: [0, 30], floor: [0, 30], flats: [0, 30],
+  };
+
   function orders(root) {
     const list = $('[data-orders-list]', root);
     const details = $$('[data-order-detail]', root);
@@ -1293,9 +1353,22 @@
         $('[data-cancelled-banner]', det).hidden = false;
         $$('.edit-btn, .cancel-btn', det).forEach((b) => { b.classList.add('disabled'); b.disabled = true; });
         $('[data-cancel-order]', det).textContent = L('Cancelled', 'ملغي');
+        $('[data-actions-hint]', det)?.remove();
       }
       const st = $(`[data-order-state="${CSS.escape(name)}"]`, root);
       if (st) { st.textContent = L('Cancelled', 'ملغي'); st.className = 'order-state red'; }
+    }
+    // The courier already has it (the orders API says so), though Shopify
+    // isn't marked fulfilled yet: same greyed-out buttons and note.
+    function markShipped(name) {
+      const det = details.find((x) => x.dataset.orderDetail === name);
+      if (!det) return;
+      det.dataset.fulfilled = 'true';
+      $$('.edit-btn, .cancel-btn', det).forEach((b) => { b.classList.add('disabled'); b.disabled = true; });
+      $('[data-actions-hint]', det)?.remove();
+      if (!$('.shipped-note', det)) {
+        $('.order-actions', det).insertAdjacentHTML('beforebegin', `<div class="shipped-note"><b>${esc(L('This order has been shipped', 'الطلب ده اتشحن'))}</b><span>${esc(L('It’s on its way, so it can no longer be edited or cancelled. Contact support if you need a change.', 'هو في الطريق ليك، فمينفعش يتعدّل أو يتلغي دلوقتي. لو محتاج تغيير كلّم خدمة العملاء.'))}</span></div>`);
+      }
     }
     Object.keys(cancelledHere).forEach((name) => {
       const det = details.find((x) => x.dataset.orderDetail === name);
@@ -1396,6 +1469,46 @@
       const cancelled = det.dataset.cancelled === 'true';
       const lines = JSON.parse(det.dataset.lines || '[]');
 
+      if (hasOrdersApi() && !shipped && !cancelled && (e.target.closest('[data-edit-order]') || e.target.closest('[data-cancel-order]'))) {
+        const btn = e.target.closest('[data-edit-order], [data-cancel-order]');
+        const who = { orderNumber: name, phone: det.dataset.phone || O.customer?.phone || '' };
+        const onApiError = (title, err) => {
+          if (/already been shipped/i.test(errText(err))) markShipped(name);
+          if (/already cancelled/i.test(errText(err))) markCancelled(name);
+          return ordersApiFail(title, err, name);
+        };
+        if (btn.hasAttribute('data-edit-order')) {
+          if (btn.classList.contains('busy')) return;
+          btn.classList.add('busy');
+          try {
+            const order = await ordersApi('customer_get_order', who);
+            if (order.canEdit === false) { markShipped(name); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped'), name); }
+            openAddressSheet(name, who, order);
+          } catch (err) {
+            onApiError(L('Can’t change it', 'مينفعش يتغيّر'), err);
+          } finally { btn.classList.remove('busy'); }
+          return;
+        }
+        return O.okaAlert(L('Cancel order?', 'تلغي الطلب؟'), L(`Are you sure? Order ${name} will be cancelled and this can’t be undone.`, `متأكد؟ الطلب ${name} هيتلغي ومينفعش نرجّعه.`), [
+          { text: L('Back', 'ارجع'), style: 'cancel' },
+          {
+            text: L('Cancel order', 'الغي الطلب'),
+            style: 'destructive',
+            onPress: async () => {
+              btn.classList.add('busy');
+              try {
+                await ordersApi('customer_cancel_order', { ...who, reason: 'Cancelled on website' });
+                markCancelled(name);
+                O.haptic.success();
+                O.okaAlert(L('Order cancelled', 'الطلب اتلغى'), L(`Your order ${name} has been cancelled.`, `طلبك ${name} اتلغى.`));
+              } catch (err) {
+                onApiError(L('Could not cancel', 'معرفناش نلغيه'), err);
+              } finally { btn.classList.remove('busy'); }
+            },
+          },
+        ]);
+      }
+
       if (e.target.closest('[data-edit-order]')) {
         if (cancelled) return O.okaAlert(L('Not available', 'مش متاح'), L('This order has already been cancelled.', 'الطلب ده اتلغى خلاص.'));
         if (shipped) {
@@ -1451,6 +1564,81 @@
         } catch (err) {
           O.okaAlert(L('Could not add', 'معرفناش نضيفه'), errText(err));
         }
+      }
+    });
+  }
+
+  /**
+   * Change address (orders API). Pre-filled with the address the courier has;
+   * only the fields the customer changed are sent. Items and the COD amount
+   * can't be changed here.
+   */
+  function openAddressSheet(orderName, who, order) {
+    const r = order.receiver || {};
+    const fields = [
+      ['name', L('Name', 'الاسم')],
+      ['prov', L('Governorate', 'المحافظة')],
+      ['city', L('City', 'المدينة')],
+      ['area', L('Area', 'المنطقة')],
+      ['street', L('Street and number', 'الشارع ورقمه')],
+      ['building', L('Building', 'العمارة')],
+      ['floor', L('Floor', 'الدور')],
+      ['flats', L('Flat', 'الشقة')],
+    ];
+    const app = $('#app');
+    const scrim = document.createElement('div');
+    scrim.className = 'scrim';
+    const sheet = document.createElement('div');
+    sheet.className = 'sheet addr-sheet';
+    sheet.innerHTML = `
+      <div class="grabber"></div>
+      <div class="sheet-head"><span class="sheet-title">${esc(L('Change address', 'غيّر العنوان'))}</span>
+        <button class="sheet-close" data-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+      <form class="sheet-body addr-form" novalidate>
+        <div class="addr-note">${esc(L(`Order ${orderName}${order.codAmount != null ? ` · pay ${fmtPrice(order.codAmount)} on delivery` : ''}. The phone number, items and amount can’t be changed here.`, `الطلب ${orderName}${order.codAmount != null ? ` · هتدفع ${fmtPrice(order.codAmount)} عند الاستلام` : ''}. مينفعش تغيّر رقم الموبايل أو المنتجات أو المبلغ من هنا.`))}</div>
+        ${fields.map(([k, label]) => `<label class="contact-field"><span>${esc(label)}</span>
+          <input name="${k}" value="${esc(r[k] ?? '')}" maxlength="${ADDR_LIMITS[k][1]}" autocomplete="off"></label>`).join('')}
+        <div class="code-error" data-addr-error hidden></div>
+        <button class="cta" type="submit" data-addr-save>${esc(L('Save address', 'احفظ العنوان'))}</button>
+      </form>`;
+    app.append(scrim, sheet);
+    const close = () => { scrim.remove(); sheet.remove(); };
+    scrim.addEventListener('click', close);
+    sheet.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) close(); });
+    const form = $('form', sheet);
+    const errBox = $('[data-addr-error]', sheet);
+    const showErr = (t) => { errBox.textContent = t; errBox.hidden = !t; };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const changes = {};
+      for (const [k] of fields) {
+        const v = form.elements[k].value.trim();
+        if (v === String(r[k] ?? '').trim()) continue;
+        const [min, max] = ADDR_LIMITS[k];
+        if (v.length > max || (v.length < min && (v.length > 0 || min > 0))) {
+          const label = fields.find((f) => f[0] === k)[1];
+          return showErr(min > 0 ? L(`${label}: ${min}–${max} characters.`, `${label}: من ${num(min)} لـ ${num(max)} حرف.`) : L(`${label}: up to ${max} characters.`, `${label}: لحد ${num(max)} حرف.`));
+        }
+        if (!v) continue; // a cleared optional field isn't an edit the API takes
+        changes[k] = v;
+      }
+      if (!Object.keys(changes).length) return showErr(L('Nothing to change.', 'مفيش حاجة اتغيّرت.'));
+      showErr('');
+      const save = $('[data-addr-save]', sheet);
+      if (save.disabled) return;
+      save.disabled = true;
+      save.innerHTML = spinner();
+      try {
+        const updated = await ordersApi('customer_edit_order', { ...who, ...changes });
+        close();
+        O.haptic.success();
+        const a = updated.receiver || {};
+        const line = [a.street, a.building && L(`Bldg ${a.building}`, `عمارة ${a.building}`), a.floor && L(`Floor ${a.floor}`, `الدور ${a.floor}`), a.flats && L(`Flat ${a.flats}`, `شقة ${a.flats}`), a.area, a.city, a.prov].filter(Boolean).join('، ');
+        O.okaAlert(L('Address updated', 'العنوان اتغيّر'), L(`The courier will deliver order ${orderName} to: ${a.name ? `${a.name}, ` : ''}${line}`, `المندوب هيوصّل الطلب ${orderName} على: ${a.name ? `${a.name}، ` : ''}${line}`));
+      } catch (err) {
+        save.disabled = false;
+        save.textContent = L('Save address', 'احفظ العنوان');
+        showErr(ordersApiMessage(err));
       }
     });
   }
@@ -2253,7 +2441,8 @@
     if (!wa) return;
     wa.addEventListener('click', (e) => {
       e.preventDefault();
-      const last = O.store.get('oka.lastOrder');
+      // From the signed-in page itself, never browser storage (orders API rule).
+      const last = wa.dataset.lastOrder || '';
       const text = last ? L(`Hi, about order ${last}`, `أهلاً، بخصوص طلب ${last}`) : L('Hi', 'أهلاً');
       window.open(O.whatsappUrl(text), '_blank', 'noopener');
     });
@@ -2442,9 +2631,8 @@
     // TESTING ONLY — the staff order lookup, when the theme setting turns it on.
     const tl = $('[data-test-lookup]');
     if (tl) testLookup(tl);
-    // Remember the latest order for the WhatsApp greeting.
-    const firstOrder = $('[data-open-order]');
-    if (firstOrder) O.store.set('oka.lastOrder', firstOrder.dataset.openOrder);
+    // Order numbers are never kept in the browser; clear what older versions saved.
+    O.store.del('oka.lastOrder');
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
