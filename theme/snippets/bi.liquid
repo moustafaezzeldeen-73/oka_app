@@ -1,0 +1,6 @@
+{%- comment -%}
+  Bilingual text. Both languages are in the page; the <html lang> attribute
+  shows one, so the language toggle is instant — the app's behaviour.
+  Usage: {% render 'bi', en: 'Cart', ar: 'السلة' %}
+{%- endcomment -%}
+<span class="l-en">{{ en }}</span><span class="l-ar">{{ ar | default: en }}</span>

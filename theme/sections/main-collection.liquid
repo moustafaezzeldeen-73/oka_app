@@ -1,0 +1,24 @@
+{%- comment -%} CollectionScreen.js — sort chip cycles, two filter toggles, the 2-up grid. {%- endcomment -%}
+<div class="screen fade-in" data-screen="collection">
+  <div class="coll-bar">
+    <button class="coll-back flip" data-back="{{ routes.root_url }}" aria-label="Back">{% render 'icon', name: 'chevron-left' %}</button>
+    <h1 class="coll-title">{% if collection.handle == 'all' %}{% render 'bi', en: 'All', ar: 'الكل' %}{% else %}{% render 'ctitle', c: collection %}{% endif %}</h1>
+  </div>
+
+  {% paginate collection.products by 250 %}
+    <div class="count" data-count-label></div>
+    <div class="chips">
+      <button class="chip dark" data-sort></button>
+      <button class="chip" data-filter="inStock">{% render 'bi', en: 'In stock', ar: 'المتاح' %}</button>
+      <button class="chip" data-filter="onSale">{% render 'bi', en: 'On sale', ar: 'عليه خصم' %}</button>
+    </div>
+    <div class="grid" data-grid>
+      {%- for p in collection.products -%}
+        {% render 'grid-card', p: p, idx: forloop.index0 %}
+      {%- endfor -%}
+    </div>
+  {% endpaginate %}
+  <div class="empty" data-empty hidden>{% render 'bi', en: 'No products in this category', ar: 'مفيش منتجات هنا لسه' %}</div>
+  <div style="height:26px"></div>
+</div>
+{% schema %}{ "name": "Collection", "tag": "div" }{% endschema %}

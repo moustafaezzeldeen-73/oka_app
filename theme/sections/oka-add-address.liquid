@@ -1,0 +1,56 @@
+{%- comment -%}
+  AddAddressScreen.js — stylised map, real GPS ("Find my location"),
+  governorate chips (the courier zone and the delivery estimate), default
+  toggle, address type. Saved to the customer's Shopify record.
+{%- endcomment -%}
+<div class="screen fade-in" data-screen="add-address">
+  {% render 'screen-header', en: 'Add new address', ar: 'ضيف عنوان جديد', back: '/pages/addresses' %}
+
+  <div class="map">
+    <div class="road-v"></div><div class="road-h"></div>
+    <div class="pin">{% render 'icon', name: 'pin', px: 30 %}<i></i></div>
+    <button type="button" class="loc-btn" data-locate>
+      <span data-loc-icon style="display:flex">{% render 'icon', name: 'crosshair', px: 15 %}</span>
+      <span data-loc-txt>{% render 'bi', en: 'Find my location', ar: 'حدّد مكاني' %}</span>
+    </button>
+  </div>
+  <div class="found" data-found hidden>{% render 'bi', en: 'Location found — address filled in automatically', ar: 'حدّدنا مكانك وملينا العنوان لوحدنا' %}</div>
+
+  {%- if customer -%}
+    {%- form 'customer_address', customer.new_address, class: 'form', data-addr-form: '' -%}
+      <input type="hidden" name="address[country]" value="Egypt">
+      <input type="hidden" name="address[province]" data-province-name>
+      <input type="hidden" name="address[first_name]" data-first>
+      <input type="hidden" name="address[last_name]" data-last>
+      <input type="hidden" name="address[address2]" data-address2>
+      <input type="hidden" name="address[default]" value="0" data-default-input>
+      <div><label class="field-label">{% render 'bi', en: 'Full name', ar: 'الاسم' %}</label><input class="field-input" data-f="name" autocomplete="name" value="{{ customer.name | escape }}" data-ph-en="Who receives the order" data-ph-ar="مين هيستلم؟"></div>
+      <div><label class="field-label">{% render 'bi', en: 'Mobile number', ar: 'رقم الموبايل' %}</label><input class="field-input" name="address[phone]" data-f="phone" type="tel" dir="ltr" autocomplete="tel" value="{{ customer.phone | escape }}" placeholder="01X XXXX XXXX"></div>
+      <div><label class="field-label">{% render 'bi', en: 'Area / city', ar: 'المنطقة / المدينة' %}</label><input class="field-input" name="address[city]" data-f="city" data-ph-en="Nasr City" data-ph-ar="مدينة نصر"></div>
+      <div><label class="field-label">{% render 'bi', en: 'Street address', ar: 'الشارع' %}</label><input class="field-input" name="address[address1]" data-f="street" autocomplete="address-line1" data-ph-en="14 Al Nasr St" data-ph-ar="١٤ شارع النصر"></div>
+      <div><label class="field-label">{% render 'bi', en: 'Building, floor, apartment', ar: 'العمارة والدور والشقة' %}</label><input class="field-input" data-f="building" data-ph-en="Building 2, Floor 5, Apt 12" data-ph-ar="عمارة ٢، الدور ٥، شقة ١٢"></div>
+      <div><label class="field-label">{% render 'bi', en: 'Nearby landmark (optional)', ar: 'علامة مميزة جنبك (لو حابب)' %}</label><input class="field-input" data-f="landmark" data-ph-en="Next to El Ezaby Pharmacy" data-ph-ar="جنب صيدلية العزبي"></div>
+
+      <div>
+        <label class="field-label">{% render 'bi', en: 'Governorate', ar: 'المحافظة' %}</label>
+        <div class="provinces" data-provinces></div>
+      </div>
+
+      <button type="button" class="default-row" data-default-toggle><span class="check{% if customer.addresses.size == 0 %} on{% endif %}"></span>{% render 'bi', en: 'Make this my default address', ar: 'خليه العنوان الأساسي' %}</button>
+
+      <div>
+        <label class="field-label">{% render 'bi', en: 'Address type', ar: 'نوع العنوان' %}</label>
+        <div class="types">
+          <button type="button" class="type-btn on" data-type="home">{% render 'bi', en: 'Home', ar: 'البيت' %}</button>
+          <button type="button" class="type-btn" data-type="work">{% render 'bi', en: 'Work', ar: 'الشغل' %}</button>
+        </div>
+      </div>
+
+      {%- if form.errors -%}<div class="error-txt">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <button type="submit" class="cta bold" style="margin-top:6px" data-save>{% render 'bi', en: 'Save address', ar: 'احفظ العنوان' %}</button>
+    {%- endform -%}
+  {%- else -%}
+    <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="notice" data-sign-in="/pages/addresses?view=oka-add-address">{% render 'bi', en: 'Sign in to save an address on your account.', ar: 'سجّل دخولك عشان تحفظ عنوان على حسابك.' %}</a>
+  {%- endif -%}
+</div>
+{% schema %}{ "name": "Add address", "tag": "div" }{% endschema %}

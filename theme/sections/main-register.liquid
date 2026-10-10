@@ -1,0 +1,18 @@
+{%- comment -%} Account creation — the app creates the account on first sign-in. {%- endcomment -%}
+<div class="screen fade-in" data-screen="register">
+  {% render 'screen-header', en: 'Create account', ar: 'اعمل حساب', back: routes.account_login_url %}
+  {%- form 'create_customer', class: 'signin' -%}
+    <p class="lead">{% render 'bi', en: 'One account for your orders, points and addresses.', ar: 'حساب واحد لطلباتك ونقاطك وعناوينك.' %}</p>
+    <label class="field-label">{% render 'bi', en: 'First name', ar: 'الاسم الأول' %}</label>
+    <input class="field-input" name="customer[first_name]" autocomplete="given-name" required>
+    <label class="field-label">{% render 'bi', en: 'Last name', ar: 'اسم العيلة' %}</label>
+    <input class="field-input" name="customer[last_name]" autocomplete="family-name">
+    <label class="field-label">{% render 'bi', en: 'Email', ar: 'الإيميل' %}</label>
+    <input class="field-input" type="email" name="customer[email]" autocomplete="email" dir="ltr" required>
+    <label class="field-label">{% render 'bi', en: 'Password', ar: 'كلمة السر' %}</label>
+    <input class="field-input" type="password" name="customer[password]" autocomplete="new-password" dir="ltr" required>
+    {%- if form.errors -%}<div class="error-txt">{{ form.errors | default_errors }}</div>{%- endif -%}
+    <button class="cta" type="submit" style="margin-top:8px">{% render 'bi', en: 'Create account', ar: 'اعمل حساب' %}</button>
+  {%- endform -%}
+</div>
+{% schema %}{ "name": "Register", "tag": "div" }{% endschema %}

@@ -1,0 +1,137 @@
+{
+ "sections": {
+  "main": {
+   "type": "oka-rows",
+   "settings": {
+    "title_en": "How to use",
+    "title_ar": "طريقة الاستخدام"
+   },
+   "blocks": {
+    "b0": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/water_0.5x.webp",
+      "heading_en": "Fill the flask",
+      "heading_ar": "املى القزازة",
+      "text_en": "<p>Fill the flask with about 700 ml of water — a little more than one small water bottle. If the draw feels heavy, use less water; if it feels light, add more.</p>",
+      "text_ar": "<p>املى القزازة بحوالي ٧٠٠ مللي مية — أكتر شوية من إزازة مية صغيرة. لو السحبة تقيلة قلّل المية، ولو خفيفة زوّدها.</p>"
+     }
+    },
+    "b1": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/stem.webp",
+      "heading_en": "Installing OKA-STEM",
+      "heading_ar": "تركيب أوكا ستيم",
+      "text_en": "",
+      "text_ar": ""
+     }
+    },
+    "b2": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/gourmet.webp",
+      "heading_en": "Installing the hose gourmet",
+      "heading_ar": "تركيب جورميه الخرطوم",
+      "text_en": "",
+      "text_ar": ""
+     }
+    },
+    "b3": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/ezgif-5-983d699ca5.webp",
+      "heading_en": "Installing the hose",
+      "heading_ar": "تركيب الخرطوم",
+      "text_en": "",
+      "text_ar": ""
+     }
+    },
+    "b4": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/bowl.webp",
+      "heading_en": "Fill the bowl",
+      "heading_ar": "املى الحجر",
+      "text_en": "<p>Fill the bowl moderately, not to the top.</p>",
+      "text_ar": "<p>املى الحجر بشكل معتدل، مش لحد الآخر.</p>"
+     }
+    },
+    "b5": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/ezgif-4-1750c26ca8.webp",
+      "heading_en": "Using the standard 15 g bowl",
+      "heading_ar": "استخدام الحجر العادي ١٥ جم",
+      "text_en": "<p>Don’t compress the tobacco, and make sure it doesn’t touch the foil. No need to dry Al Fakher tobacco before using.</p>",
+      "text_ar": "<p>متكبسش المعسل، وخلّي بالك إنه ميلمسش الفويل. مش محتاج تنشّف معسل الفاخر قبل الاستخدام.</p>"
+     }
+    },
+    "b6": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/foil.webp",
+      "heading_en": "Installing the perforated foil",
+      "heading_ar": "تركيب الفويل المخرّم",
+      "text_en": "",
+      "text_ar": ""
+     }
+    },
+    "b7": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/install_bowl.webp",
+      "heading_en": "Installing the bowl",
+      "heading_ar": "تركيب الحجر",
+      "text_en": "",
+      "text_ar": ""
+     }
+    },
+    "b8": {
+     "type": "row",
+     "settings": {
+      "image": "shopify://shop_images/foil_guard.webp",
+      "heading_en": "Safety foil guard",
+      "heading_ar": "واقي الفويل",
+      "text_en": "",
+      "text_ar": ""
+     }
+    },
+    "b9": {
+     "type": "video",
+     "settings": {
+      "heading_en": "25 bowl guide",
+      "heading_ar": "طريقة تجهيز حجر ٢٥",
+      "video": "shopify://files/videos/25 Bowl prep.mp4",
+      "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+     }
+    },
+    "b10": {
+     "type": "video",
+     "settings": {
+      "heading_en": "35 silicon bowl preparation",
+      "heading_ar": "تجهيز الحجر السيليكون ٣٥",
+      "video": "shopify://files/videos/35 silicon Bowl prep.mp4",
+      "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+     }
+    }
+   },
+   "block_order": [
+    "b0",
+    "b1",
+    "b2",
+    "b3",
+    "b4",
+    "b5",
+    "b6",
+    "b7",
+    "b8",
+    "b9",
+    "b10"
+   ]
+  }
+ },
+ "order": [
+  "main"
+ ]
+}

@@ -1,0 +1,23 @@
+{%- comment -%}
+  One shipment's live J&T tracking: /pages/track?awb=JEG…&order=%232797421
+  The order page's "Track shipment" button opens it. Status, scan timeline
+  and the courier's Call / WhatsApp come from the website tracking service
+  (Theme settings → Live J&T tracking); assets/oka-screens.js, screen "track".
+{%- endcomment -%}
+<div class="screen fade-in" data-screen="track">
+  {% render 'screen-header', en: 'Track shipment', ar: 'تتبع الشحنة', back: '/pages/orders' %}
+  <div class="track-head">
+    <div class="track-order" data-track-order></div>
+    <div class="track-awb nums" data-track-awb></div>
+  </div>
+  <div data-track-body>
+    <div class="awaiting" style="margin:20px 22px">{% render 'bi', en: 'Loading the latest courier updates…', ar: 'بنجيب آخر تحديثات الشحن…' %}</div>
+  </div>
+  {%- if settings.tracking_url != blank -%}
+    <a class="track-external" data-track-external href="{{ settings.tracking_url }}" target="_blank" rel="noopener" data-tracking-template="{{ settings.tracking_url | escape }}">
+      {% render 'bi', en: 'Also see it on the J&T website', ar: 'شوفها كمان على موقع J&T' %}
+    </a>
+  {%- endif -%}
+  <div style="height:30px"></div>
+</div>
+{% schema %}{ "name": "Track shipment", "tag": "div" }{% endschema %}

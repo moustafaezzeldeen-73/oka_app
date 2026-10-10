@@ -1,0 +1,329 @@
+<!doctype html>
+{%- liquid
+  assign key = template | append: ''
+  # The side menu is on every screen — product, checkout and sign-in included.
+  # It replaced the bottom tab bar, which took a permanent strip of every
+  # screen; `active_tab` marks where the shopper is.
+  assign active_tab = ''
+  case key
+    when 'index'
+      assign active_tab = 'home'
+    when 'list-collections', 'collection'
+      assign active_tab = 'categories'
+    when 'cart'
+      assign active_tab = 'cart'
+    when 'page.oka-orders', 'page.oka-track', 'customers/account', 'customers/order'
+      assign active_tab = 'orders'
+    when 'page.oka-account'
+      assign active_tab = 'account'
+    when 'page.oka-loyalty'
+      assign active_tab = 'loyalty'
+    when 'page.oka-subscriptions', 'page.oka-subscribe'
+      assign active_tab = 'subscriptions'
+    when 'page.oka-wishlist'
+      assign active_tab = 'wishlist'
+    when 'page.oka-support'
+      assign active_tab = 'support'
+    when 'search'
+      assign active_tab = 'search'
+  endcase
+  if settings.logo
+    assign logo_url = settings.logo | image_url: width: 128
+  else
+    assign logo_url = 'oka-logo.png' | asset_url
+  endif
+-%}
+<html lang="{{ settings.default_lang }}" dir="{% if settings.default_lang == 'ar' %}rtl{% else %}ltr{% endif %}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+    <meta name="theme-color" content="#f5f5f7">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="icon" type="image/png" href="{{ logo_url }}">
+    <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+    {%- if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+    {%- comment -%} Link previews (WhatsApp, Facebook, Instagram) and search. {%- endcomment -%}
+    {%- liquid
+      assign og_title = page_title | default: shop.name
+      assign og_type = 'website'
+      assign og_image = page_image
+      if request.page_type == 'product'
+        assign og_type = 'product'
+        assign og_image = product.featured_image | default: page_image
+      endif
+    -%}
+    <meta property="og:site_name" content="{{ shop.name }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:title" content="{{ og_title | escape }}">
+    <meta property="og:type" content="{{ og_type }}">
+    <meta property="og:description" content="{{ page_description | default: shop.description | default: shop.name | escape }}">
+    {%- if og_image -%}
+      <meta property="og:image" content="https:{{ og_image | image_url: width: 1200 }}">
+      <meta property="og:image:secure_url" content="https:{{ og_image | image_url: width: 1200 }}">
+    {%- endif -%}
+    {%- if request.page_type == 'product' -%}
+      <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+      <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+    {%- endif -%}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="google-site-verification" content="KW6n8H2dxyyZCsCYrzLIK6gqEbljAxl1ic9rRRd7khY">
+    <script>
+      /* Language before first paint: the shopper's last choice, else the store default. */
+      (function () {
+        var l = null;
+        try { l = localStorage.getItem('oka.lang'); } catch (e) {}
+        if (l !== 'ar' && l !== 'en') l = {{ settings.default_lang | json }};
+        // A language URL (okaegypt.com/ar/…) wins, so Arabic links open in Arabic.
+        {%- unless request.locale.primary %}
+        if ({{ request.locale.iso_code | json }} === 'ar' || {{ request.locale.iso_code | json }} === 'en') l = {{ request.locale.iso_code | json }};
+        {%- endunless %}
+        var h = document.documentElement;
+        h.lang = l;
+        h.dir = l === 'ar' ? 'rtl' : 'ltr';
+      })();
+    </script>
+    <script>
+      /*
+       * Portrait lock. Browsers only honour screen.orientation.lock() for
+       * installed or full-screen apps, so it is asked for and, failing that,
+       * the CSS in oka.css turns the layout back against the phone's turn
+       * (--rot is the opposite of the device's angle).
+       */
+      (function () {
+        var h = document.documentElement;
+        h.classList.add('portrait-lock');
+        function sync() {
+          var a = typeof window.orientation === 'number'
+            ? window.orientation
+            : (screen.orientation && screen.orientation.angle) || 0;
+          if (a > 180) a -= 360;
+          h.style.setProperty('--rot', (a === -90 ? 90 : -90) + 'deg');
+        }
+        sync();
+        window.addEventListener('orientationchange', sync);
+        if (screen.orientation) {
+          screen.orientation.addEventListener && screen.orientation.addEventListener('change', sync);
+          try { screen.orientation.lock('portrait').catch(function () {}); } catch (e) {}
+        }
+      })();
+    </script>
+    {{ 'oka.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+
+    <script>
+      window.OKA = {
+        defaultLang: {{ settings.default_lang | json }},
+        ageGate: {{ settings.age_gate | json }},
+        proxy: {{ settings.proxy_path | strip | json }},
+        {%- comment -%}
+          Without an App proxy: the order service's URL, and for a signed-in
+          customer a short-lived token "<id>.<time>.<signature>" signed here on
+          Shopify's servers with the Storefront key (server/auth/storefront.js).
+        {%- endcomment -%}
+        {%- comment -%} The J&T orders API: address change and cancel before pickup (oka-screens.js → ordersApi). {%- endcomment -%}
+        orders: {% if settings.orders_api_key != blank -%}
+          { url: {{ settings.orders_api_url | strip | json }}, key: {{ settings.orders_api_key | strip | json }}, ratings: {{ settings.order_ratings | json }} }
+        {%- else -%}null{%- endif %},
+        service: {{ settings.service_url | strip | json }},
+        serviceToken: {% if customer and settings.service_key != blank and settings.service_url != blank -%}
+          {%- assign sf_ts = 'now' | date: '%s' -%}
+          {%- capture sf_msg -%}{{ customer.id }}.{{ sf_ts }}{%- endcapture -%}
+          {%- assign sf_sig = sf_msg | hmac_sha256: settings.service_key -%}
+          {{ sf_msg | append: '.' | append: sf_sig | json }}
+        {%- else -%}null{%- endif %},
+        jt: {% if settings.jt_tracking_url != blank and settings.jt_tracking_key != blank %}{ url: {{ settings.jt_tracking_url | strip | json }}, key: {{ settings.jt_tracking_key | strip | json }} }{% else %}null{% endif %},
+        whatsapp: {{ settings.whatsapp | strip | json }},
+        minOrder: {{ settings.min_order | default: 0 }},
+        tier: {{ settings.tier_threshold | default: 300 }},
+        zones: {
+          metro: { under: {{ settings.fee_metro_under | default: 60 }}, over: {{ settings.fee_metro_over | default: 36 }} },
+          delta: { under: {{ settings.fee_delta_under | default: 70 }}, over: {{ settings.fee_delta_over | default: 46 }} },
+          far: { under: {{ settings.fee_far_under | default: 80 }}, over: {{ settings.fee_far_over | default: 56 }} }
+        },
+        pointsPerEgp: {{ settings.points_per_egp | default: 10 }},
+        earnPointsPerEgp: {{ settings.earn_points_per_egp | default: 1 }},
+        subscriptionDiscount: {{ settings.subscription_discount | default: 5 }},
+        shopDomain: {{ request.host | json }},
+        catalogueUrl: {{ routes.all_products_collection_url | append: '?view=oka-data' | json }},
+        routes: {
+          root: {{ routes.root_url | json }},
+          cart: {{ routes.cart_url | json }},
+          checkout: '/checkout',
+          search: {{ routes.search_url | json }},
+          collections: {{ routes.collections_url | json }},
+          // New customer accounts (one-time code / Sign in with Shop): the
+          // storefront route brings the customer back to this site after
+          // signing in, where afterSignIn resumes the page they came from.
+          login: {{ routes.storefront_login_url | default: routes.account_login_url | json }},
+          logout: {{ routes.account_logout_url | json }},
+          shopifyAccount: {{ routes.account_url | json }},
+          shopifyAddresses: {{ routes.account_addresses_url | json }},
+          account: '/pages/account',
+          orders: '/pages/orders',
+          addresses: '/pages/addresses',
+          addAddress: '/pages/addresses?view=oka-add-address',
+          checkoutReview: '/pages/checkout-review',
+          loyalty: '/pages/loyalty',
+          subscriptions: '/pages/subscriptions',
+          subscribe: '/pages/subscriptions?view=oka-subscribe',
+          wishlist: '/pages/wishlist',
+          support: '/pages/support'
+        },
+        customer: {% if customer -%}
+          {
+            id: {{ customer.id | json }},
+            name: {{ customer.name | json }},
+            email: {{ customer.email | json }},
+            phone: {{ customer.phone | json }},
+            storeCreditCents: {% if customer.store_credit_account %}{{ customer.store_credit_account.balance | default: 0 }}{% else %}null{% endif %},
+            addresses: [
+              {%- for a in customer.addresses -%}
+                {
+                  id: {{ a.id | json }},
+                  name: {{ a.name | json }},
+                  street: {{ a.address1 | json }},
+                  building: {{ a.address2 | json }},
+                  city: {{ a.city | json }},
+                  province: {{ a.province | json }},
+                  provinceCode: {{ a.province_code | json }},
+                  phone: {{ a.phone | json }},
+                  firstName: {{ a.first_name | json }},
+                  lastName: {{ a.last_name | json }},
+                  country: {{ a.country | json }},
+                  isDefault: {% if a.id == customer.default_address.id %}true{% else %}false{% endif %}
+                }{% unless forloop.last %},{% endunless %}
+              {%- endfor -%}
+            ],
+            {%- comment -%} [handle, unix seconds] of recent purchases — times replenishment suggestions. {%- endcomment -%}
+            bought: [
+              {%- for o in customer.orders limit: 10 -%}
+                {%- if o.cancelled -%}{%- continue -%}{%- endif -%}
+                {%- assign ts = o.created_at | date: '%s' -%}
+                {%- for li in o.line_items -%}[{{ li.product.handle | json }}, {{ ts }}],{%- endfor -%}
+              {%- endfor -%}
+            ]
+          }
+        {%- else -%}null{%- endif %}
+      };
+    </script>
+    <script src="{{ 'oka.js' | asset_url }}" defer></script>
+    <script src="{{ 'oka-screens.js' | asset_url }}" defer></script>
+  </head>
+
+  <body class="t-{{ template.name }}">
+    <div class="app" id="app">
+      {%- comment -%}
+        The logo bar, on every page: menu, logo (home), language. It shrinks
+        as soon as the page's own content scrolls (assets/oka.js), the way the
+        original site's sticky header does.
+      {%- endcomment -%}
+      <header class="top-bar" data-top-bar>
+        <div class="top-row">
+          <button class="circle-34 press s94" data-menu-open aria-label="Menu" aria-controls="side-menu" aria-expanded="false">{% render 'icon', name: 'menu', px: 17 %}</button>
+          <a href="{{ routes.root_url }}" class="top-logo-link" aria-label="{{ shop.name }}"><img src="{{ logo_url }}" alt="{{ shop.name }}" class="top-logo" width="32" height="32"></a>
+          <button class="circle-34 press s94" data-toggle-lang><span data-lang-label>{% if settings.default_lang == 'ar' %}EN{% else %}ع{% endif %}</span></button>
+        </div>
+      </header>
+      <main class="content" id="content" role="main">
+        {{ content_for_layout }}
+      </main>
+
+      {%- comment -%}
+        Side menu. A slim handle on the leading edge opens it on every
+        screen (the home header has a ☰ button too); the screen behind dims
+        and a tap there, Escape, or a swipe back towards the edge closes it.
+        It slides in from the start edge, so it follows the language.
+      {%- endcomment -%}
+      <button class="menu-handle" data-menu-open aria-label="Menu" aria-controls="side-menu" aria-expanded="false">
+        {% render 'icon', name: 'menu', px: 18 %}
+        <span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span>
+      </button>
+      <div class="menu-scrim" data-menu-close hidden></div>
+      <nav class="side-menu" id="side-menu" aria-label="Main" aria-hidden="true" tabindex="-1" inert>
+        <div class="side-head">
+          <img src="{{ logo_url }}" alt="{{ shop.name }}" class="side-logo" width="34" height="34">
+          <button class="side-close" data-menu-close aria-label="Close">{% render 'icon', name: 'close', px: 16 %}</button>
+        </div>
+        <div class="side-links">
+          {%- liquid
+            assign links = 'home|categories|search|cart|orders|account|loyalty|subscriptions|wishlist|support'
+            comment
+              Subscribe & Save needs the order service; without it the page is a dead end.
+            endcomment
+            if settings.proxy_path == blank
+              assign links = links | remove: '|subscriptions'
+            endif
+            assign links = links | split: '|'
+          -%}
+          {%- for l in links -%}
+            {%- liquid
+              case l
+                when 'home'
+                  assign href = routes.root_url
+                  assign icon = 'home'
+                  assign en = 'Home'
+                  assign ar = 'الرئيسية'
+                when 'categories'
+                  assign href = routes.collections_url
+                  assign icon = 'grid'
+                  assign en = 'Categories'
+                  assign ar = 'الأقسام'
+                when 'search'
+                  assign href = routes.search_url
+                  assign icon = 'search'
+                  assign en = 'Search'
+                  assign ar = 'دوّر'
+                when 'cart'
+                  assign href = routes.cart_url
+                  assign icon = 'cart'
+                  assign en = 'Cart'
+                  assign ar = 'السلة'
+                when 'orders'
+                  assign href = '/pages/orders'
+                  assign icon = 'box'
+                  assign en = 'My orders & tracking'
+                  assign ar = 'طلباتي وتتبع الشحن'
+                when 'account'
+                  assign href = '/pages/account'
+                  assign icon = 'person'
+                  assign en = 'Account'
+                  assign ar = 'حسابي'
+                when 'loyalty'
+                  assign href = '/pages/loyalty'
+                  assign icon = 'star'
+                  assign en = 'Points & rewards'
+                  assign ar = 'نقاطي وهداياي'
+                when 'subscriptions'
+                  assign href = '/pages/subscriptions'
+                  assign icon = 'repeat'
+                  assign en = 'Subscribe & save'
+                  assign ar = 'اشترك ووفّر'
+                when 'wishlist'
+                  assign href = '/pages/wishlist'
+                  assign icon = 'heart'
+                  assign en = 'Wishlist'
+                  assign ar = 'المفضلة'
+                when 'support'
+                  assign href = '/pages/support'
+                  assign icon = 'chat'
+                  assign en = 'Help & support'
+                  assign ar = 'محتاج مساعدة؟'
+              endcase
+            -%}
+            <a href="{{ href }}" class="side-link{% if active_tab == l %} active{% endif %}"{% if active_tab == l %} aria-current="page"{% endif %}>
+              <span class="side-icon">{% render 'icon', name: icon, px: 20 %}{% if l == 'cart' %}<span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span>{% endif %}</span>
+              <span class="side-label">{% render 'bi', en: en, ar: ar %}</span>
+            </a>
+          {%- endfor -%}
+        </div>
+        <div class="side-foot">
+          <button class="side-lang" data-toggle-lang>
+            <span>{% render 'bi', en: 'Language', ar: 'اللغة' %}</span>
+            <b data-lang-label>{% if settings.default_lang == 'ar' %}EN{% else %}ع{% endif %}</b>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </body>
+</html>

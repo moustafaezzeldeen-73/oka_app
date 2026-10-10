@@ -1,0 +1,42 @@
+{%- comment -%}
+  The before / after slider from the original website (the one above the
+  Cobra collection), full screen. Drag the handle — or anywhere on the
+  picture, sideways — to compare; vertical swipes still scroll the feed.
+  It keeps sweeping left and right while on screen, so it reads as a slider.
+  Behaviour: assets/oka-screens.js (compare()).
+  Usage: {% render 'compare-page', block: block %}
+{%- endcomment -%}
+{%- liquid
+  assign a = block.settings.before_image
+  assign b = block.settings.after_image
+  assign a_ar = block.settings.before_image_ar
+  assign b_ar = block.settings.after_image_ar
+  assign link = block.settings.link | default: block.settings.before.url
+-%}
+{%- if a and b -%}
+  <section class="page compare-page" data-banner data-compare style="--pos: 50%; --ratio: {{ a.aspect_ratio }}" {{ block.shopify_attributes }}>
+    <div class="compare-frame">
+      {%- liquid
+        assign b_cls = 'compare-img'
+        assign a_cls = 'compare-img'
+        if b_ar
+          assign b_cls = 'compare-img l-en'
+        endif
+        if a_ar
+          assign a_cls = 'compare-img l-en'
+        endif
+      -%}
+      {{ b | image_url: width: 1200 | image_tag: alt: b.alt, class: b_cls, loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw', draggable: 'false' }}
+      {%- if b_ar -%}{{ b_ar | image_url: width: 1200 | image_tag: alt: b_ar.alt, class: 'compare-img l-ar', loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw', draggable: 'false' }}{%- endif -%}
+      <div class="compare-before" aria-hidden="true">
+        {{ a | image_url: width: 1200 | image_tag: alt: '', class: a_cls, loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw', draggable: 'false' }}
+        {%- if a_ar -%}{{ a_ar | image_url: width: 1200 | image_tag: alt: '', class: 'compare-img l-ar', loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw', draggable: 'false' }}{%- endif -%}
+      </div>
+      <div class="compare-line" aria-hidden="true"><span class="compare-knob">{% render 'icon', name: 'chevron-left', px: 14 %}{% render 'icon', name: 'chevron-right', px: 14 %}</span></div>
+      <input class="compare-range" type="range" min="0" max="100" value="50" data-compare-range aria-label="Compare before and after">
+    </div>
+    {%- if link != blank -%}
+      <a href="{{ link }}" class="offer-cta banner-cta">{% render 'bi', en: 'Shop now', ar: 'اتسوّق دلوقتي' %}</a>
+    {%- endif -%}
+  </section>
+{%- endif -%}

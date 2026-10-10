@@ -1,0 +1,78 @@
+{%- comment -%}
+  One graphic banner from the original website, filling a feed page edge to
+  edge.
+
+  Tall banners (the 2:3 posters) are cropped to the screen — they lose a
+  sliver of the sides at most. Square and wide ones would lose text that
+  way, so they sit whole across the screen on a blurred, enlarged copy of
+  themselves that fills the rest: full screen either way, nothing cut off.
+  Usage: {% render 'banner-page', block: block %}  (eager: true for the opening screen)
+{%- endcomment -%}
+{%- liquid
+  assign link = block.settings.link | default: block.settings.before.url
+  assign bundle = block.settings.variant_ids | remove: ' '
+  assign img_en = block.settings.image
+  assign img_ar = block.settings.image_ar
+-%}
+{%- if img_en -%}
+  <section class="page banner-page" data-banner {{ block.shopify_attributes }}>
+    {%- comment -%} One layer per language when there's an Arabic picture; the site shows the one that matches. {%- endcomment -%}
+    {%- for k in (1..2) -%}
+      {%- liquid
+        if k == 1
+          assign img = img_en
+          assign lang_class = ''
+          if img_ar
+            assign lang_class = ' l-en'
+          endif
+        else
+          unless img_ar
+            break
+          endunless
+          assign img = img_ar
+          assign lang_class = ' l-ar'
+        endif
+        assign fit = 'contain'
+        if img.aspect_ratio < 0.8
+          assign fit = 'cover'
+        endif
+      -%}
+      <div class="banner-lang fill-{{ fit }}{{ lang_class }}">
+        {%- if fit == 'contain' -%}
+          <div class="banner-back-wrap" aria-hidden="true"><div class="banner-backdrop" style="background-image: url({{ img | image_url: width: 200 }})"></div></div>
+        {%- endif -%}
+        {%- if link != blank -%}<a href="{{ link }}" class="banner-fill">{%- else -%}<div class="banner-fill">{%- endif -%}
+          {%- comment -%} The opening banner is the first thing most visitors see: load it at once. {%- endcomment -%}
+          {%- liquid
+            assign page_lang = settings.default_lang
+            unless request.locale.primary
+              assign page_lang = request.locale.iso_code
+            endunless
+            assign now = false
+            if eager
+              if k == 2 and page_lang == 'ar'
+                assign now = true
+              elsif k == 1 and img_ar == blank
+                assign now = true
+              elsif k == 1 and page_lang != 'ar'
+                assign now = true
+              endif
+            endif
+          -%}
+          {%- if now -%}
+            {{ img | image_url: width: 1200 | image_tag: alt: img.alt, loading: 'eager', fetchpriority: 'high', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw' }}
+          {%- else -%}
+            {{ img | image_url: width: 1200 | image_tag: alt: img.alt, loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw' }}
+          {%- endif -%}
+        {%- if link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+      </div>
+    {%- endfor -%}
+    {%- if eager -%}
+      {%- comment -%} The opening screen is one picture: show there's more below it. {%- endcomment -%}
+      <div class="swipe-up" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 15l6-6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>{% render 'bi', en: 'Swipe up', ar: 'اسحب لفوق' %}</span></div>
+    {%- endif -%}
+    {%- if bundle != blank -%}
+      <button class="offer-cta banner-cta" data-add-bundle="{{ bundle }}">{% render 'bi', en: block.settings.button_en, ar: block.settings.button_ar %}</button>
+    {%- endif -%}
+  </section>
+{%- endif -%}

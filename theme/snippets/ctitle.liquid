@@ -1,0 +1,3 @@
+{%- comment -%} A collection's title: Arabic from the oka.title_ar metafield. {%- endcomment -%}
+{%- assign title_ar = c.metafields.oka.title_ar.value | default: c.title -%}
+{% render 'bi', en: c.title, ar: title_ar %}

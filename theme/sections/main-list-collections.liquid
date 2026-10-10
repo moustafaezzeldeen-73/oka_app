@@ -1,0 +1,33 @@
+{%- comment -%} CategoriesScreen.js {%- endcomment -%}
+<div class="screen fade-in" data-screen="categories">
+  <h1 class="big-title">{% render 'bi', en: 'Categories', ar: 'الأقسام' %}</h1>
+  {%- assign seen = ',' -%}
+  {%- for c in settings.oka_collections -%}
+    {%- assign count = 0 -%}
+    {%- for p in c.products limit: 50 -%}
+      {%- assign probe = ',' | append: p.handle | append: ',' -%}
+      {%- unless seen contains probe -%}
+        {%- assign seen = seen | append: p.handle | append: ',' -%}
+        {%- assign count = count | plus: 1 -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- comment -%} Nothing to show (no active products left): hidden until it has some. {%- endcomment -%}
+    {%- if count == 0 -%}{%- continue -%}{%- endif -%}
+    {%- liquid
+      if c.image
+        assign img = c.image
+      else
+        assign img = c.products.first.featured_image
+      endif
+    -%}
+    <a href="{{ c.url }}" class="cat-row">
+      <span class="cat-thumb">{% if img %}{{ img | image_url: width: 160 | image_tag: alt: '' }}{% endif %}</span>
+      <span style="flex:1">
+        <span class="cat-label" style="display:block">{% render 'ctitle', c: c %}</span>
+        <span class="cat-count" style="display:block">{% render 'num', n: count %} {% render 'bi', en: 'products', ar: 'منتج' %}</span>
+      </span>
+    </a>
+  {%- endfor -%}
+  <div style="height:20px"></div>
+</div>
+{% schema %}{ "name": "Categories", "tag": "div" }{% endschema %}
