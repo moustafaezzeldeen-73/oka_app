@@ -1302,7 +1302,89 @@
     name: [2, 60], prov: [0, 60], city: [0, 60], area: [0, 60], street: [5, 200], building: [0, 30], floor: [0, 30], flats: [0, 30],
   };
 
+  /** The last order this browser saw: { name, phone } (older versions kept just the name). */
+  function lastOrderStored() {
+    const v = O.store.get('oka.lastOrder');
+    if (!v) return null;
+    return typeof v === 'string' ? { name: v, phone: '' } : v;
+  }
+
+  /**
+   * Not signed in: the last order this browser saw, with Change address and
+   * Cancel through the orders API (the API re-checks the number and phone).
+   */
+  function guestLastOrder(root) {
+    const box = $('[data-guest-last]', root);
+    const last = lastOrderStored();
+    if (!box || O.customer || !last?.name || !last.phone || !hasOrdersApi()) return;
+    const who = { orderNumber: last.name, phone: last.phone };
+    const tail = String(last.phone).replace(/\D/g, '').slice(-3);
+    box.innerHTML = `
+      <div class="guest-last">
+        <div class="guest-last-k">${esc(L('Your last order', 'آخر طلب ليك'))}</div>
+        <div class="guest-last-v"><b>${esc(last.name)}</b><span>${esc(L(`Phone ending ${tail}`, `موبايل آخره ${tail}`))}</span></div>
+        <div class="guest-last-note" data-guest-note>${esc(L('You can change the address or cancel until the courier picks it up.', 'تقدر تغيّر العنوان أو تلغي الطلب لحد ما المندوب يستلمه.'))}</div>
+        <div class="order-actions" style="padding:12px 0 0">
+          <button class="edit-btn" data-guest-edit>${esc(L('Change address', 'غيّر العنوان'))}</button>
+          <button class="cancel-btn" data-guest-cancel>${esc(L('Cancel Order', 'الغي الطلب'))}</button>
+        </div>
+        <button class="guest-forget" data-guest-forget>${esc(L('Not your order? Forget it on this device', 'مش طلبك؟ امسحه من الجهاز ده'))}</button>
+      </div>`;
+    box.hidden = false;
+    const empty = $('[data-guest-empty]', root);
+    if (empty) empty.hidden = true;
+    const disable = (note, tone) => {
+      $$('[data-guest-edit], [data-guest-cancel]', box).forEach((b) => { b.classList.add('disabled'); b.disabled = true; });
+      const n = $('[data-guest-note]', box);
+      n.textContent = note;
+      n.classList.add(tone);
+    };
+    const onErr = (title, err) => {
+      if (/already been shipped/i.test(errText(err))) disable(L('This order has been shipped, so it can no longer be changed or cancelled.', 'الطلب ده اتشحن، فمينفعش يتغيّر أو يتلغي دلوقتي.'), 'shipped');
+      if (/already cancelled/i.test(errText(err))) disable(L('This order is cancelled.', 'الطلب ده ملغي.'), 'cancelled');
+      return ordersApiFail(title, err, last.name);
+    };
+    box.addEventListener('click', async (e) => {
+      if (e.target.closest('[data-guest-forget]')) {
+        O.store.del('oka.lastOrder');
+        box.hidden = true;
+        if (empty) empty.hidden = false;
+        return;
+      }
+      const edit = e.target.closest('[data-guest-edit]');
+      if (edit && !edit.classList.contains('busy')) {
+        edit.classList.add('busy');
+        try {
+          const order = await ordersApi('customer_get_order', who);
+          if (order.canEdit === false) return onErr(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already been shipped'));
+          openAddressSheet(last.name, who, order);
+        } catch (err) { onErr(L('Can’t change it', 'مينفعش يتغيّر'), err); } finally { edit.classList.remove('busy'); }
+        return;
+      }
+      const cancel = e.target.closest('[data-guest-cancel]');
+      if (cancel && !cancel.classList.contains('busy')) {
+        O.okaAlert(L('Cancel order?', 'تلغي الطلب؟'), L(`Are you sure? Order ${last.name} will be cancelled and this can’t be undone.`, `متأكد؟ الطلب ${last.name} هيتلغي ومينفعش نرجّعه.`), [
+          { text: L('Back', 'ارجع'), style: 'cancel' },
+          {
+            text: L('Cancel order', 'الغي الطلب'),
+            style: 'destructive',
+            onPress: async () => {
+              cancel.classList.add('busy');
+              try {
+                await ordersApi('customer_cancel_order', { ...who, reason: 'Cancelled on website' });
+                disable(L('This order is cancelled.', 'الطلب ده ملغي.'), 'cancelled');
+                O.haptic.success();
+                O.okaAlert(L('Order cancelled', 'الطلب اتلغى'), L(`Your order ${last.name} has been cancelled.`, `طلبك ${last.name} اتلغى.`));
+              } catch (err) { onErr(L('Could not cancel', 'معرفناش نلغيه'), err); } finally { cancel.classList.remove('busy'); }
+            },
+          },
+        ]);
+      }
+    });
+  }
+
   function orders(root) {
+    guestLastOrder(root);
     const list = $('[data-orders-list]', root);
     const details = $$('[data-order-detail]', root);
     const standalone = root.hasAttribute('data-standalone');
@@ -2441,8 +2523,8 @@
     if (!wa) return;
     wa.addEventListener('click', (e) => {
       e.preventDefault();
-      // From the signed-in page itself, never browser storage (orders API rule).
-      const last = wa.dataset.lastOrder || '';
+      // The signed-in customer's latest order, else the last one this browser saw.
+      const last = wa.dataset.lastOrder || lastOrderStored()?.name || '';
       const text = last ? L(`Hi, about order ${last}`, `أهلاً، بخصوص طلب ${last}`) : L('Hi', 'أهلاً');
       window.open(O.whatsappUrl(text), '_blank', 'noopener');
     });
@@ -2631,8 +2713,10 @@
     // TESTING ONLY — the staff order lookup, when the theme setting turns it on.
     const tl = $('[data-test-lookup]');
     if (tl) testLookup(tl);
-    // Order numbers are never kept in the browser; clear what older versions saved.
-    O.store.del('oka.lastOrder');
+    // Remember the latest order (number and phone) for when the customer
+    // isn't signed in: the WhatsApp greeting and the guest's order actions.
+    const firstOrder = $('[data-order-detail]');
+    if (firstOrder && O.customer) O.store.set('oka.lastOrder', { name: firstOrder.dataset.orderDetail, phone: firstOrder.dataset.phone || O.customer.phone || '' });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();

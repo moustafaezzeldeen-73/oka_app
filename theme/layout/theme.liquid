@@ -122,7 +122,7 @@
           Shopify's servers with the Storefront key (server/auth/storefront.js).
         {%- endcomment -%}
         {%- comment -%} The J&T orders API: address change and cancel before pickup (oka-screens.js → ordersApi). {%- endcomment -%}
-        orders: {% if customer and settings.orders_api_key != blank -%}
+        orders: {% if settings.orders_api_key != blank -%}
           { url: {{ settings.orders_api_url | strip | json }}, key: {{ settings.orders_api_key | strip | json }} }
         {%- else -%}null{%- endif %},
         service: {{ settings.service_url | strip | json }},
