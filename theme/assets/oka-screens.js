@@ -1297,6 +1297,70 @@
     name: [2, 60], prov: [0, 60], city: [0, 60], area: [0, 60], street: [5, 200], building: [0, 30], floor: [0, 30], flats: [0, 30],
   };
 
+  /* ── Rate a delivered order: 5 stars and a comment ─────────────────────
+   * Sent to the orders API as customer_rate_order { orderNumber, phone,
+   * stars, comment } (Theme settings → "Ask delivered orders for a
+   * rating"). A rating sent from this browser is remembered so the order
+   * shows it instead of asking again.
+   */
+  const STAR = (on) => `<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4L2.8 9.5l6.4-.8z" fill="${on ? '#f5a623' : 'none'}" stroke="${on ? '#f5a623' : 'rgba(0,0,0,0.28)'}" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+  const starRow = (n) => [1, 2, 3, 4, 5].map((i) => STAR(i <= n)).join('');
+  function rateBox(det) {
+    const box = $('[data-rate]', det);
+    if (!box || !(CFG.orders && CFG.orders.ratings) || !hasOrdersApi()) return;
+    const name = det.dataset.orderDetail;
+    const rated = O.store.get('oka.rated', {});
+    const thanks = (r) => {
+      box.innerHTML = `<div class="rate-done"><div class="rate-stars static">${starRow(r.stars)}</div>
+        <b>${esc(L('Thanks for rating your order', 'شكرًا على تقييمك'))}</b>
+        ${r.comment ? `<p>“${esc(r.comment)}”</p>` : ''}</div>`;
+    };
+    box.hidden = false;
+    if (rated[name]) return thanks(rated[name]);
+    let stars = 0;
+    box.innerHTML = `
+      <div class="rate-k">${esc(L('How was your order?', 'طلبك كان عامل إزاي؟'))}</div>
+      <div class="rate-stars" role="radiogroup" aria-label="${esc(L('Rating', 'التقييم'))}">
+        ${[1, 2, 3, 4, 5].map((i) => `<button type="button" class="rate-star" data-star="${i}" role="radio" aria-checked="false" aria-label="${i}">${STAR(false)}</button>`).join('')}
+      </div>
+      <textarea class="rate-comment" data-rate-comment rows="3" maxlength="500" placeholder="${esc(L('Tell us more (optional)', 'احكيلنا أكتر (اختياري)'))}"></textarea>
+      <div class="code-error" data-rate-error hidden></div>
+      <button type="button" class="cta dim" data-rate-send>${esc(L('Send rating', 'ابعت التقييم'))}</button>`;
+    const paint = () => {
+      $$('[data-star]', box).forEach((b) => {
+        const on = Number(b.dataset.star) <= stars;
+        b.innerHTML = STAR(on);
+        b.setAttribute('aria-checked', String(Number(b.dataset.star) === stars));
+      });
+      $('[data-rate-send]', box).classList.toggle('dim', !stars);
+    };
+    box.addEventListener('click', async (e) => {
+      const st = e.target.closest('[data-star]');
+      if (st) { stars = Number(st.dataset.star); O.haptic.selectionTick?.(); $('[data-rate-error]', box).hidden = true; paint(); return; }
+      const send = e.target.closest('[data-rate-send]');
+      if (!send || send.disabled) return;
+      const err = $('[data-rate-error]', box);
+      if (!stars) { err.textContent = L('Tap the stars to rate.', 'دوس على النجوم عشان تقيّم.'); err.hidden = false; return; }
+      err.hidden = true;
+      const comment = $('[data-rate-comment]', box).value.trim().slice(0, 500);
+      send.disabled = true;
+      send.innerHTML = spinner();
+      try {
+        await ordersApi('customer_rate_order', { orderNumber: name, phone: det.dataset.phone || O.customer?.phone || '', stars, comment });
+        const all = O.store.get('oka.rated', {});
+        all[name] = { stars, comment };
+        O.store.set('oka.rated', all);
+        O.haptic.success?.();
+        thanks({ stars, comment });
+      } catch (ex) {
+        send.disabled = false;
+        send.textContent = L('Send rating', 'ابعت التقييم');
+        err.textContent = ordersApiMessage(ex);
+        err.hidden = false;
+      }
+    });
+  }
+
   /** The last order this browser saw: { name, phone } (older versions kept just the name). */
   function lastOrderStored() {
     const v = O.store.get('oka.lastOrder');
@@ -1435,6 +1499,18 @@
       const st = $(`[data-order-state="${CSS.escape(name)}"]`, root);
       if (st) { st.textContent = L('Cancelled', 'ملغي'); st.className = 'order-state red'; }
     }
+    // Delivered: nothing left to edit or cancel — the actions and the
+    // "on its way" note give way to the rating.
+    function markDelivered(det) {
+      if (det.dataset.delivered === 'true') return;
+      det.dataset.delivered = 'true';
+      det.dataset.fulfilled = 'true';
+      $('.order-actions', det)?.setAttribute('hidden', '');
+      $('.shipped-note', det)?.remove();
+      $('[data-actions-hint]', det)?.remove();
+      rateBox(det);
+    }
+
     // The courier already has it (the orders API says so), though Shopify
     // isn't marked fulfilled yet: same greyed-out buttons and note.
     function markShipped(name) {
@@ -1496,6 +1572,7 @@
         col.classList.toggle('current', i === step);
       });
       if (o.stateLabel) $('[data-state-label]', det).textContent = o.stateLabel;
+      if (step >= 3 && det.dataset.cancelled !== 'true') markDelivered(det);
       if (o.fulfillmentStatus && ['FULFILLED', 'PARTIALLY_FULFILLED'].includes(o.fulfillmentStatus)) det.dataset.fulfilled = 'true';
 
       const updates = o.updates || [];

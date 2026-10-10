@@ -185,6 +185,9 @@
     <div class="shipped-note"><b>{% render 'bi', en: 'This order has been shipped', ar: 'الطلب ده اتشحن' %}</b><span>{% render 'bi', en: 'It’s on its way, so it can no longer be edited or cancelled.', ar: 'هو في الطريق ليك، فمينفعش يتعدّل أو يتلغي دلوقتي.' %}</span></div>
   {%- endif -%}
 
+  {%- comment -%} Delivered: rate the order (filled in by oka-screens.js → rateBox once J&T says it was delivered). {%- endcomment -%}
+  <div class="rate-box" data-rate hidden></div>
+
   <div class="order-actions">
     <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>{%- if settings.orders_api_key != blank -%}{% render 'bi', en: 'Change address', ar: 'غيّر العنوان' %}{%- else -%}{% render 'bi', en: 'Edit', ar: 'عدّل' %}{%- endif -%}</button>
     <button class="cancel-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-cancel-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>

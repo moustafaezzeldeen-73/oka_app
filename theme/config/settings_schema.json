@@ -186,6 +186,13 @@
         "label": "Orders API key (ORDERS_AUTH_TOKEN)"
       },
       {
+        "type": "checkbox",
+        "id": "order_ratings",
+        "label": "Ask delivered orders for a rating",
+        "info": "5 stars and a comment on each delivered order, sent to the orders API as customer_rate_order. Turn on once the API has that action.",
+        "default": false
+      },
+      {
         "type": "text",
         "id": "service_url",
         "label": "Order service URL (without an App proxy)",
