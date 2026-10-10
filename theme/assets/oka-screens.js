@@ -1251,6 +1251,8 @@
    */
   const hasOrdersApi = () => Boolean(CFG.orders && CFG.orders.url && CFG.orders.key);
   let ordersRpcId = 0;
+  /** A customer-facing error that keeps the API's own words for the theme-preview diagnostics. */
+  const apiError = (message, detail) => Object.assign(new Error(message), { detail });
   async function ordersApi(action, args) {
     let res;
     try {
@@ -1260,17 +1262,17 @@
         body: JSON.stringify({ jsonrpc: '2.0', id: ++ordersRpcId, method: 'tools/call', params: { name: action, arguments: args } }),
       });
     } catch (e) {
-      throw new Error('Something went wrong. Please try again or contact us.');
+      throw apiError('Something went wrong. Please try again or contact us.', `network: ${e.message} (blocked by the browser? the API only accepts www.okaegypt.com and okaegypt.com)`);
     }
-    if (!res.ok) throw new Error('Something went wrong. Please try again or contact us.');
+    if (!res.ok) throw apiError('Something went wrong. Please try again or contact us.', `HTTP ${res.status}`);
     const raw = await res.text();
     const line = raw.split('\n').find((l) => l.startsWith('data: '));
     let msg;
-    try { msg = JSON.parse(line ? line.slice(6) : raw); } catch (e) { throw new Error('Something went wrong. Please try again or contact us.'); }
+    try { msg = JSON.parse(line ? line.slice(6) : raw); } catch (e) { throw apiError('Something went wrong. Please try again or contact us.', `unreadable reply: ${raw.slice(0, 160)}`); }
     const text = msg.result?.content?.[0]?.text ?? '';
     if (msg.error || msg.result?.isError) {
       // Input-validation errors start with "MCP error"; never shown raw.
-      throw new Error(!text || text.startsWith('MCP error') ? 'Please check the details you entered and try again.' : text);
+      throw apiError(!text || text.startsWith('MCP error') ? 'Please check the details you entered and try again.' : text, text || msg.error?.message || 'error');
     }
     return JSON.parse(text);
   }
@@ -1385,20 +1387,50 @@
    * While it's unfulfilled it can be edited (items, address, phone) or
    * cancelled.
    */
+  /** The unpublished theme in preview (or ?oka_debug=1): show why the guest's order isn't there. */
+  const isPreviewTheme = () => Boolean((window.Shopify?.theme && window.Shopify.theme.role !== 'main') || window.Shopify?.designMode || /[?&](preview_theme_id|oka_debug)=/.test(location.search));
+
   function guestLastOrder(root) {
     const box = $('[data-guest-last]', root);
     if (!box || O.customer) return;
     const empty = $('[data-guest-empty]', root);
-    const saved = O.store.get('oka.lastCheckout', null);
-    if (!saved || !(saved.checkoutToken || saved.cartToken) || !hasOrdersApi()) return;
-    const auth = { session: { ...(saved.checkoutToken ? { checkoutToken: saved.checkoutToken } : {}), ...(saved.cartToken ? { cartToken: saved.cartToken } : {}) } };
+    const saved = O.store.get('oka.lastCheckout', null) || {};
+    // The checkout this browser went to last, then the placed order before it (if that checkout was left unfinished).
+    const cands = [saved, saved.last].filter((c) => c && (c.checkoutToken || c.cartToken || c.order));
+    const sessionOf = (c) => ({ session: { ...(c.checkoutToken ? { checkoutToken: c.checkoutToken } : {}), ...(c.cartToken ? { cartToken: String(c.cartToken).split('?')[0] } : {}) } });
+    let auth = null;
     let view = null;
+    const trace = [];
+
+    function diagnose() {
+      if (!isPreviewTheme()) return;
+      let d = $('[data-guest-diag]', root);
+      if (!d) { d = document.createElement('div'); d.setAttribute('data-guest-diag', ''); d.className = 'guest-diag'; box.after(d); }
+      const yes = (b) => (b ? '✓' : '✗');
+      d.innerHTML = `<b>Preview check — guest last order</b> <span>(only shown on the unpublished theme)</span>
+        <div>${yes(hasOrdersApi())} Orders API set in Theme settings</div>
+        <div>${yes(/(^|\.)okaegypt\.com$/.test(location.hostname))} Opened on okaegypt.com (now: ${esc(location.hostname)})</div>
+        <div>${yes(saved.cartToken)} Cart saved at checkout (theme)</div>
+        <div>${yes(saved.checkoutToken)} Checkout saved after the order (pixel)</div>
+        <div>${yes(saved.order)} Order details saved after the order (pixel)</div>
+        <div>${yes(saved.last)} An earlier order kept</div>
+        ${trace.map((x) => `<div>${esc(x)}</div>`).join('')}
+        ${!cands.length ? '<div>→ Nothing saved in this browser yet: place a test order from this browser after installing the updated checkout pixel.</div>' : ''}`;
+    }
+
+    /** What the pixel saved at checkout, shaped like the API's view. */
+    const fromSnapshot = (o) => ({
+      snapshot: true, orderNumber: '', placedAt: o.placedAt, status: 'placed', cancelled: false, canCancel: false, canEdit: false,
+      items: o.items || [], address: o.address || {}, phone: o.phone || '',
+      itemsTotal: o.itemsTotal, discount: o.discount || 0, shipping: o.shipping || 0, total: o.total || 0,
+    });
 
     const STATUS = {
       processing: ['Processing', 'بنراجعه'],
       preparing: ['Preparing to ship', 'بيتجهّز للشحن'],
       shipped: ['Shipped', 'اتشحن'],
       cancelled: ['Cancelled', 'ملغي'],
+      placed: ['Placed', 'اتطلب'],
     };
     function render() {
       if (!view) return;
@@ -1409,7 +1441,7 @@
       const province = O.provinceName(a.provinceCode) || a.province || '';
       box.innerHTML = `
         <div class="guest-order">
-          <div class="guest-detail-head"><div><div class="guest-last-k">${esc(L('Your last order', 'آخر طلب ليك'))}</div><b class="nums">${esc(view.orderNumber)}</b></div>
+          <div class="guest-detail-head"><div><div class="guest-last-k">${esc(L('Your last order', 'آخر طلب ليك'))}</div><b class="nums">${esc(view.orderNumber || (view.placedAt ? new Date(view.placedAt).toLocaleDateString(O.lang() === 'ar' ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'short' }) : ''))}</b></div>
             <span class="order-state ${view.status === 'cancelled' ? 'red' : view.status === 'shipped' ? 'green' : ''}">${esc(L(...st))}</span></div>
           <div class="items" style="padding:10px 0">${(view.items || []).map((it) => `
             <div class="item-row"><div class="item-img">${img(it.image)}</div>
@@ -1431,22 +1463,41 @@
               <button class="edit-btn" data-g-edit>${esc(L('Edit order', 'عدّل الطلب'))}</button>
               <button class="cancel-btn" data-g-cancel>${esc(L('Cancel Order', 'الغي الطلب'))}</button></div>
             <div class="order-actions-hint" style="margin:10px 0 0">${esc(L('Change items, address or phone until we start preparing it for shipping.', 'غيّر المنتجات أو العنوان أو الموبايل لحد ما نبدأ نجهّزه للشحن.'))}</div>`
-          : view.status === 'cancelled' ? '' : `<div class="shipped-note" style="margin:14px 0 0"><b>${esc(L('This order is on its way', 'الطلب ده في الطريق'))}</b><span>${esc(L('It’s being prepared or shipped, so it can no longer be changed online.', 'بيتجهّز أو اتشحن، فمينفعش يتغيّر أونلاين دلوقتي.'))}</span></div>`}
+          : view.status === 'cancelled' ? '' : view.snapshot ? `<div class="order-actions-hint" style="margin:12px 0 0">${esc(L('We couldn’t load this order’s latest status just now, so changes aren’t available. Please try again in a little while.', 'معرفناش نجيب آخر حالة للطلب دلوقتي، فالتعديل مش متاح. جرّب تاني كمان شوية.'))}</div>` : `<div class="shipped-note" style="margin:14px 0 0"><b>${esc(L('This order is on its way', 'الطلب ده في الطريق'))}</b><span>${esc(L('It’s being prepared or shipped, so it can no longer be changed online.', 'بيتجهّز أو اتشحن، فمينفعش يتغيّر أونلاين دلوقتي.'))}</span></div>`}
         </div>`;
     }
     async function load() {
-      box.hidden = false;
+      diagnose();
+      if (!cands.length) return;
       if (empty) empty.hidden = true;
-      box.innerHTML = `<div class="guest-loading">${spinner(true)}</div>`;
-      try {
-        view = await ordersApi('customer_get_order', auth);
-        render();
-      } catch (err) {
-        // Not placed (checkout left unfinished) or not found: nothing to show.
-        box.hidden = true;
-        box.innerHTML = '';
-        if (empty) empty.hidden = false;
+      box.hidden = false;
+      // Show what this browser kept straight away; the live order replaces it when the API answers.
+      const snap = cands[0].order;
+      if (snap) { view = fromSnapshot(snap); render(); } else box.innerHTML = `<div class="guest-loading">${spinner(true)}</div>`;
+      if (!hasOrdersApi()) trace.push('✗ No orders API key in Theme settings → showing the saved copy only');
+      else {
+        for (const c of cands) {
+          if (!c.checkoutToken && !c.cartToken) continue;
+          try {
+            const v = await ordersApi('customer_get_order', sessionOf(c));
+            auth = sessionOf(c); view = v;
+            trace.push(`✓ Orders API found ${v.orderNumber}`);
+            break;
+          } catch (err) {
+            const why = err.detail || errText(err);
+            const hint = /MCP error|invalid arguments|unknown tool|not allowed|not found: tool/i.test(why) ? ' → the live orders API is older than PR #8, or ALLOWED_TOOLS lacks customer_get_order'
+              : /draft/i.test(why) ? ' → add read_draft_orders / write_draft_orders to the Shopify app' : '';
+            trace.push(`✗ Orders API (${c === saved ? 'last checkout' : 'earlier order'}): ${why}${hint}`);
+          }
+        }
+        if (!auth && !snap && cands[1]?.order) view = fromSnapshot(cands[1].order);
       }
+      diagnose();
+      if (view) return render();
+      // Nothing placed (checkout left unfinished) or nothing found: nothing to show.
+      box.hidden = true;
+      box.innerHTML = '';
+      if (empty) empty.hidden = false;
     }
 
     box.addEventListener('click', async (e) => {

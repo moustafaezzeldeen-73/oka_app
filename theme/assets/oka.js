@@ -249,16 +249,18 @@
   /**
    * The guest's last order, kept like the cart: when they head to checkout the
    * cart's token is saved here, and the checkout pixel (docs/checkout-pixel.js)
-   * adds the checkout's token once the order is placed. The orders API finds
-   * that one order by these tokens — nothing else is reachable from them.
+   * adds the checkout's token and the order itself once it is placed. The
+   * orders API finds that one order by these tokens — nothing else is
+   * reachable from them.
    */
   function rememberCheckout() {
     const token = cartState?.token;
     if (!token) return;
     const prev = store.get('oka.lastCheckout', {}) || {};
-    // A new cart means a new checkout: the old checkout token belongs to an earlier order.
-    const next = prev.cartToken === token ? { ...prev, at: Date.now() } : { cartToken: token, at: Date.now() };
-    store.set('oka.lastCheckout', next);
+    if (prev.cartToken === token) return store.set('oka.lastCheckout', { ...prev, at: Date.now() });
+    // A new cart means a new checkout. Until it is placed, the order before it stays the last one.
+    const placed = prev.checkoutToken || prev.order ? { cartToken: prev.cartToken, checkoutToken: prev.checkoutToken, order: prev.order } : prev.last;
+    store.set('oka.lastCheckout', { cartToken: token, at: Date.now(), ...(placed ? { last: placed } : {}) });
   }
   async function applyDiscount(code) {
     return setCart(await cartFetch('/cart/update.js', { discount: code }));

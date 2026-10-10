@@ -1384,3 +1384,6 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .eo-add.on { background: var(--green); font-size: 13px; }
 .guest-order { margin: 6px 22px 18px; padding: 16px; border-radius: 20px; background: var(--card-bg); border: 1px solid var(--card-border); }
 .guest-addr { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-top: 1px solid var(--card-border); font-size: 13px; line-height: 19px; }
+.guest-diag { margin: 14px 0 0; padding: 12px 14px; border-radius: 14px; border: 1px dashed #c7a400; background: #fffbea; font: 12px/1.6 ui-monospace, Menlo, monospace; color: #5c4a00; direction: ltr; text-align: left; overflow-wrap: anywhere; }
+.guest-diag b { font-family: inherit; }
+.guest-diag span { opacity: .7; }
