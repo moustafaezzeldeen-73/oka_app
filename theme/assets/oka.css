@@ -1339,3 +1339,15 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .guest-detail { margin: 0 22px 18px; }
 .guest-track { margin-top: 8px; }
 .guest-loading { display: flex; justify-content: center; padding: 40px 0; }
+
+/* ── Orders API (Shopify): edit-order sheet, guest order list ── */
+.items-sheet { top: auto; max-height: 88%; }
+.oi-row.removed { opacity: .5; }
+.oi-variant { font: inherit; font-size: 12.5px; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--card-border); background: #fff; max-width: 100%; }
+.guest-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.guest-detail-head b { font-size: 20px; font-weight: 800; }
+.guest-totals { padding: 4px 0 10px; border-top: 1px solid var(--card-border); }
+.guest-add { margin: 0 22px 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--ink-soft); }
+.guest-add-row { display: flex; gap: 8px; margin-top: 8px; }
+.guest-add-row input { flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 9px 12px; border-radius: 12px; border: 1px solid var(--card-border); background: #fff; }
+.guest-add-row .cs-add { width: auto; margin: 0; padding: 9px 16px; }

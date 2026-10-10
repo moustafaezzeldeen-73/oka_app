@@ -189,14 +189,14 @@
   <div class="rate-box" data-rate hidden></div>
 
   <div class="order-actions">
-    <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>{%- if settings.orders_api_key != blank and settings.order_item_edits -%}{% render 'bi', en: 'Edit', ar: 'عدّل' %}{%- elsif settings.orders_api_key != blank -%}{% render 'bi', en: 'Change address', ar: 'غيّر العنوان' %}{%- else -%}{% render 'bi', en: 'Edit', ar: 'عدّل' %}{%- endif -%}</button>
+    <button class="edit-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-edit-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>{%- if settings.orders_api_key != blank -%}{% render 'bi', en: 'Edit order', ar: 'عدّل الطلب' %}{%- else -%}{% render 'bi', en: 'Edit', ar: 'عدّل' %}{%- endif -%}</button>
     <button class="cancel-btn{% if is_fulfilled or o.cancelled %} disabled{% endif %}" data-cancel-order{% if is_fulfilled or o.cancelled %} disabled aria-disabled="true"{% endif %}>
       {%- if o.cancelled -%}{% render 'bi', en: 'Cancelled', ar: 'ملغي' %}{%- else -%}{% render 'bi', en: 'Cancel Order', ar: 'الغي الطلب' %}{%- endif -%}
     </button>
   </div>
   {%- unless is_fulfilled or o.cancelled -%}
     {%- if settings.orders_api_key != blank -%}
-      <div class="order-actions-hint" data-actions-hint>{% render 'bi', en: 'You can change the address or cancel until the courier picks it up.', ar: 'تقدر تغيّر العنوان أو تلغي الطلب لحد ما المندوب يستلمه.' %}</div>
+      <div class="order-actions-hint" data-actions-hint>{% render 'bi', en: 'You can change or cancel it until we start preparing it for shipping.', ar: 'تقدر تعدّله أو تلغيه لحد ما نبدأ نجهّزه للشحن.' %}</div>
     {%- endif -%}
   {%- endunless -%}
   <button class="reorder-btn" data-reorder>{% render 'bi', en: 'Order again', ar: 'اطلب تاني' %}</button>

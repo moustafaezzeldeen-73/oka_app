@@ -172,7 +172,7 @@
       },
       {
         "type": "paragraph",
-        "content": "Lets signed-in customers change the delivery address or cancel an order until the courier picks it up. The key can only reach those customer actions, so it is safe in the page."
+        "content": "Lets customers change the items on their Shopify order or cancel it while it is unfulfilled (signed in, or with the order number and phone). The key can only reach those customer actions, so it is safe in the page."
       },
       {
         "type": "text",
@@ -184,13 +184,6 @@
         "type": "text",
         "id": "orders_api_key",
         "label": "Orders API key (ORDERS_AUTH_TOKEN)"
-      },
-      {
-        "type": "checkbox",
-        "id": "order_item_edits",
-        "label": "Let customers change items",
-        "info": "Adds \"Change items\" (remove, change quantities, add products) next to Change address, sent to the orders API as customer_edit_items. Turn on once the API has that action.",
-        "default": false
       },
       {
         "type": "checkbox",
