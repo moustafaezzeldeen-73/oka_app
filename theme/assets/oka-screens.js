@@ -1387,9 +1387,6 @@
    * While it's unfulfilled it can be edited (items, address, phone) or
    * cancelled.
    */
-  /** The unpublished theme in preview (or ?oka_debug=1): show why the guest's order isn't there. */
-  const isPreviewTheme = () => Boolean((window.Shopify?.theme && window.Shopify.theme.role !== 'main') || window.Shopify?.designMode || /[?&](preview_theme_id|oka_debug)=/.test(location.search));
-
   function guestLastOrder(root) {
     const box = $('[data-guest-last]', root);
     if (!box || O.customer) return;
@@ -1400,23 +1397,6 @@
     const sessionOf = (c) => ({ session: { ...(c.checkoutToken ? { checkoutToken: c.checkoutToken } : {}), ...(c.cartToken ? { cartToken: String(c.cartToken).split('?')[0] } : {}) } });
     let auth = null;
     let view = null;
-    const trace = [];
-
-    function diagnose() {
-      if (!isPreviewTheme()) return;
-      let d = $('[data-guest-diag]', root);
-      if (!d) { d = document.createElement('div'); d.setAttribute('data-guest-diag', ''); d.className = 'guest-diag'; box.after(d); }
-      const yes = (b) => (b ? '✓' : '✗');
-      d.innerHTML = `<b>Preview check — guest last order</b> <span>(only shown on the unpublished theme)</span>
-        <div>${yes(hasOrdersApi())} Orders API set in Theme settings</div>
-        <div>${yes(/(^|\.)okaegypt\.com$/.test(location.hostname))} Opened on okaegypt.com (now: ${esc(location.hostname)})</div>
-        <div>${yes(saved.cartToken)} Cart saved at checkout (theme)</div>
-        <div>${yes(saved.checkoutToken)} Checkout saved after the order (pixel)</div>
-        <div>${yes(saved.order)} Order details saved after the order (pixel)</div>
-        <div>${yes(saved.last)} An earlier order kept</div>
-        ${trace.map((x) => `<div>${esc(x)}</div>`).join('')}
-        ${!cands.length ? '<div>→ Nothing saved in this browser yet: place a test order from this browser after installing the updated checkout pixel.</div>' : ''}`;
-    }
 
     /** What the pixel saved at checkout, shaped like the API's view. */
     const fromSnapshot = (o) => ({
@@ -1467,32 +1447,25 @@
         </div>`;
     }
     async function load() {
-      diagnose();
       if (!cands.length) return;
       if (empty) empty.hidden = true;
       box.hidden = false;
       // Show what this browser kept straight away; the live order replaces it when the API answers.
       const snap = cands[0].order;
       if (snap) { view = fromSnapshot(snap); render(); } else box.innerHTML = `<div class="guest-loading">${spinner(true)}</div>`;
-      if (!hasOrdersApi()) trace.push('✗ No orders API key in Theme settings → showing the saved copy only');
-      else {
+      if (hasOrdersApi()) {
         for (const c of cands) {
           if (!c.checkoutToken && !c.cartToken) continue;
           try {
             const v = await ordersApi('customer_get_order', sessionOf(c));
             auth = sessionOf(c); view = v;
-            trace.push(`✓ Orders API found ${v.orderNumber}`);
             break;
           } catch (err) {
-            const why = err.detail || errText(err);
-            const hint = /MCP error|invalid arguments|unknown tool|not allowed|not found: tool/i.test(why) ? ' → the live orders API is older than PR #8, or ALLOWED_TOOLS lacks customer_get_order'
-              : /draft/i.test(why) ? ' → add read_draft_orders / write_draft_orders to the Shopify app' : '';
-            trace.push(`✗ Orders API (${c === saved ? 'last checkout' : 'earlier order'}): ${why}${hint}`);
+            // Not placed (checkout left unfinished) or not found: try the earlier one.
           }
         }
         if (!auth && !snap && cands[1]?.order) view = fromSnapshot(cands[1].order);
       }
-      diagnose();
       if (view) return render();
       // Nothing placed (checkout left unfinished) or nothing found: nothing to show.
       box.hidden = true;
