@@ -20,3 +20,4 @@ server/data/
 qa/harness/node_modules/
 qa/tests/**/node_modules/
 qa/harness/out/
+qa/reports/screenshots/

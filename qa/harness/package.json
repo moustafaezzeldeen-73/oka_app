@@ -1,17 +1,21 @@
 {
-  "name": "harness",
+  "name": "oka-qa-harness",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Local Shopify storefront emulator for the OKA theme (QA)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.mjs",
+    "smoke": "node smoke.mjs",
+    "fixtures": "node build-fixtures.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/model-viewer": "^4.0.0",
     "cookie-parser": "^1.4.7",
     "express": "^4.22.3",
     "liquidjs": "^10.30.0"
-  }
+  },
+  "private": true,
+  "type": "module"
 }

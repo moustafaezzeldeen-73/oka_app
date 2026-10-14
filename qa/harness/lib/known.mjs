@@ -24,7 +24,7 @@ export const KNOWN = {
   cart: s(`attributes cart_level_discount_applications checkout_charge_amount currency discount_applications duties_included empty? item_count items items_subtotal_price note original_total_price requires_shipping taxes_included total_discount total_price total_weight`),
   request: s(`design_mode host locale origin page_type path visual_preview_mode`),
   locale: s(`endonym_name iso_code name primary root_url`),
-  routes: s(`account_addresses_url account_login_url account_logout_url account_recover_url account_register_url account_url all_products_collection_url cart_add_url cart_change_url cart_clear_url cart_update_url cart_url collections_url predictive_search_url product_recommendations_url root_url search_url`),
+  routes: s(`account_addresses_url account_login_url account_logout_url account_recover_url account_register_url account_url all_products_collection_url cart_add_url cart_change_url cart_clear_url cart_update_url cart_url collections_url predictive_search_url product_recommendations_url root_url search_url storefront_login_url account_profile_url`),
   template: s(`directory name suffix`),
   theme: s(`id name role`),
   search: s(`default_sort_by filters performed results results_count sort_by sort_options terms types`),
@@ -40,7 +40,7 @@ export const KNOWN = {
 };
 
 /** Names used by this theme that we could not verify against shopify.dev from this sandbox. */
-export const UNCERTAIN = {
-  routes: s(`storefront_login_url`),
-  shop: s(`contact_information`),
-};
+export const UNCERTAIN = {};
+// Verified with shopify.dev docs search (2026-10-14): routes.storefront_login_url EXISTS
+// (/customer_authentication/login?return_to=…); shop.contact_information does NOT exist (shop
+// exposes privacy/refund/shipping/subscription policies + terms_of_service only).
