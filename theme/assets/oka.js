@@ -836,7 +836,64 @@
   }
 
   /* ── global wiring ───────────────────────────────────────────────────── */
+  /**
+   * Product cards: once a product is in the cart its Add button turns into − qty +, as in the app.
+   * Taps show at once; the cart calls run one after another so fast taps all count.
+   */
+  const CARD_ADD = '.add-btn[data-add], .gcard-add[data-add]';
+  let cardChain = Promise.resolve();
+  const cardPending = new Map(); // variantId → quantity shown while its cart calls run
+  function syncCardSteppers(root = document) {
+    root.querySelectorAll(CARD_ADD).forEach((btn) => {
+      const vid = btn.dataset.add;
+      const q = cardPending.has(vid) ? cardPending.get(vid) : cartQtyOf(vid);
+      let st = btn.nextElementSibling && btn.nextElementSibling.matches('.card-qty') ? btn.nextElementSibling : null;
+      if (!q || btn.hasAttribute('data-soldout')) { btn.hidden = false; if (st) st.hidden = true; return; }
+      if (!st) {
+        st = document.createElement('div');
+        st.className = `card-qty ${btn.classList.contains('gcard-add') ? 'is-grid' : 'is-row'}`;
+        st.dataset.cqVariant = vid;
+        st.innerHTML = `<button type="button" data-cq="-1" aria-label="${esc(L('Less', 'أقل'))}">–</button><span class="card-qty-n" aria-live="polite"></span><button type="button" data-cq="1" aria-label="${esc(L('More', 'أكتر'))}">+</button>`;
+        btn.after(st);
+      }
+      st.querySelector('.card-qty-n').textContent = num(q);
+      st.hidden = false;
+      btn.hidden = true;
+    });
+  }
+  function cardStep(vid, delta) {
+    const shown = cardPending.has(vid) ? cardPending.get(vid) : cartQtyOf(vid);
+    const next = Math.max(0, shown + delta);
+    if (next === shown) return;
+    cardPending.set(vid, next);
+    syncCardSteppers();
+    haptic.selectionTick?.();
+    cardChain = cardChain.then(async () => {
+      try {
+        if (delta > 0) await addToCart(vid, 1, { silent: true });
+        else {
+          const line = [...(cartState?.items || [])].reverse().find((i) => String(i.variant_id) === String(vid));
+          if (line) await changeLine(line.key, line.quantity - 1);
+        }
+      } catch (e) {
+        // addToCart already told them why (e.g. out of stock); show the real cart again.
+      }
+    }).finally(() => {
+      if (cardPending.get(vid) === next) { cardPending.delete(vid); syncCardSteppers(); }
+    });
+  }
+
   function wire() {
+    // Product cards follow the cart: on any change, on a language switch, and when cards are added (search, wishlist).
+    document.addEventListener('oka:cart', () => syncCardSteppers());
+    document.addEventListener('oka:lang', () => syncCardSteppers());
+    let cardRaf = 0;
+    new MutationObserver((records) => {
+      if (cardRaf) return;
+      const fresh = records.some((r) => [...r.addedNodes].some((n) => n.nodeType === 1 && (n.matches(CARD_ADD) || n.querySelector(CARD_ADD))));
+      if (fresh) cardRaf = requestAnimationFrame(() => { cardRaf = 0; syncCardSteppers(); });
+    }).observe(document.body, { childList: true, subtree: true });
+    syncCardSteppers();
     // Any way into checkout (cart button, "Check out" bar, links) remembers the cart's token first.
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a[href], [data-checkout], [data-join-guest]');
@@ -868,6 +925,13 @@
           .then(() => { haptic.success?.(); toast(L('Bundle added to cart', 'العرض اتضاف للسلة')); })
           .catch(() => toast(L("Couldn't add this offer — part of it may be sold out", 'معرفناش نضيف العرض — ممكن حاجة منه تكون خلصت')))
           .finally(() => { bundle.disabled = false; });
+        return;
+      }
+
+      const cq = e.target.closest('[data-cq]');
+      if (cq) {
+        e.preventDefault();
+        cardStep(cq.closest('[data-cq-variant]').dataset.cqVariant, Number(cq.dataset.cq));
         return;
       }
 
