@@ -170,12 +170,15 @@
     feed.addEventListener('click', (e) => {
       const slot = e.target.closest('[data-slot]');
       if (!slot || slot.classList.contains('active')) return;
-      e.preventDefault();
-      e.stopPropagation();
       const rail = slot.closest('[data-rail]');
       if (!rail) return;
       const rr = rail.getBoundingClientRect();
       const sr = slot.getBoundingClientRect();
+      // Fully in view (e.g. two offers that fit side by side, where the rail can't scroll to centre
+      // the second): the tap is meant for it, so let it through.
+      if (sr.left >= rr.left - 1 && sr.right <= rr.right + 1) return;
+      e.preventDefault();
+      e.stopPropagation();
       rail.scrollBy({ left: sr.left + sr.width / 2 - (rr.left + rr.width / 2), behavior: 'smooth' });
       O.haptic.selectionTick();
     }, true);

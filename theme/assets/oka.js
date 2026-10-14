@@ -922,7 +922,8 @@
         if (!ids.length) return;
         bundle.disabled = true;
         addManyToCart(ids.map((variantId) => ({ variantId, quantity: 1 })))
-          .then(() => { haptic.success?.(); toast(L('Bundle added to cart', 'العرض اتضاف للسلة')); })
+          // An offer goes straight to the cart, where its price shows.
+          .then(() => { haptic.success?.(); location.href = CFG.routes.cart; })
           .catch(() => toast(L("Couldn't add this offer — part of it may be sold out", 'معرفناش نضيف العرض — ممكن حاجة منه تكون خلصت')))
           .finally(() => { bundle.disabled = false; });
         return;
@@ -939,6 +940,13 @@
       if (add && add.dataset.add && !add.closest('.ar') && !add.hasAttribute('data-custom')) {
         e.preventDefault();
         if (add.hasAttribute('data-soldout')) return;
+        if (add.matches('.offer-cta')) {
+          // An offer goes straight to the cart.
+          if (add.disabled) return;
+          add.disabled = true;
+          addToCart(add.dataset.add, 1, { silent: true }).then(() => { location.href = CFG.routes.cart; }).catch(() => {}).finally(() => { add.disabled = false; });
+          return;
+        }
         addToCart(add.dataset.add, 1);
         return;
       }
