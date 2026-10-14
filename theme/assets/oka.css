@@ -1517,3 +1517,18 @@ html[lang="ar"] .arx-steps li::before { content: counter(a, arabic-indic); }
 .ar-screen.cam-on .arx-chip, .ar-screen.cam-on .arx-circle { background: rgba(0,0,0,0.38); }
 .arx-hint { margin-top: 10px; text-align: center; font-size: 12px; color: var(--ink-soft); }
 .ar-screen.cam-on .arx-panel { background: rgba(255,255,255,0.93); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+/* Product page: scrolls section by section and settles each one at the top, like the home feed.
+   A section taller than the screen still scrolls freely inside (that's how snapping treats it). */
+.screen[data-screen="product"] { scroll-snap-type: y proximity; scroll-padding-top: var(--bar-h); }
+.screen[data-screen="product"] .snap-pg,
+.screen[data-screen="product"] .story-hero,
+.screen[data-screen="product"] .story-grid,
+.screen[data-screen="product"] .story-box,
+.screen[data-screen="product"] .story-cross,
+.screen[data-screen="product"] .story-steps:has(ol) { scroll-snap-align: start; scroll-margin-top: 12px; }
+/* The story's headline is a slide of its own: the screen above the buy bar, content centred. */
+.screen[data-screen="product"] .story-hero {
+  min-height: calc(100svh - var(--bar-h) - 130px);
+  display: flex; flex-direction: column; justify-content: center;
+}

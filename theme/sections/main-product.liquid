@@ -25,6 +25,7 @@
   data-handle="{{ p.handle }}" data-variant="{{ v.id }}" data-price="{{ price_egp }}" data-stock="{{ stock }}"
   data-available="{{ p.available }}" data-url="{{ shop.url }}{{ p.url }}">
 
+  <div class="snap-pg pdp-top">
   <div class="pdp-hero">
     <div class="pdp-gallery hscroll" data-gallery>
       {%- for img in p.images limit: 10 -%}
@@ -96,6 +97,9 @@
     </div>
   </div>
 
+  </div>
+
+  {%- if model or videos.size > 0 or ext_videos.size > 0 -%}<div class="snap-pg pdp-media">{%- endif -%}
   {%- if model -%}
     <a class="ar-card press" href="{{ ar_url }}">
       <span class="ar-card-cube"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
@@ -123,9 +127,11 @@
     </section>
   {%- endif -%}
 
+  {%- if model or videos.size > 0 or ext_videos.size > 0 -%}</div>{%- endif -%}
+
   {{ story }}
 
-  <div data-related style="padding-top:22px" hidden>
+  <div class="snap-pg" data-related style="padding-top:22px" hidden>
     <div class="related-label">{% render 'bi', en: 'Goes well with it', ar: 'بيتاخد معاه' %}</div>
     <div class="related hscroll" data-related-list></div>
   </div>
