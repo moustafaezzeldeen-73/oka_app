@@ -584,39 +584,106 @@
     const stage = $('[data-ar-stage]', root);
     const loading = $('[data-ar-loading]', root);
     const live = $('[data-ar-live]', root);
+    const cam = $('[data-ar-cam]', root);
+    const reticle = $('[data-ar-reticle]', root);
+    const statusText = $('[data-ar-status-text]', root);
+    const status = (en, ar, state = '') => {
+      if (statusText) statusText.textContent = L(en, ar);
+      const chip = $('[data-ar-status]', root);
+      if (chip) chip.dataset.state = state;
+    };
     if (!d.glb) { if (loading) loading.hidden = true; return; }
+
     let mv = null;
+    let modelReady = false;
+    let camReady = false;
+    let stream = null;
+
+    // Once both the camera and the model are up, "find the floor" for a moment and drop the product on it.
+    let placed = false;
+    function place() {
+      if (placed || !modelReady) return;
+      if (!camReady) return status('3D · drag to turn it', '٣D · اسحب عشان تلفّها', 'model');
+      placed = true;
+      reticle.hidden = false;
+      status('Looking for a surface…', 'بندوّر على سطح…', 'search');
+      setTimeout(() => {
+        reticle.classList.add('lock');
+        root.classList.add('placed');
+        O.haptic.success?.();
+        status('Placed — drag to turn, pinch to resize', 'اتحطت — اسحب تلفّها، وقرّب بصباعين تكبّر', 'placed');
+        setTimeout(() => { reticle.hidden = true; }, 900);
+      }, 1100);
+    }
+
+    // The rear camera, live behind the model. One permission prompt the first time; without it the 3D studio view stays.
+    async function startCamera() {
+      if (!navigator.mediaDevices?.getUserMedia) return status('3D · drag to turn it', '٣D · اسحب عشان تلفّها', 'model');
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } } });
+        cam.srcObject = stream;
+        cam.hidden = false;
+        await cam.play().catch(() => {});
+        camReady = true;
+        root.classList.add('cam-on');
+        place();
+      } catch (e) {
+        status('Camera off — showing 3D', 'الكاميرا مقفولة — بنعرضها ٣D', 'model');
+      }
+    }
+    const stopCamera = () => { stream?.getTracks().forEach((t) => t.stop()); stream = null; };
+    window.addEventListener('pagehide', stopCamera);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { stopCamera(); camReady = false; }
+      else if (!stream && root.classList.contains('cam-on')) startCamera();
+    });
+
+    startCamera();
     O.loadModelViewer().then(() => {
       mv = document.createElement('model-viewer');
       mv.setAttribute('src', d.glb);
       if (d.usdz) mv.setAttribute('ios-src', d.usdz);
-      if (d.poster) mv.setAttribute('poster', d.poster);
       mv.setAttribute('alt', d.title || '');
-      ['ar', 'camera-controls', 'auto-rotate'].forEach((a) => mv.setAttribute(a, ''));
+      ['ar', 'camera-controls'].forEach((a) => mv.setAttribute(a, ''));
       mv.setAttribute('touch-action', 'none');
       mv.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
       mv.setAttribute('ar-scale', 'fixed');
       mv.setAttribute('ar-placement', 'floor');
-      mv.setAttribute('shadow-intensity', '1');
-      mv.setAttribute('shadow-softness', '0.8');
-      mv.setAttribute('exposure', '1.05');
+      // Seen from a little above, as if it stood on the floor or a table in front of you.
+      mv.setAttribute('camera-orbit', '0deg 72deg auto');
+      mv.setAttribute('min-camera-orbit', 'auto 40deg auto');
+      mv.setAttribute('max-camera-orbit', 'auto 88deg auto');
+      mv.setAttribute('shadow-intensity', '1.4');
+      mv.setAttribute('shadow-softness', '0.6');
+      mv.setAttribute('exposure', '1.1');
       mv.setAttribute('environment-image', 'neutral');
       mv.setAttribute('interaction-prompt', 'none');
       mv.style.setProperty('--progress-bar-color', 'transparent');
-      mv.addEventListener('load', () => { if (loading) loading.hidden = true; const ph = $('[data-ar-photo]', root); if (ph) ph.hidden = true; });
+      mv.addEventListener('load', () => {
+        modelReady = true;
+        if (loading) loading.hidden = true;
+        const ph = $('[data-ar-photo]', root);
+        if (ph) ph.hidden = true;
+        root.classList.add('model-on');
+        place();
+      });
       mv.addEventListener('ar-status', (e) => {
-        if (e.detail.status === 'failed') O.okaAlert(L('AR didn’t start', 'الكاميرا مشتغلتش'), L('Your phone couldn’t start AR. You can still spin the model here.', 'موبايلك مقدرش يشغّل الكاميرا. تقدر تلف الموديل هنا.'));
+        if (e.detail.status === 'failed') O.okaAlert(L('AR didn’t start', 'الـ AR مشتغلش'), L('Your phone couldn’t start AR. It’s still shown in your camera here.', 'موبايلك مقدرش يشغّل الـ AR. لسه ظاهرة في الكاميرا هنا.'));
+        // Back from the phone's AR: bring the live camera back.
+        if (e.detail.status === 'not-presenting' && !stream && camReady === false && root.classList.contains('cam-on')) startCamera();
       });
       stage.appendChild(mv);
-      // Open straight into the camera when they came from an "AR" link and the phone can do it.
-      if (new URLSearchParams(location.search).get('ar') === '1') setTimeout(() => { if (mv.canActivateAR) mv.activateAR(); }, 600);
     }).catch(() => {
       if (loading) loading.textContent = L('Couldn’t load the 3D model. Check your connection.', 'معرفناش نحمّل الموديل. اتأكد من النت.');
     });
+
     live?.addEventListener('click', () => {
       O.haptic.selectionTick?.();
-      if (mv && mv.canActivateAR) mv.activateAR();
-      else O.okaAlert(L('Open it on your phone', 'افتحها من الموبايل'), L('Viewing it in your space needs a phone camera (Android or iPhone). You can still spin the model here.', 'عشان تشوفها في مكانك محتاج كاميرا موبايل (أندرويد أو آيفون). تقدر تلف الموديل هنا.'));
+      if (mv && mv.canActivateAR) {
+        // The phone's AR needs the camera to itself.
+        stopCamera(); camReady = false;
+        mv.activateAR();
+      } else O.okaAlert(L('Open it on your phone', 'افتحها من الموبايل'), L('Real-size AR needs a phone (Android or iPhone).', 'الـ AR بالحجم الحقيقي محتاج موبايل (أندرويد أو آيفون).'));
     });
   }
 

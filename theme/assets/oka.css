@@ -1495,3 +1495,25 @@ html[lang="ar"] .story-cross b { transform: scaleX(-1); }
 .arx-steps li::before { content: counter(a); display: block; font-weight: 900; font-size: 13px; color: var(--ink, #1d1d1f); margin-bottom: 2px; }
 html[lang="ar"] .arx-steps li::before { content: counter(a, arabic-indic); }
 .arx-note { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+
+/* AR screen: live camera behind the model, the model "placed" on the floor in front of you. */
+.arx-cam { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; background: #000; }
+.ar-screen.cam-on { background: #000; }
+.ar-screen .arx-stage { z-index: 1; }
+.ar-screen.cam-on .arx-stage { inset: 14% 0 150px; }
+.ar-screen.cam-on .arx-fallback { display: none; }
+.ar-screen.cam-on.model-on model-viewer { opacity: 0; transform: translateY(-40px) scale(.7); transition: opacity .45s ease, transform .6s cubic-bezier(.2, 1.4, .4, 1); }
+.ar-screen.cam-on.placed model-viewer { opacity: 1; transform: none; }
+.arx-reticle {
+  position: absolute; z-index: 1; left: 50%; bottom: 210px; width: 170px; height: 56px; margin-left: -85px;
+  border-radius: 50%; border: 2.5px solid rgba(255,255,255,0.9); box-shadow: 0 0 0 6px rgba(255,255,255,0.18);
+  animation: arx-pulse 1s ease-in-out infinite;
+}
+.arx-reticle i { position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #fff; }
+.arx-reticle.lock { animation: none; border-color: #34c759; box-shadow: 0 0 0 6px rgba(52,199,89,0.25); transition: opacity .6s; opacity: 0; }
+@keyframes arx-pulse { 50% { transform: scale(1.12); opacity: .7; } }
+.arx-chip[data-state="search"] i { background: #ffcc00; box-shadow: 0 0 0 4px rgba(255,204,0,0.25); animation: arx-pulse 1s infinite; }
+.arx-chip[data-state="model"] i { background: #8e8e93; box-shadow: none; }
+.ar-screen.cam-on .arx-chip, .ar-screen.cam-on .arx-circle { background: rgba(0,0,0,0.38); }
+.arx-hint { margin-top: 10px; text-align: center; font-size: 12px; color: var(--ink-soft); }
+.ar-screen.cam-on .arx-panel { background: rgba(255,255,255,0.93); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
