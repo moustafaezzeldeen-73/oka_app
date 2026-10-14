@@ -1,0 +1,1 @@
+/cart/add.js calls: 2 quantities: [2,2] → cart gets 4 units for a shopper who chose 2
