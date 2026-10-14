@@ -514,6 +514,35 @@
       if (q > 0) O.addToCart(variant, q);
     });
 
+    // Videos play muted while in view (like a reel) and pause when scrolled away; the speaker turns sound on.
+    const reel = $('[data-reel]', root);
+    if (reel) {
+      dragScroll(reel);
+      const vids = $$('[data-reel-item] video', root);
+      vids.forEach((v) => { v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.removeAttribute('controls'); });
+      const io = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting && en.intersectionRatio > 0.6) en.target.play().catch(() => {});
+          else en.target.pause();
+        });
+      }, { threshold: [0, 0.6, 1] }) : null;
+      vids.forEach((v) => io && io.observe(v));
+      reel.addEventListener('click', (e) => {
+        const item = e.target.closest('[data-reel-item]');
+        const v = item && $('video', item);
+        if (!v) return;
+        if (e.target.closest('[data-reel-sound]')) {
+          const on = v.muted;
+          vids.forEach((x) => { x.muted = true; x.closest('[data-reel-item]').classList.remove('sound'); });
+          v.muted = !on;
+          item.classList.toggle('sound', on);
+          if (on) v.play().catch(() => {});
+          return;
+        }
+        if (v.paused) v.play().catch(() => {}); else v.pause();
+      });
+    }
+
     O.viewed.add(d.handle);
     O.loadCatalogue().then((catalogue) => {
       const me = catalogue.products.find((p) => p.id === d.handle);
@@ -547,6 +576,48 @@
     O.getCart().then(paint).catch(() => {});
     onCart(paint);
     onLang(paint);
+  }
+
+  /* ── AR screen (sections/oka-ar.liquid) ────────────────────────────── */
+  function productAr(root) {
+    const d = root.dataset;
+    const stage = $('[data-ar-stage]', root);
+    const loading = $('[data-ar-loading]', root);
+    const live = $('[data-ar-live]', root);
+    if (!d.glb) { if (loading) loading.hidden = true; return; }
+    let mv = null;
+    O.loadModelViewer().then(() => {
+      mv = document.createElement('model-viewer');
+      mv.setAttribute('src', d.glb);
+      if (d.usdz) mv.setAttribute('ios-src', d.usdz);
+      if (d.poster) mv.setAttribute('poster', d.poster);
+      mv.setAttribute('alt', d.title || '');
+      ['ar', 'camera-controls', 'auto-rotate'].forEach((a) => mv.setAttribute(a, ''));
+      mv.setAttribute('touch-action', 'none');
+      mv.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+      mv.setAttribute('ar-scale', 'fixed');
+      mv.setAttribute('ar-placement', 'floor');
+      mv.setAttribute('shadow-intensity', '1');
+      mv.setAttribute('shadow-softness', '0.8');
+      mv.setAttribute('exposure', '1.05');
+      mv.setAttribute('environment-image', 'neutral');
+      mv.setAttribute('interaction-prompt', 'none');
+      mv.style.setProperty('--progress-bar-color', 'transparent');
+      mv.addEventListener('load', () => { if (loading) loading.hidden = true; const ph = $('[data-ar-photo]', root); if (ph) ph.hidden = true; });
+      mv.addEventListener('ar-status', (e) => {
+        if (e.detail.status === 'failed') O.okaAlert(L('AR didn’t start', 'الكاميرا مشتغلتش'), L('Your phone couldn’t start AR. You can still spin the model here.', 'موبايلك مقدرش يشغّل الكاميرا. تقدر تلف الموديل هنا.'));
+      });
+      stage.appendChild(mv);
+      // Open straight into the camera when they came from an "AR" link and the phone can do it.
+      if (new URLSearchParams(location.search).get('ar') === '1') setTimeout(() => { if (mv.canActivateAR) mv.activateAR(); }, 600);
+    }).catch(() => {
+      if (loading) loading.textContent = L('Couldn’t load the 3D model. Check your connection.', 'معرفناش نحمّل الموديل. اتأكد من النت.');
+    });
+    live?.addEventListener('click', () => {
+      O.haptic.selectionTick?.();
+      if (mv && mv.canActivateAR) mv.activateAR();
+      else O.okaAlert(L('Open it on your phone', 'افتحها من الموبايل'), L('Viewing it in your space needs a phone camera (Android or iPhone). You can still spin the model here.', 'عشان تشوفها في مكانك محتاج كاميرا موبايل (أندرويد أو آيفون). تقدر تلف الموديل هنا.'));
+    });
   }
 
   /* ════════════════════════════════════════════════════════════════════
@@ -3032,7 +3103,7 @@
 
   /* ── boot ────────────────────────────────────────────────────────────── */
   const SCREENS = {
-    home, collection, search, product, cart, checkout, orders, account,
+    home, collection, search, product, 'product-ar': productAr, cart, checkout, orders, account,
     addresses: addressesScreen, 'add-address': addAddress, loyalty, subscriptions, subscribe,
     wishlist: wishlistScreen, login, support, track,
   };

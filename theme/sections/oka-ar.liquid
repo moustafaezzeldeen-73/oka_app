@@ -1,0 +1,64 @@
+{%- comment -%}
+  The AR screen — /products/<handle>?view=ar (templates/product.ar.json).
+  A full-screen 3D model the shopper can spin, and one button that hands it to
+  the phone's own AR (Scene Viewer on Android, Quick Look on iPhone, WebXR),
+  which places it on the floor or table at real size. Behaviour in
+  assets/oka-screens.js → productAr().
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign v = p.selected_or_first_available_variant
+  assign model = p.media | where: 'media_type', 'model' | first
+  assign glb = ''
+  assign usdz = ''
+  if model
+    for s in model.sources
+      if s.format == 'glb'
+        assign glb = s.url
+      elsif s.format == 'usdz'
+        assign usdz = s.url
+      endif
+    endfor
+  endif
+-%}
+<div class="screen ar-screen" data-screen="product-ar" data-glb="{{ glb }}" data-usdz="{{ usdz }}" data-title="{{ p.title | escape }}"
+  data-poster="{% if p.featured_image %}{{ p.featured_image | image_url: width: 800 }}{% endif %}">
+  <div class="arx-stage" data-ar-stage>
+    {%- comment -%} The photo shows until the 3D model has loaded, and stays if it can't. {%- endcomment -%}
+    {%- if p.featured_image -%}
+      {{ p.featured_image | image_url: width: 900 | image_tag: alt: p.title, class: 'arx-fallback', data-ar-photo: '' }}
+    {%- endif -%}
+    <div class="arx-loading" data-ar-loading>{% render 'bi', en: 'Loading 3D…', ar: 'بنحمّل الـ ٣D…' %}</div>
+  </div>
+
+  <div class="arx-top">
+    <a class="arx-circle press flip" href="{{ p.url }}" aria-label="Back">{% render 'icon', name: 'chevron-left' %}</a>
+    <div class="arx-chip"><i></i>{% if glb != '' %}{% render 'bi', en: '3D · drag to spin', ar: '٣D · اسحب عشان تلفّها' %}{% else %}{% render 'bi', en: 'Photo', ar: 'صورة' %}{% endif %}</div>
+  </div>
+
+  <div class="arx-panel">
+    <div class="arx-head">
+      <div style="min-width:0">
+        <div class="arx-title">{% render 'ptitle', p: p %}</div>
+        <div class="arx-price">{% render 'price', cents: v.price %}</div>
+      </div>
+      {%- if p.available -%}
+        <button class="arx-add press" data-add="{{ v.id }}">{% render 'bi', en: 'Add to cart', ar: 'عبيلي فالشنطة' %}</button>
+      {%- endif -%}
+    </div>
+    {%- if glb != '' -%}
+      <button class="arx-live press" data-ar-live>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="#1d1d1f" stroke-width="1.7" stroke-linejoin="round"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9" stroke="#1d1d1f" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        {% render 'bi', en: 'View in your space', ar: 'شوفها في مكانك بالكاميرا' %}
+      </button>
+      <ol class="arx-steps">
+        <li>{% render 'bi', en: 'Point your phone at the floor or a table', ar: 'وجّه الموبايل على الأرض أو ترابيزة' %}</li>
+        <li>{% render 'bi', en: 'Move it slowly until the surface is found', ar: 'حرّكه بالراحة لحد ما يلاقي السطح' %}</li>
+        <li>{% render 'bi', en: 'It appears at real size — walk around it', ar: 'هتظهر بحجمها الحقيقي — لف حواليها' %}</li>
+      </ol>
+    {%- else -%}
+      <p class="arx-note">{% render 'bi', en: 'A 3D model for this product is coming soon.', ar: 'موديل ٣D للمنتج ده جاي قريب.' %}</p>
+    {%- endif -%}
+  </div>
+</div>
+{% schema %}{ "name": "AR view", "tag": "div", "class": "ar-section" }{% endschema %}

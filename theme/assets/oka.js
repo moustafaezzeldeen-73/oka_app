@@ -684,84 +684,7 @@
     return modelViewerLoading;
   }
 
-  async function openAr(handle) {
-    const cat = await loadCatalogue();
-    const p = cat.products.find((x) => x.id === handle);
-    if (!p) return;
-    const app = $('#app');
-    const el = document.createElement('div');
-    el.className = 'overlay ar';
-    const hasModel = Boolean(p.glbUrl);
-    const stockText = p.stock === 0 ? t('outOfStock') : p.stock <= 5 ? t('onlyLeft', { n: p.stock }) : t('inStock');
-    const def = addresses().find((a) => a.isDefault);
-    el.innerHTML = `
-      <div class="ar-table"></div><div class="ar-horizon"></div>
-      <div class="ar-top">
-        <button class="ar-close s94 press" data-close aria-label="Close"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#fff" stroke-width="2.1" stroke-linecap="round"/></svg></button>
-        <div class="ar-status"><i></i>${esc(L('Surface detected', 'لقينا السطح'))}</div>
-      </div>
-      <div class="ar-stage">
-        <div class="ar-object">
-          ${p.img ? `<img src="${esc(p.img)}" alt="">` : ''}
-          <div class="ar-scale"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/></svg>${esc(L('Shown at actual size', 'بحجمها الحقيقي'))}</div>
-        </div>
-        <div class="ar-contact"></div>
-      </div>
-      ${hasModel
-        ? `<div class="ar-live">
-            <button class="ar-live-btn s97 press" data-live><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="#1d1d1f" stroke-width="1.7" stroke-linejoin="round"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9" stroke="#1d1d1f" stroke-width="1.7" stroke-linejoin="round"/></svg>${esc(L('View in your space', 'شوفها في مكانك بالكاميرا'))}</button>
-            <div class="ar-live-hint">${esc(L('Opens your camera and places it at real size', 'هتفتح الكاميرا وتحط المنتج بحجمه الحقيقي'))}</div>
-          </div>`
-        : `<div class="ar-controls">${[
-            ['⤢', L('Drag to move', 'اسحب عشان تحركها')],
-            ['⟳', L('Twist to rotate', 'لف بصباعين')],
-            ['⤡', L('Pinch to scale', 'قرّب أو بعّد')],
-          ].map(([g, label]) => `<div class="ar-control"><div class="ar-control-btn">${g}</div><span>${esc(label)}</span></div>`).join('')}</div>`}
-      <div class="ar-panel-wrap"><div class="ar-panel">
-        <div class="ar-head">
-          <div style="flex:1;min-width:0"><div class="ar-title">${esc(ptitle(p))}</div><div class="ar-price">${esc(fmtPrice(p.price))}</div></div>
-          <button class="ar-add s96 press" data-add>${esc(t('add'))}</button>
-        </div>
-        <div class="ar-rule"></div>
-        <div class="ar-facts">
-          <div class="ar-fact"><span>${esc(L('Price', 'السعر'))}</span><b>${esc(fmtPrice(p.price))}</b></div>
-          <div class="ar-fact"><span>${esc(L('Delivery', 'التوصيل'))}</span><b>${esc(etaFor(def))}</b></div>
-          <div class="ar-fact"><span>${esc(L('Availability', 'متاح؟'))}</span><b>${esc(stockText)}</b></div>
-        </div>
-      </div></div>`;
 
-    const close = () => { el.remove(); document.removeEventListener('keydown', onKey); };
-    const onKey = (e) => { if (e.key === 'Escape') close(); };
-    document.addEventListener('keydown', onKey);
-    el.querySelector('[data-close]').onclick = close;
-    el.querySelector('[data-add]').onclick = () => { if (p.available !== false && p.stock !== 0) addToCart(p.variantId, 1); };
-    app.appendChild(el);
-
-    if (hasModel) {
-      // The model floats over the scene, orbitable — the in-app viewer. The
-      // button hands off to the platform's real AR (WebXR, Scene Viewer or
-      // iOS Quick Look), which places it on a detected surface at real size.
-      loadModelViewer().then(() => {
-        if (!el.isConnected) return;
-        const mv = document.createElement('model-viewer');
-        mv.setAttribute('src', p.glbUrl);
-        if (p.usdzUrl) mv.setAttribute('ios-src', p.usdzUrl);
-        mv.setAttribute('alt', ptitle(p));
-        ['ar', 'camera-controls', 'auto-rotate', 'touch-action'].forEach((a) => mv.setAttribute(a, a === 'touch-action' ? 'pan-y' : ''));
-        mv.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
-        mv.setAttribute('ar-scale', 'fixed');
-        mv.setAttribute('shadow-intensity', '1');
-        mv.setAttribute('environment-image', 'neutral');
-        mv.style.setProperty('--progress-bar-color', 'transparent');
-        el.insertBefore(mv, el.querySelector('.ar-top'));
-        el.classList.add('has-model');
-        el.querySelector('[data-live]').onclick = () => {
-          if (mv.canActivateAR) mv.activateAR();
-          else okaAlert(L('AR isn’t available here', 'الكاميرا مش هتشتغل هنا'), L('Open this page on a phone to place it in your space. You can still turn the model around here.', 'افتح الصفحة دي من الموبايل عشان تحطها في مكانك. تقدر تلف الموديل هنا.'));
-        };
-      }).catch(() => {});
-    }
-  }
 
   /* ── side menu ───────────────────────────────────────────────────────────
    * Replaces the bottom tab bar. Opened from the edge handle or the home
@@ -911,7 +834,8 @@
       if (lt) { e.preventDefault(); toggleLang(); return; }
 
       const ar = e.target.closest('[data-ar]');
-      if (ar) { e.preventDefault(); openAr(ar.dataset.ar); return; }
+      // The AR pill opens the product's AR screen (sections/oka-ar.liquid).
+      if (ar) { e.preventDefault(); location.href = `/products/${encodeURIComponent(ar.dataset.ar)}?view=ar`; return; }
 
       // A bundle offer: every variant in one cart call, so it lands whole or not at all.
       const bundle = e.target.closest('[data-add-bundle]');
@@ -983,8 +907,8 @@
     PROVINCES, provinceOf, provinceName, addresses, selectedAddress, selectAddress, customer,
     zoneFees, shippingFor, shipBar, etaFor, days,
     getCart, setCart, addToCart, addManyToCart, changeLine, swapLine, applyDiscount, rememberCheckout, cartCount, cartQtyOf, cartTotals, toast,
-    loadCatalogue, ptitle, pdesc, searchProducts, wishlist, paintHearts, recommend, recReason, viewed,
-    api, hasService, requireSignIn, goBack, whatsappUrl, okaAlert, openAr,
+    loadCatalogue, loadModelViewer, ptitle, pdesc, searchProducts, wishlist, paintHearts, recommend, recReason, viewed,
+    api, hasService, requireSignIn, goBack, whatsappUrl, okaAlert,
     openMenu, closeMenu,
   };
 

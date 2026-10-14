@@ -211,7 +211,7 @@
     <script src="{{ 'oka-screens.js' | asset_url }}" defer></script>
   </head>
 
-  <body class="t-{{ template.name }}">
+  <body class="t-{{ template.name }}{% if template.suffix %} t-{{ template.name }}-{{ template.suffix }}{% endif %}">
     <div class="app" id="app">
       {%- comment -%}
         The logo bar, on every page: menu, logo (home), language. It shrinks

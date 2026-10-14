@@ -1,0 +1,123 @@
+{%- comment -%}
+  The product's story under the buy card: headline, numbers, what makes it
+  different, what's in the box and how to get it ready — in English and
+  Arabic. Written from the products' own descriptions; a product without a
+  story here renders nothing and keeps its plain description.
+{%- endcomment -%}
+{%- liquid
+  assign fam = ''
+  case p.handle
+    when 'oka-cloud-white-hookah', 'oka-carbon-black-hookah', 'oka-victoria-pink-hookah'
+      assign fam = 'oka'
+    when 'oka-cobra', 'oka-cobra-oka-base'
+      assign fam = 'cobra'
+    when 'oka-black-tobacco', 'oka-black-tobacco-plate'
+      assign fam = 'black'
+    when 'oka-cobra-led-rechargeable-base'
+      assign fam = 'base'
+  endcase
+-%}
+{%- if fam != '' -%}
+<section class="story story-{{ fam }}">
+  {%- case fam -%}
+  {%- when 'oka' -%}
+    <div class="story-hero">
+      <div class="story-eyebrow">{% render 'bi', en: 'Why OKA', ar: 'ليه أوكا' %}</div>
+      <h2 class="story-h">{% render 'bi', en: 'The easiest pro hookah.', ar: 'أسهل شيشة محترفة.' %}</h2>
+      <p class="story-lead">{% render 'bi', en: 'Set it up like a pro with the least effort — a smooth, flavourful session with thick smoke you won’t believe comes from its size.', ar: 'جهّز شيشتك باحترافية بأقل مجهود — سحبة ناعمة وطعم واضح ودخان كثيف مش هتصدق إنه طالع من حجمها.' %}</p>
+      <div class="story-stats">
+        <div class="stat"><b>{% render 'bi', en: '&lt;350 g', ar: 'أقل من ٣٥٠ جم' %}</b><span>{% render 'bi', en: 'Light to carry anywhere', ar: 'خفيفة تاخدها في أي حتة' %}</span></div>
+        <div class="stat"><b>{% render 'bi', en: '700 ml', ar: '٧٠٠ مل' %}</b><span>{% render 'bi', en: 'Water, same as a classic hookah', ar: 'مية، زي الشيشة العادية بالظبط' %}</span></div>
+        <div class="stat"><b>{% render 'bi', en: 'No blowing', ar: 'من غير نفخ' %}</b><span>{% render 'bi', en: 'A purging orifice clears it for you', ar: 'فتحة تنفيس بتطلّع الدخان القديم لوحدها' %}</span></div>
+      </div>
+    </div>
+    <div class="story-grid">
+      <div class="feat"><i>🌿</i><b>{% render 'bi', en: 'OKA-STEM, organic', ar: 'عمود أوكا ستيم الطبيعي' %}</b><span>{% render 'bi', en: 'Heat- and water-resistant paper-wood layers that keep the flavour natural — and better with every use.', ar: 'رقائق خشبية ورقية مقاومة للحرارة والمية، بتحافظ على الطعم وتحسّنه مع كل استخدام.' %}</span></div>
+      <div class="feat"><i>🔁</i><b>{% render 'bi', en: 'Fits your gear', ar: 'بتركب على كمالياتك' %}</b><span>{% render 'bi', en: 'Works with standard bowls and hoses — use what’s in the box or your favourites.', ar: 'متوافقة مع كل الحجارة والليّات اللي في السوق — استخدم اللي معاها أو اللي بتحبه.' %}</span></div>
+      <div class="feat"><i>♻️</i><b>{% render 'bi', en: 'Food-grade &amp; recyclable', ar: 'آمنة وقابلة لإعادة التدوير' %}</b><span>{% render 'bi', en: 'Food-grade HDPE and organic materials.', ar: 'بلاستيك HDPE بدرجة نقاء الصناعات الغذائية ومواد طبيعية.' %}</span></div>
+      <div class="feat"><i>🧳</i><b>{% render 'bi', en: 'Built to travel', ar: 'معمولة للسفر' %}</b><span>{% render 'bi', en: 'Durable enough for rough storage and transport.', ar: 'بتستحمل أصعب ظروف التخزين والنقل.' %}</span></div>
+    </div>
+    <div class="story-box">
+      <div class="story-sub">{% render 'bi', en: 'In the box', ar: 'جوّه العلبة' %}</div>
+      <ul class="box-list">
+        <li>{% render 'bi', en: 'OKA flask', ar: 'قزازة أوكا' %}</li>
+        <li>{% render 'bi', en: 'OKA-STEM', ar: 'عمود أوكا ستيم' %}</li>
+        <li>{% render 'bi', en: '1.5 m standard hose', ar: 'لي عادي ١٫٥ متر' %}</li>
+        <li>{% render 'bi', en: 'Glazed bowl, 15 g', ar: 'حجر مزجج ١٥ جم' %}</li>
+      </ul>
+    </div>
+    <div class="story-steps">
+      <div class="story-sub">{% render 'bi', en: 'Ready in 4 steps', ar: 'جاهزة في ٤ خطوات' %}</div>
+      <ol>
+        <li><b>{% render 'bi', en: 'Fill the flask', ar: 'املى القزازة' %}</b><span>{% render 'bi', en: 'About 700 ml of water. Heavy draw? Use less. Light? Add more.', ar: 'حوالي ٧٠٠ مل مية. السحبة تقيلة؟ قلّل. خفيفة؟ زوّد.' %}</span></li>
+        <li><b>{% render 'bi', en: 'Fit the OKA-STEM', ar: 'ركّب أوكا ستيم' %}</b><span>{% render 'bi', en: 'Push it in until it sits firmly.', ar: 'دخّله لحد ما يثبت كويس.' %}</span></li>
+        <li><b>{% render 'bi', en: 'Attach the hose', ar: 'ركّب اللي' %}</b><span>{% render 'bi', en: 'Any standard hose fits.', ar: 'أي لي عادي بيركب.' %}</span></li>
+        <li><b>{% render 'bi', en: 'Bowl, foil, coal', ar: 'الحجر والفويل والفحم' %}</b><span>{% render 'bi', en: 'Fill the bowl moderately — don’t press the tobacco — cover with perforated foil and place it.', ar: 'املى الحجر باعتدال — متكبسش المعسل — غطّيه بالفويل المخرّم وركّبه.' %}</span></li>
+      </ol>
+      <a class="story-link" href="/pages/how-to-use">{% render 'bi', en: 'Full guide with photos →', ar: '← الشرح الكامل بالصور' %}</a>
+    </div>
+
+  {%- when 'cobra' -%}
+    <div class="story-hero">
+      <div class="story-eyebrow">{% render 'bi', en: 'OKA Cobra', ar: 'أوكا كوبرا' %}</div>
+      <h2 class="story-h">{% render 'bi', en: 'Bold angles. Denser smoke.', ar: 'زوايا جريئة. دخان أكثف.' %}</h2>
+      <p class="story-lead">{% render 'bi', en: 'A futuristic, angular design that commands attention — and a bigger body than the classic OKA for an easier draw and denser smoke.', ar: 'تصميم عصري بزوايا بيلفت النظر — وجسم أكبر من الأوكا العادية عشان سحبة أسهل ودخان أكثف.' %}</p>
+      <div class="story-stats">
+        <div class="stat"><b>{% render 'bi', en: 'Bigger', ar: 'أكبر' %}</b><span>{% render 'bi', en: 'Than the classic OKA', ar: 'من الأوكا العادية' %}</span></div>
+        <div class="stat"><b>{% render 'bi', en: 'Easier', ar: 'أسهل' %}</b><span>{% render 'bi', en: 'Draw, every time', ar: 'في السحب' %}</span></div>
+        <div class="stat"><b>{% render 'bi', en: 'Denser', ar: 'أكثف' %}</b><span>{% render 'bi', en: 'Smoke', ar: 'في الدخان' %}</span></div>
+      </div>
+    </div>
+    <div class="story-grid">
+      <div class="feat"><i>◆</i><b>{% render 'bi', en: 'Angular design', ar: 'تصميم بزوايا' %}</b><span>{% render 'bi', en: 'Bold looks balanced with advanced function.', ar: 'شكل جريء ووظيفة متقدمة في نفس الوقت.' %}</span></div>
+      <div class="feat"><i>💨</i><b>{% render 'bi', en: 'Built for the draw', ar: 'معمولة للسحبة' %}</b><span>{% render 'bi', en: 'More room inside means a lighter pull and thicker clouds.', ar: 'مساحة أكبر جوّه يعني سحبة أخف وسحاب أتقل.' %}</span></div>
+      <div class="feat"><i>💡</i><b>{% render 'bi', en: 'Light it up', ar: 'نوّرها' %}</b><span>{% render 'bi', en: 'Pairs with the rechargeable LED wooden base.', ar: 'بتتركب على القاعدة الخشب المضيئة اللي بتتشحن.' %}</span></div>
+      <div class="feat"><i>🔁</i><b>{% render 'bi', en: 'Standard gear', ar: 'كمالياتك العادية' %}</b><span>{% render 'bi', en: 'Use standard bowls and hoses.', ar: 'استخدم الحجارة والليّات العادية.' %}</span></div>
+    </div>
+    <a class="story-cross" href="/products/oka-cobra-led-rechargeable-base">
+      <span>{% render 'bi', en: 'Complete it with the LED base', ar: 'كمّلها بالقاعدة المضيئة' %}</span><b>→</b>
+    </a>
+    <div class="story-steps"><a class="story-link" href="/pages/how-to-use">{% render 'bi', en: 'How to prepare it →', ar: '← إزاي تجهزها' %}</a></div>
+
+  {%- when 'black' -%}
+    <div class="story-hero">
+      <div class="story-eyebrow">{% render 'bi', en: 'OKA Black Tobacco', ar: 'أوكا للمعسل الأسود' %}</div>
+      <h2 class="story-h">{% render 'bi', en: 'Made for dark tobacco.', ar: 'معمولة للمعسل الأسود.' %}</h2>
+      <p class="story-lead">{% render 'bi', en: 'A lengthened smoke stem cools the smoke during hot dark-tobacco sessions — smoother draws and richer flavour, with control over the heat.', ar: 'عمود دخان أطول بيبرّد الدخان وإنت بتشرب المعسل السخن — سحبة أنعم وطعم أحلى وتحكم أكتر في الحرارة.' %}</p>
+      <div class="story-stats">
+        <div class="stat"><b>{% render 'bi', en: 'Longer', ar: 'أطول' %}</b><span>{% render 'bi', en: 'Smoke stem', ar: 'عمود الدخان' %}</span></div>
+        <div class="stat"><b>{% render 'bi', en: 'Cooler', ar: 'أبرد' %}</b><span>{% render 'bi', en: 'Smoke', ar: 'في الدخان' %}</span></div>
+        <div class="stat"><b>{% render 'bi', en: 'Smoother', ar: 'أنعم' %}</b><span>{% render 'bi', en: 'Every draw', ar: 'في كل سحبة' %}</span></div>
+      </div>
+    </div>
+    <div class="story-grid">
+      <div class="feat"><i>🌡️</i><b>{% render 'bi', en: 'Temperature control', ar: 'تحكم في الحرارة' %}</b><span>{% render 'bi', en: 'The extended stem gives the smoke room to cool.', ar: 'العمود الأطول بيدّي الدخان مسافة يبرد فيها.' %}</span></div>
+      <div class="feat"><i>👌</i><b>{% render 'bi', en: 'Richer flavour', ar: 'طعم أحلى' %}</b><span>{% render 'bi', en: 'Smoother, more refined sessions.', ar: 'قعدة أنعم وأريح.' %}</span></div>
+      {%- if p.handle contains 'plate' -%}
+        <div class="feat"><i>🛡️</i><b>{% render 'bi', en: 'Steel plate included', ar: 'معاها طاسة حديد' %}</b><span>{% render 'bi', en: 'Protects from falling coal.', ar: 'بتحمي من الفحم.' %}</span></div>
+      {%- endif -%}
+      <div class="feat"><i>🔁</i><b>{% render 'bi', en: 'Standard gear', ar: 'كمالياتك العادية' %}</b><span>{% render 'bi', en: 'Use standard bowls and hoses.', ar: 'استخدم الحجارة والليّات العادية.' %}</span></div>
+    </div>
+    <div class="story-steps"><a class="story-link" href="/pages/how-to-use">{% render 'bi', en: 'How to prepare it →', ar: '← إزاي تجهزها' %}</a></div>
+
+  {%- when 'base' -%}
+    <div class="story-hero">
+      <div class="story-eyebrow">{% render 'bi', en: 'For the OKA Cobra', ar: 'لأوكا كوبرا' %}</div>
+      <h2 class="story-h">{% render 'bi', en: 'Light up the session.', ar: 'نوّر القعدة.' %}</h2>
+      <p class="story-lead">{% render 'bi', en: 'An elegant pine-wood base that attaches securely to the OKA Cobra, with a rechargeable LED glowing from beneath.', ar: 'قاعدة شيك من خشب الصنوبر بتتركب على الأوكا كوبرا كويس، وفيها ليد بيتشحن بينوّر من تحت.' %}</p>
+      <div class="story-stats">
+        <div class="stat"><b>{% render 'bi', en: '5 W', ar: '٥ وات' %}</b><span>{% render 'bi', en: 'LED light', ar: 'إضاءة ليد' %}</span></div>
+        <div class="stat"><b>{% render 'bi', en: '2 h', ar: '٢ ساعة' %}</b><span>{% render 'bi', en: 'Of continuous light', ar: 'نور متواصل' %}</span></div>
+        <div class="stat"><b>{% render 'bi', en: '2000 mAh', ar: '٢٠٠٠ مللي أمبير' %}</b><span>{% render 'bi', en: 'USB-C rechargeable', ar: 'بتتشحن USB-C' %}</span></div>
+      </div>
+    </div>
+    <div class="story-grid">
+      <div class="feat"><i>🪵</i><b>{% render 'bi', en: 'Pine wood', ar: 'خشب صنوبر' %}</b><span>{% render 'bi', en: 'Refined craftsmanship.', ar: 'شغل يدوي راقي.' %}</span></div>
+      <div class="feat"><i>🔌</i><b>{% render 'bi', en: 'USB-C charging', ar: 'شحن USB-C' %}</b><span>{% render 'bi', en: 'Charge it like your phone.', ar: 'اشحنها زي موبايلك.' %}</span></div>
+    </div>
+    <a class="story-cross" href="/products/oka-cobra">
+      <span>{% render 'bi', en: 'Made for the OKA Cobra', ar: 'معمولة للأوكا كوبرا' %}</span><b>→</b>
+    </a>
+  {%- endcase -%}
+</section>
+{%- endif -%}
