@@ -142,7 +142,7 @@
   "locale": "ar",
   "loggedIn": false,
   "status": 200,
-  "at": "2026-10-14T21:31:05.735Z",
+  "at": "2026-10-14T21:34:12.427Z",
   "counted": 1,
   "warnings": [
    {
@@ -1394,7 +1394,7 @@
   "locale": "ar",
   "loggedIn": false,
   "status": 200,
-  "at": "2026-10-14T21:31:51.309Z",
+  "at": "2026-10-14T21:34:11.918Z",
   "counted": 0,
   "warnings": [
    {
@@ -5586,7 +5586,7 @@
   "locale": "en",
   "loggedIn": false,
   "status": 200,
-  "at": "2026-10-14T21:33:58.135Z",
+  "at": "2026-10-14T21:34:00.899Z",
   "counted": 0,
   "warnings": [
    {
@@ -5636,7 +5636,7 @@
   "locale": "en",
   "loggedIn": false,
   "status": 200,
-  "at": "2026-10-14T21:33:59.730Z",
+  "at": "2026-10-14T21:34:02.302Z",
   "counted": 0,
   "warnings": [
    {
@@ -5693,7 +5693,7 @@
   "locale": "en",
   "loggedIn": false,
   "status": 200,
-  "at": "2026-10-14T21:33:58.788Z",
+  "at": "2026-10-14T21:34:03.756Z",
   "counted": 0,
   "warnings": [
    {
@@ -5719,6 +5719,385 @@
   "loggedIn": false,
   "status": 200,
   "at": "2026-10-14T21:33:59.237Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'back' not passed to snippets/screen-header.liquid (optional render param?)",
+    "file": "snippets/screen-header.liquid",
+    "count": 1
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /policies/privacy-policy [en]": {
+  "url": "/policies/privacy-policy",
+  "template": "policy",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:05.221Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 5
+   }
+  ]
+ },
+ "GET /ar/account/reset/9000000000001/qatoken [ar]": {
+  "url": "/ar/account/reset/9000000000001/qatoken",
+  "template": "customers/reset_password",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:00.655Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /policies/shipping-policy [en]": {
+  "url": "/policies/shipping-policy",
+  "template": "policy",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:06.687Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 5
+   }
+  ]
+ },
+ "GET /ar/account/activate/9000000000001/qatoken [ar]": {
+  "url": "/ar/account/activate/9000000000001/qatoken",
+  "template": "customers/activate_account",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:02.012Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /policies/terms-of-service [en]": {
+  "url": "/policies/terms-of-service",
+  "template": "policy",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:08.147Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 5
+   }
+  ]
+ },
+ "GET /ar/policies/refund-policy [ar]": {
+  "url": "/ar/policies/refund-policy",
+  "template": "policy",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:03.440Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 5
+   }
+  ]
+ },
+ "GET /policies/contact-information [en]": {
+  "url": "/policies/contact-information",
+  "template": "policy",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:09.651Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 5
+   }
+  ]
+ },
+ "GET /ar/policies/privacy-policy [ar]": {
+  "url": "/ar/policies/privacy-policy",
+  "template": "policy",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:04.933Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 5
+   }
+  ]
+ },
+ "GET /password [en]": {
+  "url": "/password",
+  "template": "password",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:11.096Z",
+  "counted": 0,
+  "warnings": []
+ },
+ "GET /ar/policies/shipping-policy [ar]": {
+  "url": "/ar/policies/shipping-policy",
+  "template": "policy",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:06.464Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 5
+   }
+  ]
+ },
+ "GET /gift_cards/qa12345678 [en]": {
+  "url": "/gift_cards/qa12345678",
+  "template": "gift_card",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:12.457Z",
+  "counted": 0,
+  "warnings": []
+ },
+ "GET /ar/policies/terms-of-service [ar]": {
+  "url": "/ar/policies/terms-of-service",
+  "template": "policy",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:07.851Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 5
+   }
+  ]
+ },
+ "GET /nope-404 [en]": {
+  "url": "/nope-404",
+  "template": "404",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 404,
+  "at": "2026-10-14T21:34:11.037Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'back' not passed to snippets/screen-header.liquid (optional render param?)",
+    "file": "snippets/screen-header.liquid",
+    "count": 1
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /ar/policies/contact-information [ar]": {
+  "url": "/ar/policies/contact-information",
+  "template": "policy",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:09.288Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 5
+   }
+  ]
+ },
+ "GET /ar/password [ar]": {
+  "url": "/ar/password",
+  "template": "password",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:10.617Z",
+  "counted": 0,
+  "warnings": []
+ },
+ "GET /ar/gift_cards/qa12345678 [ar]": {
+  "url": "/ar/gift_cards/qa12345678",
+  "template": "gift_card",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:34:11.867Z",
+  "counted": 0,
+  "warnings": []
+ },
+ "GET /ar/nope-404 [ar]": {
+  "url": "/ar/nope-404",
+  "template": "404",
+  "locale": "ar",
+  "loggedIn": false,
+  "status": 404,
+  "at": "2026-10-14T21:34:13.245Z",
   "counted": 0,
   "warnings": [
    {

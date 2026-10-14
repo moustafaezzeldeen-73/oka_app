@@ -142,6 +142,7 @@ for (const rm of ['no-preference', 'reduce']) {
       const infinite = anims.filter((a) => a.effect?.getTiming?.().iterations === Infinity).map((a) => `${a.animationName || a.constructor.name}@${a.effect?.target?.className?.toString?.().slice(0, 30)}`);
       // rAF-driven transforms (ribbon/compare): sample a ribbon ring twice
       const ring = document.querySelector('[data-ribbon-ring]');
+      const rp = document.querySelector('[data-ribbon]'); if (rp) { rp.scrollIntoView(); await new Promise((r) => setTimeout(r, 800)); }
       const t1 = ring?.style.transform; await new Promise((r) => setTimeout(r, 600)); const t2 = ring?.style.transform;
       const vids = [...document.querySelectorAll('video')].map((v) => ({ paused: v.paused, autoplay: v.autoplay, cls: v.className }));
       return { running: anims.length, infinite: [...new Set(infinite)], ribbonMoving: ring ? t1 !== t2 : null, vids, transitionsMenu: getComputedStyle(document.querySelector('.side-menu')).transitionDuration };
