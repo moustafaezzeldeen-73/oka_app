@@ -1518,33 +1518,38 @@ html[lang="ar"] .arx-steps li::before { content: counter(a, arabic-indic); }
 .arx-hint { margin-top: 10px; text-align: center; font-size: 12px; color: var(--ink-soft); }
 .ar-screen.cam-on .arx-panel { background: rgba(255,255,255,0.93); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
-/* Product page: scrolls section by section and settles each one at the top, like the home feed.
-   A section taller than the screen still scrolls freely inside (that's how snapping treats it). */
-.screen[data-screen="product"] { scroll-snap-type: y proximity; scroll-padding-top: var(--bar-h); }
-.screen[data-screen="product"] .snap-pg,
-.screen[data-screen="product"] .story-hero,
-.screen[data-screen="product"] .story-grid,
-.screen[data-screen="product"] .story-box,
-.screen[data-screen="product"] .story-cross,
-.screen[data-screen="product"] .story-steps:has(ol) { scroll-snap-align: start; scroll-margin-top: 12px; }
-/* The story's headline is a slide of its own: the screen above the buy bar, content centred. */
-.screen[data-screen="product"] .story-hero {
-  min-height: calc(100svh - var(--bar-h) - 130px);
-  display: flex; flex-direction: column; justify-content: center;
-}
+/* Product page: full-screen pages, one per swipe, like the home feed. Every page fills the screen
+   (a taller one, e.g. the buy card on a small phone, scrolls inside before moving on). */
+.screen[data-screen="product"] { --pg-h: calc(100svh - var(--bar-h) - max(env(safe-area-inset-bottom), 8px)); --buy-h: 104px; scroll-snap-type: y mandatory; scroll-padding-top: var(--bar-h); overscroll-behavior-y: contain; }
+.screen[data-screen="product"] > .snap-pg,
+.screen[data-screen="product"] .story > .snap-pg { scroll-snap-align: start; scroll-snap-stop: always; min-height: var(--pg-h); }
+.screen[data-screen="product"] .story { margin-top: 0; }
+.screen[data-screen="product"] .story-pg { display: flex; flex-direction: column; justify-content: center; padding: 14px 0 var(--buy-h); }
+.screen[data-screen="product"] .story-pg-hero .story-hero { min-height: calc(var(--pg-h) - var(--buy-h) - 28px); display: flex; flex-direction: column; justify-content: center; }
+.screen[data-screen="product"] .pdp-top { padding-bottom: var(--buy-h); }
+.screen[data-screen="product"] [data-related] { padding-bottom: var(--buy-h); }
+.screen[data-screen="product"] > div[style*="height:100px"] { display: none; }
 
-/* The product page's AR section: a full screen of its own inside the page (same parts as the AR screen). */
+/* The video page: the video fills the screen like a reel; several sit side by side. */
+.screen[data-screen="product"] .pdp-reel-wrap { display: flex; flex-direction: column; justify-content: center; padding: 10px 0 var(--buy-h); }
+.screen[data-screen="product"] .pdp-reel-wrap .related-label { padding-bottom: 10px; }
+.screen[data-screen="product"] .reel-item { flex: 0 0 auto; width: auto; max-width: none; height: calc(var(--pg-h) - var(--buy-h) - 60px); aspect-ratio: 9 / 16; }
+.screen[data-screen="product"] .reel-item:only-child { margin-inline: auto; }
+
+/* The AR section: a full page — live camera, the product placed in it, tap anywhere for the phone's AR. */
 .ar-screen.ar-inline {
   position: relative; inset: auto; z-index: auto; overflow: hidden;
-  margin: 16px 12px 0; border-radius: 28px;
-  height: calc(100svh - var(--bar-h) - 118px); min-height: 460px;
-  scroll-snap-stop: always;
+  margin: 10px 10px 0; border-radius: 28px;
+  height: calc(var(--pg-h, 100svh) - var(--buy-h, 104px) - 20px); min-height: 440px;
 }
-.ar-inline .arx-stage { inset: 0 0 118px; }
-.ar-inline.cam-on .arx-stage { inset: 8% 0 110px; }
+.screen[data-screen="product"] > .ar-inline { min-height: 0; margin-bottom: calc(var(--buy-h) + 10px); }
+.ar-inline .arx-stage { inset: 0 0 96px; }
+.ar-inline.cam-on .arx-stage { inset: 6% 0 90px; }
 .ar-inline .arx-top { top: 14px; left: 14px; right: 14px; }
 .ar-inline .arx-panel { left: 10px; right: 10px; bottom: 10px; padding: 12px; border-radius: 22px; }
 .ar-inline .arx-live { margin-top: 0; }
-.ar-inline .arx-reticle { bottom: 150px; }
-.ar-inline .arx-loading { bottom: 130px; padding: 0 20px; text-align: center; }
+.ar-inline .arx-reticle { bottom: 130px; }
+.ar-inline .arx-loading { bottom: 110px; padding: 0 20px; text-align: center; }
 .ar-inline .arx-fallback { max-height: 62%; }
+/* While the camera runs, the product follows the room (phone motion sensor) instead of the screen. */
+.arx-stage.anchored { will-change: transform; }

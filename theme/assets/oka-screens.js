@@ -618,6 +618,41 @@
     let placed = false;
     let timer = null;
 
+    /*
+     * Keeps the product where it was put in the room while the phone moves (3 degrees of freedom from
+     * the motion sensor): turn the phone left and the product slides right, as a real object would.
+     * Android gives the sensor freely; iPhone only after a tap, which here opens the phone's AR anyway.
+     */
+    let base = null;
+    let want = { x: 0, y: 0 };
+    let now = { x: 0, y: 0 };
+    let raf = 0;
+    const wrap = (a) => ((a + 540) % 360) - 180;
+    function onTilt(e) {
+      if (e.alpha == null || e.beta == null) return;
+      if (!base) { base = { a: e.alpha, b: e.beta }; return; }
+      const pxPerDeg = root.clientWidth / 62; // a phone camera sees roughly 62° across
+      const max = root.clientWidth * 1.2;
+      want = {
+        x: Math.max(-max, Math.min(max, wrap(e.alpha - base.a) * pxPerDeg)),
+        y: Math.max(-max, Math.min(max, (e.beta - base.b) * pxPerDeg)),
+      };
+      if (!raf) raf = requestAnimationFrame(follow);
+    }
+    function follow() {
+      raf = 0;
+      now = { x: now.x + (want.x - now.x) * 0.35, y: now.y + (want.y - now.y) * 0.35 };
+      stage.style.transform = `translate3d(${now.x.toFixed(1)}px, ${now.y.toFixed(1)}px, 0)`;
+      if (Math.abs(want.x - now.x) > 0.5 || Math.abs(want.y - now.y) > 0.5) raf = requestAnimationFrame(follow);
+    }
+    function anchor(on) {
+      base = null; want = { x: 0, y: 0 }; now = { x: 0, y: 0 };
+      stage.style.transform = '';
+      stage.classList.toggle('anchored', on);
+      if (on) window.addEventListener('deviceorientation', onTilt);
+      else window.removeEventListener('deviceorientation', onTilt);
+    }
+
     function place() {
       if (placed || !modelReady || !active) return;
       if (!stream) return status('3D · drag to turn it', '٣D · اسحب عشان تلفّها', 'model');
@@ -631,7 +666,8 @@
         reticle.classList.add('lock');
         root.classList.add('placed');
         O.haptic.success?.();
-        status('Placed — drag to turn, pinch to resize', 'اتحطت — اسحب تلفّها، وقرّب بصباعين تكبّر', 'placed');
+        anchor(true);
+        status('Tap anywhere to place it for real', 'دوس في أي حتة عشان تحطها بجد', 'placed');
         timer = setTimeout(() => { reticle.hidden = true; }, 900);
       }, 1100);
     }
@@ -659,6 +695,7 @@
       if (cam) { cam.srcObject = null; cam.hidden = true; }
       root.classList.remove('cam-on', 'placed');
       placed = false;
+      anchor(false);
       clearTimeout(timer);
       if (reticle) reticle.hidden = true;
     }
@@ -705,12 +742,19 @@
       return modelLoading;
     }
 
-    $('[data-ar-live]', root)?.addEventListener('click', () => {
+    // The phone's own AR — the one that finds the real floor or table and places the product on it at
+    // real size. Browsers only let a tap start it, so a tap anywhere on the live view (or the button) does.
+    function launchAr() {
       O.haptic.selectionTick?.();
       if (mv && mv.canActivateAR) {
         stopCamera(); // the phone's AR needs the camera to itself
         mv.activateAR();
       } else O.okaAlert(L('Open it on your phone', 'افتحها من الموبايل'), L('Real-size AR needs a phone (Android or iPhone).', 'الـ AR بالحجم الحقيقي محتاج موبايل (أندرويد أو آيفون).'));
+    }
+    $('[data-ar-live]', root)?.addEventListener('click', launchAr);
+    root.addEventListener('click', (e) => {
+      if (!active || e.target.closest('a, button, [data-ar-live]')) return;
+      if (root.classList.contains('cam-on') && mv) launchAr();
     });
     window.addEventListener('pagehide', stopCamera);
     document.addEventListener('visibilitychange', () => {
