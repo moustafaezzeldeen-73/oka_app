@@ -1,0 +1,14 @@
+
+/home/user/oka_app/qa/tests/lint/oka-screens.js
+   291:11  warning  'raf' is already declared in the upper scope on line 133 column 9       no-shadow
+   644:47  warning  't' is already declared in the upper scope on line 13 column 26         no-shadow
+   657:36  warning  't' is already declared in the upper scope on line 13 column 26         no-shadow
+   959:11  warning  'product' is already declared in the upper scope on line 454 column 12  no-shadow
+  1331:34  warning  't' is already declared in the upper scope on line 13 column 26         no-shadow
+  1495:9   warning  'ADDR_LIMITS' is assigned a value but never used                        no-unused-vars
+  2280:18  warning  'openEditSheet' is defined but never used                               no-unused-vars
+  3117:13  warning  'go' is already declared in the upper scope on line 50 column 9         no-shadow
+  3175:30  warning  Return values from promise executor functions cannot be read            no-promise-executor-return
+
+✖ 9 problems (0 errors, 9 warnings)
+

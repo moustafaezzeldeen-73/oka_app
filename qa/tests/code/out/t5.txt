@@ -1,0 +1,5 @@
+Live store: primary locale en, published alternate ar, theme default_lang ar
+Unprefixed URL, shopper chose EN  → en
+/ar/... URL,     shopper chose EN  → ar   <- saved choice ignored
+/ar/... URL,     no choice saved   → ar
+BUG REPRODUCED: toggling to English on an /ar page reverts to Arabic on the next page load (routes.* links keep /ar).

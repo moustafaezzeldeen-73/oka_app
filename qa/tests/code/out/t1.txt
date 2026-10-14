@@ -1,0 +1,4 @@
+getUserMedia calls: 2
+stream #1 still live after stop(): true
+stream #2 still live after stop(): false
+BUG REPRODUCED: a camera stream is never stopped (camera light stays on)

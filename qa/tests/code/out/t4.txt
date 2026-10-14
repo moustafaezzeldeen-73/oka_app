@@ -1,0 +1,4 @@
+sheet open: true value: Ahmed Ali
+same <input> element after one keystroke? false | focused element is the new input? true
+caret expected at 6, actual at 10 (value length 10)
+BUG REPRODUCED: input replaced on each keystroke; caret jumps to the end
