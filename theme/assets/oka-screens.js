@@ -543,6 +543,19 @@
       });
     }
 
+    // The AR section opens the camera by itself once it fills the screen, and lets it go when scrolled away.
+    const arSec = $('[data-ar-view]', root);
+    if (arSec && arSec.dataset.glb) {
+      const view = arView(arSec);
+      let on = false;
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(([en]) => {
+          if (en.intersectionRatio >= 0.75 && !on) { on = true; view.start(); }
+          else if (en.intersectionRatio < 0.35 && on) { on = false; view.stop(); }
+        }, { root, threshold: [0, 0.35, 0.75, 1] }).observe(arSec);
+      }
+    }
+
     O.viewed.add(d.handle);
     O.loadCatalogue().then((catalogue) => {
       const me = catalogue.products.find((p) => p.id === d.handle);
@@ -578,12 +591,17 @@
     onLang(paint);
   }
 
-  /* ── AR screen (sections/oka-ar.liquid) ────────────────────────────── */
-  function productAr(root) {
+  /* ── AR view: the AR screen (sections/oka-ar.liquid) and the product page's AR section ── */
+  /**
+   * Live rear camera with the 3D model dropped into it. start() opens the camera (one permission
+   * prompt the first time), loads the model and "places" it after a short surface search; stop()
+   * frees the camera. The phone's own real-size AR (Scene Viewer / Quick Look / WebXR) needs a tap —
+   * browsers don't let a page start it by itself — so [data-ar-live] hands over to it.
+   */
+  function arView(root) {
     const d = root.dataset;
     const stage = $('[data-ar-stage]', root);
     const loading = $('[data-ar-loading]', root);
-    const live = $('[data-ar-live]', root);
     const cam = $('[data-ar-cam]', root);
     const reticle = $('[data-ar-reticle]', root);
     const statusText = $('[data-ar-status-text]', root);
@@ -592,99 +610,128 @@
       const chip = $('[data-ar-status]', root);
       if (chip) chip.dataset.state = state;
     };
-    if (!d.glb) { if (loading) loading.hidden = true; return; }
-
     let mv = null;
     let modelReady = false;
-    let camReady = false;
+    let modelLoading = null;
     let stream = null;
-
-    // Once both the camera and the model are up, "find the floor" for a moment and drop the product on it.
+    let active = false;
     let placed = false;
+    let timer = null;
+
     function place() {
-      if (placed || !modelReady) return;
-      if (!camReady) return status('3D · drag to turn it', '٣D · اسحب عشان تلفّها', 'model');
+      if (placed || !modelReady || !active) return;
+      if (!stream) return status('3D · drag to turn it', '٣D · اسحب عشان تلفّها', 'model');
       placed = true;
+      root.classList.remove('placed');
+      reticle.classList.remove('lock');
       reticle.hidden = false;
       status('Looking for a surface…', 'بندوّر على سطح…', 'search');
-      setTimeout(() => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
         reticle.classList.add('lock');
         root.classList.add('placed');
         O.haptic.success?.();
         status('Placed — drag to turn, pinch to resize', 'اتحطت — اسحب تلفّها، وقرّب بصباعين تكبّر', 'placed');
-        setTimeout(() => { reticle.hidden = true; }, 900);
+        timer = setTimeout(() => { reticle.hidden = true; }, 900);
       }, 1100);
     }
-
-    // The rear camera, live behind the model. One permission prompt the first time; without it the 3D studio view stays.
     async function startCamera() {
+      if (stream) return;
       if (!navigator.mediaDevices?.getUserMedia) return status('3D · drag to turn it', '٣D · اسحب عشان تلفّها', 'model');
+      status('Opening camera…', 'بنفتح الكاميرا…', 'search');
       try {
-        stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } } });
+        const s = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } } });
+        if (!active) { s.getTracks().forEach((t) => t.stop()); return; }
+        stream = s;
         cam.srcObject = stream;
         cam.hidden = false;
         await cam.play().catch(() => {});
-        camReady = true;
         root.classList.add('cam-on');
         place();
       } catch (e) {
         status('Camera off — showing 3D', 'الكاميرا مقفولة — بنعرضها ٣D', 'model');
+        root.classList.add('placed');
       }
     }
-    const stopCamera = () => { stream?.getTracks().forEach((t) => t.stop()); stream = null; };
-    window.addEventListener('pagehide', stopCamera);
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) { stopCamera(); camReady = false; }
-      else if (!stream && root.classList.contains('cam-on')) startCamera();
-    });
-
-    startCamera();
-    O.loadModelViewer().then(() => {
-      mv = document.createElement('model-viewer');
-      mv.setAttribute('src', d.glb);
-      if (d.usdz) mv.setAttribute('ios-src', d.usdz);
-      mv.setAttribute('alt', d.title || '');
-      ['ar', 'camera-controls'].forEach((a) => mv.setAttribute(a, ''));
-      mv.setAttribute('touch-action', 'none');
-      mv.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
-      mv.setAttribute('ar-scale', 'fixed');
-      mv.setAttribute('ar-placement', 'floor');
-      // Seen from a little above, as if it stood on the floor or a table in front of you.
-      mv.setAttribute('camera-orbit', '0deg 72deg auto');
-      mv.setAttribute('min-camera-orbit', 'auto 40deg auto');
-      mv.setAttribute('max-camera-orbit', 'auto 88deg auto');
-      mv.setAttribute('shadow-intensity', '1.4');
-      mv.setAttribute('shadow-softness', '0.6');
-      mv.setAttribute('exposure', '1.1');
-      mv.setAttribute('environment-image', 'neutral');
-      mv.setAttribute('interaction-prompt', 'none');
-      mv.style.setProperty('--progress-bar-color', 'transparent');
-      mv.addEventListener('load', () => {
-        modelReady = true;
-        if (loading) loading.hidden = true;
-        const ph = $('[data-ar-photo]', root);
-        if (ph) ph.hidden = true;
-        root.classList.add('model-on');
-        place();
+    function stopCamera() {
+      stream?.getTracks().forEach((t) => t.stop());
+      stream = null;
+      if (cam) { cam.srcObject = null; cam.hidden = true; }
+      root.classList.remove('cam-on', 'placed');
+      placed = false;
+      clearTimeout(timer);
+      if (reticle) reticle.hidden = true;
+    }
+    function loadModel() {
+      if (modelLoading) return modelLoading;
+      modelLoading = O.loadModelViewer().then(() => {
+        mv = document.createElement('model-viewer');
+        mv.setAttribute('src', d.glb);
+        if (d.usdz) mv.setAttribute('ios-src', d.usdz);
+        mv.setAttribute('alt', d.title || '');
+        ['ar', 'camera-controls'].forEach((a) => mv.setAttribute(a, ''));
+        mv.setAttribute('touch-action', 'pan-y');
+        mv.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+        mv.setAttribute('ar-scale', 'fixed');
+        mv.setAttribute('ar-placement', 'floor');
+        // Seen from a little above, as if it stood on the floor or a table in front of you.
+        mv.setAttribute('camera-orbit', '0deg 72deg auto');
+        mv.setAttribute('min-camera-orbit', 'auto 40deg auto');
+        mv.setAttribute('max-camera-orbit', 'auto 88deg auto');
+        mv.setAttribute('shadow-intensity', '1.4');
+        mv.setAttribute('shadow-softness', '0.6');
+        mv.setAttribute('exposure', '1.1');
+        mv.setAttribute('environment-image', 'neutral');
+        mv.setAttribute('interaction-prompt', 'none');
+        mv.style.setProperty('--progress-bar-color', 'transparent');
+        mv.addEventListener('load', () => {
+          modelReady = true;
+          if (loading) loading.hidden = true;
+          const ph = $('[data-ar-photo]', root);
+          if (ph) ph.hidden = true;
+          root.classList.add('model-on');
+          if (!stream) root.classList.add('placed');
+          place();
+        });
+        mv.addEventListener('ar-status', (e) => {
+          if (e.detail.status === 'failed') O.okaAlert(L('AR didn’t start', 'الـ AR مشتغلش'), L('Your phone couldn’t start AR. It’s still shown in your camera here.', 'موبايلك مقدرش يشغّل الـ AR. لسه ظاهرة في الكاميرا هنا.'));
+          // Back from the phone's AR: bring the live camera back.
+          if (e.detail.status === 'not-presenting' && active) startCamera();
+        });
+        stage.appendChild(mv);
+      }).catch(() => {
+        if (loading) loading.textContent = L('Couldn’t load the 3D model. Check your connection.', 'معرفناش نحمّل الموديل. اتأكد من النت.');
       });
-      mv.addEventListener('ar-status', (e) => {
-        if (e.detail.status === 'failed') O.okaAlert(L('AR didn’t start', 'الـ AR مشتغلش'), L('Your phone couldn’t start AR. It’s still shown in your camera here.', 'موبايلك مقدرش يشغّل الـ AR. لسه ظاهرة في الكاميرا هنا.'));
-        // Back from the phone's AR: bring the live camera back.
-        if (e.detail.status === 'not-presenting' && !stream && camReady === false && root.classList.contains('cam-on')) startCamera();
-      });
-      stage.appendChild(mv);
-    }).catch(() => {
-      if (loading) loading.textContent = L('Couldn’t load the 3D model. Check your connection.', 'معرفناش نحمّل الموديل. اتأكد من النت.');
-    });
+      return modelLoading;
+    }
 
-    live?.addEventListener('click', () => {
+    $('[data-ar-live]', root)?.addEventListener('click', () => {
       O.haptic.selectionTick?.();
       if (mv && mv.canActivateAR) {
-        // The phone's AR needs the camera to itself.
-        stopCamera(); camReady = false;
+        stopCamera(); // the phone's AR needs the camera to itself
         mv.activateAR();
       } else O.okaAlert(L('Open it on your phone', 'افتحها من الموبايل'), L('Real-size AR needs a phone (Android or iPhone).', 'الـ AR بالحجم الحقيقي محتاج موبايل (أندرويد أو آيفون).'));
     });
+    window.addEventListener('pagehide', stopCamera);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopCamera();
+      else if (active) startCamera();
+    });
+
+    return {
+      start() {
+        if (!d.glb) { if (loading) loading.hidden = true; return; }
+        active = true;
+        loadModel();
+        startCamera();
+        place();
+      },
+      stop() { active = false; stopCamera(); status('Your space', 'في مكانك'); },
+    };
+  }
+
+  function productAr(root) {
+    arView(root).start();
   }
 
   /* ════════════════════════════════════════════════════════════════════

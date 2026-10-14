@@ -1532,3 +1532,19 @@ html[lang="ar"] .arx-steps li::before { content: counter(a, arabic-indic); }
   min-height: calc(100svh - var(--bar-h) - 130px);
   display: flex; flex-direction: column; justify-content: center;
 }
+
+/* The product page's AR section: a full screen of its own inside the page (same parts as the AR screen). */
+.ar-screen.ar-inline {
+  position: relative; inset: auto; z-index: auto; overflow: hidden;
+  margin: 16px 12px 0; border-radius: 28px;
+  height: calc(100svh - var(--bar-h) - 118px); min-height: 460px;
+  scroll-snap-stop: always;
+}
+.ar-inline .arx-stage { inset: 0 0 118px; }
+.ar-inline.cam-on .arx-stage { inset: 8% 0 110px; }
+.ar-inline .arx-top { top: 14px; left: 14px; right: 14px; }
+.ar-inline .arx-panel { left: 10px; right: 10px; bottom: 10px; padding: 12px; border-radius: 22px; }
+.ar-inline .arx-live { margin-top: 0; }
+.ar-inline .arx-reticle { bottom: 150px; }
+.ar-inline .arx-loading { bottom: 130px; padding: 0 20px; text-align: center; }
+.ar-inline .arx-fallback { max-height: 62%; }

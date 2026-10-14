@@ -19,6 +19,17 @@
   assign videos = p.media | where: 'media_type', 'video'
   assign ext_videos = p.media | where: 'media_type', 'external_video'
   assign ar_url = p.url | append: '?view=ar'
+  assign glb = ''
+  assign usdz = ''
+  if model
+    for src in model.sources
+      if src.format == 'glb'
+        assign glb = src.url
+      elsif src.format == 'usdz'
+        assign usdz = src.url
+      endif
+    endfor
+  endif
 -%}
 {%- capture story -%}{% render 'pdp-story', p: p %}{%- endcapture -%}
 <div class="screen fade-in" data-screen="product"
@@ -99,8 +110,32 @@
 
   </div>
 
-  {%- if model or videos.size > 0 or ext_videos.size > 0 -%}<div class="snap-pg pdp-media">{%- endif -%}
-  {%- if model -%}
+  {%- comment -%}
+    The AR section: a full screen of its own. When the scroll settles on it, the camera opens by
+    itself and the product is placed in the live view (assets/oka-screens.js → arView). The phone's
+    real-size AR is one tap on its button; browsers don't allow starting it from a scroll.
+  {%- endcomment -%}
+  {%- if glb != '' -%}
+    <section class="snap-pg ar-screen ar-inline" data-ar-view data-glb="{{ glb }}" data-usdz="{{ usdz }}" data-title="{{ p.title | escape }}">
+      <video class="arx-cam" data-ar-cam muted playsinline autoplay hidden></video>
+      <div class="arx-reticle" data-ar-reticle hidden><i></i></div>
+      <div class="arx-stage" data-ar-stage>
+        {%- if p.featured_image -%}<img class="arx-fallback" data-ar-photo src="{{ p.featured_image | image_url: width: 700 }}" alt="{{ p.title | escape }}" loading="lazy">{%- endif -%}
+        <div class="arx-loading" data-ar-loading>{% render 'bi', en: 'Scroll here to see it in your space', ar: 'وقف هنا وشوفها في مكانك' %}</div>
+      </div>
+      <div class="arx-top">
+        <div class="arx-chip" data-ar-status><i></i><span data-ar-status-text>{% render 'bi', en: 'Your space', ar: 'في مكانك' %}</span></div>
+        <a class="arx-circle press" href="{{ ar_url }}" aria-label="Full screen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="arx-panel">
+        <button class="arx-live press" data-ar-live>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="#1d1d1f" stroke-width="1.7" stroke-linejoin="round"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9" stroke="#1d1d1f" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          {% render 'bi', en: 'Real size on your table (AR)', ar: 'بحجمها الحقيقي على الترابيزة (AR)' %}
+        </button>
+        <p class="arx-hint">{% render 'bi', en: 'Drag to turn it · pinch to resize', ar: 'اسحب عشان تلفّها · قرّب بصباعين عشان تكبّر' %}</p>
+      </div>
+    </section>
+  {%- elsif model -%}
     <a class="ar-card press" href="{{ ar_url }}">
       <span class="ar-card-cube"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
       <span class="ar-card-txt"><b>{% render 'bi', en: 'See it in your space', ar: 'شوفها في مكانك' %}</b><span>{% render 'bi', en: 'Real size, through your camera — or spin it in 3D', ar: 'بحجمها الحقيقي بكاميرا موبايلك — أو لفّها ٣D' %}</span></span>
@@ -109,7 +144,7 @@
   {%- endif -%}
 
   {%- if videos.size > 0 or ext_videos.size > 0 -%}
-    <section class="pdp-reel-wrap">
+    <section class="snap-pg pdp-reel-wrap">
       <div class="related-label">{% render 'bi', en: 'Watch it', ar: 'اتفرّج عليها' %}</div>
       <div class="pdp-reel hscroll" data-reel>
         {%- for m in videos -%}
@@ -126,8 +161,6 @@
       </div>
     </section>
   {%- endif -%}
-
-  {%- if model or videos.size > 0 or ext_videos.size > 0 -%}</div>{%- endif -%}
 
   {{ story }}
 
