@@ -1,0 +1,3 @@
+{%- comment -%} A product's title: Arabic from the oka.title_ar metafield, as the app reads it. {%- endcomment -%}
+{%- assign title_ar = p.metafields.oka.title_ar.value | default: p.title -%}
+{% render 'bi', en: p.title, ar: title_ar %}

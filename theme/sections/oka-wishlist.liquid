@@ -1,0 +1,6 @@
+{%- comment -%} WishlistScreen.js — everything the shopper has hearted. {%- endcomment -%}
+<div class="screen fade-in" data-screen="wishlist">
+  {% render 'screen-header', en: 'Wishlist', ar: 'المفضلة', back: '/pages/account' %}
+  <div data-wish-root></div>
+</div>
+{% schema %}{ "name": "Wishlist", "tag": "div" }{% endschema %}

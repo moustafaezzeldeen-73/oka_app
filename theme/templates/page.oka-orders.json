@@ -1,0 +1,4 @@
+{
+  "sections": { "main": { "type": "oka-orders", "settings": {} } },
+  "order": ["main"]
+}

@@ -1,0 +1,10 @@
+{%- comment -%} SubscriptionsScreen.js — drawn by assets/oka-screens.js from the order service. {%- endcomment -%}
+<div class="screen fade-in" data-screen="subscriptions">
+  {% render 'screen-header', en: 'My Subscriptions', ar: 'اشتراكاتي', back: '/pages/account' %}
+  {%- if customer -%}
+    <div data-subs-root></div>
+  {%- else -%}
+    <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="notice press s99" data-sign-in="/pages/subscriptions">{% render 'bi', en: 'Sign in to see your subscriptions.', ar: 'سجّل دخولك عشان تشوف اشتراكاتك.' %}</a>
+  {%- endif -%}
+</div>
+{% schema %}{ "name": "Subscriptions", "tag": "div" }{% endschema %}

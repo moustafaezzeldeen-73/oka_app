@@ -1,0 +1,10 @@
+{%- comment -%} SubscribeScreen.js — the subscription builder (create and edit). {%- endcomment -%}
+<div class="screen fade-in" data-screen="subscribe">
+  <div data-sub-header>{% render 'screen-header', en: 'Subscribe & Save', ar: 'اشترك ووفّر', back: '/pages/subscriptions' %}</div>
+  {%- if customer -%}
+    <div data-subscribe-root></div>
+  {%- else -%}
+    <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="notice press s99" data-sign-in="/pages/subscriptions?view=oka-subscribe">{% render 'bi', en: 'Sign in to start a recurring delivery subscription.', ar: 'سجّل دخولك عشان تبدأ اشتراك يوصلك كل فترة.' %}</a>
+  {%- endif -%}
+</div>
+{% schema %}{ "name": "Subscribe & Save", "tag": "div" }{% endschema %}

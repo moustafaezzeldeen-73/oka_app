@@ -1,0 +1,39 @@
+{%- comment -%}
+  The feed's last page: links to the store's policies (Settings → Policies in
+  Shopify admin), each in the shopper's language. Terms such as refused
+  deliveries live in the policies themselves; the optional notice below is
+  for short announcements only.
+  Usage: {% render 'policies-page', block: block %}
+{%- endcomment -%}
+<section class="page policies-page" {{ block.shopify_attributes }}>
+  <h2 class="page-title">{% render 'bi', en: block.settings.title_en, ar: block.settings.title_ar %}</h2>
+  <div class="pol-list">
+    {%- liquid
+      assign keys = 'shipping_policy,refund_policy,terms_of_service,privacy_policy,contact_information' | split: ','
+      assign en_names = 'Shipping policy,Returns & refunds,Terms of service,Privacy policy,Contact information' | split: ','
+      assign ar_names = 'سياسة الشحن,الاسترجاع والاسترداد,الشروط والأحكام,سياسة الخصوصية,بيانات التواصل' | split: ','
+    -%}
+    {%- for key in keys -%}
+      {%- assign pol = shop[key] -%}
+      {%- if pol and pol.url -%}
+        {%- comment -%} The same policy in each language: Shopify serves the Arabic translation under /ar. {%- endcomment -%}
+        {%- assign base = pol.url | remove_first: '/ar/' | prepend: '/' | replace: '//', '/' -%}
+        <a class="pol-row press s98 l-en" href="{{ base }}">
+          <span>{{ en_names[forloop.index0] }}</span>
+          <span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right', px: 15 %}</span>
+        </a>
+        <a class="pol-row press s98 l-ar" href="/ar{{ base }}">
+          <span>{{ ar_names[forloop.index0] }}</span>
+          <span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right', px: 15 %}</span>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  {%- if block.settings.note_en != blank or block.settings.note_ar != blank -%}
+    <div class="pol-note">
+      <b>{% render 'bi', en: block.settings.note_title_en, ar: block.settings.note_title_ar %}</b>
+      <p class="l-en">{{ block.settings.note_en | escape | newline_to_br }}</p>
+      <p class="l-ar">{{ block.settings.note_ar | escape | newline_to_br }}</p>
+    </div>
+  {%- endif -%}
+</section>

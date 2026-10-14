@@ -1,0 +1,11 @@
+{%- comment -%}
+  CartScreen.js. Drawn by assets/oka-screens.js from Shopify's cart; the
+  cart JSON is inlined so the first paint already has it.
+{%- endcomment -%}
+<div class="screen fade-in" data-screen="cart">
+  <h1 class="big-title">{% render 'bi', en: 'Cart', ar: 'السلة' %}</h1>
+  <div data-cart-root></div>
+  <div style="height:26px"></div>
+</div>
+<script type="application/json" data-cart-json>{{ cart | json }}</script>
+{% schema %}{ "name": "Cart", "tag": "div" }{% endschema %}

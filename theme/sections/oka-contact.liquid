@@ -1,0 +1,18 @@
+{%- comment -%} Contact page: Shopify's contact form (sends to the store's email), plus the page text. {%- endcomment -%}
+<div class="screen fade-in" data-screen="page">
+  {% render 'screen-header', en: page.title, ar: 'تواصل معانا' %}
+  {%- if page.content != blank -%}<div class="rte">{{ page.content }}</div>{%- endif -%}
+  {%- form 'contact', class: 'contact-form' -%}
+    {%- if form.posted_successfully? -%}
+      <div class="contact-ok">{% render 'bi', en: 'Thanks — we’ll get back to you soon.', ar: 'شكرًا — هنرد عليك قريب.' %}</div>
+    {%- elsif form.errors -%}
+      <div class="code-error">{{ form.errors | default_errors }}</div>
+    {%- endif -%}
+    <label class="contact-field"><span>{% render 'bi', en: 'Name', ar: 'الاسم' %}</span><input type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></label>
+    <label class="contact-field"><span>{% render 'bi', en: 'Phone', ar: 'الموبايل' %}</span><input type="tel" name="contact[phone]" autocomplete="tel" inputmode="tel" value="{{ form.phone }}"></label>
+    <label class="contact-field"><span>{% render 'bi', en: 'Email', ar: 'الإيميل' %}</span><input type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}"></label>
+    <label class="contact-field"><span>{% render 'bi', en: 'Message', ar: 'رسالتك' %}</span><textarea name="contact[body]" rows="5">{{ form.body }}</textarea></label>
+    <button class="cta" type="submit">{% render 'bi', en: 'Send', ar: 'ابعت' %}</button>
+  {%- endform -%}
+</div>
+{% schema %}{ "name": "Contact form", "tag": "div" }{% endschema %}

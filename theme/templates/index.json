@@ -1,0 +1,133 @@
+{
+  "sections": {
+    "feed": {
+      "type": "oka-home",
+      "blocks": {
+        "bundle-1": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/1_e837ee23-f89a-4575-a040-145c02960102.png",
+            "collection": "hookahs",
+            "variant_ids": "47026198217002,49400093081898,49400060805418,46037718303018",
+            "button_en": "Add bundle to cart",
+            "button_ar": "عبيلي العرض فالشنطة",
+            "image_ar": "shopify://shop_images/4_93108f1f-34f9-4224-a8b8-eedd7f5e3b73.png"
+          }
+        },
+        "bundle-2": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/3_38369644-1b55-46a5-82a3-b737d078e7fe.png",
+            "collection": "hookahs",
+            "variant_ids": "47026198217002,49371416363306,49400093081898,49400060805418,46037718303018",
+            "button_en": "Add bundle to cart",
+            "button_ar": "عبيلي العرض فالشنطة",
+            "image_ar": "shopify://shop_images/6.png"
+          }
+        },
+        "banner-premium": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/Copy_of_Your_paragraph_text.png",
+            "before": "oka-basic-hookahs-copy"
+          }
+        },
+        "banner-parties-1": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/1_7afffa90-7771-481e-b8df-384590df3f7e.png",
+            "before": "oka-parties",
+            "image_ar": "shopify://shop_images/2_87ac362f-513f-4cbf-91b0-ae1c3e536601.png"
+          }
+        },
+        "banner-parties-2": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/2_91efa2d1-41e9-4649-83ec-e145bdb9b254.png",
+            "before": "oka-parties",
+            "image_ar": "shopify://shop_images/5_30e221f5-048a-4e07-a869-102f2f77eb09.png"
+          }
+        },
+        "banner-dark-tobacco": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/1_bbc68db1-54d8-4cd1-84a8-e4c90af8a693.png",
+            "before": "dark-tobacco",
+            "image_ar": "shopify://shop_images/2_582d8f7a-2d57-40c3-8e4a-07275d2f0b09.png"
+          }
+        },
+        "banner-bowls": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/Copy_of_OKA_-_1.png",
+            "before": "ready-to-smoke-bowls",
+            "image_ar": "shopify://shop_images/Copy_of_OKA_-_2.png"
+          }
+        },
+        "banner-parts": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/1_e3f61bcf-4efd-419c-9a50-0efcb0f264fe.png",
+            "before": "oka-parts",
+            "image_ar": "shopify://shop_images/2_a9fdbefc-6b0c-4276-84c4-d2e915cfc9f5.png"
+          }
+        },
+        "cobra-slider": {
+          "type": "compare",
+          "settings": {
+            "before_image": "shopify://shop_images/1_c9081114-663b-461a-9d9a-7f610c512a91.png",
+            "after_image": "shopify://shop_images/2_c998b195-330f-4ccf-8095-157512d0d7dd.png",
+            "before": "oka-cobra"
+          }
+        },
+        "customer-photos": {
+          "type": "ribbon",
+          "settings": {
+            "title_en": "From our customers",
+            "title_ar": "من عند عملائنا",
+            "seconds": 40,
+            "background": "#121212",
+            "image_1": "shopify://shop_images/ezgif-1-b53db8d7c8.gif",
+            "image_2": "shopify://shop_images/vlcsnap-2023-12-20-19h56m12s766.png",
+            "image_3": "shopify://shop_images/ezgif-2-8893503247.gif",
+            "image_4": "shopify://shop_images/Screenshot_2023-12-20_201651-2.png",
+            "image_5": "shopify://shop_images/Screenshot_2023-12-20_201005-enhanced.png",
+            "image_6": "shopify://shop_images/My_project-2.png",
+            "image_7": "shopify://shop_images/My_project-1.png",
+            "image_8": "shopify://shop_images/WhatsApp_Image_2023-12-20_at_19.17.55_6a1fc70f.jpg"
+          }
+        },
+        "policies": {
+          "type": "policies",
+          "settings": {
+            "title_en": "Policies",
+            "title_ar": "السياسات",
+            "note_title_en": "Refused deliveries",
+            "note_title_ar": "رفض الاستلام",
+            "note_en": "",
+            "note_ar": ""
+          }
+        }
+      },
+      "block_order": [
+        "bundle-1",
+        "bundle-2",
+        "banner-premium",
+        "banner-parties-1",
+        "banner-parties-2",
+        "cobra-slider",
+        "banner-dark-tobacco",
+        "banner-bowls",
+        "banner-parts",
+        "customer-photos",
+        "policies"
+      ],
+      "settings": {
+        "opening_screen": true
+      }
+    }
+  },
+  "order": [
+    "feed"
+  ]
+}

@@ -1,0 +1,35 @@
+{%- comment -%}
+  The original website's 3D cylindrical carousel of customer photos: a full
+  feed page with a ring of photos turning slowly (CSS 3D, assets/oka.css
+  .ribbon-*). A finger on it holds it, a sideways drag turns it, a flick
+  spins it, and a tap pauses it until the next tap (assets/oka-screens.js). Usage: {% render 'ribbon-page', block: block %}
+{%- endcomment -%}
+{%- liquid
+  assign n = 0
+  for i in (1..12)
+    assign key = 'image_' | append: i
+    if block.settings[key]
+      assign n = n | plus: 1
+    endif
+  endfor
+-%}
+{%- if n > 0 -%}
+  <section class="page ribbon-page" data-ribbon style="--n: {{ n }}; --spin: {{ block.settings.seconds | default: 40 }}s; --stage: {{ block.settings.background | default: '#121212' }}" {{ block.shopify_attributes }}>
+    <h2 class="ribbon-title">{% render 'bi', en: block.settings.title_en, ar: block.settings.title_ar %}</h2>
+    <div class="ribbon-stage">
+      <div class="ribbon-ring" data-ribbon-ring>
+        {%- assign k = 0 -%}
+        {%- for i in (1..12) -%}
+          {%- assign key = 'image_' | append: i -%}
+          {%- assign img = block.settings[key] -%}
+          {%- if img -%}
+            <button class="ribbon-item" style="--i: {{ k }}" data-ribbon-item="{{ k }}" aria-label="{{ img.alt | default: 'Customer photo' | escape }}">
+              {{ img | image_url: width: 500 | image_tag: alt: '', loading: 'lazy', draggable: 'false' }}
+            </button>
+            {%- assign k = k | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}

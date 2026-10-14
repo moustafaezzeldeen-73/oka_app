@@ -1,0 +1,31 @@
+{%- comment -%}
+  Which of the theme's collections have something to show, as ",handle,handle,".
+
+  An empty collection is hidden everywhere it would appear — the home feed,
+  categories, search, the app data — and comes back on its own as soon as it
+  has an active (published) product again; no setting to flip.
+
+  dedupe: true  — the home feed shows each product only under the first
+                  collection that has it, so a collection whose products all
+                  appeared earlier is empty *there* and is hidden too.
+
+  Usage:
+    {%- capture live -%}{% render 'live-collections', dedupe: true %}{%- endcapture -%}
+    {%- assign probe = ',' | append: c.handle | append: ',' -%}
+    {%- if live contains probe -%} … {%- endif -%}
+{%- endcomment -%}
+{%- assign seen = ',' -%}
+{%- assign out = ',' -%}
+{%- for c in settings.oka_collections -%}
+  {%- assign n = 0 -%}
+  {%- for p in c.products limit: 50 -%}
+    {%- if dedupe -%}
+      {%- assign probe = ',' | append: p.handle | append: ',' -%}
+      {%- if seen contains probe -%}{%- continue -%}{%- endif -%}
+      {%- assign seen = seen | append: p.handle | append: ',' -%}
+    {%- endif -%}
+    {%- assign n = n | plus: 1 -%}
+  {%- endfor -%}
+  {%- if n > 0 -%}{%- assign out = out | append: c.handle | append: ',' -%}{%- endif -%}
+{%- endfor -%}
+{{- out -}}

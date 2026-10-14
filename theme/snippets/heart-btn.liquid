@@ -1,0 +1,6 @@
+{%- comment -%}
+  The wishlist heart on a product card. assets/oka.js toggles it (and every
+  other heart for the same product) and keeps it filled when saved.
+  Usage: {% render 'heart-btn', handle: p.handle %}
+{%- endcomment -%}
+<button class="heart-btn" data-heart="{{ handle | escape }}" aria-label="Save to wishlist"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.6-9.2C.9 8 2.6 4 6.4 4c2.3 0 3.9 1.4 5.6 3.5C13.7 5.4 15.3 4 17.6 4c3.8 0 5.5 4 4 7.3-2.1 4.6-9.6 9.2-9.6 9.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>

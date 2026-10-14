@@ -1,0 +1,56 @@
+# Render blueprint for the OKA order service (server/). Secrets are marked
+# sync: false — Render asks for them when the blueprint is applied; they are
+# never stored in this file.
+services:
+  - type: web
+    name: oka-order-service
+    runtime: node
+    region: frankfurt
+    plan: starter
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: SHOPIFY_STORE_DOMAIN
+        value: 756009.myshopify.com
+      - key: SHOPIFY_API_VERSION
+        value: 2026-07
+      - key: SHOPIFY_ADMIN_ACCESS_TOKEN
+        sync: false
+      - key: SHOPIFY_APP_PROXY_SECRET
+        sync: false
+      - key: JT_CONNECTOR_URL
+        sync: false
+      - key: JT_CONNECTOR_TOKEN
+        sync: false
+      - key: JT_API_BASE_URL
+        value: https://openapi.jtjms-eg.com/webopenplatformapi
+      - key: JT_API_ACCOUNT
+        sync: false
+      - key: JT_PRIVATE_KEY
+        sync: false
+      - key: JT_CUSTOMER_CODE
+        sync: false
+      - key: JT_CUSTOMER_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      # The website signs each signed-in customer with this (auth/storefront.js).
+      # Copy the generated value into Theme settings → Order service →
+      # Storefront key.
+      - key: STOREFRONT_TOKEN_SECRET
+        generateValue: true
+      # The storefront origins allowed to call this service from the browser.
+      - key: ALLOWED_ORIGIN
+        value: https://www.okaegypt.com,https://okaegypt.com,https://756009.myshopify.com
+      # One instance runs the background jobs (subscriptions, notifications,
+      # loyalty). Leave false until you mean this deployment to be that one.
+      - key: JOBS_ENABLED
+        value: "false"
+      - key: OTP_PROVIDER
+        value: whatsapp

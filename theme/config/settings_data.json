@@ -1,0 +1,39 @@
+{
+  "current": {
+    "default_lang": "ar",
+    "age_gate": true,
+    "oka_collections": [
+      "oka-basic-hookahs-copy",
+      "oka-parties",
+      "oka-cobra",
+      "dark-tobacco",
+      "ready-to-smoke-bowls",
+      "oka-parts",
+      "hookahs",
+      "hoses",
+      "coal",
+      "bowls"
+    ],
+    "tier_threshold": 300,
+    "fee_metro_under": 60,
+    "fee_metro_over": 36,
+    "fee_delta_under": 70,
+    "fee_delta_over": 46,
+    "fee_far_under": 80,
+    "fee_far_over": 56,
+    "min_order": 0,
+    "points_per_egp": 10,
+    "earn_points_per_egp": 1,
+    "subscription_discount": 5,
+    "whatsapp": "",
+    "proxy_path": "",
+    "tracking_url": "https://www.jtexpress-eg.com/"
+  },
+  "presets": {
+    "Default": {
+      "default_lang": "ar",
+      "age_gate": true,
+      "min_order": 0
+    }
+  }
+}

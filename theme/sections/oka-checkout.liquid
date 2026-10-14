@@ -1,0 +1,14 @@
+{%- comment -%}
+  CheckoutScreen.js — the review step: what's coming, when, where to, how
+  it's paid, and the total. "Place Order" continues to Shopify's checkout,
+  which charges the store's own shipping rate for the address.
+{%- endcomment -%}
+<div class="screen fade-in" data-screen="checkout">
+  {% render 'screen-header', en: 'Checkout', ar: 'الدفع', back: routes.cart_url %}
+  <div data-checkout-root></div>
+</div>
+<div class="place-bar" data-place-bar hidden>
+  <button class="cta bold" data-place>{% render 'bi', en: 'Place Order', ar: 'أكّد الطلب' %}</button>
+</div>
+<script type="application/json" data-cart-json>{{ cart | json }}</script>
+{% schema %}{ "name": "Checkout review", "tag": "div" }{% endschema %}

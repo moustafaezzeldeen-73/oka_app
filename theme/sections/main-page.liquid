@@ -1,0 +1,5 @@
+<div class="screen fade-in" data-screen="page">
+  {% render 'screen-header', en: page.title, ar: page.title %}
+  <div class="rte">{{ page.content }}</div>
+</div>
+{% schema %}{ "name": "Page", "tag": "div" }{% endschema %}

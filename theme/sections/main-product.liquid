@@ -1,0 +1,205 @@
+{%- comment -%}
+  PdpScreen.js — gallery hero, detail card, related rail, sticky buy bar.
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign v = p.selected_or_first_available_variant
+  if v.inventory_management == 'shopify' and v.inventory_policy == 'deny'
+    assign stock = v.inventory_quantity | at_least: 0
+  elsif p.available
+    assign stock = 99
+  else
+    assign stock = 0
+  endif
+  assign price_egp = v.price | divided_by: 100.0 | round
+  assign desc_en = p.description | strip_html | strip
+  assign desc_ar = p.metafields.oka.description_ar.value | default: desc_en | strip_html
+  assign points = price_egp | times: settings.earn_points_per_egp | floor
+  assign model = p.media | where: 'media_type', 'model' | first
+  assign videos = p.media | where: 'media_type', 'video'
+  assign ext_videos = p.media | where: 'media_type', 'external_video'
+  assign ar_url = p.url | append: '?view=ar'
+  assign glb = ''
+  assign usdz = ''
+  if model
+    for src in model.sources
+      if src.format == 'glb'
+        assign glb = src.url
+      elsif src.format == 'usdz'
+        assign usdz = src.url
+      endif
+    endfor
+  endif
+-%}
+{%- capture story -%}{% render 'pdp-story', p: p %}{%- endcapture -%}
+<div class="screen fade-in" data-screen="product"
+  data-handle="{{ p.handle }}" data-variant="{{ v.id }}" data-price="{{ price_egp }}" data-stock="{{ stock }}"
+  data-available="{{ p.available }}" data-url="{{ shop.url }}{{ p.url }}">
+
+  <div class="snap-pg pdp-top">
+  <div class="pdp-hero">
+    <div class="pdp-gallery hscroll" data-gallery>
+      {%- for img in p.images limit: 10 -%}
+        <div>{{ img | image_url: width: 1000 | image_tag: alt: p.title, loading: 'eager', sizes: '430px' }}</div>
+      {%- else -%}
+        <div></div>
+      {%- endfor -%}
+    </div>
+    {%- if p.images.size > 1 -%}
+      <div class="dots" data-dots>{% for img in p.images limit: 10 %}<i class="dot{% if forloop.first %} on{% endif %}"></i>{% endfor %}</div>
+    {%- endif -%}
+    <div class="pdp-fade"></div>
+    {%- if model -%}
+      <a class="pdp-3d press" href="{{ ar_url }}">{% render 'bi', en: '3D · AR', ar: '٣D · AR' %}</a>
+    {%- endif -%}
+    <div class="pdp-btns">
+      <button class="circle-38 flip" data-back="{{ routes.root_url }}" aria-label="Back">{% render 'icon', name: 'chevron-left' %}</button>
+      <div>
+        <button class="circle-38" data-share aria-label="Share">↗</button>
+        <button class="circle-38" data-wish aria-label="Wishlist">{% render 'icon', name: 'heart' %}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pdp-card">
+    <div class="pdp-titlerow">
+      <h1 class="pdp-title">{% render 'ptitle', p: p %}</h1>
+      <div>
+        <div class="pdp-price">{% render 'price', cents: v.price %}</div>
+        {%- if v.compare_at_price > v.price -%}<div class="pdp-compare">{% render 'price', cents: v.compare_at_price %}</div>{%- endif -%}
+      </div>
+    </div>
+    <div class="pdp-stock">
+      {%- if stock == 0 -%}{% render 'bi', en: 'Out of stock', ar: 'خلصان' %}
+      {%- elsif stock <= 5 -%}<span class="l-en">Only {{ stock }} left</span><span class="l-ar">فاضل {% render 'ar-digits', s: stock %} بس</span>
+      {%- else -%}{% render 'bi', en: 'In stock', ar: 'متوفر' %}{%- endif -%}
+    </div>
+
+    <div class="ship-box">
+      <div class="progress"><i data-ship-pct style="width:0"></i></div>
+      <div class="ship-txt" data-ship-txt>&nbsp;</div>
+    </div>
+
+    <div class="section-label">{% render 'bi', en: 'Customize', ar: 'اختار' %}</div>
+    <div class="qty-row">
+      <span class="qty-label">{% render 'bi', en: 'Quantity', ar: 'العدد' %}</span>
+      <div class="stepper">
+        <button class="step-btn" data-qty="-1" aria-label="Less">–</button>
+        <span class="step-qty" data-qty-val>1</span>
+        <button class="step-btn" data-qty="1" aria-label="More">+</button>
+      </div>
+    </div>
+
+    <div class="pdp-block">
+      <div class="spread"><span class="deliver">{% render 'bi', en: 'Estimated delivery', ar: 'هيوصلك إمتى' %}</span><span class="deliver-muted" data-eta></span></div>
+      <div class="spread" style="margin-top:6px"><span class="fee">{% render 'bi', en: 'Shipping fee', ar: 'مصاريف الشحن' %}</span><span class="fee" data-fee></span></div>
+      <div class="pay">{% render 'bi', en: 'Cash on delivery', ar: 'كاش عند الاستلام' %}</div>
+    </div>
+
+    {%- if story == blank -%}
+    <div class="pdp-block">
+      <div class="section-label">{% render 'bi', en: 'Description', ar: 'التفاصيل' %}</div>
+      <div class="desc">{% render 'bi', en: desc_en, ar: desc_ar %}</div>
+    </div>
+    {%- endif -%}
+
+    <div class="points-box">
+      <span class="l-en">Earn ~{{ points }} points when delivered</span><span class="l-ar">هتاخد ~{% render 'ar-digits', s: points %} نقطة لما يوصلك</span>
+    </div>
+  </div>
+
+  </div>
+
+  {%- comment -%}
+    The AR section: a full screen of its own. When the scroll settles on it, the camera opens by
+    itself and the product is placed in the live view (assets/oka-screens.js → arView). The phone's
+    real-size AR is one tap on its button; browsers don't allow starting it from a scroll.
+  {%- endcomment -%}
+  {%- if glb != '' -%}
+    <section class="snap-pg ar-screen ar-inline" data-ar-view data-glb="{{ glb }}" data-usdz="{{ usdz }}" data-title="{{ p.title | escape }}">
+      <video class="arx-cam" data-ar-cam muted playsinline autoplay hidden></video>
+      <div class="arx-reticle" data-ar-reticle hidden><i></i></div>
+      <div class="arx-stage" data-ar-stage>
+        {%- if p.featured_image -%}<img class="arx-fallback" data-ar-photo src="{{ p.featured_image | image_url: width: 700 }}" alt="{{ p.title | escape }}" loading="lazy">{%- endif -%}
+        <div class="arx-loading" data-ar-loading>{% render 'bi', en: 'Scroll here to see it in your space', ar: 'وقف هنا وشوفها في مكانك' %}</div>
+      </div>
+      <div class="arx-top">
+        <div class="arx-chip" data-ar-status><i></i><span data-ar-status-text>{% render 'bi', en: 'Your space', ar: 'في مكانك' %}</span></div>
+        <a class="arx-circle press" href="{{ ar_url }}" aria-label="Full screen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="arx-panel">
+        <button class="arx-live press" data-ar-live>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="#1d1d1f" stroke-width="1.7" stroke-linejoin="round"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9" stroke="#1d1d1f" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          {% render 'bi', en: 'Real size on your table (AR)', ar: 'بحجمها الحقيقي على الترابيزة (AR)' %}
+        </button>
+        <p class="arx-hint">{% render 'bi', en: 'Tap anywhere on the camera to place it on your floor or table', ar: 'دوس في أي حتة على الكاميرا عشان تحطها على الأرض أو الترابيزة' %}</p>
+      </div>
+    </section>
+  {%- elsif model -%}
+    <a class="ar-card press" href="{{ ar_url }}">
+      <span class="ar-card-cube"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+      <span class="ar-card-txt"><b>{% render 'bi', en: 'See it in your space', ar: 'شوفها في مكانك' %}</b><span>{% render 'bi', en: 'Real size, through your camera — or spin it in 3D', ar: 'بحجمها الحقيقي بكاميرا موبايلك — أو لفّها ٣D' %}</span></span>
+      <span class="ar-card-go flip">{% render 'icon', name: 'chevron-right', px: 16 %}</span>
+    </a>
+  {%- endif -%}
+
+  {%- if videos.size > 0 or ext_videos.size > 0 -%}
+    <section class="snap-pg pdp-reel-wrap">
+      <div class="related-label">{% render 'bi', en: 'Watch it', ar: 'اتفرّج عليها' %}</div>
+      <div class="pdp-reel hscroll" data-reel>
+        {%- for m in videos -%}
+          <div class="reel-item" data-reel-item>
+            {{ m | video_tag: muted: true, loop: true, controls: false, preload: 'metadata', playsinline: true, image_size: '720x' }}
+            <button class="reel-sound" data-reel-sound aria-label="Sound">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="#fff"/><path class="reel-x" d="M16 9l5 6M21 9l-5 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path class="reel-w" d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        {%- endfor -%}
+        {%- for m in ext_videos -%}
+          <div class="reel-item ext">{{ m | external_video_tag }}</div>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {{ story }}
+
+  <div class="snap-pg" data-related style="padding-top:22px" hidden>
+    <div class="related-label">{% render 'bi', en: 'Goes well with it', ar: 'بيتاخد معاه' %}</div>
+    <div class="related hscroll" data-related-list></div>
+  </div>
+  <div style="height:100px"></div>
+</div>
+
+<div class="buy-bar">
+  <a href="{{ routes.cart_url }}" class="cart-btn" aria-label="Cart">
+    {% render 'icon', name: 'cart', px: 20 %}
+    <span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span>
+  </a>
+  {%- if p.available -%}
+    <button class="cta glow buy-cta" data-buy>
+      <span>{% render 'bi', en: 'Add to Cart', ar: 'عبيلي فالشنطة' %}</span>
+      <span data-buy-price>{% render 'price', cents: v.price %}</span>
+    </button>
+  {%- else -%}
+    <div class="sold-out">{% render 'bi', en: 'Out of stock', ar: 'خلصان' %}</div>
+  {%- endif -%}
+</div>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": {{ p.title | json }},
+    "url": {{ shop.url | append: p.url | json }},
+    {% if p.featured_image %}"image": [{{ p.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}],{% endif %}
+    "description": {{ desc_en | json }},
+    "offers": {
+      "@type": "Offer",
+      "price": {{ v.price | divided_by: 100.0 | json }},
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "availability": "https://schema.org/{% if p.available %}InStock{% else %}OutOfStock{% endif %}"
+    }
+  }
+</script>
+{% schema %}{ "name": "Product", "tag": "div", "class": "pdp-section" }{% endschema %}

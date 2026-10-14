@@ -1,0 +1,271 @@
+{%- comment -%}
+  HomeScreen.js — the collection feed.
+
+  Vertical: one page per collection (CSS scroll-snap y mandatory — what the
+  prototype used, and what the app's pagingEnabled reproduces).
+  Horizontal: one notch per product.
+
+  Above the feed there is only the layout's logo bar (layout/theme.liquid),
+  which shrinks once the shopper scrolls. The collection selector strip that
+  used to sit under it was removed to give the feed the room.
+
+  The feed, top to bottom:
+    Offers       real offers only — a banner and a button that buys it
+    banners      the original website's graphic banners and the Cobra
+                 before/after slider, each a full-screen page just before the
+                 collection it introduces there
+    collections  one page each; a collection with nothing active to show is
+                 skipped (see snippets/live-collections.liquid)
+  Behaviour lives in assets/oka-screens.js (screen "home").
+{%- endcomment -%}
+{%- capture live -%}{% render 'live-collections', dedupe: true %}{%- endcapture -%}
+<div class="home fade-in" data-screen="home">
+
+  <div class="feed" data-feed>
+    {%- comment -%} The opening screen: the first banner, on its own, before the offers slider. {%- endcomment -%}
+    {%- assign opening_id = '' -%}
+    {%- if section.settings.opening_screen -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'banner' and block.settings.image -%}
+          {%- assign opening_id = block.id -%}
+          {%- render 'banner-page', block: block, eager: true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      Offers — only blocks that can actually be bought: a bundle (variant IDs)
+      or a single product. A picture with nothing to buy is advertising and
+      belongs in a Banner block, not here.
+    {%- endcomment -%}
+    {%- capture offers -%}
+      {%- assign offer_n = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type != 'offer' -%}{%- continue -%}{%- endif -%}
+        {%- liquid
+          assign bundle = block.settings.variant_ids | remove: ' '
+          assign offer_variant = block.settings.product.selected_or_first_available_variant
+          if bundle == blank and offer_variant == blank
+            continue
+          endif
+          assign offer_n = offer_n | plus: 1
+          assign ratio = 0.88
+          assign iw = 264
+          assign ih = 300
+          if block.settings.image
+            assign src = block.settings.image | image_url: width: 700
+            assign ratio = block.settings.image.aspect_ratio
+            assign iw = block.settings.image.width
+            assign ih = block.settings.image.height
+          elsif block.settings.bundled_image != blank
+            assign src = block.settings.bundled_image | asset_url
+          else
+            assign src = ''
+          endif
+          assign link = block.settings.collection.url | default: routes.collections_url
+        -%}
+        <div class="offer-slot{% if offer_n == 1 %} active{% endif %}" data-slot style="--ratio: {{ ratio }}" {{ block.shopify_attributes }}>
+          {%- liquid
+            assign load = 'lazy'
+            if offer_n < 3
+              assign load = 'eager'
+            endif
+            assign img_class = ''
+            if block.settings.image_ar
+              assign img_class = 'l-en'
+            endif
+          -%}
+          <a href="{{ link }}" class="offer-card">
+            {%- if src != '' -%}<img src="{{ src }}" alt="" width="{{ iw }}" height="{{ ih }}" loading="{{ load }}"{% if img_class != '' %} class="{{ img_class }}"{% endif %}>{%- endif -%}
+            {%- if block.settings.image_ar -%}<img src="{{ block.settings.image_ar | image_url: width: 700 }}" alt="" width="{{ block.settings.image_ar.width }}" height="{{ block.settings.image_ar.height }}" loading="{{ load }}" class="l-ar">{%- endif -%}
+          </a>
+          {%- if bundle != blank -%}
+            <button class="offer-cta" data-add-bundle="{{ bundle }}">{% render 'bi', en: block.settings.button_en, ar: block.settings.button_ar %}</button>
+          {%- else -%}
+            <button class="offer-cta" data-add="{{ offer_variant.id }}">{% render 'bi', en: 'Add to Cart', ar: 'عبيلي فالشنطة' %}</button>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- assign has_offers = false -%}
+    {%- if offers contains 'offer-slot' -%}{%- assign has_offers = true -%}{%- endif -%}
+    {%- if has_offers -%}
+      <section class="page{% if opening_id == blank %} active{% endif %}" data-i="0">
+        <h2 class="page-title">{% render 'bi', en: 'Offers', ar: 'العروض' %}</h2>
+        <div class="rail offers hscroll" data-rail>{{ offers }}</div>
+      </section>
+    {%- endif -%}
+
+    {%- comment -%} Banners whose collection isn't shown follow the Offers page. {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type != 'banner' and block.type != 'compare' -%}{%- continue -%}{%- endif -%}
+      {%- if block.id == opening_id -%}{%- continue -%}{%- endif -%}
+      {%- assign probe = ',' | append: block.settings.before.handle | append: ',' -%}
+      {%- if live contains probe -%}{%- continue -%}{%- endif -%}
+      {%- if block.type == 'banner' -%}{%- render 'banner-page', block: block -%}{%- else -%}{%- render 'compare-page', block: block -%}{%- endif -%}
+    {%- endfor -%}
+
+    {%- comment -%} One rail per collection; a product shows under the first collection that has it. {%- endcomment -%}
+    {%- assign seen = ',' -%}
+    {%- assign first_page = true -%}
+    {%- if has_offers or opening_id != blank -%}{%- assign first_page = false -%}{%- endif -%}
+    {%- for c in settings.oka_collections -%}
+      {%- assign probe = ',' | append: c.handle | append: ',' -%}
+      {%- unless live contains probe -%}{%- continue -%}{%- endunless -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.before.handle != c.handle -%}{%- continue -%}{%- endif -%}
+        {%- if block.id == opening_id -%}{%- continue -%}{%- endif -%}
+        {%- if block.type == 'banner' -%}{%- render 'banner-page', block: block -%}{%- elsif block.type == 'compare' -%}{%- render 'compare-page', block: block -%}{%- endif -%}
+      {%- endfor -%}
+      <section class="page{% if first_page %} active{% endif %}" data-i="{{ forloop.index }}">
+        {%- assign first_page = false -%}
+        <h2 class="page-title anim">{% render 'ctitle', c: c %}</h2>
+        <div class="rail prods hscroll" data-rail>
+          {%- assign first = true -%}
+          {%- for p in c.products limit: 50 -%}
+            {%- assign probe = ',' | append: p.handle | append: ',' -%}
+            {%- if seen contains probe -%}{%- continue -%}{%- endif -%}
+            {%- assign seen = seen | append: p.handle | append: ',' -%}
+            {%- assign v = p.selected_or_first_available_variant -%}
+            <div class="prod-slot{% if first %} active{% endif %}" data-slot>
+              <a href="{{ p.url }}" class="prod-card" data-tap data-variant="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %}>
+                {%- if p.featured_image -%}{{ p.featured_image | image_url: width: 500 | image_tag: alt: p.title, loading: 'lazy', draggable: 'false' }}{%- endif -%}
+              </a>
+              {% render 'heart-btn', handle: p.handle %}
+              <div class="prod-meta">
+                <div class="prod-title">{% render 'ptitle', p: p %}</div>
+                <div class="prod-price">{% render 'price', cents: v.price %}</div>
+                <div class="prod-actions">
+                  <button class="add-btn" data-add="{{ v.id }}"{% unless p.available %} data-soldout{% endunless %}>{% render 'bi', en: 'Add to cart', ar: 'عبيلي فالشنطة' %}</button>
+                  {%- comment -%}
+                    Only products with a 3D model get the AR button; add a model
+                    to a product in Shopify and its button appears by itself.
+                  {%- endcomment -%}
+                  {%- assign has_model = false -%}
+                  {%- for m in p.media -%}{%- if m.media_type == 'model' -%}{%- assign has_model = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
+                  {%- if has_model -%}
+                    <button class="ar-pill" data-ar="{{ p.handle }}">
+                      {% render 'icon', name: 'cube', px: 15 %}
+                      {% render 'bi', en: 'See it on your table', ar: 'شوفها على طرابيزتك' %}
+                    </button>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+            {%- assign first = false -%}
+          {%- endfor -%}
+        </div>
+      </section>
+    {%- endfor -%}
+
+    {%- comment -%} Customer photos — the original website's 3D carousel, last in the feed. {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'ribbon' -%}{%- render 'ribbon-page', block: block -%}{%- endif -%}
+    {%- endfor -%}
+
+    {%- comment -%} Policies and the refused-delivery notice — the very last page. {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'policies' -%}{%- render 'policies-page', block: block -%}{%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "OKA feed",
+  "tag": "div",
+  "class": "home-section",
+  "max_blocks": 30,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "opening_screen",
+      "label": "Show the first banner as the opening screen",
+      "info": "The first Banner block gets the first full screen, before the offers slider.",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "offer",
+      "name": "Offer",
+      "settings": [
+        { "type": "paragraph", "content": "Only offers that can be bought appear: set bundle variant IDs or a product. A picture alone belongs in a Banner block." },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "image_picker", "id": "image_ar", "label": "Arabic image", "info": "Shown on the Arabic site instead. Leave empty to use the same image." },
+        { "type": "text", "id": "bundled_image", "label": "Bundled image (theme asset)", "info": "Used when no image is picked, e.g. promo1.jpg" },
+        { "type": "collection", "id": "collection", "label": "Opens collection" },
+        { "type": "product", "id": "product", "label": "Add to Cart adds", "info": "One product. Ignored when bundle variant IDs are set." },
+        { "type": "text", "id": "variant_ids", "label": "Bundle variant IDs", "info": "Comma-separated. The button adds all of them at once — the website's bundle offers." },
+        { "type": "text", "id": "button_en", "label": "Bundle button (English)", "default": "Add bundle to cart" },
+        { "type": "text", "id": "button_ar", "label": "Bundle button (Arabic)", "default": "عبيلي العرض فالشنطة" }
+      ]
+    },
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Shown full screen." },
+        { "type": "image_picker", "id": "image_ar", "label": "Arabic image", "info": "Shown on the Arabic site instead. Leave empty to use the same image." },
+        { "type": "collection", "id": "before", "label": "Show before collection", "info": "The banner gets its own page just before this collection. Not shown: it follows the Offers page." },
+        { "type": "url", "id": "link", "label": "Opens", "info": "Defaults to the collection above." },
+        { "type": "text", "id": "variant_ids", "label": "Bundle variant IDs (optional)", "info": "Comma-separated. Adds a button that puts all of them in the cart." },
+        { "type": "text", "id": "button_en", "label": "Button (English)", "default": "Add to Cart" },
+        { "type": "text", "id": "button_ar", "label": "Button (Arabic)", "default": "عبيلي فالشنطة" }
+      ]
+    },
+    {
+      "type": "compare",
+      "name": "Before / after slider",
+      "settings": [
+        { "type": "image_picker", "id": "before_image", "label": "Before image" },
+        { "type": "image_picker", "id": "after_image", "label": "After image" },
+        { "type": "image_picker", "id": "before_image_ar", "label": "Before image (Arabic)", "info": "Optional — for the Arabic site." },
+        { "type": "image_picker", "id": "after_image_ar", "label": "After image (Arabic)", "info": "Optional — for the Arabic site." },
+        { "type": "collection", "id": "before", "label": "Show before collection" },
+        { "type": "url", "id": "link", "label": "Opens", "info": "Defaults to the collection above." }
+      ]
+    },
+    {
+      "type": "policies",
+      "name": "Policies",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "The feed's last page: links to the store policies (Settings → Policies in Shopify admin), in English or Arabic. Policy terms belong in the policies themselves; the notice is optional, for short announcements." },
+        { "type": "text", "id": "title_en", "label": "Title (English)", "default": "Policies" },
+        { "type": "text", "id": "title_ar", "label": "Title (Arabic)", "default": "السياسات" },
+        { "type": "text", "id": "note_title_en", "label": "Notice heading (English)", "default": "Refused deliveries" },
+        { "type": "text", "id": "note_title_ar", "label": "Notice heading (Arabic)", "default": "رفض الاستلام" },
+        { "type": "textarea", "id": "note_en", "label": "Notice (English)" },
+        { "type": "textarea", "id": "note_ar", "label": "Notice (Arabic)" }
+      ]
+    },
+    {
+      "type": "ribbon",
+      "name": "Customer photos carousel",
+      "limit": 2,
+      "settings": [
+        { "type": "paragraph", "content": "A full-screen 3D ring of customer photos and GIFs, turning slowly — the original website's bottom section. Shown at the end of the feed." },
+        { "type": "text", "id": "title_en", "label": "Title (English)", "default": "From our customers" },
+        { "type": "text", "id": "title_ar", "label": "Title (Arabic)", "default": "من عند عملائنا" },
+        { "type": "range", "id": "seconds", "label": "Seconds per turn", "min": 10, "max": 90, "step": 5, "default": 40 },
+        { "type": "color", "id": "background", "label": "Background", "default": "#121212" },
+        { "type": "image_picker", "id": "image_1", "label": "Photo 1" },
+        { "type": "image_picker", "id": "image_2", "label": "Photo 2" },
+        { "type": "image_picker", "id": "image_3", "label": "Photo 3" },
+        { "type": "image_picker", "id": "image_4", "label": "Photo 4" },
+        { "type": "image_picker", "id": "image_5", "label": "Photo 5" },
+        { "type": "image_picker", "id": "image_6", "label": "Photo 6" },
+        { "type": "image_picker", "id": "image_7", "label": "Photo 7" },
+        { "type": "image_picker", "id": "image_8", "label": "Photo 8" },
+        { "type": "image_picker", "id": "image_9", "label": "Photo 9" },
+        { "type": "image_picker", "id": "image_10", "label": "Photo 10" },
+        { "type": "image_picker", "id": "image_11", "label": "Photo 11" },
+        { "type": "image_picker", "id": "image_12", "label": "Photo 12" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "OKA feed" }]
+}
+{% endschema %}
