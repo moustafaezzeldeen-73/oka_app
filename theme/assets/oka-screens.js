@@ -1423,10 +1423,16 @@
         <div class="guest-order">
           <div class="guest-detail-head"><div><div class="guest-last-k">${esc(L('Your last order', 'آخر طلب ليك'))}</div><b class="nums">${esc(view.orderNumber || (view.placedAt ? new Date(view.placedAt).toLocaleDateString(O.lang() === 'ar' ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'short' }) : ''))}</b></div>
             <span class="order-state ${view.status === 'cancelled' ? 'red' : view.status === 'shipped' ? 'green' : ''}">${esc(L(...st))}</span></div>
-          <div class="items" style="padding:10px 0">${(view.items || []).map((it) => `
-            <div class="item-row"><div class="item-img">${img(it.image)}</div>
+          <div class="items" style="padding:10px 0">${(view.items || []).map((it) => {
+            const live = view.canEdit && !view.snapshot && it.variantId;
+            return `
+            <div class="item-row"${live ? ` data-g-item="${esc(it.variantId)}"` : ''}><div class="item-img">${img(it.image)}</div>
               <div style="flex:1;min-width:0"><div class="item-title">${esc(it.title)}</div>
-                <div class="item-qty">${esc([it.variant && it.variant !== 'Default Title' ? it.variant : '', `× ${num(it.quantity)}`, fmtPrice(it.unitPrice * it.quantity)].filter(Boolean).join(' · '))}</div></div></div>`).join('')}</div>
+                <div class="item-qty">${esc(live
+                  ? [it.variant && it.variant !== 'Default Title' ? it.variant : '', fmtPrice(it.unitPrice * it.quantity)].filter(Boolean).join(' · ')
+                  : [it.variant && it.variant !== 'Default Title' ? it.variant : '', `× ${num(it.quantity)}`, fmtPrice(it.unitPrice * it.quantity)].filter(Boolean).join(' · '))}</div></div>
+              ${live ? stepper(it.quantity, { size: 28, fs: 14, gap: 8 }) : ''}</div>`;
+          }).join('')}</div>
           <div class="guest-addr">
             <div class="guest-last-k">${esc(L('Delivering to', 'هيتوصّل على'))}</div>
             <div><b>${esc(a.name || '')}</b> · <span class="nums">${esc(view.phone || a.phone || '')}</span></div>
@@ -1474,18 +1480,20 @@
     }
 
     box.addEventListener('click', async (e) => {
-      const edit = e.target.closest('[data-g-edit]');
+      const itemStep = e.target.closest('[data-g-item] [data-step]');
+      const edit = e.target.closest('[data-g-edit]') || (itemStep && $('[data-g-edit]', box));
       const cancel = e.target.closest('[data-g-cancel]');
       if (!edit && !cancel) return;
       if (edit) {
         if (edit.classList.contains('busy')) return;
+        const preset = itemStep ? { variantId: itemStep.closest('[data-g-item]').dataset.gItem, delta: Number(itemStep.dataset.step) } : null;
         edit.classList.add('busy');
         try {
           view = await ordersApi('customer_get_order', auth);
           render();
           if (!view.canCancel) return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error(view.cancelled ? 'already cancelled' : 'being prepared for shipping'));
-          openEditOrder(auth, view, (updated) => { view = updated; render(); });
-        } catch (err) { ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), err); } finally { edit.classList.remove('busy'); }
+          openEditOrder(auth, view, (updated) => { view = updated; render(); }, preset);
+        } catch (err) { ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), err); } finally { $('[data-g-edit]', box)?.classList.remove('busy'); }
         return;
       }
       O.okaAlert(L('Cancel order?', 'تلغي الطلب؟'), L(`Are you sure? Order ${view.orderNumber} will be cancelled and this can’t be undone.`, `متأكد؟ الطلب ${view.orderNumber} هيتلغي ومينفعش نرجّعه.`), [
@@ -1522,6 +1530,18 @@
       $$('[data-eta]', det).forEach((el) => { el.textContent = eta; });
     };
     details.forEach(fillEta);
+
+    // While an order can still change, each item gets the website's −/+ (it opens the edit sheet with that change made).
+    const dropSteppers = (det) => $$('[data-oi]', det).forEach((row) => { row.querySelector('.stepper')?.remove(); row.removeAttribute('data-oi'); });
+    if (hasOrdersApi()) details.forEach((det) => {
+      if (det.dataset.fulfilled === 'true' || det.dataset.cancelled === 'true') return;
+      const lines = JSON.parse(det.dataset.lines || '[]');
+      $$('.items .item-row', det).forEach((row, i) => {
+        if (!lines[i] || !lines[i].quantity || !lines[i].variantId) return;
+        row.setAttribute('data-oi', String(i));
+        $('.item-price', row)?.insertAdjacentHTML('afterend', stepper(lines[i].quantity, { size: 26, fs: 14, gap: 8 }));
+      });
+    });
     onLang(() => details.forEach(fillEta));
 
     function show(name) {
@@ -1559,6 +1579,7 @@
       const det = details.find((x) => x.dataset.orderDetail === name);
       if (det) {
         det.dataset.cancelled = 'true';
+        dropSteppers(det);
         $('[data-cancelled-banner]', det).hidden = false;
         $$('.edit-btn, .cancel-btn', det).forEach((b) => { b.classList.add('disabled'); b.disabled = true; });
         $('[data-cancel-order]', det).textContent = L('Cancelled', 'ملغي');
@@ -1573,6 +1594,7 @@
       if (det.dataset.delivered === 'true') return;
       det.dataset.delivered = 'true';
       det.dataset.fulfilled = 'true';
+      dropSteppers(det);
       $('.order-actions', det)?.setAttribute('hidden', '');
       $('.shipped-note', det)?.remove();
       $('[data-actions-hint]', det)?.remove();
@@ -1585,6 +1607,7 @@
       const det = details.find((x) => x.dataset.orderDetail === name);
       if (!det) return;
       det.dataset.fulfilled = 'true';
+      dropSteppers(det);
       $$('.edit-btn, .cancel-btn', det).forEach((b) => { b.classList.add('disabled'); b.disabled = true; });
       $('[data-actions-hint]', det)?.remove();
       if (!$('.shipped-note', det)) {
@@ -1691,8 +1714,12 @@
       const cancelled = det.dataset.cancelled === 'true';
       const lines = JSON.parse(det.dataset.lines || '[]');
 
-      if (hasOrdersApi() && !shipped && !cancelled && (e.target.closest('[data-edit-order]') || e.target.closest('[data-cancel-order]'))) {
-        const btn = e.target.closest('[data-edit-order], [data-cancel-order]');
+      const itemStep = e.target.closest('[data-oi] [data-step]');
+      if (hasOrdersApi() && !shipped && !cancelled && (itemStep || e.target.closest('[data-edit-order]') || e.target.closest('[data-cancel-order]'))) {
+        const btn = itemStep ? $('[data-edit-order]', det) : e.target.closest('[data-edit-order], [data-cancel-order]');
+        if (!btn) return;
+        const line = itemStep ? lines[Number(itemStep.closest('[data-oi]').dataset.oi)] : null;
+        const preset = line ? { variantId: String(line.variantId), delta: Number(itemStep.dataset.step) } : null;
         const who = { orderNumber: name, phone: det.dataset.phone || O.customer?.phone || '' };
         const onApiError = (title, err) => {
           if (SHIPPED_RE.test(errText(err))) markShipped(name);
@@ -1706,7 +1733,7 @@
             const view = await ordersApi('customer_get_order', who);
             if (view.cancelled) { markCancelled(name); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('already cancelled')); }
             if (!view.canCancel) { markShipped(name); return ordersApiFail(L('Can’t change it', 'مينفعش يتغيّر'), new Error('being prepared for shipping')); }
-            openEditOrder(who, view, () => setTimeout(() => location.reload(), 1200));
+            openEditOrder(who, view, () => setTimeout(() => location.reload(), 1200), preset);
           } catch (err) {
             onApiError(L('Can’t change it', 'مينفعش يتغيّر'), err);
           } finally { btn.classList.remove('busy'); }
@@ -1781,7 +1808,8 @@
    * nothing is saved if the price moved meanwhile. `auth` is { session } for a
    * guest's last order or { orderNumber, phone } for a signed-in customer.
    */
-  async function openEditOrder(auth, view, onSaved) {
+  /** preset: { variantId, delta } — a −/+ tapped on the order itself, applied as the sheet opens. */
+  async function openEditOrder(auth, view, onSaved, preset) {
     const { products } = await O.loadCatalogue();
     const EG_MOBILE = /^(?:\+?20|0)?1[0125]\d{8}$/;
     const orig = {
@@ -1812,6 +1840,8 @@
     const close = () => { clearTimeout(timer); scrim.remove(); sheet.remove(); };
     scrim.addEventListener('click', close);
 
+    // A product added in this edit and taken back to 0 just goes; the order's own items stay, marked removed.
+    const prune = () => { for (let i = rows.length - 1; i >= 0; i--) if (!rows[i].origVariant && rows[i].qty === 0) rows.splice(i, 1); };
     const wantedItems = () => {
       const m = new Map();
       rows.forEach((r) => { if (r.qty > 0) m.set(r.variantId, (m.get(r.variantId) || 0) + r.qty); });
@@ -1880,7 +1910,8 @@
             return `<div class="eo-pick-row">
               <div class="cat-item-img">${img(p.img)}</div>
               <div class="eo-item-meta"><div class="eo-item-title">${esc(O.ptitle(p))}</div><div class="eo-item-price">${esc(fmtPrice(p.price))}</div></div>
-              <button class="eo-add${inOrder ? ' on' : ''}" data-add-variant="${esc(p.variantId)}">${inOrder ? `✓ ${esc(num(inOrder))}` : '+'}</button>
+              ${inOrder ? `<div data-pick-variant="${esc(p.variantId)}">${stepper(inOrder, { size: 28, fs: 14, gap: 8 })}</div>`
+                : `<button class="eo-add" data-add-variant="${esc(p.variantId)}" aria-label="${esc(L('Add', 'ضيف'))}">+</button>`}
             </div>`;
           }).join('') || `<div class="awaiting" style="margin:10px 0">${esc(L('No products match.', 'مفيش منتجات بالاسم ده.'))}</div>`}
         </div>`;
@@ -1984,10 +2015,21 @@
         O.haptic.selectionTick?.();
         return render();
       }
+      const pickStep = e.target.closest('[data-pick-variant] [data-step]');
+      if (pickStep) {
+        const v = pickStep.closest('[data-pick-variant]').dataset.pickVariant;
+        const own = rows.filter((r) => r.variantId === v);
+        const r = Number(pickStep.dataset.step) > 0 ? own[0] : [...own].reverse().find((x) => x.qty > 0);
+        if (r) r.qty = Math.max(0, Math.min(20, r.qty + Number(pickStep.dataset.step)));
+        prune();
+        O.haptic.selectionTick?.();
+        return render();
+      }
       const step = e.target.closest('[data-step]');
       if (step) {
         const r = rows[Number(step.closest('[data-i]').dataset.i)];
         r.qty = Math.max(0, Math.min(20, r.qty + Number(step.dataset.step)));
+        prune();
         return requote();
       }
       if (!e.target.closest('[data-save]') || saving || !changed()) return;
@@ -2015,8 +2057,10 @@
         ordersApiFail(L('Could not save the changes', 'معرفناش نحفظ التعديلات'), err);
       }
     });
-    render();
+    const pre = preset && view.canEdit ? rows.find((r) => r.variantId === String(preset.variantId)) : null;
+    if (pre) pre.qty = Math.max(0, Math.min(20, pre.qty + Number(preset.delta)));
     app.append(scrim, sheet);
+    if (pre) requote(); else render();
   }
 
   /** Orders change only through the orders API; without its key in Theme settings there's no other route. */
