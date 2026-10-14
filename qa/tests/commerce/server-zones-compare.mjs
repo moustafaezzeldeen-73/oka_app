@@ -1,0 +1,4 @@
+// Same free-text cases through the SERVER's resolver (server/config/zones.js) for comparison with the theme's provinceOf().
+import { provinceFor } from '../../../server/config/zones.js';
+const cases = [['قاهرة',''],['Al Qahirah',''],['','Nasr City'],['','مدينة نصر'],['October',''],['','Sheikh Zayed'],['جيزة',''],['Alex',''],['Qaliubiya',''],['','القناطر الخيرية'],['','Banha'],['','Mansoura'],['Fayoum',''],['Kafr El Sheikh',''],['Menoufia',''],['بور سعيد',''],['Sharqia',''],['Sharqia','Minya al Qamh'],['Beheira','Alexandria Desert Road'],['','Tanta'],['Assiut',''],['Bani Sweif',''],['Minia',''],['','Alamein'],['شمال سينا',''],['','Arish'],['','Hurghada'],['','الغردقة']];
+for (const [province, city] of cases) console.log(JSON.stringify([province, city]), '→', provinceFor({ province, city })?.code ?? 'null');

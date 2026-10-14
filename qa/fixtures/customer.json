@@ -1,0 +1,408 @@
+{
+  "_note": "SYNTHETIC customer for the logged-in state (cookie qa_customer=1). Not a real person; addresses/phones are fake; order numbers #9000101… do not exist in the store.",
+  "id": 9000000000001,
+  "first_name": "QA",
+  "last_name": "Tester",
+  "email": "qa.tester@example.com",
+  "phone": "+201000000000",
+  "accepts_marketing": false,
+  "tags": [
+    "qa"
+  ],
+  "store_credit_cents": 2500,
+  "default_address_id": 9000000001,
+  "addresses": [
+    {
+      "id": 9000000001,
+      "country": "Egypt",
+      "country_code": "EG",
+      "zip": "",
+      "company": "",
+      "first_name": "QA",
+      "last_name": "Tester",
+      "address1": "1 Test Street",
+      "address2": "Building 1, Floor 2, Apt 3",
+      "city": "Nasr City",
+      "province": "Cairo",
+      "province_code": "C",
+      "phone": "+201000000001"
+    },
+    {
+      "id": 9000000002,
+      "country": "Egypt",
+      "country_code": "EG",
+      "zip": "",
+      "company": "",
+      "first_name": "QA",
+      "last_name": "Office",
+      "address1": "2 Sample Road",
+      "address2": "",
+      "city": "Dokki",
+      "province": "Giza",
+      "province_code": "GZ",
+      "phone": "+201000000002"
+    },
+    {
+      "id": 9000000003,
+      "country": "Egypt",
+      "country_code": "EG",
+      "zip": "",
+      "company": "",
+      "first_name": "QA",
+      "last_name": "Far",
+      "address1": "3 Example Corniche",
+      "address2": "Villa 4",
+      "city": "Aswan",
+      "province": "Aswan",
+      "province_code": "ASN",
+      "phone": ""
+    }
+  ],
+  "orders": [
+    {
+      "id": 9100000001,
+      "name": "#9000101",
+      "created_at": "2026-10-14T10:30:00.000Z",
+      "financial_status": "pending",
+      "fulfillment_status": null,
+      "cancelled": false,
+      "shipping_price": 6000,
+      "discount": 0,
+      "address": {
+        "id": 9000000001,
+        "country": "Egypt",
+        "country_code": "EG",
+        "zip": "",
+        "company": "",
+        "first_name": "QA",
+        "last_name": "Tester",
+        "address1": "1 Test Street",
+        "address2": "Building 1, Floor 2, Apt 3",
+        "city": "Nasr City",
+        "province": "Cairo",
+        "province_code": "C",
+        "phone": "+201000000001"
+      },
+      "line_items": [
+        {
+          "handle": "oka-cloud-white-hookah",
+          "variant_id": 47026198217002,
+          "product_id": 8771860955434,
+          "title": "OKA white",
+          "variant_title": null,
+          "sku": "",
+          "quantity": 1,
+          "price": 16900
+        },
+        {
+          "handle": "tobacco-bowls-blueberry-12g",
+          "variant_id": 49400093081898,
+          "product_id": 9522783486250,
+          "title": "Tobacco Bowls- Blue Cloud - 12g",
+          "variant_title": null,
+          "sku": "500",
+          "quantity": 2,
+          "price": 4900
+        }
+      ],
+      "subtotal_price": 26700,
+      "total_discounts": 0,
+      "total_price": 32700,
+      "phone": "+201000000001",
+      "email": "qa.tester@example.com"
+    },
+    {
+      "id": 9100000002,
+      "name": "#9000102",
+      "created_at": "2026-10-12T10:30:00.000Z",
+      "financial_status": "pending",
+      "fulfillment_status": "partial",
+      "cancelled": false,
+      "shipping_price": 3600,
+      "discount": 0,
+      "address": {
+        "id": 9000000001,
+        "country": "Egypt",
+        "country_code": "EG",
+        "zip": "",
+        "company": "",
+        "first_name": "QA",
+        "last_name": "Tester",
+        "address1": "1 Test Street",
+        "address2": "Building 1, Floor 2, Apt 3",
+        "city": "Nasr City",
+        "province": "Cairo",
+        "province_code": "C",
+        "phone": "+201000000001"
+      },
+      "line_items": [
+        {
+          "handle": "oka-carbon-black-hookah",
+          "variant_id": 49371416330538,
+          "product_id": 9516081381674,
+          "title": "OKA Carbon Black",
+          "variant_title": null,
+          "sku": "",
+          "quantity": 1,
+          "price": 18900,
+          "tracking": {
+            "number": "JEGQA0000000001",
+            "company": "J&T Express",
+            "url": ""
+          }
+        },
+        {
+          "handle": "steel-plate",
+          "variant_id": 50685141188906,
+          "product_id": 9910147514666,
+          "title": "Steel Plate",
+          "variant_title": null,
+          "sku": "",
+          "quantity": 1,
+          "price": 3900
+        }
+      ],
+      "subtotal_price": 22800,
+      "total_discounts": 0,
+      "total_price": 26400,
+      "phone": "+201000000001",
+      "email": "qa.tester@example.com"
+    },
+    {
+      "id": 9100000003,
+      "name": "#9000103",
+      "created_at": "2026-10-09T10:30:00.000Z",
+      "financial_status": "pending",
+      "fulfillment_status": "fulfilled",
+      "cancelled": false,
+      "shipping_price": 6000,
+      "discount": 3100,
+      "address": {
+        "id": 9000000002,
+        "country": "Egypt",
+        "country_code": "EG",
+        "zip": "",
+        "company": "",
+        "first_name": "QA",
+        "last_name": "Office",
+        "address1": "2 Sample Road",
+        "address2": "",
+        "city": "Dokki",
+        "province": "Giza",
+        "province_code": "GZ",
+        "phone": "+201000000002"
+      },
+      "line_items": [
+        {
+          "handle": "oka-cloud-white-hookah",
+          "variant_id": 47026198217002,
+          "product_id": 8771860955434,
+          "title": "OKA white",
+          "variant_title": null,
+          "sku": "",
+          "quantity": 1,
+          "price": 16900,
+          "tracking": {
+            "number": "JEGQA0000000002",
+            "company": "J&T Express",
+            "url": ""
+          }
+        },
+        {
+          "handle": "tobacco-bowls-iced-lemon-mint-12g",
+          "variant_id": 49400060805418,
+          "product_id": 9522780733738,
+          "title": "Tobacco Bowls-Iced Lemon Mint - 12g",
+          "variant_title": null,
+          "sku": "",
+          "quantity": 1,
+          "price": 4900,
+          "tracking": {
+            "number": "JEGQA0000000002",
+            "company": "J&T Express",
+            "url": ""
+          }
+        },
+        {
+          "handle": "tobacco-bowls-cola-12g",
+          "variant_id": 49399977148714,
+          "product_id": 9522776047914,
+          "title": "Tobacco Bowls-Cola- 12g",
+          "variant_title": null,
+          "sku": "",
+          "quantity": 1,
+          "price": 4900,
+          "tracking": {
+            "number": "JEGQA0000000002",
+            "company": "J&T Express",
+            "url": ""
+          }
+        },
+        {
+          "handle": "tongs",
+          "variant_id": 46037718303018,
+          "product_id": 8478737432874,
+          "title": "Tongs",
+          "variant_title": null,
+          "sku": "EX-ACC-P-01-TONGS",
+          "quantity": 1,
+          "price": 3100,
+          "discount": 3100,
+          "tracking": {
+            "number": "JEGQA0000000002",
+            "company": "J&T Express",
+            "url": ""
+          }
+        }
+      ],
+      "subtotal_price": 26700,
+      "total_discounts": 3100,
+      "total_price": 32700,
+      "phone": "+201000000002",
+      "email": "qa.tester@example.com"
+    },
+    {
+      "id": 9100000004,
+      "name": "#9000104",
+      "created_at": "2026-10-05T10:30:00.000Z",
+      "financial_status": "voided",
+      "fulfillment_status": null,
+      "cancelled": true,
+      "cancelled_at": "2026-10-06T10:30:00.000Z",
+      "cancel_reason": "customer",
+      "shipping_price": 8000,
+      "discount": 0,
+      "address": {
+        "id": 9000000003,
+        "country": "Egypt",
+        "country_code": "EG",
+        "zip": "",
+        "company": "",
+        "first_name": "QA",
+        "last_name": "Far",
+        "address1": "3 Example Corniche",
+        "address2": "Villa 4",
+        "city": "Aswan",
+        "province": "Aswan",
+        "province_code": "ASN",
+        "phone": ""
+      },
+      "line_items": [
+        {
+          "handle": "oka-cobra",
+          "variant_id": 50678215508266,
+          "product_id": 9908659585322,
+          "title": "OKA Cobra",
+          "variant_title": null,
+          "sku": "",
+          "quantity": 1,
+          "price": 18900
+        }
+      ],
+      "subtotal_price": 18900,
+      "total_discounts": 0,
+      "total_price": 26900,
+      "phone": null,
+      "email": "qa.tester@example.com"
+    },
+    {
+      "id": 9100000005,
+      "name": "#9000105",
+      "created_at": "2026-09-24T10:30:00.000Z",
+      "financial_status": "paid",
+      "fulfillment_status": "fulfilled",
+      "cancelled": false,
+      "shipping_price": 0,
+      "discount": 0,
+      "address": {
+        "id": 9000000001,
+        "country": "Egypt",
+        "country_code": "EG",
+        "zip": "",
+        "company": "",
+        "first_name": "QA",
+        "last_name": "Tester",
+        "address1": "1 Test Street",
+        "address2": "Building 1, Floor 2, Apt 3",
+        "city": "Nasr City",
+        "province": "Cairo",
+        "province_code": "C",
+        "phone": "+201000000001"
+      },
+      "line_items": [
+        {
+          "handle": "the-hexa-party",
+          "variant_id": 51548875587882,
+          "product_id": 10132254818602,
+          "title": "The Hexa Party (EGP129 each)",
+          "variant_title": null,
+          "sku": "",
+          "quantity": 1,
+          "price": 77400,
+          "tracking": {
+            "number": "JEGQA0000000003",
+            "company": "",
+            "url": "https://www.jtexpress-eg.com/"
+          }
+        }
+      ],
+      "subtotal_price": 77400,
+      "total_discounts": 0,
+      "total_price": 77400,
+      "phone": "+201000000001",
+      "email": "qa.tester@example.com"
+    },
+    {
+      "id": 9100000006,
+      "name": "#9000106",
+      "created_at": "2026-09-14T10:30:00.000Z",
+      "financial_status": "pending",
+      "fulfillment_status": null,
+      "cancelled": false,
+      "shipping_price": 7000,
+      "discount": 0,
+      "address": {
+        "id": 9000000002,
+        "country": "Egypt",
+        "country_code": "EG",
+        "zip": "",
+        "company": "",
+        "first_name": "QA",
+        "last_name": "Office",
+        "address1": "2 Sample Road",
+        "address2": "",
+        "city": "Dokki",
+        "province": "Giza",
+        "province_code": "GZ",
+        "phone": "+201000000002"
+      },
+      "line_items": [
+        {
+          "handle": "1-pcs-of-foil",
+          "variant_id": 47207342506282,
+          "product_id": 8818158272810,
+          "title": "1 Pcs of Foil",
+          "variant_title": null,
+          "sku": "",
+          "quantity": 3,
+          "price": 500
+        },
+        {
+          "handle": "premium-1-5-m-hose",
+          "variant_id": 46037717123370,
+          "product_id": 8478737105194,
+          "title": "Premium 1.5 m Hose",
+          "variant_title": null,
+          "sku": "EX-HOSE-P-01-VAR",
+          "quantity": 1,
+          "price": 4500
+        }
+      ],
+      "subtotal_price": 6000,
+      "total_discounts": 0,
+      "total_price": 13000,
+      "phone": "+201000000002",
+      "email": "qa.tester@example.com"
+    }
+  ]
+}

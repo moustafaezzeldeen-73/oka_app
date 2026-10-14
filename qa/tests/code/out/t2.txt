@@ -1,0 +1,4 @@
+cart loaded, qty of variant 111 = 2
+Add button hidden? false | stepper present? false
+BUG REPRODUCED: product is in the cart (qty 2) but its card still shows "Add" instead of − 2 +
+after an oka:cart event → Add hidden? true stepper text: 2

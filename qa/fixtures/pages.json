@@ -1,0 +1,195 @@
+[
+  {
+    "id": 125856612650,
+    "handle": "contact",
+    "title": "Contact",
+    "template_suffix": "contact",
+    "body_html": "",
+    "published": true,
+    "created_at": "2023-08-14T15:34:18Z",
+    "updated_at": "2023-08-14T15:34:18Z",
+    "translations": {
+      "ar": {
+        "title": "اتصل بنا"
+      }
+    }
+  },
+  {
+    "id": 126034870570,
+    "handle": "about-us",
+    "title": "About us",
+    "template_suffix": "about-us",
+    "body_html": "",
+    "published": true,
+    "created_at": "2023-08-16T11:47:51Z",
+    "updated_at": "2023-08-16T11:48:44Z",
+    "translations": {
+      "ar": {
+        "title": "من نحن"
+      }
+    }
+  },
+  {
+    "id": 126036017450,
+    "handle": "how-to-use",
+    "title": "How to Use",
+    "template_suffix": "how-to-use",
+    "body_html": "",
+    "published": true,
+    "created_at": "2023-08-16T12:03:56Z",
+    "updated_at": "2023-08-16T12:06:24Z",
+    "translations": {
+      "ar": {
+        "title": "دليل الاستخدام"
+      }
+    }
+  },
+  {
+    "id": 126343872810,
+    "handle": "online-store",
+    "title": "Online Store",
+    "template_suffix": "online-store",
+    "body_html": "",
+    "published": true,
+    "created_at": "2023-08-20T07:24:02Z",
+    "updated_at": "2023-08-20T07:24:07Z",
+    "translations": {
+      "ar": {
+        "title": "المتجر السريع"
+      }
+    }
+  },
+  {
+    "id": 129702592810,
+    "handle": "faq",
+    "title": "FAQ",
+    "template_suffix": "faq",
+    "body_html": "The frequently asked questions about the brand-new game changer hookah \"OKA\" , know everything you need to know about the most efficient hookah in the world.",
+    "published": true,
+    "created_at": "2023-10-01T11:18:42Z",
+    "updated_at": "2023-10-01T11:18:46Z",
+    "translations": {
+      "ar": {
+        "title": "أسئلة شائعة",
+        "body_html": "الاسئلة الاكثر شيوعا بين زوار الموقع , و مستخدمين أوكا في مصر , جمعنا كل الاستفسرات عن التطور الجديد للشيشة المحترفة في العالم"
+      }
+    }
+  },
+  {
+    "id": 166787678506,
+    "handle": "account",
+    "title": "Account",
+    "template_suffix": "oka-account",
+    "body_html": "",
+    "published": true,
+    "created_at": "2026-10-02T08:58:24Z",
+    "updated_at": "2026-10-02T08:58:24Z",
+    "translations": {
+      "ar": {}
+    }
+  },
+  {
+    "id": 166787711274,
+    "handle": "orders",
+    "title": "Orders",
+    "template_suffix": "oka-orders",
+    "body_html": "",
+    "published": true,
+    "created_at": "2026-10-02T08:58:24Z",
+    "updated_at": "2026-10-02T08:58:24Z",
+    "translations": {
+      "ar": {}
+    }
+  },
+  {
+    "id": 166787744042,
+    "handle": "addresses",
+    "title": "My addresses",
+    "template_suffix": "oka-addresses",
+    "body_html": "",
+    "published": true,
+    "created_at": "2026-10-02T08:58:24Z",
+    "updated_at": "2026-10-02T08:58:24Z",
+    "translations": {
+      "ar": {}
+    }
+  },
+  {
+    "id": 166787776810,
+    "handle": "loyalty",
+    "title": "Loyalty points",
+    "template_suffix": "oka-loyalty",
+    "body_html": "",
+    "published": true,
+    "created_at": "2026-10-02T08:58:24Z",
+    "updated_at": "2026-10-02T08:58:24Z",
+    "translations": {
+      "ar": {}
+    }
+  },
+  {
+    "id": 166787809578,
+    "handle": "subscriptions",
+    "title": "My Subscriptions",
+    "template_suffix": "oka-subscriptions",
+    "body_html": "",
+    "published": true,
+    "created_at": "2026-10-02T08:58:24Z",
+    "updated_at": "2026-10-02T08:58:24Z",
+    "translations": {
+      "ar": {}
+    }
+  },
+  {
+    "id": 166787842346,
+    "handle": "wishlist",
+    "title": "Wishlist",
+    "template_suffix": "oka-wishlist",
+    "body_html": "",
+    "published": true,
+    "created_at": "2026-10-02T08:58:24Z",
+    "updated_at": "2026-10-02T08:58:24Z",
+    "translations": {
+      "ar": {}
+    }
+  },
+  {
+    "id": 166787875114,
+    "handle": "support",
+    "title": "Help & support",
+    "template_suffix": "oka-support",
+    "body_html": "",
+    "published": true,
+    "created_at": "2026-10-02T08:58:24Z",
+    "updated_at": "2026-10-02T08:58:24Z",
+    "translations": {
+      "ar": {}
+    }
+  },
+  {
+    "id": 166787907882,
+    "handle": "checkout-review",
+    "title": "Checkout",
+    "template_suffix": "oka-checkout",
+    "body_html": "",
+    "published": true,
+    "created_at": "2026-10-02T08:58:25Z",
+    "updated_at": "2026-10-02T08:58:25Z",
+    "translations": {
+      "ar": {}
+    }
+  },
+  {
+    "id": 166892339498,
+    "handle": "track",
+    "title": "Track shipment",
+    "template_suffix": "oka-track",
+    "body_html": "",
+    "published": true,
+    "created_at": "2026-10-05T12:23:42Z",
+    "updated_at": "2026-10-05T12:23:42Z",
+    "translations": {
+      "ar": {}
+    }
+  }
+]

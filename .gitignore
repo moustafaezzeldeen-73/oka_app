@@ -17,3 +17,7 @@ web-build/
 # Subscription records — real customer data generated at runtime, not
 # something to ship in the repo. See server/services/subscriptions.js.
 server/data/
+qa/harness/node_modules/
+qa/tests/**/node_modules/
+qa/harness/out/
+qa/reports/screenshots/

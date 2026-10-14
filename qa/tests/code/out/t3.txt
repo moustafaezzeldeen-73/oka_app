@@ -1,0 +1,6 @@
+Scenario A: qty 1, tap + twice quickly (shopper wants 3)
+  /cart/change.js quantities sent: [2,2] → server qty 2 | shown 2
+  BUG REPRODUCED: one tap lost
+Scenario B: qty 2, tap + then − quickly; the + response is slower (arrives last)
+  sent: [3,1] → server ends at 3 (the last request the server processed), screen shows 3
+  Two overlapping /cart/change.js calls with no ordering — final state depends on network timing.

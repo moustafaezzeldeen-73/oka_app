@@ -1,0 +1,4 @@
+(a) portrait, keyboard closed 360x640: lock media query matches=false; .app transform=none
+(a) portrait, keyboard open (viewport shrunk) 360x300: lock media query matches=true; .app transform=matrix(0, -1, 1, 0, -150, -180)
+(a) real landscape 800x360: lock media query matches=true; .app transform=matrix(0, -1, 1, 0, -180, -400)
+(b) on the AR screen: added-bar is covered by screen ar-screen | toast is covered by arx-panel

@@ -1,0 +1,386 @@
+[
+  {
+    "id": "AG-1",
+    "scenario": "Age gate shown on first visit to /",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate count=1, title=\"عندك ١٨ سنة أو أكتر؟\"",
+    "at": "2026-10-14T21:31:29.095Z"
+  },
+  {
+    "id": "AG-2",
+    "scenario": "Age gate: is there a decline (\"No\"/\"under 18\") path?",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "buttons=[\"أيوه، عندي ١٨+\",\"English\"]; Escape leaves gate=true. No decline/exit option exists.",
+    "at": "2026-10-14T21:31:29.472Z"
+  },
+  {
+    "id": "AG-3",
+    "scenario": "Age gate blocks interaction / keyboard focus behind it",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "focus escaped gate on 6/6 Tab presses; role=null; covers viewport=true",
+    "at": "2026-10-14T21:31:29.854Z"
+  },
+  {
+    "id": "AG-4",
+    "scenario": "Age gate language button toggles language",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "ar -> en/ltr -> ar",
+    "at": "2026-10-14T21:31:30.763Z"
+  },
+  {
+    "id": "AG-5",
+    "scenario": "Accept gate → hidden, stored, not shown after reload",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "after click=0, oka.age=true, after reload=0",
+    "at": "2026-10-14T21:31:32.248Z"
+  },
+  {
+    "id": "AG-6",
+    "scenario": "localStorage cleared → gate returns",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate on /collections after clearing=1",
+    "at": "2026-10-14T21:31:33.540Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /products/oka-cobra",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:31:35.941Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /products/oka-cloud-white-hookah?view=ar",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:31:47.760Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /cart",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:31:50.703Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /pages/orders",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:31:52.571Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /search?q=x",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:31:54.401Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /nope-404",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:31:56.158Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /password",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=0, theme JS loaded=false",
+    "at": "2026-10-14T21:31:58.128Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /policies/refund-policy",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:32:00.203Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /checkout",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=0, theme JS loaded=false",
+    "at": "2026-10-14T21:32:02.236Z"
+  },
+  {
+    "id": "AG-8",
+    "scenario": "Gate with storage blocked (localStorage throws) — gate shows every page, accept still dismisses",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "shown=1 dismissed=true shown again next page=1 (expected with blocked storage) errors=[]",
+    "at": "2026-10-14T21:32:06.852Z"
+  },
+  {
+    "id": "MN-1",
+    "scenario": "Side menu opens from header ☰, aria-expanded, inert removed, focus on panel",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"open\":true,\"inert\":false,\"exp\":[\"true\",\"true\"],\"focus\":\"side-menu\",\"links\":[\"/\",\"/collections\",\"/search\",\"/cart\",\"/pages/orders\",\"/pages/account\",\"/pages/loyalty\",\"/pages/wishlist\",\"/pages/support\"]}",
+    "at": "2026-10-14T21:32:42.303Z"
+  },
+  {
+    "id": "MN-2",
+    "scenario": "Side menu closes with Escape and returns focus to opener",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"open\":false,\"inert\":true,\"focusMenuOpen\":true}",
+    "at": "2026-10-14T21:32:42.757Z"
+  },
+  {
+    "id": "MN-3",
+    "scenario": "Side menu closes via scrim tap and via ✕",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "open after scrim=false, after ✕=false",
+    "at": "2026-10-14T21:32:44.833Z"
+  },
+  {
+    "id": "MN-4",
+    "scenario": "Side menu: Tab cannot reach links while closed (inert)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "menu elements focused 0/25",
+    "at": "2026-10-14T21:32:45.915Z"
+  },
+  {
+    "id": "MN-5",
+    "scenario": "Side menu: swipe towards edge closes (touch)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "open after swipe=false",
+    "at": "2026-10-14T21:32:46.938Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → / (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "active link: just closes (open=false)",
+    "at": "2026-10-14T21:32:49.193Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /collections (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /collections; active=true; menu open after Back=false; ",
+    "at": "2026-10-14T21:32:52.630Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /search (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /search; active=true; menu open after Back=false; ",
+    "at": "2026-10-14T21:32:56.529Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /cart (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /cart; active=true; menu open after Back=false; ",
+    "at": "2026-10-14T21:33:00.318Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/orders (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/orders; active=true; menu open after Back=false; ",
+    "at": "2026-10-14T21:33:04.017Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/account (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/account; active=true; menu open after Back=false; ",
+    "at": "2026-10-14T21:33:06.528Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/loyalty (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/loyalty; active=true; menu open after Back=false; ",
+    "at": "2026-10-14T21:33:09.104Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/wishlist (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/wishlist; active=true; menu open after Back=false; ",
+    "at": "2026-10-14T21:33:11.634Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/support (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/support; active=true; menu open after Back=false; ",
+    "at": "2026-10-14T21:33:15.040Z"
+  },
+  {
+    "id": "MN-7",
+    "scenario": "Menu handle (edge) opens the menu on inner pages",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "handle visible=true, open=true",
+    "at": "2026-10-14T21:33:16.528Z"
+  },
+  {
+    "id": "LG-1",
+    "scenario": "Header language switch toggles dir/lang, label, persists across navigation",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "before=ar/rtl/EN after=en/ltr/ع/en next page=en; on /ar/ URL=ar (F-07: CONFIRMED: English does not stick on /ar/ URLs)",
+    "at": "2026-10-14T21:33:20.570Z"
+  },
+  {
+    "id": "AG-1",
+    "scenario": "Age gate shown on first visit to /",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate count=1, title=\"Are you 18 or older?\"",
+    "at": "2026-10-14T21:33:23.322Z"
+  },
+  {
+    "id": "AG-2",
+    "scenario": "Age gate: is there a decline (\"No\"/\"under 18\") path?",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "buttons=[\"Yes, I’m 18+\",\"العربية\"]; Escape leaves gate=true. No decline/exit option exists.",
+    "at": "2026-10-14T21:33:23.492Z"
+  },
+  {
+    "id": "AG-3",
+    "scenario": "Age gate blocks interaction / keyboard focus behind it",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "focus escaped gate on 6/6 Tab presses; role=null; covers viewport=true",
+    "at": "2026-10-14T21:33:23.594Z"
+  },
+  {
+    "id": "AG-4",
+    "scenario": "Age gate language button toggles language",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "en -> ar/rtl -> en",
+    "at": "2026-10-14T21:33:24.238Z"
+  },
+  {
+    "id": "AG-5",
+    "scenario": "Accept gate → hidden, stored, not shown after reload",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "after click=0, oka.age=true, after reload=0",
+    "at": "2026-10-14T21:33:25.051Z"
+  },
+  {
+    "id": "AG-6",
+    "scenario": "localStorage cleared → gate returns",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate on /collections after clearing=1",
+    "at": "2026-10-14T21:33:25.894Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /products/oka-cobra",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:33:27.065Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /products/oka-cloud-white-hookah?view=ar",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:33:32.443Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /cart",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:33:34.087Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /pages/orders",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:33:35.884Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /search?q=x",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:33:37.271Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /nope-404",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:33:38.515Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /password",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=0, theme JS loaded=false",
+    "at": "2026-10-14T21:33:40.068Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /policies/refund-policy",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-14T21:33:41.408Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /checkout",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=0, theme JS loaded=false",
+    "at": "2026-10-14T21:33:42.482Z"
+  },
+  {
+    "id": "AG-8",
+    "scenario": "Gate with storage blocked (localStorage throws) — gate shows every page, accept still dismisses",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "shown=1 dismissed=true shown again next page=1 (expected with blocked storage) errors=[]",
+    "at": "2026-10-14T21:33:45.838Z"
+  }
+]
