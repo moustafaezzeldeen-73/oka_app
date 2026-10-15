@@ -101,13 +101,21 @@ for (const device of ALL_DEVICES) for (const locale of ['ar', 'en']) {
   await step(rec, { id: 'MN-3', scenario: 'Side menu closes via scrim tap and via ✕', ctx }, async () => {
     await pg.locator('[data-menu-open]:visible').first().click(); await sleep(400);
     // tap scrim far from the panel
-    const vw = pg.viewportSize().width;
-    await pg.mouse.click(locale === 'ar' ? 15 : vw - 15, 300); await sleep(350);
+    const sb = await pg.locator('.menu-scrim').boundingBox();
+    await pg.mouse.click(locale === 'ar' ? sb.x + 15 : sb.x + sb.width - 15, 300); await sleep(350);
     const a = await pg.evaluate(() => document.querySelector('#app').classList.contains('menu-open'));
     await pg.locator('[data-menu-open]:visible').first().click(); await sleep(400);
     await pg.locator('.side-close').click(); await sleep(350);
     const b = await pg.evaluate(() => document.querySelector('#app').classList.contains('menu-open'));
     return { status: !a && !b ? 'PASS' : 'FAIL', note: `open after scrim=${a}, after ✕=${b}` };
+  });
+  if (device === 'Desktop 1440') await step(rec, { id: 'MN-3b', scenario: 'Desktop: click outside the 430px app column closes the menu', ctx }, async () => {
+    await pg.locator('[data-menu-open]:visible').first().click(); await sleep(400);
+    const vw = pg.viewportSize().width;
+    await pg.mouse.click(locale === 'ar' ? 20 : vw - 20, 300); await sleep(350);
+    const open = await pg.evaluate(() => document.querySelector('#app').classList.contains('menu-open'));
+    await pg.keyboard.press('Escape'); await sleep(300);
+    return { status: open ? 'FAIL' : 'PASS', note: `menu still open after clicking the page backdrop outside #app: ${open}` };
   });
   await step(rec, { id: 'MN-4', scenario: 'Side menu: Tab cannot reach links while closed (inert)', ctx }, async () => {
     let reached = 0;

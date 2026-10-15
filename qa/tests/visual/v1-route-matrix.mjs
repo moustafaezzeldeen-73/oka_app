@@ -10,7 +10,7 @@ const which = process.argv[2] != null ? [Number(process.argv[2])] : COMBOS.map((
 for (const ci of which) {
   const c = COMBOS[ci];
   const tag = `${c.urlLocale ? 'arurl' : 'root'}-${c.locale}-${c.loggedIn ? 'cust' : 'guest'}`;
-  const s = await launch({ baseURL: BASE, device: 'iPhone 13', locale: c.locale, urlLocale: c.urlLocale, loggedIn: c.loggedIn, agent: 'visual', externalTimeoutMs: 1500 });
+  const s = await launch({ baseURL: BASE, device: 'iPhone 13', locale: c.locale, urlLocale: false, loggedIn: c.loggedIn, agent: 'visual', externalTimeoutMs: 1500 });
   await seedCart(s);
   const rows = [];
   for (const [route, label] of ROUTES) {
@@ -18,7 +18,9 @@ for (const ci of which) {
     s.clearLogs();
     const row = { route, label, combo: tag };
     try {
-      const resp = await s.goto(route, { settle: 800 });
+      // explicit /ar prefix for both languages (pw.mjs only prefixes when locale = ar)
+      const target = c.urlLocale && !route.startsWith('/ar') && !route.startsWith('/__') ? `/ar${route}` : route;
+      const resp = await s.goto(target, { settle: 800 });
       row.status = resp?.status();
       row.template = resp?.headers()['x-qa-template'];
       row.final = new URL(s.page.url()).pathname + new URL(s.page.url()).search;

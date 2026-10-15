@@ -1,0 +1,512 @@
+{
+ "GET /pages/orders [en,customer]": {
+  "url": "/pages/orders",
+  "template": "page.oka-orders",
+  "locale": "en",
+  "loggedIn": true,
+  "status": 200,
+  "at": "2026-10-14T21:35:35.458Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 33
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 23
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'standalone' not passed to snippets/order-detail.liquid (optional render param?)",
+    "file": "snippets/order-detail.liquid",
+    "count": 6
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'px' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   }
+  ]
+ },
+ "GET /pages/x [en,customer]": {
+  "url": "/pages/x",
+  "template": "404",
+  "locale": "en",
+  "loggedIn": true,
+  "status": 404,
+  "at": "2026-10-14T21:35:41.374Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'back' not passed to snippets/screen-header.liquid (optional render param?)",
+    "file": "snippets/screen-header.liquid",
+    "count": 1
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /collections/all?view=oka-data [en,customer]": {
+  "url": "/collections/all?view=oka-data",
+  "template": "collection.oka-data",
+  "locale": "en",
+  "loggedIn": true,
+  "status": 200,
+  "at": "2026-10-14T21:35:35.934Z",
+  "counted": 0,
+  "warnings": []
+ },
+ "GET /pages/orders?order=%239000101 [en,customer]": {
+  "url": "/pages/orders?order=%239000101",
+  "template": "page.oka-orders",
+  "locale": "en",
+  "loggedIn": true,
+  "status": 200,
+  "at": "2026-10-14T21:35:41.238Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 33
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 23
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'standalone' not passed to snippets/order-detail.liquid (optional render param?)",
+    "file": "snippets/order-detail.liquid",
+    "count": 6
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'px' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   }
+  ]
+ },
+ "GET /pages/orders?order=%239000102 [en,customer]": {
+  "url": "/pages/orders?order=%239000102",
+  "template": "page.oka-orders",
+  "locale": "en",
+  "loggedIn": true,
+  "status": 200,
+  "at": "2026-10-14T21:35:37.723Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 33
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 23
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'standalone' not passed to snippets/order-detail.liquid (optional render param?)",
+    "file": "snippets/order-detail.liquid",
+    "count": 6
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'px' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   }
+  ]
+ },
+ "GET /pages/orders?order=%239000105 [en,customer]": {
+  "url": "/pages/orders?order=%239000105",
+  "template": "page.oka-orders",
+  "locale": "en",
+  "loggedIn": true,
+  "status": 200,
+  "at": "2026-10-14T21:35:38.670Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 33
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 23
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'standalone' not passed to snippets/order-detail.liquid (optional render param?)",
+    "file": "snippets/order-detail.liquid",
+    "count": 6
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'px' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 12
+   }
+  ]
+ },
+ "GET /pages/account [en,customer]": {
+  "url": "/pages/account",
+  "template": "page.oka-account",
+  "locale": "en",
+  "loggedIn": true,
+  "status": 200,
+  "at": "2026-10-14T21:35:39.594Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /pages/addresses [en,customer]": {
+  "url": "/pages/addresses",
+  "template": "page.oka-addresses",
+  "locale": "en",
+  "loggedIn": true,
+  "status": 200,
+  "at": "2026-10-14T21:35:40.420Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 14
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 7
+   }
+  ]
+ },
+ "GET /products/oka-cobra [en]": {
+  "url": "/products/oka-cobra",
+  "template": "product",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:35:43.649Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 15
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'px' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 4
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /products/x [en]": {
+  "url": "/products/x",
+  "template": "404",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 404,
+  "at": "2026-10-14T21:35:44.624Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'back' not passed to snippets/screen-header.liquid (optional render param?)",
+    "file": "snippets/screen-header.liquid",
+    "count": 1
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /collections/all?view=oka-data [en]": {
+  "url": "/collections/all?view=oka-data",
+  "template": "collection.oka-data",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:35:48.113Z",
+  "counted": 0,
+  "warnings": []
+ },
+ "GET /products/oka-cobra?view=ar [en]": {
+  "url": "/products/oka-cobra?view=ar",
+  "template": "product.ar",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:35:44.542Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'px' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 2
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /collections/hookahs [en]": {
+  "url": "/collections/hookahs",
+  "template": "collection",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:35:46.460Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'px' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 2
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET /search?q=oka [en]": {
+  "url": "/search?q=oka",
+  "template": "search",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:35:47.272Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'back' not passed to snippets/screen-header.liquid (optional render param?)",
+    "file": "snippets/screen-header.liquid",
+    "count": 1
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ },
+ "GET / [en]": {
+  "url": "/",
+  "template": "index",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 200,
+  "at": "2026-10-14T21:35:48.540Z",
+  "counted": 1,
+  "warnings": [
+   {
+    "kind": "missing-setting",
+    "class": "info",
+    "detail": "block.settings(oka-home/offer).before — not a setting of this block type (nil on Shopify)",
+    "file": "sections/oka-home.liquid",
+    "count": 12
+   },
+   {
+    "kind": "missing-setting",
+    "class": "info",
+    "detail": "block.settings(oka-home/ribbon).before — not a setting of this block type (nil on Shopify)",
+    "file": "sections/oka-home.liquid",
+    "count": 6
+   },
+   {
+    "kind": "missing-setting",
+    "class": "info",
+    "detail": "block.settings(oka-home/policies).before — not a setting of this block type (nil on Shopify)",
+    "file": "sections/oka-home.liquid",
+    "count": 6
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 27
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'eager' not passed to snippets/banner-page.liquid (optional render param?)",
+    "file": "snippets/banner-page.liquid",
+    "count": 15
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 15
+   },
+   {
+    "kind": "missing-property",
+    "class": "theme-suspect",
+    "detail": "shop.contact_information — not a documented Shopify shop property (Shopify returns nil)",
+    "file": "snippets/policies-page.liquid",
+    "count": 1
+   }
+  ]
+ },
+ "GET /x [en]": {
+  "url": "/x",
+  "template": "404",
+  "locale": "en",
+  "loggedIn": false,
+  "status": 404,
+  "at": "2026-10-14T21:35:48.605Z",
+  "counted": 0,
+  "warnings": [
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'back' not passed to snippets/screen-header.liquid (optional render param?)",
+    "file": "snippets/screen-header.liquid",
+    "count": 1
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'color' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 13
+   },
+   {
+    "kind": "undefined-variable",
+    "class": "info",
+    "detail": "'width' not passed to snippets/icon.liquid (optional render param?)",
+    "file": "snippets/icon.liquid",
+    "count": 6
+   }
+  ]
+ }
+}

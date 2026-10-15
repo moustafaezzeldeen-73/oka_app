@@ -1,0 +1,553 @@
+{
+ "phoneLandscape-90": {
+  "/": {
+   "vw": 844,
+   "vh": 390,
+   "mq": true,
+   "rot": "-90deg",
+   "transform": "matrix(0, -1, 1, 0, -195, -422)",
+   "box": [
+    0,
+    0,
+    844,
+    390
+   ],
+   "orientation": 90,
+   "screenAngle": 90,
+   "active": "BODY.t-index",
+   "hit": null
+  },
+  "/products/oka-cobra": {
+   "vw": 844,
+   "vh": 390,
+   "mq": true,
+   "rot": "-90deg",
+   "transform": "matrix(0, -1, 1, 0, -195, -422)",
+   "box": [
+    0,
+    0,
+    844,
+    390
+   ],
+   "orientation": 90,
+   "screenAngle": 90,
+   "active": "BODY.t-product",
+   "hit": {
+    "target": "circle-38",
+    "ok": true
+   }
+  },
+  "/cart": {
+   "vw": 844,
+   "vh": 390,
+   "mq": true,
+   "rot": "-90deg",
+   "transform": "matrix(0, -1, 1, 0, -195, -422)",
+   "box": [
+    0,
+    0,
+    844,
+    390
+   ],
+   "orientation": 90,
+   "screenAngle": 90,
+   "active": "BODY.t-cart",
+   "hit": {
+    "target": "line-variant",
+    "ok": true
+   }
+  },
+  "/pages/checkout-review": {
+   "vw": 844,
+   "vh": 390,
+   "mq": true,
+   "rot": "-90deg",
+   "transform": "matrix(0, -1, 1, 0, -195, -422)",
+   "box": [
+    0,
+    0,
+    844,
+    390
+   ],
+   "orientation": 90,
+   "screenAngle": 90,
+   "active": "BODY.t-page t-page-oka-checkout",
+   "hit": null
+  },
+  "menu": [
+   0,
+   0,
+   844,
+   300
+  ]
+ },
+ "phoneLandscape-270": {
+  "/": {
+   "vw": 844,
+   "vh": 390,
+   "mq": true,
+   "rot": "90deg",
+   "transform": "matrix(0, 1, -1, 0, -195, -422)",
+   "box": [
+    0,
+    0,
+    844,
+    390
+   ],
+   "orientation": -90,
+   "screenAngle": 90,
+   "active": "BODY.t-index",
+   "hit": null
+  },
+  "/products/oka-cobra": {
+   "vw": 844,
+   "vh": 390,
+   "mq": true,
+   "rot": "90deg",
+   "transform": "matrix(0, 1, -1, 0, -195, -422)",
+   "box": [
+    0,
+    0,
+    844,
+    390
+   ],
+   "orientation": -90,
+   "screenAngle": 90,
+   "active": "BODY.t-product",
+   "hit": {
+    "target": "circle-38",
+    "ok": true
+   }
+  },
+  "/cart": {
+   "vw": 844,
+   "vh": 390,
+   "mq": true,
+   "rot": "90deg",
+   "transform": "matrix(0, 1, -1, 0, -195, -422)",
+   "box": [
+    0,
+    0,
+    844,
+    390
+   ],
+   "orientation": -90,
+   "screenAngle": 90,
+   "active": "BODY.t-cart",
+   "hit": {
+    "target": "line-img",
+    "ok": true
+   }
+  },
+  "/pages/checkout-review": {
+   "vw": 844,
+   "vh": 390,
+   "mq": true,
+   "rot": "90deg",
+   "transform": "matrix(0, 1, -1, 0, -195, -422)",
+   "box": [
+    0,
+    0,
+    844,
+    390
+   ],
+   "orientation": -90,
+   "screenAngle": 90,
+   "active": "BODY.t-page t-page-oka-checkout",
+   "hit": null
+  },
+  "menu": [
+   0,
+   90,
+   844,
+   300
+  ]
+ },
+ "keyboard-phone-port": {
+  "/search": {
+   "before": {
+    "vw": 390,
+    "vh": 844,
+    "mq": false,
+    "rot": "-90deg",
+    "transform": "none",
+    "box": [
+     0,
+     0,
+     390,
+     844
+    ],
+    "orientation": 0,
+    "screenAngle": 0,
+    "active": "INPUT.search-input"
+   },
+   "after": {
+    "vw": 390,
+    "vh": 300,
+    "mq": true,
+    "rot": "-90deg",
+    "transform": "matrix(0, -1, 1, 0, -150, -195)",
+    "box": [
+     0,
+     0,
+     390,
+     300
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "INPUT.search-input"
+   },
+   "inputBox": {
+    "box": [
+     132,
+     22,
+     45,
+     256
+    ],
+    "visible": true,
+    "stillFocused": true
+   }
+  },
+  "/cart": {
+   "before": {
+    "vw": 390,
+    "vh": 844,
+    "mq": false,
+    "rot": "-90deg",
+    "transform": "none",
+    "box": [
+     0,
+     0,
+     390,
+     844
+    ],
+    "orientation": 0,
+    "screenAngle": 0,
+    "active": "INPUT.discount-input"
+   },
+   "after": {
+    "vw": 390,
+    "vh": 300,
+    "mq": true,
+    "rot": "-90deg",
+    "transform": "matrix(0, -1, 1, 0, -150, -195)",
+    "box": [
+     0,
+     0,
+     390,
+     300
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "INPUT.discount-input"
+   },
+   "inputBox": {
+    "box": [
+     483,
+     22,
+     40,
+     172
+    ],
+    "visible": false,
+    "stillFocused": true
+   }
+  },
+  "/pages/addresses?view=oka-add-address": {
+   "before": {
+    "vw": 390,
+    "vh": 844,
+    "mq": false,
+    "rot": "-90deg",
+    "transform": "none",
+    "box": [
+     0,
+     0,
+     390,
+     844
+    ],
+    "orientation": 0,
+    "screenAngle": 0,
+    "active": "INPUT.field-input"
+   },
+   "after": {
+    "vw": 390,
+    "vh": 300,
+    "mq": true,
+    "rot": "-90deg",
+    "transform": "matrix(0, -1, 1, 0, -150, -195)",
+    "box": [
+     0,
+     0,
+     390,
+     300
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "INPUT.field-input"
+   },
+   "inputBox": {
+    "box": [
+     341,
+     22,
+     45,
+     256
+    ],
+    "visible": true,
+    "stillFocused": true
+   }
+  },
+  "/pages/contact": {
+   "before": {
+    "vw": 390,
+    "vh": 844,
+    "mq": false,
+    "rot": "-90deg",
+    "transform": "none",
+    "box": [
+     0,
+     0,
+     390,
+     844
+    ],
+    "orientation": 0,
+    "screenAngle": 0,
+    "active": "TEXTAREA."
+   },
+   "after": {
+    "vw": 390,
+    "vh": 300,
+    "mq": true,
+    "rot": "-90deg",
+    "transform": "matrix(0, -1, 1, 0, -150, -195)",
+    "box": [
+     0,
+     0,
+     390,
+     300
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "TEXTAREA."
+   },
+   "inputBox": {
+    "box": [
+     394,
+     22,
+     126,
+     256
+    ],
+    "visible": false,
+    "stillFocused": true
+   }
+  }
+ },
+ "keyboard-tab-land": {
+  "/search": {
+   "before": {
+    "vw": 1180,
+    "vh": 820,
+    "mq": false,
+    "rot": "-90deg",
+    "transform": "none",
+    "box": [
+     375,
+     0,
+     430,
+     820
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "INPUT.search-input"
+   },
+   "after": {
+    "vw": 1180,
+    "vh": 450,
+    "mq": true,
+    "rot": "-90deg",
+    "transform": "matrix(0, -1, 1, 0, -225, -590)",
+    "box": [
+     0,
+     0,
+     1180,
+     450
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "INPUT.search-input"
+   },
+   "inputBox": {
+    "box": [
+     132,
+     22,
+     45,
+     406
+    ],
+    "visible": true,
+    "stillFocused": true
+   }
+  },
+  "/cart": {
+   "before": {
+    "vw": 1180,
+    "vh": 820,
+    "mq": false,
+    "rot": "-90deg",
+    "transform": "none",
+    "box": [
+     375,
+     0,
+     430,
+     820
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "INPUT.discount-input"
+   },
+   "after": {
+    "vw": 1180,
+    "vh": 450,
+    "mq": true,
+    "rot": "-90deg",
+    "transform": "matrix(0, -1, 1, 0, -225, -590)",
+    "box": [
+     0,
+     0,
+     1180,
+     450
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "INPUT.discount-input"
+   },
+   "inputBox": {
+    "box": [
+     467,
+     22,
+     40,
+     322
+    ],
+    "visible": true,
+    "stillFocused": true
+   }
+  },
+  "/pages/addresses?view=oka-add-address": {
+   "before": {
+    "vw": 1180,
+    "vh": 820,
+    "mq": false,
+    "rot": "-90deg",
+    "transform": "none",
+    "box": [
+     375,
+     0,
+     430,
+     820
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "INPUT.field-input"
+   },
+   "after": {
+    "vw": 1180,
+    "vh": 450,
+    "mq": true,
+    "rot": "-90deg",
+    "transform": "matrix(0, -1, 1, 0, -225, -590)",
+    "box": [
+     0,
+     0,
+     1180,
+     450
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "INPUT.field-input"
+   },
+   "inputBox": {
+    "box": [
+     341,
+     22,
+     45,
+     406
+    ],
+    "visible": true,
+    "stillFocused": true
+   }
+  },
+  "/pages/contact": {
+   "before": {
+    "vw": 1180,
+    "vh": 820,
+    "mq": false,
+    "rot": "-90deg",
+    "transform": "none",
+    "box": [
+     375,
+     0,
+     430,
+     820
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "TEXTAREA."
+   },
+   "after": {
+    "vw": 1180,
+    "vh": 450,
+    "mq": true,
+    "rot": "-90deg",
+    "transform": "matrix(0, -1, 1, 0, -225, -590)",
+    "box": [
+     0,
+     0,
+     1180,
+     450
+    ],
+    "orientation": 90,
+    "screenAngle": 90,
+    "active": "TEXTAREA."
+   },
+   "inputBox": {
+    "box": [
+     394,
+     22,
+     126,
+     406
+    ],
+    "visible": true,
+    "stillFocused": true
+   }
+  }
+ },
+ "noLock-desk": {
+  "vw": 1280,
+  "vh": 800,
+  "mq": false,
+  "rot": "-90deg",
+  "transform": "none",
+  "box": [
+   425,
+   0,
+   430,
+   800
+  ],
+  "screenAngle": 0,
+  "active": "BODY.t-index"
+ },
+ "noLock-tab-land": {
+  "vw": 1180,
+  "vh": 820,
+  "mq": false,
+  "rot": "-90deg",
+  "transform": "none",
+  "box": [
+   375,
+   0,
+   430,
+   820
+  ],
+  "orientation": 90,
+  "screenAngle": 90,
+  "active": "BODY.t-index"
+ }
+}

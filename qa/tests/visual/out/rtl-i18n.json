@@ -1,0 +1,3178 @@
+{
+ "enOnArUrlText": [
+  "أوكا كوبرا"
+ ],
+ "langPersistence": [
+  [
+   "start /",
+   {
+    "url": "/",
+    "lang": "ar",
+    "dir": "rtl",
+    "stored": "ar"
+   }
+  ],
+  [
+   "toggle → EN",
+   {
+    "url": "/",
+    "lang": "en",
+    "dir": "ltr",
+    "stored": "en"
+   }
+  ],
+  [
+   "navigate /collections",
+   {
+    "url": "/collections",
+    "lang": "en",
+    "dir": "ltr",
+    "stored": "en"
+   }
+  ],
+  [
+   "reload",
+   {
+    "url": "/collections",
+    "lang": "en",
+    "dir": "ltr",
+    "stored": "en"
+   }
+  ],
+  [
+   "/products/oka-cobra",
+   {
+    "url": "/products/oka-cobra",
+    "lang": "en",
+    "dir": "ltr",
+    "stored": "en"
+   }
+  ],
+  [
+   "/ar/products/oka-cobra with EN saved",
+   {
+    "url": "/ar/products/oka-cobra",
+    "lang": "ar",
+    "dir": "rtl",
+    "stored": "en"
+   }
+  ],
+  [
+   "toggle on /ar page",
+   {
+    "url": "/ar/products/oka-cobra",
+    "lang": "en",
+    "dir": "ltr",
+    "stored": "en"
+   }
+  ],
+  [
+   "side-menu Home href on /ar page",
+   "/ar"
+  ],
+  [
+   "follow Home link",
+   {
+    "url": "/ar",
+    "lang": "ar",
+    "dir": "rtl",
+    "stored": "en"
+   }
+  ]
+ ],
+ "cacheAfterArVisit": {
+  "cat0": {
+   "id": "oka-basic-hookahs-copy",
+   "en": " شيشة اوكا المتميزة ",
+   "ar": "شيشة أوكا المتميزة",
+   "url": "/ar/collections/oka-basic-hookahs-copy",
+   "img": "//localhost:9420/cdn/shop/collections/Untitled-4.webp?v=1762673989&width=200"
+  },
+  "p0": {
+   "titleEn": "أوكا فوشيا",
+   "url": "/ar/products/oka-victoria-pink-hookah"
+  }
+ },
+ "cartEnAfterAr": {
+  "state": {
+   "url": "/cart",
+   "lang": "en",
+   "dir": "ltr",
+   "stored": "en"
+  },
+  "arabicInEnglishUI": [
+   "line-title: أوكا ابيض",
+   "line-title: السما الزرقا - حجر حاهز للشرب- 12 جرام",
+   "cs-title: لمون نعناع ثلج - حجر حاهز للشرب- 12 جرام",
+   "cs-title: كماشة فحم",
+   "cs-title: سته وستين - حجر حاهز للشرب- 12 جرام",
+   "cs-title: مصفاه فحم و رأس هديه",
+   "cs-title: الفاتك بالحريم - حجر حاهز للشرب- 12 جرام",
+   "cs-title: طاسة أوكا",
+   "cs-title: البيري الاعظم - حجر حاهز للشرب- 12 جرام",
+   "cs-title: لي مخصوص",
+   "cs-title: تفاحتين - حجر حاهز للشرب- 12 جرام"
+  ],
+  "links": [
+   "/ar/products/tobacco-bowls-iced-lemon-mint-12g",
+   "/ar/products/tongs",
+   "/ar/products/tobacco-bowls-love-sixty-six-12g",
+   "/ar/products/untitled-sep8_15-46",
+   "/ar/products/tobacco-bowls-lady-killer-12g",
+   "/ar/products/steel-plate",
+   "/ar/products/tobacco-bowls-mega-berry-12g",
+   "/ar/products/premium-1-5-m-hose"
+  ]
+ },
+ "searchEnAfterAr": [
+  "gcard-title: أوكا كوبرا",
+  "gcard-title: أوكا كوبرا +  قاعدة مضيئة قابلة للشحن",
+  "gcard-title: قاعدة مضيئة قابلة للشحن"
+ ],
+ "cartEnControl": [],
+ "bidi": {
+  "ar /pages/account": [],
+  "ar /pages/addresses": [
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000002",
+    "context": "+201000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000000",
+    "context": "+201000000000",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٥",
+    "context": "٣-٥ أيام",
+    "ok": false,
+    "cls": "",
+    "dir": "rtl",
+    "bidi": "normal"
+   }
+  ],
+  "ar /pages/orders": [
+   {
+    "kind": "hash-order",
+    "text": "#9000101",
+    "context": "#9000101",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000102",
+    "context": "#9000102",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000104",
+    "context": "#9000104",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000105",
+    "context": "#9000105",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000106",
+    "context": "#9000106",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   }
+  ],
+  "ar /pages/orders?order=%239000101": [
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "السما الزرقا - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "l-ar",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "field-txt",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000101",
+    "context": "#9000101",
+    "ok": true,
+    "cls": "field-strong",
+    "dir": "rtl",
+    "bidi": "isolate"
+   }
+  ],
+  "ar /pages/orders?order=%239000102": [
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 09",
+    "context": "2026-10-13 09:15:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 18",
+    "context": "2026-10-12 18:40:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 10",
+    "context": "2026-10-12 10:05:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "field-txt",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000102",
+    "context": "#9000102",
+    "ok": true,
+    "cls": "field-strong",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "awb",
+    "text": "JEGQA0000000001",
+    "context": "JEGQA0000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "ar /pages/orders?order=%239000103": [
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "لمون نعناع ثلج - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "l-ar",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "كولا - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "l-ar",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 15:30:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 15:30:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 15",
+    "context": "2026-10-13 15:30:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 09",
+    "context": "2026-10-13 09:15:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 18",
+    "context": "2026-10-12 18:40:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 10",
+    "context": "2026-10-12 10:05:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000002",
+    "context": "+201000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "field-txt",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "field-strong",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "awb",
+    "text": "JEGQA0000000002",
+    "context": "JEGQA0000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "ar /pages/track?awb=JEGQA0000000002&order=%239000103": [
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "track-order",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "awb",
+    "text": "JEGQA0000000002",
+    "context": "AWB JEGQA0000000002",
+    "ok": true,
+    "cls": "track-awb nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 09",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 18",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "ar /account": [
+   {
+    "kind": "hash-order",
+    "text": "#9000101",
+    "context": "#9000101",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000102",
+    "context": "#9000102",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000104",
+    "context": "#9000104",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000105",
+    "context": "#9000105",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000106",
+    "context": "#9000106",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "rtl",
+    "bidi": "normal"
+   }
+  ],
+  "ar /account/orders/9100000003": [
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "لمون نعناع ثلج - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "l-ar",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "كولا - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "l-ar",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 09",
+    "context": "2026-10-13 09:15:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 18",
+    "context": "2026-10-12 18:40:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 10",
+    "context": "2026-10-12 10:05:00",
+    "ok": false,
+    "cls": "update-time",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000002",
+    "context": "+201000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "field-txt",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "field-strong",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "awb",
+    "text": "JEGQA0000000002",
+    "context": "JEGQA0000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "ar /account/addresses": [
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000002",
+    "context": "+201000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000000",
+    "context": "+201000000000",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٥",
+    "context": "٣-٥ أيام",
+    "ok": false,
+    "cls": "",
+    "dir": "rtl",
+    "bidi": "normal"
+   }
+  ],
+  "ar /pages/checkout-review": [
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "يوصل خلال ١-٢ يوم",
+    "ok": false,
+    "cls": "arrives-title",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "لمون نعناع ثلج - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "",
+    "dir": "rtl",
+    "bidi": "normal"
+   }
+  ],
+  "ar /cart": [
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "السما الزرقا - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "line-title",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "لمون نعناع ثلج - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "cs-title",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "سته وستين - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "cs-title",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "كولا - حجر جاهز للشرب- 12 جرام",
+    "ok": true,
+    "cls": "cs-title",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "الفاتك بالحريم - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "cs-title",
+    "dir": "rtl",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "البيري الاعظم - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "cs-title",
+    "dir": "rtl",
+    "bidi": "isolate"
+   }
+  ],
+  "ar /pages/loyalty": [],
+  "ar /pages/support": [
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "القاهرة والجيزة والإسكندرية: ١-٢ يوم. الدلتا والقناة: ٢-٣ أيام. الصعيد",
+    "ok": false,
+    "cls": "l-ar",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٣",
+    "context": "القاهرة والجيزة والإسكندرية: ١-٢ يوم. الدلتا والقناة: ٢-٣ أيام. الصعيد",
+    "ok": false,
+    "cls": "l-ar",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-٥",
+    "context": "القاهرة والجيزة والإسكندرية: ١-٢ يوم. الدلتا والقناة: ٢-٣ أيام. الصعيد",
+    "ok": false,
+    "cls": "l-ar",
+    "dir": "rtl",
+    "bidi": "normal"
+   }
+  ],
+  "ar /products/oka-cobra-oka-base": [
+   {
+    "kind": "minus-amount",
+    "text": "-٢",
+    "context": "١-٢ يوم",
+    "ok": false,
+    "cls": "deliver-muted",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "السما الزرقا - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "rcard-title",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "لمون نعناع ثلج - حجر جاهز للشرب- 12 جرام",
+    "ok": true,
+    "cls": "rcard-title",
+    "dir": "rtl",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "سته وستين - حجر جاهز للشرب- 12 جرام",
+    "ok": false,
+    "cls": "rcard-title",
+    "dir": "rtl",
+    "bidi": "normal"
+   }
+  ],
+  "ar /pages/addresses?view=oka-add-address": [],
+  "en /pages/account": [],
+  "en /pages/addresses": [
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000002",
+    "context": "+201000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000000",
+    "context": "+201000000000",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "en /pages/orders": [
+   {
+    "kind": "hash-order",
+    "text": "#9000101",
+    "context": "#9000101",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000102",
+    "context": "#9000102",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 264",
+    "context": "EGP 264",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000104",
+    "context": "#9000104",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 269",
+    "context": "EGP 269",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000105",
+    "context": "#9000105",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 774",
+    "context": "EGP 774",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000106",
+    "context": "#9000106",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 130",
+    "context": "EGP 130",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   }
+  ],
+  "en /pages/orders?order=%239000101": [
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 169",
+    "context": "EGP 169",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 169",
+    "context": "EGP 169",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls- Blue Cloud - 12g",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 98",
+    "context": "EGP 98",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 267",
+    "context": "EGP 267",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 60",
+    "context": "EGP 60",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000101",
+    "context": "#9000101",
+    "ok": true,
+    "cls": "field-strong",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "en /pages/orders?order=%239000102": [
+   {
+    "kind": "egp-amount",
+    "text": "EGP 264",
+    "context": "EGP 264",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 189",
+    "context": "EGP 189",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 189",
+    "context": "EGP 189",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 39",
+    "context": "EGP 39",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 39",
+    "context": "EGP 39",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 228",
+    "context": "EGP 228",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 36",
+    "context": "EGP 36",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 264",
+    "context": "EGP 264",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 264",
+    "context": "EGP 264",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 09",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 18",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000102",
+    "context": "#9000102",
+    "ok": true,
+    "cls": "field-strong",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "awb",
+    "text": "JEGQA0000000001",
+    "context": "JEGQA0000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "en /pages/orders?order=%239000103": [
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 169",
+    "context": "EGP 169",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 169",
+    "context": "EGP 169",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Iced Lemon Mint - 12g",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Cola- 12g",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 31",
+    "context": "EGP 31",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 31",
+    "context": "EGP 31",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 298",
+    "context": "EGP 298",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 31",
+    "context": "EGP 31",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 60",
+    "context": "EGP 60",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 15:30:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 15:30:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 15",
+    "context": "2026-10-13 15:30:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 09",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 18",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000002",
+    "context": "+201000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "field-strong",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "awb",
+    "text": "JEGQA0000000002",
+    "context": "JEGQA0000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "en /pages/track?awb=JEGQA0000000002&order=%239000103": [
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "track-order",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "awb",
+    "text": "JEGQA0000000002",
+    "context": "AWB JEGQA0000000002",
+    "ok": true,
+    "cls": "track-awb nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 09",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 18",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "en /account": [
+   {
+    "kind": "hash-order",
+    "text": "#9000101",
+    "context": "#9000101",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000102",
+    "context": "#9000102",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 264",
+    "context": "EGP 264",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000104",
+    "context": "#9000104",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 269",
+    "context": "EGP 269",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000105",
+    "context": "#9000105",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 774",
+    "context": "EGP 774",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000106",
+    "context": "#9000106",
+    "ok": true,
+    "cls": "order-name",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 130",
+    "context": "EGP 130",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   }
+  ],
+  "en /account/orders/9100000003": [
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 169",
+    "context": "EGP 169",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 169",
+    "context": "EGP 169",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Iced Lemon Mint - 12g",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Cola- 12g",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 31",
+    "context": "EGP 31",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 31",
+    "context": "EGP 31",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 298",
+    "context": "EGP 298",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 31",
+    "context": "EGP 31",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 60",
+    "context": "EGP 60",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-13",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "13 09",
+    "context": "2026-10-13 09:15:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 18",
+    "context": "2026-10-12 18:40:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "-12",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "digit-groups",
+    "text": "12 10",
+    "context": "2026-10-12 10:05:00",
+    "ok": true,
+    "cls": "update-time",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000002",
+    "context": "+201000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "hash-order",
+    "text": "#9000103",
+    "context": "#9000103",
+    "ok": true,
+    "cls": "field-strong",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "awb",
+    "text": "JEGQA0000000002",
+    "context": "JEGQA0000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "en /account/addresses": [
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000002",
+    "context": "+201000000002",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000000",
+    "context": "+201000000000",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "en /pages/checkout-review": [
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "hero-total",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "plus-phone",
+    "text": "+201000000001",
+    "context": "+201000000001",
+    "ok": true,
+    "cls": "nums",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "Have this amount ready for the courier: EGP 327",
+    "ok": true,
+    "cls": "cod-note",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Iced Lemon Mint - 12g",
+    "ok": false,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "Unlocks cheaper shipping · EGP 49",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 31",
+    "context": "Often bought together · EGP 31",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 267",
+    "context": "EGP 267",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 60",
+    "context": "EGP 60",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 36",
+    "context": "Add 33 EGP more and shipping drops to EGP 36",
+    "ok": true,
+    "cls": "ship-txt",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "arrives-title",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "en /cart": [
+   {
+    "kind": "egp-amount",
+    "text": "EGP 169",
+    "context": "EGP 169",
+    "ok": true,
+    "cls": "line-unit",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 169",
+    "context": "EGP 169",
+    "ok": true,
+    "cls": "line-total",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls- Blue Cloud - 12g",
+    "ok": true,
+    "cls": "line-title",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "line-unit",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 98",
+    "context": "EGP 98",
+    "ok": true,
+    "cls": "line-total",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 36",
+    "context": "Add 33 EGP more and shipping drops to EGP 36",
+    "ok": true,
+    "cls": "ship-txt",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 267",
+    "context": "EGP 267",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 60",
+    "context": "EGP 60",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 327",
+    "context": "EGP 327",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Iced Lemon Mint - 12g",
+    "ok": true,
+    "cls": "cs-title",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 31",
+    "context": "EGP 31",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls- Sixty Six - 12g",
+    "ok": true,
+    "cls": "cs-title",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 94",
+    "context": "EGP 94",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Cola- 12g",
+    "ok": false,
+    "cls": "cs-title",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 39",
+    "context": "EGP 39",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Lady Killer - 12g",
+    "ok": true,
+    "cls": "cs-title",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 45",
+    "context": "EGP 45",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Mega berry - 12g",
+    "ok": true,
+    "cls": "cs-title",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 69",
+    "context": "EGP 69",
+    "ok": true,
+    "cls": "cs-price",
+    "dir": "ltr",
+    "bidi": "isolate"
+   }
+  ],
+  "en /pages/loyalty": [
+   {
+    "kind": "egp-amount",
+    "text": "EGP 25",
+    "context": "250 points to your next reward · worth EGP 25",
+    "ok": true,
+    "cls": "next-tier",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 1",
+    "context": "Every EGP 1 of products delivered",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 1",
+    "context": "worth EGP 1",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   }
+  ],
+  "en /pages/support": [
+   {
+    "kind": "egp-amount",
+    "text": "EGP 60",
+    "context": "EGP 60",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 36",
+    "context": "EGP 36",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 70",
+    "context": "EGP 70",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 46",
+    "context": "EGP 46",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 80",
+    "context": "EGP 80",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 56",
+    "context": "EGP 56",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 300",
+    "context": "EGP 300",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   }
+  ],
+  "en /products/oka-cobra-oka-base": [
+   {
+    "kind": "egp-amount",
+    "text": "EGP 357",
+    "context": "EGP 357",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 409",
+    "context": "EGP 409",
+    "ok": true,
+    "cls": "l-en",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 36",
+    "context": "Shipping EGP 36 — the best rate for your area",
+    "ok": true,
+    "cls": "ship-txt",
+    "dir": "ltr",
+    "bidi": "isolate"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 36",
+    "context": "EGP 36",
+    "ok": true,
+    "cls": "fee",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 94",
+    "context": "EGP 94",
+    "ok": true,
+    "cls": "rcard-price",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls- Blue Cloud - 12g",
+    "ok": true,
+    "cls": "rcard-title",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "rcard-price",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 10",
+    "context": "EGP 10",
+    "ok": true,
+    "cls": "rcard-price",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls-Iced Lemon Mint - 12g",
+    "ok": true,
+    "cls": "rcard-title",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "rcard-price",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 45",
+    "context": "EGP 45",
+    "ok": true,
+    "cls": "rcard-price",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "minus-amount",
+    "text": "- 12",
+    "context": "Tobacco Bowls- Sixty Six - 12g",
+    "ok": true,
+    "cls": "rcard-title",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 49",
+    "context": "EGP 49",
+    "ok": true,
+    "cls": "rcard-price",
+    "dir": "ltr",
+    "bidi": "normal"
+   },
+   {
+    "kind": "egp-amount",
+    "text": "EGP 357",
+    "context": "EGP 357",
+    "ok": true,
+    "cls": "",
+    "dir": "ltr",
+    "bidi": "normal"
+   }
+  ],
+  "en /pages/addresses?view=oka-add-address": []
+ },
+ "telTyped": {
+  "value": "+201001234567",
+  "dir": "ltr"
+ },
+ "inputs": {
+  "/pages/addresses?view=oka-add-address": [
+   {
+    "name": "field-input",
+    "type": "text",
+    "inputmode": "",
+    "autocomplete": "name",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "مين هيستلم؟",
+    "latinish": false
+   },
+   {
+    "name": "address[phone]",
+    "type": "tel",
+    "inputmode": "",
+    "autocomplete": "tel",
+    "dir": "ltr",
+    "attrDir": "ltr",
+    "textAlign": "start",
+    "placeholder": "01X XXXX XXXX",
+    "latinish": true
+   },
+   {
+    "name": "address[city]",
+    "type": "text",
+    "inputmode": "",
+    "autocomplete": "",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "مدينة نصر",
+    "latinish": false
+   },
+   {
+    "name": "address[address1]",
+    "type": "text",
+    "inputmode": "",
+    "autocomplete": "address-line1",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "١٤ شارع النصر",
+    "latinish": false
+   },
+   {
+    "name": "field-input",
+    "type": "text",
+    "inputmode": "",
+    "autocomplete": "",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "عمارة ٢، الدور ٥، شقة ١٢",
+    "latinish": false
+   },
+   {
+    "name": "field-input",
+    "type": "text",
+    "inputmode": "",
+    "autocomplete": "",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "جنب صيدلية العزبي",
+    "latinish": false
+   }
+  ],
+  "/pages/contact": [
+   {
+    "name": "contact[name]",
+    "type": "text",
+    "inputmode": "",
+    "autocomplete": "name",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "",
+    "latinish": false
+   },
+   {
+    "name": "contact[phone]",
+    "type": "tel",
+    "inputmode": "tel",
+    "autocomplete": "tel",
+    "dir": "ltr",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "",
+    "latinish": true
+   },
+   {
+    "name": "contact[email]",
+    "type": "email",
+    "inputmode": "",
+    "autocomplete": "email",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "",
+    "latinish": true
+   },
+   {
+    "name": "contact[body]",
+    "type": "textarea",
+    "inputmode": "",
+    "autocomplete": "",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "",
+    "latinish": false
+   }
+  ],
+  "/account/login": [],
+  "/account/register": [
+   {
+    "name": "customer[first_name]",
+    "type": "text",
+    "inputmode": "",
+    "autocomplete": "given-name",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "",
+    "latinish": false
+   },
+   {
+    "name": "customer[last_name]",
+    "type": "text",
+    "inputmode": "",
+    "autocomplete": "family-name",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "",
+    "latinish": false
+   },
+   {
+    "name": "customer[email]",
+    "type": "email",
+    "inputmode": "",
+    "autocomplete": "email",
+    "dir": "ltr",
+    "attrDir": "ltr",
+    "textAlign": "start",
+    "placeholder": "",
+    "latinish": true
+   },
+   {
+    "name": "customer[password]",
+    "type": "password",
+    "inputmode": "",
+    "autocomplete": "new-password",
+    "dir": "ltr",
+    "attrDir": "ltr",
+    "textAlign": "start",
+    "placeholder": "",
+    "latinish": false
+   }
+  ],
+  "/pages/track": [],
+  "/search": [
+   {
+    "name": "search-input",
+    "type": "search",
+    "inputmode": "",
+    "autocomplete": "off",
+    "dir": "rtl",
+    "attrDir": null,
+    "textAlign": "start",
+    "placeholder": "دوّر على شيشة، بولّات وإكسسوارات",
+    "latinish": false
+   }
+  ],
+  "/cart": [],
+  "/pages/checkout-review": [],
+  "/account/addresses": [],
+  "/pages/orders": []
+ },
+ "rails": {
+  "ar": [
+   {
+    "cls": "rail offers hscroll",
+    "scrollLeft": -272,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     1
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": -432,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     2
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": -216,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     1
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": -432,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     2
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": -216,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     1
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": -432,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     2
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   }
+  ],
+  "en": [
+   {
+    "cls": "rail offers hscroll",
+    "scrollLeft": 273,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     1
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": 432,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     2
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": 216,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     1
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": 432,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     2
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": 216,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     1
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   },
+   {
+    "cls": "rail prods hscroll",
+    "scrollLeft": 432,
+    "startOk": false,
+    "activeBefore": [
+     0
+    ],
+    "activeAfter": [
+     2
+    ],
+    "snap": "x mandatory",
+    "dots": null
+   }
+  ]
+ }
+}

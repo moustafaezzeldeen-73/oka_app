@@ -1,0 +1,5060 @@
+[
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__feed > div.home.fade-in > div.feed > section.page",
+    "left": 667,
+    "right": 1334,
+    "text": "العروض\nعبيلي العرض فالشنطة\nعبيلي العرض ف"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > h2.page-title",
+    "left": 774,
+    "right": 800,
+    "text": "العروض"
+   },
+   {
+    "sel": "div.feed > section.page > h2.page-title > span",
+    "left": 774,
+    "right": 800,
+    "text": "العروض"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > div.rail.offers",
+    "left": 814,
+    "right": 1273,
+    "text": "عبيلي العرض فالشنطة\nعبيلي العرض فالشنطة"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__feed > div.home.fade-in > div.feed > section.page",
+    "left": 1334,
+    "right": 2001,
+    "text": "شيشة أوكا المتميزة\nأوكا فوشيا\n١٦٩ ج.م\nعب"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > h2.page-title.anim",
+    "left": 1461,
+    "right": 1484,
+    "text": "شيشة أوكا المتميزة"
+   },
+   {
+    "sel": "div.feed > section.page > h2.page-title.anim > span",
+    "left": 1461,
+    "right": 1484,
+    "text": "شيشة أوكا المتميزة"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > div.rail.prods",
+    "left": 1500,
+    "right": 1922,
+    "text": "أوكا فوشيا\n١٦٩ ج.م\nعبيلي فالشنطة\nشوفها ع"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/collections",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row",
+    "left": 631,
+    "right": 719,
+    "text": "قطع الغيار\n١٢ منتج"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row > span.cat-thumb",
+    "left": 646,
+    "right": 704,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span.cat-thumb > img",
+    "left": 648,
+    "right": 702,
+    "text": ""
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row > span",
+    "left": 657,
+    "right": 694,
+    "text": "قطع الغيار\n١٢ منتج"
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span > span.cat-label",
+    "left": 657,
+    "right": 676,
+    "text": "قطع الغيار"
+   },
+   {
+    "sel": "a.cat-row > span > span.cat-label > span",
+    "left": 657,
+    "right": 676,
+    "text": "قطع الغيار"
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span > span.cat-count",
+    "left": 679,
+    "right": 694,
+    "text": "١٢ منتج"
+   },
+   {
+    "sel": "a.cat-row > span > span.cat-count > span",
+    "left": 679,
+    "right": 694,
+    "text": "١٢"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/collections/oka-cobra",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid",
+    "left": 213,
+    "right": 788,
+    "text": "أوكا كوبرا\n١٨٩ ج.م\nعبيلي فالشنطة\nأوكا كو"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid > div.gcard",
+    "left": 508,
+    "right": 788,
+    "text": "قاعدة مضيئة قابلة للشحن\n١٨٩ ج.م\nعبيلي فا"
+   },
+   {
+    "sel": "div.screen.fade-in > div.grid > div.gcard > div.gcard-body",
+    "left": 665,
+    "right": 787,
+    "text": "قاعدة مضيئة قابلة للشحن\n١٨٩ ج.م\nعبيلي فا"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 673,
+    "right": 703,
+    "text": "قاعدة مضيئة قابلة للشحن"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > a.gcard-title > span",
+    "left": 673,
+    "right": 688,
+    "text": "قاعدة مضيئة قابلة للشحن"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 703,
+    "right": 773,
+    "text": "١٨٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 711,
+    "right": 727,
+    "text": "١٨٩ ج.م"
+   },
+   {
+    "sel": "div.gcard-body > div.gcard-row > span.gcard-price > span",
+    "left": 711,
+    "right": 727,
+    "text": "١٨٩ ج.م"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.chip.dark",
+    "text": "المميز ⇅",
+    "by": "header.top-bar",
+    "scrollTop": 155
+   },
+   {
+    "el": "button.chip",
+    "text": "المتاح",
+    "by": "header.top-bar",
+    "scrollTop": 155
+   },
+   {
+    "el": "button.chip",
+    "text": "عليه خصم",
+    "by": "header.top-bar",
+    "scrollTop": 155
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/collections/ready-to-smoke-bowls?sort_by=price-ascending",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid",
+    "left": 213,
+    "right": 2555,
+    "text": "نعناع - حجر جاهز للشرب- 12 جرام\n٣٩ ج.م\nع"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid > div.gcard",
+    "left": 508,
+    "right": 788,
+    "text": "السما الزرقا - حجر جاهز للشرب- 12 جرام\n٤"
+   },
+   {
+    "sel": "div.screen.fade-in > div.grid > div.gcard > div.gcard-body",
+    "left": 665,
+    "right": 787,
+    "text": "السما الزرقا - حجر جاهز للشرب- 12 جرام\n٤"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 673,
+    "right": 703,
+    "text": "السما الزرقا - حجر جاهز للشرب- 12 جرام"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > a.gcard-title > span",
+    "left": 673,
+    "right": 703,
+    "text": "السما الزرقا - حجر جاهز للشرب- 12 جرام"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 703,
+    "right": 773,
+    "text": "٤٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 711,
+    "right": 727,
+    "text": "٤٩ ج.م"
+   },
+   {
+    "sel": "div.gcard-body > div.gcard-row > span.gcard-price > span",
+    "left": 711,
+    "right": 727,
+    "text": "٤٩ ج.م"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 1922
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 1922
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/collections/all?filter.v.availability=1",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid",
+    "left": 213,
+    "right": 5500,
+    "text": "تخشينات سيليكون لي و راس\n١٠ ج.م\nعبيلي فا"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid > div.gcard",
+    "left": 508,
+    "right": 788,
+    "text": "لي مخصوص\n٤٥ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div.screen.fade-in > div.grid > div.gcard > div.gcard-body",
+    "left": 665,
+    "right": 787,
+    "text": "لي مخصوص\n٤٥ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 673,
+    "right": 703,
+    "text": "لي مخصوص"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > a.gcard-title > span",
+    "left": 673,
+    "right": 688,
+    "text": "لي مخصوص"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 703,
+    "right": 773,
+    "text": "٤٥ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 711,
+    "right": 727,
+    "text": "٤٥ ج.م"
+   },
+   {
+    "sel": "div.gcard-body > div.gcard-row > span.gcard-price > span",
+    "left": 711,
+    "right": 727,
+    "text": "٤٥ ج.م"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 4867
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 4867
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/collections/hookahs?page=2",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/collections/does-not-exist",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/products/oka-cloud-white-hookah",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 716,
+    "text": "٣D · AR\n↗\nأوكا ابيض\n١٦٩ ج.م\nمتوفر\nالشحن "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 716,
+    "text": "أوكا ابيض\n١٦٩ ج.م\nمتوفر\nالشحن ٣٦ ج.م — أ"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 654,
+    "right": 695,
+    "text": "هتاخد ~١٦٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 667,
+    "right": 682,
+    "text": "هتاخد ~١٦٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen",
+    "left": 732,
+    "right": 1192,
+    "text": "وقف هنا وشوفها في مكانك\nفي مكانك\nبحجمها "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage",
+    "left": 732,
+    "right": 1074,
+    "text": "وقف هنا وشوفها في مكانك"
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > img.arx-fallback",
+    "left": 797,
+    "right": 1009,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > div.arx-loading",
+    "left": 928,
+    "right": 944,
+    "text": "وقف هنا وشوفها في مكانك"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/products/oka-cobra",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 716,
+    "text": "٣D · AR\n↗\nأوكا كوبرا\n١٨٩ ج.م\nمتوفر\nالشحن"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 716,
+    "text": "أوكا كوبرا\n١٨٩ ج.م\nمتوفر\nالشحن ٣٦ ج.م — "
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 654,
+    "right": 695,
+    "text": "هتاخد ~١٨٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 667,
+    "right": 682,
+    "text": "هتاخد ~١٨٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen",
+    "left": 732,
+    "right": 1192,
+    "text": "وقف هنا وشوفها في مكانك\nفي مكانك\nبحجمها "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage",
+    "left": 732,
+    "right": 1074,
+    "text": "وقف هنا وشوفها في مكانك"
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > img.arx-fallback",
+    "left": 797,
+    "right": 1009,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > div.arx-loading",
+    "left": 928,
+    "right": 944,
+    "text": "وقف هنا وشوفها في مكانك"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/products/oka-black-tobacco",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 716,
+    "text": "↗\nأوكا معسل اسود\n١٩٩ ج.م\nمتوفر\nالشحن ٣٦ "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 716,
+    "text": "أوكا معسل اسود\n١٩٩ ج.م\nمتوفر\nالشحن ٣٦ ج."
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 654,
+    "right": 695,
+    "text": "هتاخد ~١٩٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 667,
+    "right": 682,
+    "text": "هتاخد ~١٩٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.pdp-reel-wrap",
+    "left": 716,
+    "right": 1141,
+    "text": "اتفرّج عليها"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.pdp-reel-wrap > div.related-label",
+    "left": 740,
+    "right": 772,
+    "text": "اتفرّج عليها"
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.pdp-reel-wrap > div.related-label > span",
+    "left": 740,
+    "right": 760,
+    "text": "اتفرّج عليها"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.pdp-reel-wrap > div.pdp-reel.hscroll",
+    "left": 772,
+    "right": 1141,
+    "text": ""
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/products/oka-cobra-oka-base",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 741,
+    "text": "↗\nأوكا كوبرا + قاعدة مضيئة قابلة للشحن\n٣"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 741,
+    "text": "أوكا كوبرا + قاعدة مضيئة قابلة للشحن\n٣٥٧"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 679,
+    "right": 720,
+    "text": "هتاخد ~٣٥٧ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 692,
+    "right": 707,
+    "text": "هتاخد ~٣٥٧ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.story.story-cobra",
+    "left": 767,
+    "right": 1363,
+    "text": "أوكا كوبرا\nزوايا جريئة. دخان أكثف.\n\nتصمي"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.story.story-cobra > div.story-hero",
+    "left": 767,
+    "right": 1006,
+    "text": "أوكا كوبرا\nزوايا جريئة. دخان أكثف.\n\nتصمي"
+   },
+   {
+    "sel": "div.screen.fade-in > section.story.story-cobra > div.story-hero > div.story-eyebrow",
+    "left": 793,
+    "right": 808,
+    "text": "أوكا كوبرا"
+   },
+   {
+    "sel": "section.story.story-cobra > div.story-hero > div.story-eyebrow > span",
+    "left": 793,
+    "right": 808,
+    "text": "أوكا كوبرا"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/products/1-pcs-of-foil",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 817,
+    "text": "↗\nقطعه فويل جاهزة للاستخدام\n٥ ج.م\nخلصان\n"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 817,
+    "text": "قطعه فويل جاهزة للاستخدام\n٥ ج.م\nخلصان\nضي"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.pdp-block",
+    "left": 679,
+    "right": 741,
+    "text": "التفاصيل\nرقائق من الفويل المخرم الجاهز ل"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.pdp-block > div.section-label",
+    "left": 694,
+    "right": 710,
+    "text": "التفاصيل"
+   },
+   {
+    "sel": "div.pdp-card > div.pdp-block > div.section-label > span",
+    "left": 694,
+    "right": 710,
+    "text": "التفاصيل"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.pdp-block > div.desc",
+    "left": 720,
+    "right": 741,
+    "text": "رقائق من الفويل المخرم الجاهز للاستخدام"
+   },
+   {
+    "sel": "div.pdp-card > div.pdp-block > div.desc > span",
+    "left": 722,
+    "right": 738,
+    "text": "رقائق من الفويل المخرم الجاهز للاستخدام"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 755,
+    "right": 796,
+    "text": "هتاخد ~٥ نقطة لما يوصلك"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.step-btn",
+    "text": "–",
+    "by": "header.top-bar",
+    "scrollTop": 540
+   },
+   {
+    "el": "button.step-btn",
+    "text": "+",
+    "by": "header.top-bar",
+    "scrollTop": 540
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/products/tongs?variant=46037718303018",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 876,
+    "text": "↗\nكماشة فحم\n٣١ ج.م\nمتوفر\nضيف ٢ ج.م كمان "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 876,
+    "text": "كماشة فحم\n٣١ ج.م\nمتوفر\nضيف ٢ ج.م كمان وا"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.pdp-block",
+    "left": 654,
+    "right": 800,
+    "text": "التفاصيل\nThese steel hookah tongs provid"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.pdp-block > div.section-label",
+    "left": 669,
+    "right": 685,
+    "text": "التفاصيل"
+   },
+   {
+    "sel": "div.pdp-card > div.pdp-block > div.section-label > span",
+    "left": 669,
+    "right": 685,
+    "text": "التفاصيل"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.pdp-block > div.desc",
+    "left": 695,
+    "right": 800,
+    "text": "These steel hookah tongs provide a conve"
+   },
+   {
+    "sel": "div.pdp-card > div.pdp-block > div.desc > span",
+    "left": 697,
+    "right": 797,
+    "text": "These steel hookah tongs provide a conve"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 814,
+    "right": 855,
+    "text": "هتاخد ~٣١ نقطة لما يوصلك"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/products/oka-cloud-white-hookah?view=ar",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/products/tongs?view=ar",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/products/foil",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/account",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/orders",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/orders?order=%239000101",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/addresses",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/addresses?view=oka-add-address",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/loyalty",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/subscriptions",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/subscriptions?view=oka-subscribe",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/wishlist",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/support",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa",
+    "left": 581,
+    "right": 675,
+    "text": "نقاط الولاء بتشتغل إزاي؟\nبتاخد نقطة على "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.divider",
+    "left": 674,
+    "right": 675,
+    "text": ""
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa",
+    "left": 675,
+    "right": 754,
+    "text": "لو حاجة وصلت مكسورة؟\nابعتلنا على واتساب "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.qa-q",
+    "left": 687,
+    "right": 708,
+    "text": "لو حاجة وصلت مكسورة؟"
+   },
+   {
+    "sel": "div.screen.fade-in > div.qa > div.qa-q > span",
+    "left": 689,
+    "right": 706,
+    "text": "لو حاجة وصلت مكسورة؟"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.qa-a",
+    "left": 712,
+    "right": 754,
+    "text": "ابعتلنا على واتساب في خلال ٤٨ ساعة بصورة"
+   },
+   {
+    "sel": "div.screen.fade-in > div.qa > div.qa-a > span",
+    "left": 714,
+    "right": 751,
+    "text": "ابعتلنا على واتساب في خلال ٤٨ ساعة بصورة"
+   },
+   {
+    "sel": "div#legal",
+    "left": 754,
+    "right": 806,
+    "text": "الشروط والسياسات"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/checkout-review",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/track?awb=JEGQA0000000002&order=%239000103",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 192,
+    "right": 679,
+    "text": "خرجت للتوصيل مع المندوب\nبنراجعه\nبيتجهز ل"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.test-detail.track-detail",
+    "left": 192,
+    "right": 679,
+    "text": "خرجت للتوصيل مع المندوب\nبنراجعه\nبيتجهز ل"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.track-external",
+    "left": 697,
+    "right": 713,
+    "text": "شوفها كمان على موقع J&T"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.track-external > span",
+    "left": 697,
+    "right": 713,
+    "text": "شوفها كمان على موقع J&T"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 713,
+    "right": 743,
+    "text": ""
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.hdr-btn.flip",
+    "text": "Back",
+    "by": "header.top-bar",
+    "scrollTop": 84
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/about-us",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows",
+    "left": 132,
+    "right": 2633,
+    "text": "بدأنا ٢٠٢٢\n\nمتصممة ومتجرّبة ومتصنّعة بال"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows > div.row-card",
+    "left": 664,
+    "right": 1008,
+    "text": "هندسة مضبوطة\n\nأوكا اشتغلت شهور على هندسة"
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > div.row-img",
+    "left": 665,
+    "right": 912,
+    "text": ""
+   },
+   {
+    "sel": "div.rows > div.row-card > div.row-img > img",
+    "left": 665,
+    "right": 912,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > h2.row-title",
+    "left": 924,
+    "right": 945,
+    "text": "هندسة مضبوطة"
+   },
+   {
+    "sel": "div.rows > div.row-card > h2.row-title > span",
+    "left": 925,
+    "right": 945,
+    "text": "هندسة مضبوطة"
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > div.row-text",
+    "left": 949,
+    "right": 993,
+    "text": "أوكا اشتغلت شهور على هندسة التجربة دي عش"
+   },
+   {
+    "sel": "div.rows > div.row-card > div.row-text > div",
+    "left": 949,
+    "right": 993,
+    "text": "أوكا اشتغلت شهور على هندسة التجربة دي عش"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/how-to-use",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows",
+    "left": 132,
+    "right": 5351,
+    "text": "املى القزازة\n\nاملى القزازة بحوالي ٧٠٠ مل"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows > div.row-card",
+    "left": 632,
+    "right": 1046,
+    "text": "تركيب أوكا ستيم"
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > div.row-img",
+    "left": 633,
+    "right": 994,
+    "text": ""
+   },
+   {
+    "sel": "div.rows > div.row-card > div.row-img > img",
+    "left": 633,
+    "right": 994,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > h2.row-title",
+    "left": 1006,
+    "right": 1027,
+    "text": "تركيب أوكا ستيم"
+   },
+   {
+    "sel": "div.rows > div.row-card > h2.row-title > span",
+    "left": 1007,
+    "right": 1027,
+    "text": "تركيب أوكا ستيم"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows > div.row-card",
+    "left": 1064,
+    "right": 1478,
+    "text": "تركيب جورميه الخرطوم"
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > div.row-img",
+    "left": 1065,
+    "right": 1426,
+    "text": ""
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/contact",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/faq",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/pages/online-store",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row",
+    "left": 631,
+    "right": 719,
+    "text": "قطع الغيار\n١٢ منتج"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row > span.cat-thumb",
+    "left": 646,
+    "right": 704,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span.cat-thumb > img",
+    "left": 648,
+    "right": 702,
+    "text": ""
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row > span",
+    "left": 657,
+    "right": 694,
+    "text": "قطع الغيار\n١٢ منتج"
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span > span.cat-label",
+    "left": 657,
+    "right": 676,
+    "text": "قطع الغيار"
+   },
+   {
+    "sel": "a.cat-row > span > span.cat-label > span",
+    "left": 657,
+    "right": 676,
+    "text": "قطع الغيار"
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span > span.cat-count",
+    "left": 679,
+    "right": 694,
+    "text": "١٢ منتج"
+   },
+   {
+    "sel": "a.cat-row > span > span.cat-count > span",
+    "left": 679,
+    "right": 694,
+    "text": "١٢"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/search",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/search?q=%D8%B4%D9%8A%D8%B4%D9%87",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 191,
+    "right": 2856,
+    "text": "١٨ منتج\nأوكا فوشيا\n١٦٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.grid",
+    "left": 219,
+    "right": 2856,
+    "text": "أوكا فوشيا\n١٦٩ ج.م\nعبيلي فالشنطة\nأوكا اب"
+   },
+   {
+    "sel": "div.screen.fade-in > div > div.grid > div.gcard",
+    "left": 514,
+    "right": 794,
+    "text": "أوكا اسود كاربون\n١٨٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div > div.grid > div.gcard > a.gcard-img",
+    "left": 515,
+    "right": 671,
+    "text": ""
+   },
+   {
+    "sel": "div > div.grid > div.gcard > div.gcard-body",
+    "left": 671,
+    "right": 793,
+    "text": "أوكا اسود كاربون\n١٨٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 679,
+    "right": 709,
+    "text": "أوكا اسود كاربون"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 709,
+    "right": 779,
+    "text": "١٨٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 717,
+    "right": 733,
+    "text": "١٨٩ ج.م"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 2227
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 2227
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/search?q=hookah",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 191,
+    "right": 1972,
+    "text": "١١ منتج\nأوكا فوشيا\n١٦٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.grid",
+    "left": 219,
+    "right": 1972,
+    "text": "أوكا فوشيا\n١٦٩ ج.م\nعبيلي فالشنطة\nأوكا اب"
+   },
+   {
+    "sel": "div.screen.fade-in > div > div.grid > div.gcard",
+    "left": 514,
+    "right": 794,
+    "text": "أوكا اسود كاربون\n١٨٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div > div.grid > div.gcard > a.gcard-img",
+    "left": 515,
+    "right": 671,
+    "text": ""
+   },
+   {
+    "sel": "div > div.grid > div.gcard > div.gcard-body",
+    "left": 671,
+    "right": 793,
+    "text": "أوكا اسود كاربون\n١٨٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 679,
+    "right": 709,
+    "text": "أوكا اسود كاربون"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 709,
+    "right": 779,
+    "text": "١٨٩ ج.م\nعبيلي فالشنطة"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 717,
+    "right": 733,
+    "text": "١٨٩ ج.م"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 1343
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 1343
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/cart",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 131,
+    "right": 1187,
+    "text": "أوكا ابيض\nغيّر\n١٦٩ ج.م\n–\n١\n+\n١٦٩ ج.م\n✕\nا"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.totals",
+    "left": 541,
+    "right": 685,
+    "text": "المجموع قبل الشحن\n٢٦٧ ج.م\nالشحن\n٦٠ ج.م\nا"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.rail-title",
+    "left": 703,
+    "right": 733,
+    "text": "كمّل جلستك"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.xrail.hscroll",
+    "left": 733,
+    "right": 1013,
+    "text": "يوصّلك لشحن أرخص\nلمون نعناع ثلج - حجر جا"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > button.join-nudge",
+    "left": 1013,
+    "right": 1095,
+    "text": "اكسب ٢٦٧ نقطة على الطلب ده\nسجّل دخولك عش"
+   },
+   {
+    "sel": "div.screen.fade-in > div > button.join-nudge > span.join-tick",
+    "left": 1045,
+    "right": 1065,
+    "text": ""
+   },
+   {
+    "sel": "div > button.join-nudge > span.join-tick > svg",
+    "left": 1049,
+    "right": 1061,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > div > button.join-nudge > span",
+    "left": 1027,
+    "right": 1081,
+    "text": "اكسب ٢٦٧ نقطة على الطلب ده\nسجّل دخولك عش"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/account",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/account/login",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/account/register",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/account/addresses",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/account/orders/9100000003",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/account/reset/9000000000001/qatoken",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/account/activate/9000000000001/qatoken",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/policies/refund-policy",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body",
+    "left": 118,
+    "right": 1424,
+    "text": "We have a 14-day return policy, which me"
+   },
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body > div.rte",
+    "left": 118,
+    "right": 1424,
+    "text": "We have a 14-day return policy, which me"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 184,
+    "right": 800,
+    "text": "The tobacco ready bowls are non-returnab"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > span",
+    "left": 780,
+    "right": 797,
+    "text": ""
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > a",
+    "left": 780,
+    "right": 797,
+    "text": "oka-egypt@hotmail.com"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 800,
+    "right": 822,
+    "text": ""
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 822,
+    "right": 954,
+    "text": "Damages and issues\nPlease inspect your o"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 824,
+    "right": 841,
+    "text": "Damages and issues"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/policies/privacy-policy",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body",
+    "left": 118,
+    "right": 11634,
+    "text": "Last updated: 6/7/2023\n\n\nThis Privacy Po"
+   },
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body > div.rte",
+    "left": 118,
+    "right": 11634,
+    "text": "Last updated: 6/7/2023\n\n\nThis Privacy Po"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 628,
+    "right": 804,
+    "text": "We may update this Privacy Policy from t"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 804,
+    "right": 1134,
+    "text": "We value your privacy and the informatio"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > span",
+    "left": 806,
+    "right": 977,
+    "text": "We value your privacy and the informatio"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > span",
+    "left": 1004,
+    "right": 1131,
+    "text": "Our website uses cookies to keep track o"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > h2",
+    "left": 1152,
+    "right": 1196,
+    "text": "How We Collect and Use Your Personal Inf"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 1204,
+    "right": 1336,
+    "text": "To provide the Services, we collect and "
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/policies/shipping-policy",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body",
+    "left": 122,
+    "right": 1250,
+    "text": "Shipping & Delivery Policy\n\nOrder Confir"
+   },
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body > div.rte",
+    "left": 122,
+    "right": 1250,
+    "text": "Shipping & Delivery Policy\n\nOrder Confir"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 526,
+    "right": 680,
+    "text": "Refusal of Delivery & Blacklisting We ar"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > ul",
+    "left": 694,
+    "right": 892,
+    "text": "The customer’s name and details will be "
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > ul > li",
+    "left": 694,
+    "right": 760,
+    "text": "The customer’s name and details will be "
+   },
+   {
+    "sel": "div.rte > ul > li > p",
+    "left": 694,
+    "right": 760,
+    "text": "The customer’s name and details will be "
+   },
+   {
+    "sel": "ul > li > p > b",
+    "left": 718,
+    "right": 757,
+    "text": "OKA Blacklist"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > ul > li",
+    "left": 760,
+    "right": 826,
+    "text": "This Blacklist is shared with all our si"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/policies/terms-of-service",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body",
+    "left": 118,
+    "right": 12974,
+    "text": "OVERVIEW\nThis website is operated by OKA"
+   },
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body > div.rte",
+    "left": 118,
+    "right": 12974,
+    "text": "OVERVIEW\nThis website is operated by OKA"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 118,
+    "right": 11448,
+    "text": "OVERVIEW\nThis website is operated by OKA"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 1308,
+    "right": 1325,
+    "text": "SECTION 1 - ONLINE STORE TERMS"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 1770,
+    "right": 1787,
+    "text": "SECTION 2 - GENERAL CONDITIONS"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 2276,
+    "right": 2337,
+    "text": "SECTION 3 - ACCURACY, COMPLETENESS AND T"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 2782,
+    "right": 2821,
+    "text": "SECTION 4 - MODIFICATIONS TO THE SERVICE"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 3068,
+    "right": 3107,
+    "text": "SECTION 5 - PRODUCTS OR SERVICES (if app"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/policies/contact-information",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/password",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "none",
+   "appW": 430,
+   "appH": 375,
+   "appL": 119,
+   "appT": 0,
+   "rot": ""
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/gift_cards/qa12345678",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "error": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at eval (eval at evaluate (:290:30), <anonymous>:4:23)\n    at UtilityScript.evaluate (<anonymous>:292:16)"
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/nope-404",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/ar/",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__feed > div.home.fade-in > div.feed > section.page",
+    "left": 667,
+    "right": 1334,
+    "text": "العروض\nعبيلي العرض فالشنطة\nعبيلي العرض ف"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > h2.page-title",
+    "left": 774,
+    "right": 800,
+    "text": "العروض"
+   },
+   {
+    "sel": "div.feed > section.page > h2.page-title > span",
+    "left": 774,
+    "right": 800,
+    "text": "العروض"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > div.rail.offers",
+    "left": 814,
+    "right": 1273,
+    "text": "عبيلي العرض فالشنطة\nعبيلي العرض فالشنطة"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__feed > div.home.fade-in > div.feed > section.page",
+    "left": 1334,
+    "right": 2001,
+    "text": "شيشة أوكا المتميزة\nأوكا فوشيا\n١٦٩ ج.م\nعب"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > h2.page-title.anim",
+    "left": 1461,
+    "right": 1484,
+    "text": "شيشة أوكا المتميزة"
+   },
+   {
+    "sel": "div.feed > section.page > h2.page-title.anim > span",
+    "left": 1461,
+    "right": 1484,
+    "text": "شيشة أوكا المتميزة"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > div.rail.prods",
+    "left": 1500,
+    "right": 1922,
+    "text": "أوكا فوشيا\n١٦٩ ج.م\nعبيلي فالشنطة\nشوفها ع"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/ar/products/oka-cobra",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 716,
+    "text": "٣D · AR\n↗\nأوكا كوبرا\n١٨٩ ج.م\nمتوفر\nالشحن"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 716,
+    "text": "أوكا كوبرا\n١٨٩ ج.م\nمتوفر\nالشحن ٣٦ ج.م — "
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 654,
+    "right": 695,
+    "text": "هتاخد ~١٨٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 667,
+    "right": 682,
+    "text": "هتاخد ~١٨٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen",
+    "left": 732,
+    "right": 1192,
+    "text": "وقف هنا وشوفها في مكانك\nفي مكانك\nبحجمها "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage",
+    "left": 732,
+    "right": 1074,
+    "text": "وقف هنا وشوفها في مكانك"
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > img.arx-fallback",
+    "left": 797,
+    "right": 1009,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > div.arx-loading",
+    "left": 928,
+    "right": 944,
+    "text": "وقف هنا وشوفها في مكانك"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/ar/collections/hookahs",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/ar/pages/support",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa",
+    "left": 581,
+    "right": 675,
+    "text": "نقاط الولاء بتشتغل إزاي؟\nبتاخد نقطة على "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.divider",
+    "left": 674,
+    "right": 675,
+    "text": ""
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa",
+    "left": 675,
+    "right": 754,
+    "text": "لو حاجة وصلت مكسورة؟\nابعتلنا على واتساب "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.qa-q",
+    "left": 687,
+    "right": 708,
+    "text": "لو حاجة وصلت مكسورة؟"
+   },
+   {
+    "sel": "div.screen.fade-in > div.qa > div.qa-q > span",
+    "left": 689,
+    "right": 706,
+    "text": "لو حاجة وصلت مكسورة؟"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.qa-a",
+    "left": 712,
+    "right": 754,
+    "text": "ابعتلنا على واتساب في خلال ٤٨ ساعة بصورة"
+   },
+   {
+    "sel": "div.screen.fade-in > div.qa > div.qa-a > span",
+    "left": 714,
+    "right": 751,
+    "text": "ابعتلنا على واتساب في خلال ٤٨ ساعة بصورة"
+   },
+   {
+    "sel": "div#legal",
+    "left": 754,
+    "right": 806,
+    "text": "الشروط والسياسات"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "ar",
+  "route": "/checkout",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "error": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at eval (eval at evaluate (:290:30), <anonymous>:4:23)\n    at UtilityScript.evaluate (<anonymous>:292:16)"
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__feed > div.home.fade-in > div.feed > section.page",
+    "left": 667,
+    "right": 1334,
+    "text": "Offers\nAdd bundle to cart\nAdd bundle to "
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > h2.page-title",
+    "left": 774,
+    "right": 800,
+    "text": "Offers"
+   },
+   {
+    "sel": "div.feed > section.page > h2.page-title > span",
+    "left": 774,
+    "right": 800,
+    "text": "Offers"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > div.rail.offers",
+    "left": 814,
+    "right": 1273,
+    "text": "Add bundle to cart\nAdd bundle to cart"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__feed > div.home.fade-in > div.feed > section.page",
+    "left": 1334,
+    "right": 2001,
+    "text": "OKA Premium Hookahs\nOKA Pink\nEGP 169\nAdd"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > h2.page-title.anim",
+    "left": 1461,
+    "right": 1484,
+    "text": "OKA Premium Hookahs"
+   },
+   {
+    "sel": "div.feed > section.page > h2.page-title.anim > span",
+    "left": 1461,
+    "right": 1484,
+    "text": "OKA Premium Hookahs"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > div.rail.prods",
+    "left": 1500,
+    "right": 1922,
+    "text": "OKA Pink\nEGP 169\nAdd to cart\nSee it on y"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/collections",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row",
+    "left": 631,
+    "right": 719,
+    "text": "OKA Parts\n12 products"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row > span.cat-thumb",
+    "left": 646,
+    "right": 704,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span.cat-thumb > img",
+    "left": 648,
+    "right": 702,
+    "text": ""
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row > span",
+    "left": 657,
+    "right": 694,
+    "text": "OKA Parts\n12 products"
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span > span.cat-label",
+    "left": 657,
+    "right": 676,
+    "text": "OKA Parts"
+   },
+   {
+    "sel": "a.cat-row > span > span.cat-label > span",
+    "left": 657,
+    "right": 676,
+    "text": "OKA Parts"
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span > span.cat-count",
+    "left": 679,
+    "right": 694,
+    "text": "12 products"
+   },
+   {
+    "sel": "a.cat-row > span > span.cat-count > span",
+    "left": 679,
+    "right": 694,
+    "text": "12"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/collections/oka-cobra",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid",
+    "left": 212,
+    "right": 787,
+    "text": "OKA Cobra\nEGP 189\nAdd\nOKA Cobra + OKA ba"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid > div.gcard",
+    "left": 507,
+    "right": 787,
+    "text": "OKA Cobra LED Rechargeable Base\nEGP 189\n"
+   },
+   {
+    "sel": "div.screen.fade-in > div.grid > div.gcard > div.gcard-body",
+    "left": 664,
+    "right": 786,
+    "text": "OKA Cobra LED Rechargeable Base\nEGP 189\n"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 672,
+    "right": 702,
+    "text": "OKA Cobra LED Rechargeable Base"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > a.gcard-title > span",
+    "left": 672,
+    "right": 702,
+    "text": "OKA Cobra LED Rechargeable Base"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 702,
+    "right": 772,
+    "text": "EGP 189\nAdd"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 710,
+    "right": 726,
+    "text": "EGP 189"
+   },
+   {
+    "sel": "div.gcard-body > div.gcard-row > span.gcard-price > span",
+    "left": 710,
+    "right": 726,
+    "text": "EGP 189"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.chip.dark",
+    "text": "Featured ⇅",
+    "by": "header.top-bar",
+    "scrollTop": 154
+   },
+   {
+    "el": "button.chip",
+    "text": "In stock",
+    "by": "header.top-bar",
+    "scrollTop": 154
+   },
+   {
+    "el": "button.chip",
+    "text": "On sale",
+    "by": "header.top-bar",
+    "scrollTop": 154
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/collections/ready-to-smoke-bowls?sort_by=price-ascending",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid",
+    "left": 212,
+    "right": 2554,
+    "text": "Tobacco Bowls- Mint - 12g\nEGP 39\nAdd\nTob"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid > div.gcard",
+    "left": 507,
+    "right": 787,
+    "text": "Tobacco Bowls- Blue Cloud - 12g\nEGP 49\nA"
+   },
+   {
+    "sel": "div.screen.fade-in > div.grid > div.gcard > div.gcard-body",
+    "left": 664,
+    "right": 786,
+    "text": "Tobacco Bowls- Blue Cloud - 12g\nEGP 49\nA"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 672,
+    "right": 702,
+    "text": "Tobacco Bowls- Blue Cloud - 12g"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > a.gcard-title > span",
+    "left": 672,
+    "right": 702,
+    "text": "Tobacco Bowls- Blue Cloud - 12g"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 702,
+    "right": 772,
+    "text": "EGP 49\nAdd"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 710,
+    "right": 726,
+    "text": "EGP 49"
+   },
+   {
+    "sel": "div.gcard-body > div.gcard-row > span.gcard-price > span",
+    "left": 710,
+    "right": 726,
+    "text": "EGP 49"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 1921
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 1921
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/collections/all?filter.v.availability=1",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid",
+    "left": 212,
+    "right": 5499,
+    "text": "OKA Silicon Gourmets - Hose / bowl\nEGP 1"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.grid > div.gcard",
+    "left": 507,
+    "right": 787,
+    "text": "Premium 1.5 m Hose\nEGP 45\nAdd"
+   },
+   {
+    "sel": "div.screen.fade-in > div.grid > div.gcard > div.gcard-body",
+    "left": 664,
+    "right": 786,
+    "text": "Premium 1.5 m Hose\nEGP 45\nAdd"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 672,
+    "right": 702,
+    "text": "Premium 1.5 m Hose"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > a.gcard-title > span",
+    "left": 672,
+    "right": 687,
+    "text": "Premium 1.5 m Hose"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 702,
+    "right": 772,
+    "text": "EGP 45\nAdd"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 710,
+    "right": 726,
+    "text": "EGP 45"
+   },
+   {
+    "sel": "div.gcard-body > div.gcard-row > span.gcard-price > span",
+    "left": 710,
+    "right": 726,
+    "text": "EGP 45"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 4866
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 4866
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/collections/hookahs?page=2",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/collections/does-not-exist",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/products/oka-cloud-white-hookah",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 715,
+    "text": "3D · AR\n↗\nOKA white\nEGP 169\nIn stock\nShi"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 715,
+    "text": "OKA white\nEGP 169\nIn stock\nShipping EGP "
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 653,
+    "right": 694,
+    "text": "Earn ~169 points when delivered"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 666,
+    "right": 681,
+    "text": "Earn ~169 points when delivered"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen",
+    "left": 731,
+    "right": 1191,
+    "text": "Scroll here to see it in your space\nYour"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage",
+    "left": 731,
+    "right": 1073,
+    "text": "Scroll here to see it in your space"
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > img.arx-fallback",
+    "left": 796,
+    "right": 1008,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > div.arx-loading",
+    "left": 927,
+    "right": 943,
+    "text": "Scroll here to see it in your space"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/products/oka-cobra",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 715,
+    "text": "3D · AR\n↗\nOKA Cobra\nEGP 189\nIn stock\nShi"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 715,
+    "text": "OKA Cobra\nEGP 189\nIn stock\nShipping EGP "
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 653,
+    "right": 694,
+    "text": "Earn ~189 points when delivered"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 666,
+    "right": 681,
+    "text": "Earn ~189 points when delivered"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen",
+    "left": 731,
+    "right": 1191,
+    "text": "Scroll here to see it in your space\nYour"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage",
+    "left": 731,
+    "right": 1073,
+    "text": "Scroll here to see it in your space"
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > img.arx-fallback",
+    "left": 796,
+    "right": 1008,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > div.arx-loading",
+    "left": 927,
+    "right": 943,
+    "text": "Scroll here to see it in your space"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/products/oka-black-tobacco",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 740,
+    "text": "↗\nOKA Black Tobacco\nEGP 199\nIn stock\nShi"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 740,
+    "text": "OKA Black Tobacco\nEGP 199\nIn stock\nShipp"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 678,
+    "right": 719,
+    "text": "Earn ~199 points when delivered"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 691,
+    "right": 706,
+    "text": "Earn ~199 points when delivered"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.pdp-reel-wrap",
+    "left": 740,
+    "right": 1165,
+    "text": "Watch it"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.pdp-reel-wrap > div.related-label",
+    "left": 764,
+    "right": 796,
+    "text": "Watch it"
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.pdp-reel-wrap > div.related-label > span",
+    "left": 764,
+    "right": 784,
+    "text": "Watch it"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.pdp-reel-wrap > div.pdp-reel.hscroll",
+    "left": 796,
+    "right": 1165,
+    "text": ""
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/products/oka-cobra-oka-base",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 758,
+    "text": "↗\nOKA Cobra + OKA base\nEGP 357\nEGP 409\nI"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 758,
+    "text": "OKA Cobra + OKA base\nEGP 357\nEGP 409\nIn "
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.pdp-block",
+    "left": 609,
+    "right": 682,
+    "text": "Estimated delivery\n1–5 days\nShipping fee"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.pdp-block > div.pay",
+    "left": 668,
+    "right": 682,
+    "text": "Cash on delivery"
+   },
+   {
+    "sel": "div.pdp-card > div.pdp-block > div.pay > span",
+    "left": 668,
+    "right": 682,
+    "text": "Cash on delivery"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 696,
+    "right": 737,
+    "text": "Earn ~357 points when delivered"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 709,
+    "right": 724,
+    "text": "Earn ~357 points when delivered"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.story.story-cobra",
+    "left": 784,
+    "right": 1482,
+    "text": "OKA COBRA\nBold angles. Denser smoke.\n\nA "
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/products/1-pcs-of-foil",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 805,
+    "text": "↗\n1 Pcs of Foil\nEGP 5\nOut of stock\nAdd 2"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 805,
+    "text": "1 Pcs of Foil\nEGP 5\nOut of stock\nAdd 28 "
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.pdp-block",
+    "left": 667,
+    "right": 729,
+    "text": "Description\n1 Piece of foil for one OKA "
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.pdp-block > div.section-label",
+    "left": 682,
+    "right": 698,
+    "text": "Description"
+   },
+   {
+    "sel": "div.pdp-card > div.pdp-block > div.section-label > span",
+    "left": 682,
+    "right": 698,
+    "text": "Description"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.pdp-block > div.desc",
+    "left": 708,
+    "right": 729,
+    "text": "1 Piece of foil for one OKA session"
+   },
+   {
+    "sel": "div.pdp-card > div.pdp-block > div.desc > span",
+    "left": 710,
+    "right": 726,
+    "text": "1 Piece of foil for one OKA session"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 743,
+    "right": 784,
+    "text": "Earn ~5 points when delivered"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.step-btn",
+    "text": "–",
+    "by": "header.top-bar",
+    "scrollTop": 541
+   },
+   {
+    "el": "button.step-btn",
+    "text": "+",
+    "by": "header.top-bar",
+    "scrollTop": 541
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/products/tongs?variant=46037718303018",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 875,
+    "text": "↗\nTongs\nEGP 31\nIn stock\nAdd 2 EGP more a"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 875,
+    "text": "Tongs\nEGP 31\nIn stock\nAdd 2 EGP more and"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.pdp-block",
+    "left": 653,
+    "right": 799,
+    "text": "Description\nThese steel hookah tongs pro"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.pdp-block > div.section-label",
+    "left": 668,
+    "right": 684,
+    "text": "Description"
+   },
+   {
+    "sel": "div.pdp-card > div.pdp-block > div.section-label > span",
+    "left": 668,
+    "right": 684,
+    "text": "Description"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.pdp-block > div.desc",
+    "left": 694,
+    "right": 799,
+    "text": "These steel hookah tongs provide a conve"
+   },
+   {
+    "sel": "div.pdp-card > div.pdp-block > div.desc > span",
+    "left": 696,
+    "right": 796,
+    "text": "These steel hookah tongs provide a conve"
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 813,
+    "right": 854,
+    "text": "Earn ~31 points when delivered"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/products/oka-cloud-white-hookah?view=ar",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/products/tongs?view=ar",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/products/foil",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/account",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/orders",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/orders?order=%239000101",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/addresses",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/addresses?view=oka-add-address",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/loyalty",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/subscriptions",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/subscriptions?view=oka-subscribe",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/wishlist",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/support",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa",
+    "left": 644,
+    "right": 759,
+    "text": "How do loyalty points work?\nYou earn 1 p"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.qa-q",
+    "left": 656,
+    "right": 677,
+    "text": "How do loyalty points work?"
+   },
+   {
+    "sel": "div.screen.fade-in > div.qa > div.qa-q > span",
+    "left": 658,
+    "right": 675,
+    "text": "How do loyalty points work?"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.qa-a",
+    "left": 681,
+    "right": 744,
+    "text": "You earn 1 point for every EGP of produc"
+   },
+   {
+    "sel": "div.screen.fade-in > div.qa > div.qa-a > span",
+    "left": 683,
+    "right": 741,
+    "text": "You earn 1 point for every EGP of produc"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.divider",
+    "left": 758,
+    "right": 759,
+    "text": ""
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa",
+    "left": 759,
+    "right": 838,
+    "text": "What if something arrives damaged?\nMessa"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.qa-q",
+    "left": 771,
+    "right": 792,
+    "text": "What if something arrives damaged?"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/checkout-review",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/track?awb=JEGQA0000000002&order=%239000103",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 192,
+    "right": 692,
+    "text": "Out for delivery\nProcessing\nPreparing to"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.test-detail.track-detail",
+    "left": 192,
+    "right": 692,
+    "text": "Out for delivery\nProcessing\nPreparing to"
+   },
+   {
+    "sel": "div.screen.fade-in > div > div.test-detail.track-detail > div.courier",
+    "left": 534,
+    "right": 677,
+    "text": "J&T courier\nQA Courier\n01000000009\nCall\n"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.track-external",
+    "left": 710,
+    "right": 726,
+    "text": "Also see it on the J&T website"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.track-external > span",
+    "left": 710,
+    "right": 726,
+    "text": "Also see it on the J&T website"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 726,
+    "right": 756,
+    "text": ""
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.hdr-btn.flip",
+    "text": "Back",
+    "by": "header.top-bar",
+    "scrollTop": 97
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/about-us",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows",
+    "left": 132,
+    "right": 2759,
+    "text": "Started 2022\n\nFully designed, tested and"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows > div.row-card",
+    "left": 132,
+    "right": 711,
+    "text": "Started 2022\n\nFully designed, tested and"
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > div.row-text",
+    "left": 498,
+    "right": 696,
+    "text": "Fully designed, tested and manufactured "
+   },
+   {
+    "sel": "div.rows > div.row-card > div.row-text > div",
+    "left": 498,
+    "right": 696,
+    "text": "Fully designed, tested and manufactured "
+   },
+   {
+    "sel": "div.row-card > div.row-text > div > p",
+    "left": 498,
+    "right": 696,
+    "text": "Fully designed, tested and manufactured "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows > div.row-card",
+    "left": 729,
+    "right": 1094,
+    "text": "Engineered to perfection\n\nOKA spent mont"
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > div.row-img",
+    "left": 730,
+    "right": 977,
+    "text": ""
+   },
+   {
+    "sel": "div.rows > div.row-card > div.row-img > img",
+    "left": 730,
+    "right": 977,
+    "text": ""
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/how-to-use",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows",
+    "left": 132,
+    "right": 5384,
+    "text": "Fill the flask\n\nFill the flask with abou"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows > div.row-card",
+    "left": 653,
+    "right": 1066,
+    "text": "Installing OKA-STEM"
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > div.row-img",
+    "left": 654,
+    "right": 1015,
+    "text": ""
+   },
+   {
+    "sel": "div.rows > div.row-card > div.row-img > img",
+    "left": 654,
+    "right": 1015,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > h2.row-title",
+    "left": 1027,
+    "right": 1047,
+    "text": "Installing OKA-STEM"
+   },
+   {
+    "sel": "div.rows > div.row-card > h2.row-title > span",
+    "left": 1027,
+    "right": 1047,
+    "text": "Installing OKA-STEM"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.rows > div.row-card",
+    "left": 1084,
+    "right": 1497,
+    "text": "Installing the hose gourmet"
+   },
+   {
+    "sel": "div.screen.fade-in > div.rows > div.row-card > div.row-img",
+    "left": 1085,
+    "right": 1446,
+    "text": ""
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/contact",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/faq",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/pages/online-store",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row",
+    "left": 631,
+    "right": 719,
+    "text": "OKA Parts\n12 products"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row > span.cat-thumb",
+    "left": 646,
+    "right": 704,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span.cat-thumb > img",
+    "left": 648,
+    "right": 702,
+    "text": ""
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > a.cat-row > span",
+    "left": 657,
+    "right": 694,
+    "text": "OKA Parts\n12 products"
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span > span.cat-label",
+    "left": 657,
+    "right": 676,
+    "text": "OKA Parts"
+   },
+   {
+    "sel": "a.cat-row > span > span.cat-label > span",
+    "left": 657,
+    "right": 676,
+    "text": "OKA Parts"
+   },
+   {
+    "sel": "div.screen.fade-in > a.cat-row > span > span.cat-count",
+    "left": 679,
+    "right": 694,
+    "text": "12 products"
+   },
+   {
+    "sel": "a.cat-row > span > span.cat-count > span",
+    "left": 679,
+    "right": 694,
+    "text": "12"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/search",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/search?q=%D8%B4%D9%8A%D8%B4%D9%87",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 191,
+    "right": 2855,
+    "text": "18 products\nOKA Pink\nEGP 169\nAdd\nOKA whi"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.grid",
+    "left": 218,
+    "right": 2855,
+    "text": "OKA Pink\nEGP 169\nAdd\nOKA white\nEGP 169\nA"
+   },
+   {
+    "sel": "div.screen.fade-in > div > div.grid > div.gcard",
+    "left": 513,
+    "right": 793,
+    "text": "OKA Carbon Black\nEGP 189\nAdd"
+   },
+   {
+    "sel": "div > div.grid > div.gcard > a.gcard-img",
+    "left": 514,
+    "right": 670,
+    "text": ""
+   },
+   {
+    "sel": "div > div.grid > div.gcard > div.gcard-body",
+    "left": 670,
+    "right": 792,
+    "text": "OKA Carbon Black\nEGP 189\nAdd"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 678,
+    "right": 708,
+    "text": "OKA Carbon Black"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 708,
+    "right": 778,
+    "text": "EGP 189\nAdd"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 716,
+    "right": 732,
+    "text": "EGP 189"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 2226
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 2226
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/search?q=hookah",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 191,
+    "right": 1971,
+    "text": "11 products\nOKA Pink\nEGP 169\nAdd\nOKA whi"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.grid",
+    "left": 218,
+    "right": 1971,
+    "text": "OKA Pink\nEGP 169\nAdd\nOKA white\nEGP 169\nA"
+   },
+   {
+    "sel": "div.screen.fade-in > div > div.grid > div.gcard",
+    "left": 513,
+    "right": 793,
+    "text": "OKA Carbon Black\nEGP 189\nAdd"
+   },
+   {
+    "sel": "div > div.grid > div.gcard > a.gcard-img",
+    "left": 514,
+    "right": 670,
+    "text": ""
+   },
+   {
+    "sel": "div > div.grid > div.gcard > div.gcard-body",
+    "left": 670,
+    "right": 792,
+    "text": "OKA Carbon Black\nEGP 189\nAdd"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > a.gcard-title",
+    "left": 678,
+    "right": 708,
+    "text": "OKA Carbon Black"
+   },
+   {
+    "sel": "div.grid > div.gcard > div.gcard-body > div.gcard-row",
+    "left": 708,
+    "right": 778,
+    "text": "EGP 189\nAdd"
+   },
+   {
+    "sel": "div.gcard > div.gcard-body > div.gcard-row > span.gcard-price",
+    "left": 716,
+    "right": 732,
+    "text": "EGP 189"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 1342
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 1342
+   }
+  ]
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/cart",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div",
+    "left": 131,
+    "right": 1199,
+    "text": "OKA white\nChange\nEGP 169\n–\n1\n+\nEGP 169\n✕"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.totals",
+    "left": 541,
+    "right": 685,
+    "text": "Subtotal\nEGP 267\nShipping\nEGP 60\nTotal\nE"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.rail-title",
+    "left": 703,
+    "right": 733,
+    "text": "Complete your setup"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > div.xrail.hscroll",
+    "left": 733,
+    "right": 1025,
+    "text": "Unlocks cheaper shipping\nTobacco Bowls-I"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div > button.join-nudge",
+    "left": 1025,
+    "right": 1107,
+    "text": "Earn 267 points on this order\nSign in to"
+   },
+   {
+    "sel": "div.screen.fade-in > div > button.join-nudge > span.join-tick",
+    "left": 1057,
+    "right": 1077,
+    "text": ""
+   },
+   {
+    "sel": "div > button.join-nudge > span.join-tick > svg",
+    "left": 1061,
+    "right": 1073,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > div > button.join-nudge > span",
+    "left": 1039,
+    "right": 1093,
+    "text": "Earn 267 points on this order\nSign in to"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/account",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/account/login",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/account/register",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/account/addresses",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/account/orders/9100000003",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/account/reset/9000000000001/qatoken",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/account/activate/9000000000001/qatoken",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/policies/refund-policy",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body",
+    "left": 118,
+    "right": 1424,
+    "text": "We have a 14-day return policy, which me"
+   },
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body > div.rte",
+    "left": 118,
+    "right": 1424,
+    "text": "We have a 14-day return policy, which me"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 184,
+    "right": 800,
+    "text": "The tobacco ready bowls are non-returnab"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > span",
+    "left": 780,
+    "right": 797,
+    "text": ""
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > a",
+    "left": 780,
+    "right": 797,
+    "text": "oka-egypt@hotmail.com"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 800,
+    "right": 822,
+    "text": ""
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 822,
+    "right": 954,
+    "text": "Damages and issues\nPlease inspect your o"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 824,
+    "right": 841,
+    "text": "Damages and issues"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/policies/privacy-policy",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body",
+    "left": 118,
+    "right": 11612,
+    "text": "Last updated: 6/7/2023\n\n\nThis Privacy Po"
+   },
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body > div.rte",
+    "left": 118,
+    "right": 11612,
+    "text": "Last updated: 6/7/2023\n\n\nThis Privacy Po"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 628,
+    "right": 782,
+    "text": "We may update this Privacy Policy from t"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 782,
+    "right": 1112,
+    "text": "We value your privacy and the informatio"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > span",
+    "left": 784,
+    "right": 955,
+    "text": "We value your privacy and the informatio"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > span",
+    "left": 982,
+    "right": 1109,
+    "text": "Our website uses cookies to keep track o"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > h2",
+    "left": 1130,
+    "right": 1174,
+    "text": "How We Collect and Use Your Personal Inf"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 1182,
+    "right": 1314,
+    "text": "To provide the Services, we collect and "
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/policies/shipping-policy",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body",
+    "left": 122,
+    "right": 1250,
+    "text": "Shipping & Delivery Policy\n\nOrder Confir"
+   },
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body > div.rte",
+    "left": 122,
+    "right": 1250,
+    "text": "Shipping & Delivery Policy\n\nOrder Confir"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 526,
+    "right": 680,
+    "text": "Refusal of Delivery & Blacklisting We ar"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > ul",
+    "left": 694,
+    "right": 892,
+    "text": "The customer’s name and details will be "
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > ul > li",
+    "left": 694,
+    "right": 760,
+    "text": "The customer’s name and details will be "
+   },
+   {
+    "sel": "div.rte > ul > li > p",
+    "left": 694,
+    "right": 760,
+    "text": "The customer’s name and details will be "
+   },
+   {
+    "sel": "ul > li > p > b",
+    "left": 718,
+    "right": 757,
+    "text": "OKA Blacklist"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > ul > li",
+    "left": 760,
+    "right": 826,
+    "text": "This Blacklist is shared with all our si"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/policies/terms-of-service",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body",
+    "left": 118,
+    "right": 12974,
+    "text": "OVERVIEW\nThis website is operated by OKA"
+   },
+   {
+    "sel": "main#content > div.shopify-policy__container > div.shopify-policy__body > div.rte",
+    "left": 118,
+    "right": 12974,
+    "text": "OVERVIEW\nThis website is operated by OKA"
+   },
+   {
+    "sel": "div.shopify-policy__container > div.shopify-policy__body > div.rte > p",
+    "left": 118,
+    "right": 11448,
+    "text": "OVERVIEW\nThis website is operated by OKA"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 1308,
+    "right": 1325,
+    "text": "SECTION 1 - ONLINE STORE TERMS"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 1770,
+    "right": 1787,
+    "text": "SECTION 2 - GENERAL CONDITIONS"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 2276,
+    "right": 2337,
+    "text": "SECTION 3 - ACCURACY, COMPLETENESS AND T"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 2782,
+    "right": 2821,
+    "text": "SECTION 4 - MODIFICATIONS TO THE SERVICE"
+   },
+   {
+    "sel": "div.shopify-policy__body > div.rte > p > strong",
+    "left": 3068,
+    "right": 3107,
+    "text": "SECTION 5 - PRODUCTS OR SERVICES (if app"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/policies/contact-information",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/password",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "none",
+   "appW": 430,
+   "appH": 375,
+   "appL": 119,
+   "appT": 0,
+   "rot": ""
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/gift_cards/qa12345678",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "error": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at eval (eval at evaluate (:290:30), <anonymous>:4:23)\n    at UtilityScript.evaluate (<anonymous>:292:16)"
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/nope-404",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/ar/",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__feed > div.home.fade-in > div.feed > section.page",
+    "left": 667,
+    "right": 1334,
+    "text": "العروض\nعبيلي العرض فالشنطة\nعبيلي العرض ف"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > h2.page-title",
+    "left": 774,
+    "right": 800,
+    "text": "العروض"
+   },
+   {
+    "sel": "div.feed > section.page > h2.page-title > span",
+    "left": 774,
+    "right": 800,
+    "text": "العروض"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > div.rail.offers",
+    "left": 814,
+    "right": 1273,
+    "text": "عبيلي العرض فالشنطة\nعبيلي العرض فالشنطة"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__feed > div.home.fade-in > div.feed > section.page",
+    "left": 1334,
+    "right": 2001,
+    "text": "شيشة أوكا المتميزة\nأوكا فوشيا\n١٦٩ ج.م\nعب"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > h2.page-title.anim",
+    "left": 1461,
+    "right": 1484,
+    "text": "شيشة أوكا المتميزة"
+   },
+   {
+    "sel": "div.feed > section.page > h2.page-title.anim > span",
+    "left": 1461,
+    "right": 1484,
+    "text": "شيشة أوكا المتميزة"
+   },
+   {
+    "sel": "div.home.fade-in > div.feed > section.page > div.rail.prods",
+    "left": 1500,
+    "right": 1922,
+    "text": "أوكا فوشيا\n١٦٩ ج.م\nعبيلي فالشنطة\nشوفها ع"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/ar/products/oka-cobra",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top",
+    "left": 64,
+    "right": 716,
+    "text": "٣D · AR\n↗\nأوكا كوبرا\n١٨٩ ج.م\nمتوفر\nالشحن"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card",
+    "left": 338,
+    "right": 716,
+    "text": "أوكا كوبرا\n١٨٩ ج.م\nمتوفر\nالشحن ٣٦ ج.م — "
+   },
+   {
+    "sel": "div.screen.fade-in > div.snap-pg.pdp-top > div.pdp-card > div.points-box",
+    "left": 654,
+    "right": 695,
+    "text": "هتاخد ~١٨٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div.snap-pg.pdp-top > div.pdp-card > div.points-box > span",
+    "left": 667,
+    "right": 682,
+    "text": "هتاخد ~١٨٩ نقطة لما يوصلك"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen",
+    "left": 732,
+    "right": 1192,
+    "text": "وقف هنا وشوفها في مكانك\nفي مكانك\nبحجمها "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage",
+    "left": 732,
+    "right": 1074,
+    "text": "وقف هنا وشوفها في مكانك"
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > img.arx-fallback",
+    "left": 797,
+    "right": 1009,
+    "text": ""
+   },
+   {
+    "sel": "div.screen.fade-in > section.snap-pg.ar-screen > div.arx-stage > div.arx-loading",
+    "left": 928,
+    "right": 944,
+    "text": "وقف هنا وشوفها في مكانك"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/ar/collections/hookahs",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/ar/pages/support",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa",
+    "left": 581,
+    "right": 675,
+    "text": "نقاط الولاء بتشتغل إزاي؟\nبتاخد نقطة على "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.divider",
+    "left": 674,
+    "right": 675,
+    "text": ""
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa",
+    "left": 675,
+    "right": 754,
+    "text": "لو حاجة وصلت مكسورة؟\nابعتلنا على واتساب "
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.qa-q",
+    "left": 687,
+    "right": 708,
+    "text": "لو حاجة وصلت مكسورة؟"
+   },
+   {
+    "sel": "div.screen.fade-in > div.qa > div.qa-q > span",
+    "left": 689,
+    "right": 706,
+    "text": "لو حاجة وصلت مكسورة؟"
+   },
+   {
+    "sel": "div#shopify-section-template--191458214186__main > div.screen.fade-in > div.qa > div.qa-a",
+    "left": 712,
+    "right": 754,
+    "text": "ابعتلنا على واتساب في خلال ٤٨ ساعة بصورة"
+   },
+   {
+    "sel": "div.screen.fade-in > div.qa > div.qa-a > span",
+    "left": 714,
+    "right": 751,
+    "text": "ابعتلنا على واتساب في خلال ٤٨ ساعة بصورة"
+   },
+   {
+    "sel": "div#legal",
+    "left": 754,
+    "right": 806,
+    "text": "الشروط والسياسات"
+   }
+  ],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": true,
+   "transform": "matrix(0, -1, 1, 0, -187.5, -333.5)",
+   "appW": 667,
+   "appH": 375,
+   "appL": 0,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "l667",
+  "locale": "en",
+  "route": "/checkout",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 667,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "error": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at eval (eval at evaluate (:290:30), <anonymous>:4:23)\n    at UtilityScript.evaluate (<anonymous>:292:16)"
+ }
+]

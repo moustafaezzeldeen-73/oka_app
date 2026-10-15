@@ -12,8 +12,8 @@ export const BASE = process.env.E2E_BASE || 'http://localhost:9410';
 export const OUT = process.env.E2E_OUT || '/home/user/oka_app/qa/harness/out-e2e';
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 
-export const MOBILES = ['iPhone 13', 'Pixel 7'];
-export const ALL_DEVICES = ['iPhone 13', 'Pixel 7', 'Desktop 1440'];
+export const MOBILES = process.env.E2E_DEVICES ? process.env.E2E_DEVICES.split(',').filter((d) => !d.startsWith('Desktop')) : ['iPhone 13', 'Pixel 7'];
+export const ALL_DEVICES = process.env.E2E_DEVICES ? process.env.E2E_DEVICES.split(',') : ['iPhone 13', 'Pixel 7', 'Desktop 1440'];
 
 // Variant ids from the fixtures
 export const V = {

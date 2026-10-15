@@ -1,0 +1,114 @@
+[
+  {
+    "id": "HM-1",
+    "scenario": "Home loads, feed pages, no console/page errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "16 pages; snap=y mandatory; feed h=664/664; ",
+    "data": {
+      "pages": 16,
+      "kinds": [
+        "banner-page",
+        "col:العروض",
+        "col:شيشة أوكا المتميزة",
+        "banner-page",
+        "banner-page",
+        "col:أوكا بارتي",
+        "compare-page",
+        "col:أوكا كوبرا",
+        "banner-page",
+        "col:معسل أسود",
+        "banner-page",
+        "col:حجر جاهز للتدخين",
+        "banner-page",
+        "col:قطع الغيار",
+        "ribbon-page",
+        "policies-page"
+      ],
+      "snap": "y mandatory",
+      "fh": 664,
+      "vh": 664
+    },
+    "at": "2026-10-14T21:42:09.504Z"
+  },
+  {
+    "id": "HM-2",
+    "scenario": "Snap scrolling: feed scroll by one screen snaps to next page, active class follows",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "[{\"top\":664,\"h\":664,\"aligned\":true,\"active\":1},{\"top\":1328,\"h\":664,\"aligned\":true,\"active\":2},{\"top\":1992,\"h\":664,\"aligned\":true,\"active\":3},{\"top\":2656,\"h\":664,\"aligned\":true,\"active\":4}]",
+    "at": "2026-10-14T21:42:13.794Z"
+  },
+  {
+    "id": "HM-3",
+    "scenario": "Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "collection pages link to: [\"/collections/hookahs\",null,null,null,null,null,null]; setting collections absent from feed: hoses, coal, bowls (SI-02 partly)",
+    "at": "2026-10-14T21:42:13.801Z"
+  },
+  {
+    "id": "HM-4",
+    "scenario": "Every feed link (banners, offer cards, collection titles) resolves 200",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "15 links: /collections/oka-basic-hookahs-copy /collections/hookahs /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /policies/shipping-policy /ar/policies/shipping-policy /policies/refund-policy /ar/policies/refund-policy /policies/terms-of-service /ar/policies/terms-of-service /policies/privacy-policy /ar/policies/privacy-policy; bad=[]",
+    "at": "2026-10-14T21:42:14.613Z"
+  },
+  {
+    "id": "HM-5",
+    "scenario": "Offer slot not in focus: first tap only centres it (no add); tap in focus adds the bundle",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "slots=[{\"active\":true,\"l\":67,\"r\":323,\"w\":390},{\"active\":false,\"l\":-206,\"r\":51,\"w\":390}]; second fully visible=false; after side tap url=/cart active=[] cart items=5",
+    "at": "2026-10-14T21:42:19.647Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #1 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=4 missing= original=298 total=267 discounts=[] lineDisc=[\"tong free\"] totals=[\"المجموع قبل الشحن ٢٩٨ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٢٧ ج.م\",\"هتاخد ٢٦٧ نقطة لما يوصلك\"]",
+    "at": "2026-10-14T21:42:24.601Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #2 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=5 missing= original=467 total=395 discounts=[] lineDisc=[\"Valentines\",\"Valentines\",\"Valentines\"] totals=[\"المجموع قبل الشحن ٤٦٧ ج.م\",\"الخصم -٧٢ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٤٣١ ج.م\",\"هتاخد ٣٩٥ نقطة لما يوصلك\"]",
+    "at": "2026-10-14T21:42:30.163Z"
+  },
+  {
+    "id": "HM-7",
+    "scenario": "Offer button double-tap adds the bundle once (disabled guard)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "item_count=4 (bundle has 4 variants)",
+    "at": "2026-10-14T21:42:34.612Z"
+  },
+  {
+    "id": "HM-8",
+    "scenario": "Offer bundle containing a sold-out variant → toast, nothing added (atomic)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/ items=0 toast=\"معرفناش نضيف العرض — ممكن حاجة منه تكون خلصت\" (DOM-modified bundle to include sold-out foil)",
+    "at": "2026-10-14T21:42:38.659Z"
+  },
+  {
+    "id": "HM-9",
+    "scenario": "Product card: single tap opens PDP after 280ms",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "ERROR",
+    "note": "locator.getAttribute: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('.page[data-i=\"0\"] [data-slot].active [data-tap]').first()\u001b[22m\n",
+    "at": "2026-10-14T21:42:46.375Z"
+  },
+  {
+    "id": "HM-10",
+    "scenario": "Product card: double tap adds to cart (no navigation)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "ERROR",
+    "note": "page.evaluate: Target page, context or browser has been closed",
+    "at": "2026-10-14T21:42:46.385Z"
+  }
+]

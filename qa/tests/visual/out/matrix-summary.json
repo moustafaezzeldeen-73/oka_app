@@ -1,0 +1,430 @@
+{
+ "axe": [
+  {
+   "kind": "violation",
+   "impact": "critical",
+   "id": "meta-viewport",
+   "help": "Zooming and scaling must not be disabled",
+   "pages": [
+    "/",
+    "/collections",
+    "/collections/oka-cobra",
+    "/collections/ready-to-smoke-bowls?sort_by=price-ascending",
+    "/collections/all?filter.v.availability=1",
+    "/collections/hookahs?page=2",
+    "/collections/does-not-exist",
+    "/products/oka-cloud-white-hookah",
+    "/products/oka-cobra",
+    "/products/oka-black-tobacco",
+    "/products/oka-cobra-oka-base",
+    "/products/1-pcs-of-foil",
+    "/products/tongs?variant=46037718303018",
+    "/products/oka-cloud-white-hookah?view=ar",
+    "/products/tongs?view=ar",
+    "/products/foil",
+    "/pages/account",
+    "/pages/orders",
+    "/pages/orders?order=%239000101",
+    "/pages/addresses",
+    "/pages/addresses?view=oka-add-address",
+    "/pages/loyalty",
+    "/pages/subscriptions",
+    "/pages/subscriptions?view=oka-subscribe",
+    "/pages/wishlist",
+    "/pages/support",
+    "/pages/checkout-review",
+    "/pages/track?awb=JEGQA0000000002&order=%239000103",
+    "/pages/about-us",
+    "/pages/how-to-use",
+    "/pages/contact",
+    "/pages/faq",
+    "/pages/online-store",
+    "/search",
+    "/search?q=%D8%B4%D9%8A%D8%B4%D9%87",
+    "/search?q=hookah",
+    "/cart",
+    "/account",
+    "/account/login",
+    "/account/register",
+    "/account/addresses",
+    "/account/orders/9100000003",
+    "/account/reset/9000000000001/qatoken",
+    "/account/activate/9000000000001/qatoken",
+    "/policies/refund-policy",
+    "/policies/privacy-policy",
+    "/policies/shipping-policy",
+    "/policies/terms-of-service",
+    "/policies/contact-information",
+    "/nope-404",
+    "/ar/",
+    "/ar/products/oka-cobra",
+    "/ar/collections/hookahs",
+    "/ar/pages/support"
+   ],
+   "nodes": 416,
+   "targets": [
+    "meta[name=\"viewport\"]"
+   ],
+   "summary": "Fix any of the following:\n  maximum-scale on <meta> tag disables zooming on mobile devices"
+  },
+  {
+   "kind": "violation",
+   "impact": "critical",
+   "id": "image-alt",
+   "help": "Images must have alternative text",
+   "pages": [
+    "/products/oka-cloud-white-hookah",
+    "/products/oka-black-tobacco",
+    "/pages/how-to-use"
+   ],
+   "nodes": 32,
+   "targets": [
+    "video[loop=\"\"] > img",
+    "video > img",
+    ".row-card:nth-child(10) > .row-video > video > img",
+    ".row-card:nth-child(11) > .row-video > video > img"
+   ],
+   "summary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics "
+  },
+  {
+   "kind": "violation",
+   "impact": "critical",
+   "id": "label",
+   "help": "Form elements must have labels",
+   "pages": [
+    "/account/register",
+    "/account/reset/9000000000001/qatoken",
+    "/account/activate/9000000000001/qatoken"
+   ],
+   "nodes": 64,
+   "targets": [
+    "input[name=\"customer[first_name]\"]",
+    "input[name=\"customer[last_name]\"]",
+    "input[type=\"email\"]",
+    "input[type=\"password\"]",
+    "input[name=\"customer[password]\"]",
+    ".field-input[type=\"password\"][autocomplete=\"new-password\"]:nth-child(8)"
+   ],
+   "summary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Elem"
+  },
+  {
+   "kind": "violation",
+   "impact": "serious",
+   "id": "link-name",
+   "help": "Links must have discernible text",
+   "pages": [
+    "/",
+    "/products/oka-cloud-white-hookah",
+    "/products/oka-cobra",
+    "/products/oka-black-tobacco",
+    "/products/oka-cobra-oka-base",
+    "/products/1-pcs-of-foil",
+    "/products/tongs?variant=46037718303018",
+    "/cart",
+    "/ar/",
+    "/ar/products/oka-cobra"
+   ],
+   "nodes": 504,
+   "targets": [
+    ".banner-page[data-banner=\"\"]:nth-child(1) > .fill-cover.banner-lang > .banner-fill",
+    ".offer-slot.active[data-slot=\"\"] > .offer-card[href$=\"hookahs\"]",
+    ".offer-slot[data-slot=\"\"]:nth-child(2) > .offer-card[href$=\"hookahs\"]",
+    ".fill-contain.banner-lang.l-ar > .banner-fill[href$=\"oka-parties\"]",
+    ".fill-cover.banner-lang.l-ar > .banner-fill[href$=\"oka-parties\"]",
+    ".fill-contain.banner-lang.l-ar > .banner-fill[href$=\"dark-tobacco\"]",
+    ".rcard:nth-child(1) > .rcard-img",
+    ".rcard-img[href$=\"tongs\"]",
+    ".rcard:nth-child(3) > .rcard-img",
+    ".rcard:nth-child(4) > .rcard-img",
+    ".rcard:nth-child(5) > .rcard-img",
+    ".rcard:nth-child(6) > .rcard-img"
+   ],
+   "summary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do no"
+  },
+  {
+   "kind": "violation",
+   "impact": "serious",
+   "id": "scrollable-region-focusable",
+   "help": "Scrollable region must have keyboard access",
+   "pages": [
+    "/products/oka-cobra-oka-base",
+    "/policies/shipping-policy"
+   ],
+   "nodes": 16,
+   "targets": [
+    ".pdp-gallery",
+    ".shopify-policy__container"
+   ],
+   "summary": "Fix any of the following:\n  Element should have focusable content\n  Element should be focusable"
+  },
+  {
+   "kind": "violation",
+   "impact": "serious",
+   "id": "nested-interactive",
+   "help": "Interactive controls must not be nested",
+   "pages": [
+    "/pages/addresses",
+    "/account/addresses"
+   ],
+   "nodes": 24,
+   "targets": [
+    ".active",
+    "div[data-addr=\"9000000002\"]",
+    "div[data-addr=\"9000000003\"]"
+   ],
+   "summary": "Fix any of the following:\n  Element has focusable descendants"
+  },
+  {
+   "kind": "violation",
+   "impact": "serious",
+   "id": "target-size",
+   "help": "All touch targets must be 24px large, or leave sufficient space",
+   "pages": [
+    "/pages/addresses",
+    "/account/addresses"
+   ],
+   "nodes": 24,
+   "targets": [
+    ".active > .addr-inner > div > .addr-actions > .red.addr-action[data-delete-addr=\"\"]",
+    "div[data-addr=\"9000000002\"] > .addr-inner > div > .addr-actions > .addr-action[data-make-default=\"\"]",
+    "div[data-addr=\"9000000002\"] > .addr-inner > div > .addr-actions > .red.addr-action[data-delete-addr=\"\"]"
+   ],
+   "summary": "Fix any of the following:\n  Target has insufficient size (29.4px by 16px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 16px instead of at least 24px."
+  },
+  {
+   "kind": "violation",
+   "impact": "serious",
+   "id": "color-contrast",
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "pages": [
+    "/pages/track?awb=JEGQA0000000002&order=%239000103",
+    "/cart"
+   ],
+   "nodes": 12,
+   "targets": [
+    ".wa",
+    "div[data-qty=\"1\"] > .line-body > .line-variant[data-replace=\"\"] > b",
+    "div[data-qty=\"2\"] > .line-body > .line-variant[data-replace=\"\"] > b"
+   ],
+   "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.98 (foreground color: #ffffff, background color: #25d366, font size: 10.1pt (13.5px), font weight: bold). Expected contrast ratio of 4.5:1"
+  },
+  {
+   "kind": "violation",
+   "impact": "serious",
+   "id": "document-title",
+   "help": "Documents must have <title> element to aid in navigation",
+   "pages": [
+    "/collections/all?view=oka-data"
+   ],
+   "nodes": 8,
+   "targets": [
+    "html"
+   ],
+   "summary": "Fix any of the following:\n  Document does not have a non-empty <title> element"
+  },
+  {
+   "kind": "violation",
+   "impact": "serious",
+   "id": "html-has-lang",
+   "help": "<html> element must have a lang attribute",
+   "pages": [
+    "/collections/all?view=oka-data"
+   ],
+   "nodes": 8,
+   "targets": [
+    "html"
+   ],
+   "summary": "Fix any of the following:\n  The <html> element does not have a lang attribute"
+  },
+  {
+   "kind": "violation",
+   "impact": "moderate",
+   "id": "page-has-heading-one",
+   "help": "Page should contain a level-one heading",
+   "pages": [
+    "/collections/all?view=oka-data",
+    "/collections/does-not-exist",
+    "/products/foil",
+    "/pages/orders?order=%239000101",
+    "/pages/addresses",
+    "/pages/addresses?view=oka-add-address",
+    "/pages/loyalty",
+    "/pages/subscriptions",
+    "/pages/subscriptions?view=oka-subscribe",
+    "/pages/wishlist",
+    "/pages/support",
+    "/pages/checkout-review",
+    "/pages/track?awb=JEGQA0000000002&order=%239000103",
+    "/pages/about-us",
+    "/pages/how-to-use",
+    "/pages/contact",
+    "/pages/faq",
+    "/search",
+    "/search?q=%D8%B4%D9%8A%D8%B4%D9%87",
+    "/search?q=hookah",
+    "/account/register",
+    "/account/addresses",
+    "/account/orders/9100000003",
+    "/account/reset/9000000000001/qatoken",
+    "/account/activate/9000000000001/qatoken",
+    "/password",
+    "/gift_cards/qa12345678",
+    "/nope-404",
+    "/account",
+    "/account/login",
+    "/ar/pages/support"
+   ],
+   "nodes": 232,
+   "targets": [
+    "html"
+   ],
+   "summary": "Fix all of the following:\n  Page must have a level-one heading"
+  },
+  {
+   "kind": "violation",
+   "impact": "moderate",
+   "id": "landmark-one-main",
+   "help": "Document should have one main landmark",
+   "pages": [
+    "/collections/all?view=oka-data",
+    "/gift_cards/qa12345678",
+    "/checkout"
+   ],
+   "nodes": 24,
+   "targets": [
+    "html"
+   ],
+   "summary": "Fix all of the following:\n  Document does not have a main landmark"
+  },
+  {
+   "kind": "violation",
+   "impact": "moderate",
+   "id": "region",
+   "help": "All page content should be contained by landmarks",
+   "pages": [
+    "/gift_cards/qa12345678",
+    "/checkout"
+   ],
+   "nodes": 64,
+   "targets": [
+    ".app",
+    "h1",
+    "p:nth-child(2)",
+    "table",
+    "p:nth-child(4)",
+    "p:nth-child(5)",
+    "pre"
+   ],
+   "summary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+  },
+  {
+   "kind": "violation",
+   "impact": "moderate",
+   "id": "heading-order",
+   "help": "Heading levels should only increase by one",
+   "pages": [
+    "/policies/shipping-policy"
+   ],
+   "nodes": 8,
+   "targets": [
+    "h3"
+   ],
+   "summary": "Fix any of the following:\n  Heading order invalid"
+  },
+  {
+   "kind": "violation",
+   "impact": "minor",
+   "id": "empty-heading",
+   "help": "Headings should not be empty",
+   "pages": [
+    "/policies/privacy-policy"
+   ],
+   "nodes": 16,
+   "targets": [
+    "h2:nth-child(34)",
+    "h2:nth-child(51)"
+   ],
+   "summary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+  },
+  {
+   "kind": "incomplete",
+   "impact": "serious",
+   "id": "color-contrast",
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "pages": [
+    "/",
+    "/collections",
+    "/collections/oka-cobra",
+    "/collections/ready-to-smoke-bowls?sort_by=price-ascending",
+    "/collections/all?filter.v.availability=1",
+    "/collections/hookahs?page=2",
+    "/collections/does-not-exist",
+    "/products/oka-cloud-white-hookah",
+    "/products/oka-cobra",
+    "/products/oka-black-tobacco",
+    "/products/oka-cobra-oka-base",
+    "/products/1-pcs-of-foil",
+    "/products/tongs?variant=46037718303018",
+    "/products/oka-cloud-white-hookah?view=ar",
+    "/products/tongs?view=ar",
+    "/products/foil",
+    "/pages/account",
+    "/pages/orders",
+    "/pages/orders?order=%239000101",
+    "/pages/addresses",
+    "/pages/addresses?view=oka-add-address",
+    "/pages/loyalty",
+    "/pages/subscriptions",
+    "/pages/subscriptions?view=oka-subscribe",
+    "/pages/wishlist",
+    "/pages/support",
+    "/pages/checkout-review",
+    "/pages/track?awb=JEGQA0000000002&order=%239000103",
+    "/pages/about-us",
+    "/pages/how-to-use",
+    "/pages/contact",
+    "/pages/faq",
+    "/pages/online-store",
+    "/search",
+    "/search?q=%D8%B4%D9%8A%D8%B4%D9%87",
+    "/search?q=hookah",
+    "/cart",
+    "/account",
+    "/account/login",
+    "/account/register",
+    "/account/addresses",
+    "/account/orders/9100000003",
+    "/account/reset/9000000000001/qatoken",
+    "/account/activate/9000000000001/qatoken",
+    "/policies/refund-policy",
+    "/policies/privacy-policy",
+    "/policies/shipping-policy",
+    "/policies/terms-of-service",
+    "/policies/contact-information",
+    "/password",
+    "/gift_cards/qa12345678",
+    "/nope-404",
+    "/ar/",
+    "/ar/products/oka-cobra",
+    "/ar/collections/hookahs",
+    "/ar/pages/support"
+   ],
+   "nodes": 3694,
+   "targets": [
+    "span[data-lang-label=\"\"]",
+    ".cat-row:nth-child(2) > span:nth-child(2) > .cat-count > .l-ar:nth-child(2)",
+    "a[href$=\"oka-parties\"] > span:nth-child(2) > .cat-count > .l-ar:nth-child(2)",
+    "a[href$=\"oka-cobra\"] > span:nth-child(2) > .cat-label > .l-ar",
+    "a[href$=\"oka-cobra\"] > span:nth-child(2) > .cat-count > .l-ar:nth-child(2)",
+    "a[href$=\"dark-tobacco\"] > span:nth-child(2) > .cat-label > .l-ar",
+    "h1 > .l-ar",
+    ".dark",
+    ".gcard-title[href$=\"oka-cobra\"] > .l-ar",
+    "div[data-idx=\"0\"] > .gcard-body > .gcard-row > .gcard-price > .l-ar",
+    "div[data-price=\"357\"] > .gcard-body > .gcard-row > .gcard-price > .l-ar",
+    "div[data-idx=\"0\"] > .gcard-body > .gcard-title > .l-ar"
+   ],
+   "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+  }
+ ]
+}
