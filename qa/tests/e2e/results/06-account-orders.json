@@ -534,5 +534,77 @@
     "status": "PASS",
     "note": "alert=\"Can’t change it Something went wrong updating your order. Please try again. OK\" {\"disabled\":false,\"note\":null}",
     "at": "2026-10-19T11:36:41.068Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"timeout\": friendly alert, state",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "alert=\"Can’t change it Something went wrong updating your order. Please try again. OK\" {\"disabled\":false,\"note\":null}",
+    "at": "2026-10-19T11:36:53.017Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"shipped\": friendly alert, state",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "alert=\"Can’t change it This order is already being prepared for shipping, so it can no longer be changed or cancelled. OK\" {\"disabled\":true,\"note\":\"This order has been shipped It’s on its way, so it can no lo\"}",
+    "at": "2026-10-19T11:36:56.916Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"not-found\": friendly alert, state",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "alert=\"Can’t change it We couldn't find an order with that order number and phone number. OK\" {\"disabled\":false,\"note\":null}",
+    "at": "2026-10-19T11:37:00.837Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"malformed\": friendly alert, state",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "alert=\"Can’t change it Something went wrong updating your order. Please try again. OK\" {\"disabled\":false,\"note\":null}",
+    "at": "2026-10-19T11:37:04.797Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"rpc-error\": friendly alert, state",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "alert=\"Can’t change it Please check the details you entered and try again. OK\" {\"disabled\":false,\"note\":null}",
+    "at": "2026-10-19T11:37:08.681Z"
+  },
+  {
+    "id": "OR-6",
+    "scenario": "customer_quote_order error while editing → sheet shows error, Save disabled",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"txt\":\"Sharqia Beheira Gharbia Aswan Asyut Beni Suef Luxor Minya Qena Sohag Matrouh New Valley North Sinai South Sinai Red Sea Area Street and building Floor, flat, landmark (optional) Something went wrong updating your order. Please try again. Save changes\",\"dim\":true}",
+    "at": "2026-10-19T11:37:13.349Z"
+  },
+  {
+    "id": "OR-7",
+    "scenario": "Cancel #9000106: \"Back\" keeps it; \"Cancel order\" calls API, marks cancelled; reload state",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "confirm=\"Cancel order? Are you sure? Order #9000106 will be cancelled and this can’t be undone. Back Cancel order\" calls after Back=0; done=\"Order cancelled Your order #9000106 has been cancelled. OK\" {\"banner\":true,\"cancelled\":\"true\"}; after reload {\"banner\":false,\"cancelled\":\"false\"} oka.cancelled=null (harness fixture is not cancelled server-side, so after reload the theme relies on oka.cancelled, which nothing writes)",
+    "at": "2026-10-19T11:37:20.479Z"
+  },
+  {
+    "id": "OR-8",
+    "scenario": "Cancel when customer_cancel_order → \"shipped\"",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "alert=\"Could not cancel This order is already being prepared for shipping, so it can no longer be changed or cancelled. OK\" {\"editDisabled\":true,\"note\":true,\"cancelled\":\"false\"}",
+    "at": "2026-10-19T11:37:24.741Z"
+  },
+  {
+    "id": "OR-8",
+    "scenario": "Cancel when customer_cancel_order → \"error500\"",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "alert=\"Could not cancel Something went wrong updating your order. Please try again. OK\" {\"editDisabled\":false,\"note\":false,\"cancelled\":\"false\"}",
+    "at": "2026-10-19T11:37:29.033Z"
   }
 ]
