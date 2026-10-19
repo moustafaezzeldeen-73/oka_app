@@ -118,5 +118,29 @@
     "status": "FAIL",
     "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QAFREESHIP:true\"],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]} → COM-04 CONFIRMED (shipping still charged in cart)",
     "at": "2026-10-19T11:30:33.076Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAEXPIRED\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-19T11:30:35.873Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"NOPE123\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-19T11:30:38.973Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"<b>x</b>\" on a 300 EGP cart → rejected, escaped",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-19T11:30:41.795Z"
   }
 ]

@@ -126,5 +126,45 @@
     "status": "PASS",
     "note": "alert=\"مينفعش يتغيّر حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. تمام\" {\"disabled\":false,\"note\":null}",
     "at": "2026-10-19T11:30:32.198Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"shipped\": friendly alert, state",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "alert=\"مينفعش يتغيّر الطلب ده بيتجهّز للشحن خلاص، فمينفعش يتغيّر أو يتلغي دلوقتي. تمام\" {\"disabled\":true,\"note\":\"الطلب ده اتشحن هو في الطريق ليك، فمينفعش يتعدّل أو يتلغي دلو\"}",
+    "at": "2026-10-19T11:30:36.137Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"not-found\": friendly alert, state",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "alert=\"مينفعش يتغيّر مش لاقيين طلب بالرقم ده على رقم الموبايل ده. تمام\" {\"disabled\":false,\"note\":null}",
+    "at": "2026-10-19T11:30:40.081Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"malformed\": friendly alert, state",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "alert=\"مينفعش يتغيّر حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. تمام\" {\"disabled\":false,\"note\":null}",
+    "at": "2026-10-19T11:30:44.052Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"rpc-error\": friendly alert, state",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "alert=\"مينفعش يتغيّر راجع البيانات اللي كتبتها وجرّب تاني. تمام\" {\"disabled\":false,\"note\":null}",
+    "at": "2026-10-19T11:30:48.001Z"
+  },
+  {
+    "id": "OR-6",
+    "scenario": "customer_quote_order error while editing → sheet shows error, Save disabled",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"txt\":\"السويس الشرقية البحيرة الغربية أسوان أسيوط بني سويف الأقصر المنيا قنا سوهاج مطروح الوادي الجديد شمال سيناء جنوب سيناء البحر الأحمر المنطقة الشارع ورقم العمارة الدور، الشقة، علامة مميزة (اختياري) حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. احفظ التعديلات\",\"dim\":true}",
+    "at": "2026-10-19T11:30:52.726Z"
   }
 ]
