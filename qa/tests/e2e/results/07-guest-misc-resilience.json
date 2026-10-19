@@ -1,0 +1,714 @@
+[
+  {
+    "id": "GO-1",
+    "scenario": "Guest /pages/orders with no last checkout → \"No orders yet\", no API call",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "empty visible=true",
+    "at": "2026-10-19T11:43:56.885Z"
+  },
+  {
+    "id": "GO-2",
+    "scenario": "Guest checks out → oka.lastCheckout saved → /pages/orders shows the last order (customer_get_order by cart token)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "lastCheckout keys=cartToken,at; calls=[{\"tool\":\"customer_get_order\",\"args\":[\"session\"],\"session\":[\"cartToken\"]}]; box=\"آخر طلب ليك #9000101 بنراجعه OKA white ١٦٩ ج.م – ١ + Tobacco Bowls- Blue Cloud - 12g ٩٨ ج.م – ٢ + هيتوصّل على QA Tester · +201000000001 1 Test Street، Building 1, Floor 2, Apt 3 Nasr City، القاهرة المجموع قبل الشحن ٢٦٧ ج.م الشحن ٦٠ ج.م الإجمالي (كاش عند الاستل\" (harness mock maps any session to the fixture's first order)",
+    "at": "2026-10-19T11:44:00.949Z"
+  },
+  {
+    "id": "GO-3",
+    "scenario": "Guest edits last order via item + → sheet → save",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "sheet=1 alert=\"الطلب اتعدّل طلبك #9000101 بقى ٤٧٢ ج.م، هتدفعهم عند الاستلام. تمام\" tools=[\"customer_get_order\",\"customer_quote_order\",\"customer_update_order\"]",
+    "at": "2026-10-19T11:44:06.196Z"
+  },
+  {
+    "id": "GO-4",
+    "scenario": "Guest cancels last order (confirm) → cancelled state",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "alert=\"الطلب اتلغى طلبك #9000101 اتلغى. تمام\" state=\"ملغي\"",
+    "at": "2026-10-19T11:44:11.601Z"
+  },
+  {
+    "id": "GO-5",
+    "scenario": "Pixel snapshot + API error500 → snapshot shown with \"couldn’t load\" hint (SEC-06: PII kept in localStorage)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "box=\"آخر طلب ليك ١٨ أكتوبر اتطلب OKA white × ١ · ١٦٩ ج.م هيتوصّل على Guest QA · 01000000055 1 QA St Nasr City، القاهرة المجموع قبل الشحن ١٦٩ ج.م الشحن ٦٠ ج.م الإجمالي (كاش عند الاستلام) ٢٢٩ ج.م معرفناش نجيب آخر حالة للطلب دلوقتي، فالتعديل مش متاح. جرّب تاني كمان شوية.\" → SEC-06 CONFIRMED: name/phone/address from localStorage shown to whoever opens the page on this browser (no sign-in, no expiry)",
+    "at": "2026-10-19T11:44:14.836Z"
+  },
+  {
+    "id": "GO-6",
+    "scenario": "Guest last order: get_order timeout → spinner then snapshot/empty, no hang",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "spinner while waiting=true; after timeout {\"boxHidden\":true,\"empty\":true}",
+    "at": "2026-10-19T11:44:25.031Z"
+  },
+  {
+    "id": "GO-7",
+    "scenario": "F-16: guest order with canEdit && !canCancel → item −/+ shown but inert",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "steppers=2; sheet/alert after tap=0 → F-16 (guest part) CONFIRMED",
+    "at": "2026-10-19T11:44:28.351Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /nope-404: status 404, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 404 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN مش موجود الصفحة دي مش موجودة. كمّل تسوّق ١\",\"home\":4,\"theme\":true} ",
+    "at": "2026-10-19T11:44:29.519Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /products/foil: status 404, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 404 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN مش موجود الصفحة دي مش موجودة. كمّل تسوّق ١\",\"home\":4,\"theme\":true} ",
+    "at": "2026-10-19T11:44:30.550Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /collections/does-not-exist: status 404, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 404 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN مش موجود الصفحة دي مش موجودة. كمّل تسوّق ١\",\"home\":4,\"theme\":true} ",
+    "at": "2026-10-19T11:44:31.568Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /password: status 200, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"Enter\",\"home\":0,\"theme\":false} ",
+    "at": "2026-10-19T11:44:32.553Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /gift_cards/qa12345678: status 200, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"\",\"lang\":\"en\",\"text\":\"OKA EGYPT GIFT CARD 100.00 EGP QAQA 1234 5678 0000 Continue Shopping\",\"home\":0,\"theme\":false} ",
+    "at": "2026-10-19T11:44:33.612Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/refund-policy: status 200, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco rea\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:44:34.717Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/privacy-policy: status 200, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Privacy policy Last updated: 6/7/2023 This Privacy Policy describes how OKA (the \\\"Site\\\", \\\"we\\\", \\\"us\\\", or \\\"our\\\") collects, uses, and disclo\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:44:35.807Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/shipping-policy: status 200, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Shipping Shipping & Delivery Policy Order Confirmation All orders require a mandatory confirmation via phone call before dispatch. Our te\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:44:36.907Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/terms-of-service: status 200, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Terms of service OVERVIEW This website is operated by OKA. Throughout the site, the terms “we”, “us” and “our” refer to OKA. OKA offers t\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:44:38.004Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/contact-information: status 200, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Contact Trade name: OKA Hookahs LLC Phone number: 0105 093 1690 Email: oka-egypt@hotmail.com ١\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:44:39.057Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /ar/policies/privacy-policy: status 200, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Privacy policy Last updated: 6/7/2023 This Privacy Policy describes how OKA (the \\\"Site\\\", \\\"we\\\", \\\"us\\\", or \\\"our\\\") collects, uses, and disclo\",\"home\":0,\"theme\":true} ",
+    "at": "2026-10-19T11:44:40.189Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /ar/policies/refund-policy: status 200, renders in ar, way back home",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco rea\",\"home\":0,\"theme\":true} ",
+    "at": "2026-10-19T11:44:41.279Z"
+  },
+  {
+    "id": "MT-1",
+    "scenario": "COM-09: two tabs — tab B adds/changes cart; tab A (cart page) after focus shows stale qty; + in tab A",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "tab A after B changed cart (mint 2 + tongs): {\"lines\":[\"49399990976810×1\"],\"badge\":\"١\"}; + in tab A → cart mint=2 (A computed from stale qty 1 → set 2, so B's change was silently overwritten); A now shows [\"49399990976810×2\",\"46037718303018×1\"] → COM-09 CONFIRMED",
+    "at": "2026-10-19T11:44:47.133Z"
+  },
+  {
+    "id": "MT-2",
+    "scenario": "Badge / card steppers after Back (bfcache) once cart changed elsewhere",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "cart=0; page after Back {\"badge\":\"\",\"stepper\":false,\"nav\":\"back_forward\"}",
+    "at": "2026-10-19T11:44:52.829Z"
+  },
+  {
+    "id": "BF-1",
+    "scenario": "Back/forward through home → collection → PDP → cart → checkout and back again; every page renders",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "trail(path:badge)=/cart:١ /products/oka-cobra:١ /collections/oka-cobra:١ /:١ /collections/oka-parts:١ →/ →/collections/oka-cobra →/products/oka-cobra →/cart →/checkout ",
+    "at": "2026-10-19T11:45:02.441Z"
+  },
+  {
+    "id": "RL-1",
+    "scenario": "Reload mid-flow: PDP qty chosen, cart with code, checkout-review — state after reload",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "INFO",
+    "note": "PDP qty after reload=١ (resets to 1); unapplied code typed then reload → field=\"\" (draft not kept)",
+    "at": "2026-10-19T11:45:06.430Z"
+  },
+  {
+    "id": "OF-1",
+    "scenario": "Offline: PDP Add to Cart → alert text (F-15)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "alert=\"معرفناش نضيفه Failed to fetch تمام\" → F-15 CONFIRMED (raw browser error shown)",
+    "at": "2026-10-19T11:45:09.249Z"
+  },
+  {
+    "id": "OF-2",
+    "scenario": "Offline: card + stepper and cart − → feedback, UI reverts",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "alert=\"معرفناش نحدّث Failed to fetch تمام\" qty shown=2",
+    "at": "2026-10-19T11:45:11.632Z"
+  },
+  {
+    "id": "OF-3",
+    "scenario": "Offline: Checkout button → browser error page / spinner stuck?",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "INFO",
+    "note": "{\"url\":\"chrome-error://chromewebdata/\",\"btn\":null}",
+    "at": "2026-10-19T11:45:14.702Z"
+  },
+  {
+    "id": "OF-4",
+    "scenario": "Offline: /pages/track loaded, then refresh tracking offline (language toggle re-runs load)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "INFO",
+    "note": "\"Out for delivery Processing Preparing to Ship Shipped Delivered Out for delivery with courier QA Courier (01000000009) 2\"",
+    "at": "2026-10-19T11:45:18.212Z"
+  },
+  {
+    "id": "OF-5",
+    "scenario": "Offline: discount code apply → message",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "code-error=\"Failed to fetch\" → F-15 CONFIRMED",
+    "at": "2026-10-19T11:45:20.380Z"
+  },
+  {
+    "id": "GM-LOG",
+    "scenario": "Guest/misc session error summary",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart",
+    "at": "2026-10-19T11:45:20.382Z"
+  },
+  {
+    "id": "GO-1",
+    "scenario": "Guest /pages/orders with no last checkout → \"No orders yet\", no API call",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "empty visible=true",
+    "at": "2026-10-19T11:45:22.479Z"
+  },
+  {
+    "id": "GO-2",
+    "scenario": "Guest checks out → oka.lastCheckout saved → /pages/orders shows the last order (customer_get_order by cart token)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "lastCheckout keys=cartToken,at; calls=[{\"tool\":\"customer_get_order\",\"args\":[\"session\"],\"session\":[\"cartToken\"]}]; box=\"Your last order #9000101 Cancelled OKA white × 1 · EGP 169 Tobacco Bowls- Blue Cloud - 12g × 2 · EGP 98 Delivering to QA Tester · +201000000001 1 Test Street, Building 1, Floor 2, Apt 3 Nasr City, Cairo Subtotal EGP 267 Shipping EGP 60 Total (cash on delivery)\" (harness mock maps any session to the fixture's first order)",
+    "at": "2026-10-19T11:45:26.482Z"
+  },
+  {
+    "id": "GO-3",
+    "scenario": "Guest edits last order via item + → sheet → save",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "no steppers on guest order",
+    "at": "2026-10-19T11:45:26.489Z"
+  },
+  {
+    "id": "GO-4",
+    "scenario": "Guest cancels last order (confirm) → cancelled state",
+    "ctx": "iPhone 13/en/guest",
+    "status": "ERROR",
+    "note": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-g-cancel]')\u001b[22m\n",
+    "at": "2026-10-19T11:45:59.051Z"
+  },
+  {
+    "id": "GO-5",
+    "scenario": "Pixel snapshot + API error500 → snapshot shown with \"couldn’t load\" hint (SEC-06: PII kept in localStorage)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "box=\"Your last order 18 Oct Placed OKA white × 1 · EGP 169 Delivering to Guest QA · 01000000055 1 QA St Nasr City, Cairo Subtotal EGP 169 Shipping EGP 60 Total (cash on delivery) EGP 229 We couldn’t load this order’s latest status just now, so changes aren’t available. Please try again in a little while.\" → SEC-06 CONFIRMED: name/phone/address from localStorage shown to whoever opens the page on this browser (no sign-in, no expiry)",
+    "at": "2026-10-19T11:46:02.393Z"
+  },
+  {
+    "id": "GO-6",
+    "scenario": "Guest last order: get_order timeout → spinner then snapshot/empty, no hang",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "spinner while waiting=true; after timeout {\"boxHidden\":true,\"empty\":true}",
+    "at": "2026-10-19T11:46:12.556Z"
+  },
+  {
+    "id": "GO-7",
+    "scenario": "F-16: guest order with canEdit && !canCancel → item −/+ shown but inert",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "steppers=2; sheet/alert after tap=0 → F-16 (guest part) CONFIRMED",
+    "at": "2026-10-19T11:46:15.901Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /nope-404: status 404, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 404 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Not found This page doesn’t exist. Continue Shopping 1\",\"home\":4,\"theme\":true} ",
+    "at": "2026-10-19T11:46:16.949Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /products/foil: status 404, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 404 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Not found This page doesn’t exist. Continue Shopping 1\",\"home\":4,\"theme\":true} ",
+    "at": "2026-10-19T11:46:17.955Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /collections/does-not-exist: status 404, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 404 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Not found This page doesn’t exist. Continue Shopping 1\",\"home\":4,\"theme\":true} ",
+    "at": "2026-10-19T11:46:18.950Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /password: status 200, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"Enter\",\"home\":0,\"theme\":false} ",
+    "at": "2026-10-19T11:46:19.930Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /gift_cards/qa12345678: status 200, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"\",\"lang\":\"en\",\"text\":\"OKA EGYPT GIFT CARD 100.00 EGP QAQA 1234 5678 0000 Continue Shopping\",\"home\":0,\"theme\":false} ",
+    "at": "2026-10-19T11:46:21.023Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/refund-policy: status 200, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco read\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:46:22.106Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/privacy-policy: status 200, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Privacy policy Last updated: 6/7/2023 This Privacy Policy describes how OKA (the \\\"Site\\\", \\\"we\\\", \\\"us\\\", or \\\"our\\\") collects, uses, and disclos\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:46:23.195Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/shipping-policy: status 200, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Shipping Shipping & Delivery Policy Order Confirmation All orders require a mandatory confirmation via phone call before dispatch. Our tea\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:46:24.316Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/terms-of-service: status 200, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Terms of service OVERVIEW This website is operated by OKA. Throughout the site, the terms “we”, “us” and “our” refer to OKA. OKA offers th\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:46:25.400Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/contact-information: status 200, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Contact Trade name: OKA Hookahs LLC Phone number: 0105 093 1690 Email: oka-egypt@hotmail.com 1\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:46:26.403Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /ar/policies/privacy-policy: status 200, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Privacy policy Last updated: 6/7/2023 This Privacy Policy describes how OKA (the \\\"Site\\\", \\\"we\\\", \\\"us\\\", or \\\"our\\\") collects, uses, and disclo\",\"home\":0,\"theme\":true} ",
+    "at": "2026-10-19T11:46:27.585Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /ar/policies/refund-policy: status 200, renders in en, way back home",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco rea\",\"home\":0,\"theme\":true} ",
+    "at": "2026-10-19T11:46:28.660Z"
+  },
+  {
+    "id": "MT-1",
+    "scenario": "COM-09: two tabs — tab B adds/changes cart; tab A (cart page) after focus shows stale qty; + in tab A",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "tab A after B changed cart (mint 2 + tongs): {\"lines\":[\"49399990976810×1\"],\"badge\":\"1\"}; + in tab A → cart mint=2 (A computed from stale qty 1 → set 2, so B's change was silently overwritten); A now shows [\"49399990976810×2\",\"46037718303018×1\"] → COM-09 CONFIRMED",
+    "at": "2026-10-19T11:46:34.527Z"
+  },
+  {
+    "id": "MT-2",
+    "scenario": "Badge / card steppers after Back (bfcache) once cart changed elsewhere",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "cart=0; page after Back {\"badge\":\"\",\"stepper\":false,\"nav\":\"back_forward\"}",
+    "at": "2026-10-19T11:46:40.199Z"
+  },
+  {
+    "id": "BF-1",
+    "scenario": "Back/forward through home → collection → PDP → cart → checkout and back again; every page renders",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "trail(path:badge)=/cart:1 /products/oka-cobra:1 /collections/oka-cobra:1 /:1 /collections/oka-parts:1 →/ →/collections/oka-cobra →/products/oka-cobra →/cart →/checkout ",
+    "at": "2026-10-19T11:46:49.501Z"
+  },
+  {
+    "id": "RL-1",
+    "scenario": "Reload mid-flow: PDP qty chosen, cart with code, checkout-review — state after reload",
+    "ctx": "iPhone 13/en/guest",
+    "status": "INFO",
+    "note": "PDP qty after reload=1 (resets to 1); unapplied code typed then reload → field=\"\" (draft not kept)",
+    "at": "2026-10-19T11:46:53.380Z"
+  },
+  {
+    "id": "OF-1",
+    "scenario": "Offline: PDP Add to Cart → alert text (F-15)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "alert=\"Could not add Failed to fetch OK\" → F-15 CONFIRMED (raw browser error shown)",
+    "at": "2026-10-19T11:46:55.926Z"
+  },
+  {
+    "id": "OF-2",
+    "scenario": "Offline: card + stepper and cart − → feedback, UI reverts",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "alert=\"Could not update Failed to fetch OK\" qty shown=2",
+    "at": "2026-10-19T11:46:58.282Z"
+  },
+  {
+    "id": "OF-3",
+    "scenario": "Offline: Checkout button → browser error page / spinner stuck?",
+    "ctx": "iPhone 13/en/guest",
+    "status": "INFO",
+    "note": "{\"url\":\"chrome-error://chromewebdata/\",\"btn\":null}",
+    "at": "2026-10-19T11:47:01.345Z"
+  },
+  {
+    "id": "OF-4",
+    "scenario": "Offline: /pages/track loaded, then refresh tracking offline (language toggle re-runs load)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "INFO",
+    "note": "\"خرجت للتوصيل مع المندوب بنراجعه بيتجهز للشحن اتشحن وصل Out for delivery with courier QA Courier (01000000009) 2026-10-13\"",
+    "at": "2026-10-19T11:47:04.866Z"
+  },
+  {
+    "id": "OF-5",
+    "scenario": "Offline: discount code apply → message",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "code-error=\"Failed to fetch\" → F-15 CONFIRMED",
+    "at": "2026-10-19T11:47:07.035Z"
+  },
+  {
+    "id": "GM-LOG",
+    "scenario": "Guest/misc session error summary",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart",
+    "at": "2026-10-19T11:47:07.037Z"
+  },
+  {
+    "id": "GO-1",
+    "scenario": "Guest /pages/orders with no last checkout → \"No orders yet\", no API call",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "empty visible=true",
+    "at": "2026-10-19T11:47:09.182Z"
+  },
+  {
+    "id": "GO-2",
+    "scenario": "Guest checks out → oka.lastCheckout saved → /pages/orders shows the last order (customer_get_order by cart token)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "lastCheckout keys=cartToken,at; calls=[{\"tool\":\"customer_get_order\",\"args\":[\"session\"],\"session\":[\"cartToken\"]}]; box=\"آخر طلب ليك #9000101 ملغي OKA white × ١ · ١٦٩ ج.م Tobacco Bowls- Blue Cloud - 12g × ٢ · ٩٨ ج.م هيتوصّل على QA Tester · +201000000001 1 Test Street، Building 1, Floor 2, Apt 3 Nasr City، القاهرة المجموع قبل الشحن ٢٦٧ ج.م الشحن ٦٠ ج.م الإجمالي (كاش عند الاستلام)\" (harness mock maps any session to the fixture's first order)",
+    "at": "2026-10-19T11:47:13.178Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /nope-404: status 404, renders in ar, way back home",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 404 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN مش موجود الصفحة دي مش موجودة. كمّل تسوّق ١\",\"home\":4,\"theme\":true} ",
+    "at": "2026-10-19T11:47:14.193Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /password: status 200, renders in ar, way back home",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"Enter\",\"home\":0,\"theme\":false} ",
+    "at": "2026-10-19T11:47:15.165Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/refund-policy: status 200, renders in ar, way back home",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco rea\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:47:16.263Z"
+  },
+  {
+    "id": "MT-1",
+    "scenario": "COM-09: two tabs — tab B adds/changes cart; tab A (cart page) after focus shows stale qty; + in tab A",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "tab A after B changed cart (mint 2 + tongs): {\"lines\":[\"49399990976810×1\"],\"badge\":\"١\"}; + in tab A → cart mint=2 (A computed from stale qty 1 → set 2, so B's change was silently overwritten); A now shows [\"49399990976810×2\",\"46037718303018×1\"] → COM-09 CONFIRMED",
+    "at": "2026-10-19T11:47:22.214Z"
+  },
+  {
+    "id": "MT-2",
+    "scenario": "Badge / card steppers after Back (bfcache) once cart changed elsewhere",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "cart=0; page after Back {\"badge\":\"\",\"stepper\":false,\"nav\":\"back_forward\"}",
+    "at": "2026-10-19T11:47:27.980Z"
+  },
+  {
+    "id": "BF-1",
+    "scenario": "Back/forward through home → collection → PDP → cart → checkout and back again; every page renders",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "trail(path:badge)=/cart:١ /products/oka-cobra:١ /collections/oka-cobra:١ /:١ /collections/oka-parts:١ →/ →/collections/oka-cobra →/products/oka-cobra →/cart →/checkout ",
+    "at": "2026-10-19T11:47:37.504Z"
+  },
+  {
+    "id": "RL-1",
+    "scenario": "Reload mid-flow: PDP qty chosen, cart with code, checkout-review — state after reload",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "INFO",
+    "note": "PDP qty after reload=١ (resets to 1); unapplied code typed then reload → field=\"\" (draft not kept)",
+    "at": "2026-10-19T11:47:41.546Z"
+  },
+  {
+    "id": "OF-1",
+    "scenario": "Offline: PDP Add to Cart → alert text (F-15)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "alert=\"معرفناش نضيفه Failed to fetch تمام\" → F-15 CONFIRMED (raw browser error shown)",
+    "at": "2026-10-19T11:47:44.157Z"
+  },
+  {
+    "id": "OF-2",
+    "scenario": "Offline: card + stepper and cart − → feedback, UI reverts",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "alert=\"معرفناش نحدّث Failed to fetch تمام\" qty shown=2",
+    "at": "2026-10-19T11:47:46.511Z"
+  },
+  {
+    "id": "OF-3",
+    "scenario": "Offline: Checkout button → browser error page / spinner stuck?",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "INFO",
+    "note": "{\"url\":\"chrome-error://chromewebdata/\",\"btn\":null}",
+    "at": "2026-10-19T11:47:49.607Z"
+  },
+  {
+    "id": "OF-4",
+    "scenario": "Offline: /pages/track loaded, then refresh tracking offline (language toggle re-runs load)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "INFO",
+    "note": "\"Out for delivery Processing Preparing to Ship Shipped Delivered Out for delivery with courier QA Courier (01000000009) 2\"",
+    "at": "2026-10-19T11:47:53.129Z"
+  },
+  {
+    "id": "OF-5",
+    "scenario": "Offline: discount code apply → message",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "code-error=\"Failed to fetch\" → F-15 CONFIRMED",
+    "at": "2026-10-19T11:47:55.372Z"
+  },
+  {
+    "id": "GM-LOG",
+    "scenario": "Guest/misc session error summary",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"GET http://localhost:9410/cdn/s",
+    "at": "2026-10-19T11:47:55.373Z"
+  },
+  {
+    "id": "GO-1",
+    "scenario": "Guest /pages/orders with no last checkout → \"No orders yet\", no API call",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "empty visible=true",
+    "at": "2026-10-19T11:47:57.479Z"
+  },
+  {
+    "id": "GO-2",
+    "scenario": "Guest checks out → oka.lastCheckout saved → /pages/orders shows the last order (customer_get_order by cart token)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "lastCheckout keys=cartToken,at; calls=[{\"tool\":\"customer_get_order\",\"args\":[\"session\"],\"session\":[\"cartToken\"]}]; box=\"Your last order #9000101 Cancelled OKA white × 1 · EGP 169 Tobacco Bowls- Blue Cloud - 12g × 2 · EGP 98 Delivering to QA Tester · +201000000001 1 Test Street, Building 1, Floor 2, Apt 3 Nasr City, Cairo Subtotal EGP 267 Shipping EGP 60 Total (cash on delivery)\" (harness mock maps any session to the fixture's first order)",
+    "at": "2026-10-19T11:48:01.431Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /nope-404: status 404, renders in en, way back home",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "HTTP 404 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Not found This page doesn’t exist. Continue Shopping 1\",\"home\":4,\"theme\":true} ",
+    "at": "2026-10-19T11:48:02.442Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /password: status 200, renders in en, way back home",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"Enter\",\"home\":0,\"theme\":false} ",
+    "at": "2026-10-19T11:48:03.402Z"
+  },
+  {
+    "id": "MP-1",
+    "scenario": "Page /policies/refund-policy: status 200, renders in en, way back home",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco read\",\"home\":2,\"theme\":true} ",
+    "at": "2026-10-19T11:48:04.488Z"
+  },
+  {
+    "id": "MT-1",
+    "scenario": "COM-09: two tabs — tab B adds/changes cart; tab A (cart page) after focus shows stale qty; + in tab A",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "tab A after B changed cart (mint 2 + tongs): {\"lines\":[\"49399990976810×1\"],\"badge\":\"1\"}; + in tab A → cart mint=2 (A computed from stale qty 1 → set 2, so B's change was silently overwritten); A now shows [\"49399990976810×2\",\"46037718303018×1\"] → COM-09 CONFIRMED",
+    "at": "2026-10-19T11:48:10.310Z"
+  },
+  {
+    "id": "MT-2",
+    "scenario": "Badge / card steppers after Back (bfcache) once cart changed elsewhere",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "cart=0; page after Back {\"badge\":\"\",\"stepper\":false,\"nav\":\"back_forward\"}",
+    "at": "2026-10-19T11:48:15.926Z"
+  },
+  {
+    "id": "BF-1",
+    "scenario": "Back/forward through home → collection → PDP → cart → checkout and back again; every page renders",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "trail(path:badge)=/cart:1 /products/oka-cobra:1 /collections/oka-cobra:1 /:1 /collections/oka-parts:1 →/ →/collections/oka-cobra →/products/oka-cobra →/cart →/checkout ",
+    "at": "2026-10-19T11:48:25.155Z"
+  },
+  {
+    "id": "RL-1",
+    "scenario": "Reload mid-flow: PDP qty chosen, cart with code, checkout-review — state after reload",
+    "ctx": "Pixel 7/en/guest",
+    "status": "INFO",
+    "note": "PDP qty after reload=1 (resets to 1); unapplied code typed then reload → field=\"\" (draft not kept)",
+    "at": "2026-10-19T11:48:29.064Z"
+  },
+  {
+    "id": "OF-1",
+    "scenario": "Offline: PDP Add to Cart → alert text (F-15)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "alert=\"Could not add Failed to fetch OK\" → F-15 CONFIRMED (raw browser error shown)",
+    "at": "2026-10-19T11:48:31.672Z"
+  },
+  {
+    "id": "OF-2",
+    "scenario": "Offline: card + stepper and cart − → feedback, UI reverts",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "alert=\"Could not update Failed to fetch OK\" qty shown=2",
+    "at": "2026-10-19T11:48:34.022Z"
+  },
+  {
+    "id": "OF-3",
+    "scenario": "Offline: Checkout button → browser error page / spinner stuck?",
+    "ctx": "Pixel 7/en/guest",
+    "status": "INFO",
+    "note": "{\"url\":\"chrome-error://chromewebdata/\",\"btn\":null}",
+    "at": "2026-10-19T11:48:37.071Z"
+  },
+  {
+    "id": "OF-4",
+    "scenario": "Offline: /pages/track loaded, then refresh tracking offline (language toggle re-runs load)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "INFO",
+    "note": "\"خرجت للتوصيل مع المندوب بنراجعه بيتجهز للشحن اتشحن وصل Out for delivery with courier QA Courier (01000000009) 2026-10-13\"",
+    "at": "2026-10-19T11:48:40.635Z"
+  },
+  {
+    "id": "OF-5",
+    "scenario": "Offline: discount code apply → message",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "code-error=\"Failed to fetch\" → F-15 CONFIRMED",
+    "at": "2026-10-19T11:48:42.832Z"
+  },
+  {
+    "id": "GM-LOG",
+    "scenario": "Guest/misc session error summary",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart",
+    "at": "2026-10-19T11:48:42.833Z"
+  },
+  {
+    "id": "EX-1",
+    "scenario": "External calls audit (whole run): hosts contacted, key header present",
+    "ctx": "all",
+    "status": "INFO",
+    "note": "calls=423 hosts={\"ajax.googleapis.com\":26,\"cdn.shopify.com\":170,\"website-app-649584328410.europe-west1.run.app\":225,\"nominatim.openstreetmap.org\":2} tools={\"track_delivery\":147,\"customer_get_order\":51,\"customer_quote_order\":10,\"customer_update_order\":4,\"customer_cancel_order\":13} requests carrying x-api-key=225 (SEC-01: key is sent from every browser)",
+    "at": "2026-10-19T11:48:42.875Z"
+  }
+]

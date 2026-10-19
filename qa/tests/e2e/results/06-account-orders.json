@@ -5,7 +5,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "cards=[\"#9000101:Processingبنراجعه\",\"#9000102:خرجت للتوصيل مع المندوب\",\"#9000103:اتسلمت\",\"#9000104:Cancelledملغي\",\"#9000105:خرجت للتوصيل مع المندوب\",\"#9000106:Processingبنراجعه\"] detail={\"url\":\"?order=%239000102\",\"vis\":[\"#9000102\"],\"list\":false} back={\"url\":\"\",\"list\":true} forward=[\"#9000102\"] ",
-    "at": "2026-10-19T11:28:59.772Z"
+    "at": "2026-10-19T11:39:10.156Z"
   },
   {
     "id": "OR-2",
@@ -13,7 +13,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"url\":\"/pages/orders\",\"list\":true}",
-    "at": "2026-10-19T11:29:01.988Z"
+    "at": "2026-10-19T11:39:12.379Z"
   },
   {
     "id": "TR-1",
@@ -21,7 +21,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"اتسلمت\",\"steps\":4,\"updates\":4,\"courier\":\"QA Courier\",\"wa\":\"https://wa.me/201000000009\",\"err\":null,\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:خرجت للتوصيل مع المندوب\",\"#9000103:اتسلمت\",\"#9000104:Cancelledملغي\",\"#9000105:خرجت للتوصيل مع المندوب\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:03.891Z"
+    "at": "2026-10-19T11:39:14.289Z"
   },
   {
     "id": "TR-1",
@@ -29,7 +29,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"اتسلمت\",\"steps\":4,\"updates\":4,\"courier\":\"QA Courier\",\"wa\":\"https://wa.me/201000000009\",\"err\":null,\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:خرجت للتوصيل مع المندوب\",\"#9000103:اتسلمت\",\"#9000104:Cancelledملغي\",\"#9000105:خرجت للتوصيل مع المندوب\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:05.594Z"
+    "at": "2026-10-19T11:39:16.033Z"
   },
   {
     "id": "TR-1",
@@ -37,7 +37,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:07.522Z"
+    "at": "2026-10-19T11:39:17.975Z"
   },
   {
     "id": "TR-1",
@@ -45,7 +45,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:09.239Z"
+    "at": "2026-10-19T11:39:19.654Z"
   },
   {
     "id": "TR-1",
@@ -53,7 +53,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:11.292Z"
+    "at": "2026-10-19T11:39:21.572Z"
   },
   {
     "id": "TR-1",
@@ -61,7 +61,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:21.990Z"
+    "at": "2026-10-19T11:39:32.283Z"
   },
   {
     "id": "TR-1",
@@ -69,7 +69,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:23.676Z"
+    "at": "2026-10-19T11:39:34.027Z"
   },
   {
     "id": "TR-1",
@@ -77,7 +77,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:25.359Z"
+    "at": "2026-10-19T11:39:35.771Z"
   },
   {
     "id": "TR-1",
@@ -85,7 +85,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:27.044Z"
+    "at": "2026-10-19T11:39:37.508Z"
   },
   {
     "id": "TR-1",
@@ -93,7 +93,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:29:28.746Z"
+    "at": "2026-10-19T11:39:39.212Z"
   },
   {
     "id": "OR-3",
@@ -101,7 +101,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "steppers=4 sheet={\"txt\":\"عدّل الطلب #9000101 المنتجات OKA white ٣٣٨ ج.م – ٢ + Tobacco Bowls- Blue Cloud - 12g ٩٨ ج.م – ٢ + ＋ ضيف منتجات التوصيل اسم المستلم رقم الموبايل المحافظة اختار… القاهرة الجيزة ٦ أكتوبر حلوان الإسكندرية القليوبية الدقهلية دمياط الفيوم الإسماعيلية كفر الشيخ المنوفية بورسعيد السويس الشرقية البحيرة الغرب\",\"save\":\"احفظ التعديلات\",\"dim\":false} alert=\"\" calls=[\"track_delivery\",\"customer_get_order\",\"customer_quote_order\",\"customer_update_order\",\"track_delivery\"]",
-    "at": "2026-10-19T11:30:06.434Z"
+    "at": "2026-10-19T11:40:16.811Z"
   },
   {
     "id": "OR-4",
@@ -109,7 +109,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "picker results=2 rows=[\"OKA white ١٦٩ ج.م – ١ +\",\"Tobacco Bowls- Blue Cloud - 12g ٩٨ ج.م – ٢ +\",\"كماشة فحم ٣١ ج.م – ١ +\"] quotes=[\"customer_quote_order\"] caret after typing={\"focused\":\"name\",\"val\":\"QA Testerxy\",\"pos\":11} short-name msg=اكتب اسم المستلم saveDim=true",
-    "at": "2026-10-19T11:30:16.361Z"
+    "at": "2026-10-19T11:40:26.807Z"
   },
   {
     "id": "OR-5",
@@ -117,7 +117,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "alert=\"مينفعش يتغيّر حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. تمام\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:30:20.262Z"
+    "at": "2026-10-19T11:40:30.775Z"
   },
   {
     "id": "OR-5",
@@ -125,7 +125,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "alert=\"مينفعش يتغيّر حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. تمام\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:30:32.198Z"
+    "at": "2026-10-19T11:40:42.723Z"
   },
   {
     "id": "OR-5",
@@ -133,7 +133,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "alert=\"مينفعش يتغيّر الطلب ده بيتجهّز للشحن خلاص، فمينفعش يتغيّر أو يتلغي دلوقتي. تمام\" {\"disabled\":true,\"note\":\"الطلب ده اتشحن هو في الطريق ليك، فمينفعش يتعدّل أو يتلغي دلو\"}",
-    "at": "2026-10-19T11:30:36.137Z"
+    "at": "2026-10-19T11:40:46.677Z"
   },
   {
     "id": "OR-5",
@@ -141,7 +141,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "alert=\"مينفعش يتغيّر مش لاقيين طلب بالرقم ده على رقم الموبايل ده. تمام\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:30:40.081Z"
+    "at": "2026-10-19T11:40:50.625Z"
   },
   {
     "id": "OR-5",
@@ -149,7 +149,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "alert=\"مينفعش يتغيّر حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. تمام\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:30:44.052Z"
+    "at": "2026-10-19T11:40:54.604Z"
   },
   {
     "id": "OR-5",
@@ -157,7 +157,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "alert=\"مينفعش يتغيّر راجع البيانات اللي كتبتها وجرّب تاني. تمام\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:30:48.001Z"
+    "at": "2026-10-19T11:40:58.540Z"
   },
   {
     "id": "OR-6",
@@ -165,7 +165,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"txt\":\"السويس الشرقية البحيرة الغربية أسوان أسيوط بني سويف الأقصر المنيا قنا سوهاج مطروح الوادي الجديد شمال سيناء جنوب سيناء البحر الأحمر المنطقة الشارع ورقم العمارة الدور، الشقة، علامة مميزة (اختياري) حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. احفظ التعديلات\",\"dim\":true}",
-    "at": "2026-10-19T11:30:52.726Z"
+    "at": "2026-10-19T11:41:03.104Z"
   },
   {
     "id": "OR-7",
@@ -173,7 +173,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "FAIL",
     "note": "confirm=\"تلغي الطلب؟ متأكد؟ الطلب #9000106 هيتلغي ومينفعش نرجّعه. ارجع الغي الطلب\" calls after Back=0; done=\"الطلب اتلغى طلبك #9000106 اتلغى. تمام\" {\"banner\":true,\"cancelled\":\"true\"}; after reload {\"banner\":false,\"cancelled\":\"false\"} oka.cancelled=null (harness fixture is not cancelled server-side, so after reload the theme relies on oka.cancelled, which nothing writes)",
-    "at": "2026-10-19T11:30:59.857Z"
+    "at": "2026-10-19T11:41:10.339Z"
   },
   {
     "id": "OR-8",
@@ -181,7 +181,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "alert=\"معرفناش نلغيه الطلب ده بيتجهّز للشحن خلاص، فمينفعش يتغيّر أو يتلغي دلوقتي. تمام\" {\"editDisabled\":true,\"note\":true,\"cancelled\":\"false\"}",
-    "at": "2026-10-19T11:31:04.130Z"
+    "at": "2026-10-19T11:41:14.620Z"
   },
   {
     "id": "OR-8",
@@ -189,15 +189,15 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "alert=\"معرفناش نلغيه حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. تمام\" {\"editDisabled\":false,\"note\":false,\"cancelled\":\"false\"}",
-    "at": "2026-10-19T11:31:08.378Z"
+    "at": "2026-10-19T11:41:18.922Z"
   },
   {
     "id": "OR-9",
     "scenario": "Cancelled (#9000104) and fulfilled (#9000105) orders: edit/cancel give \"not available\" without API calls",
     "ctx": "iPhone 13/ar/customer",
-    "status": "PASS",
-    "note": "#9000104 [data-edit-order]: \"\" | #9000104 [data-cancel-order]: \"\" | #9000105 [data-edit-order]: \"\" | #9000105 [data-cancel-order]: \"\"; orders-API calls=[]",
-    "at": "2026-10-19T11:33:13.496Z"
+    "status": "FAIL",
+    "note": "#9000104 [data-edit-order]: \"\" | #9000104 [data-cancel-order]: \"\" | #9000105 [data-edit-order]: \"\" | #9000105 [data-cancel-order]: \"\"; orders-API calls=[\"customer_get_order\",\"customer_get_order\"]",
+    "at": "2026-10-19T11:43:24.031Z"
   },
   {
     "id": "OR-10",
@@ -205,7 +205,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "order lines=[\"the-hexa-party×1\"] cart=the-hexa-party×1 url=http://localhost:9410/cart",
-    "at": "2026-10-19T11:33:16.164Z"
+    "at": "2026-10-19T11:43:26.792Z"
   },
   {
     "id": "OR-11",
@@ -213,7 +213,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"fired\":0,\"imgs\":0} (signed-in order detail address comes from Liquid; SEC-04's innerHTML path was not reached via edit sheet)",
-    "at": "2026-10-19T11:33:20.420Z"
+    "at": "2026-10-19T11:43:31.053Z"
   },
   {
     "id": "AC-1",
@@ -221,7 +221,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "links=[\"/pages/addresses\",\"/pages/wishlist\",\"/pages/loyalty\",\"/pages/support\",\"/pages/support#legal\",\"/account/logout\"] bad=[] signout=/account/logout",
-    "at": "2026-10-19T11:33:21.672Z"
+    "at": "2026-10-19T11:43:32.377Z"
   },
   {
     "id": "AD-1",
@@ -229,7 +229,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "cards=[\"9000000001:C:true:١-٢ يوم\",\"9000000002:GZ:false:١-٢ يوم\",\"9000000003:ASN:false:٣-٥ أيام\"]; posted=[\" undefined \\\"\\\"\"] landed=http://localhost:9410/account/addresses default now=9000000002 (SI-01: on the live store with new customer accounts this classic POST does not exist)",
-    "at": "2026-10-19T11:33:24.720Z"
+    "at": "2026-10-19T11:43:35.387Z"
   },
   {
     "id": "AD-2",
@@ -237,7 +237,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "confirm=\"امسح العنوان متأكد؟ ارجع امسح\" posts=1 addresses now=2",
-    "at": "2026-10-19T11:33:26.931Z"
+    "at": "2026-10-19T11:43:37.726Z"
   },
   {
     "id": "AD-3",
@@ -245,7 +245,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "missing alert=\"ناقص بيانات محتاجين: الشارع، المنطقة، المحافظة تمام\"; locate → {\"city\":\"Nasr City\",\"street\":\"1 QA Street\",\"found\":true,\"chip\":\"C\"} alert=\"\" nominatim calls=1; posted=[[\"country\",\"province\",\"first_name\",\"last_name\",\"address2\",\"default\",\"phone\",\"city\",\"address1\"]] landed=http://localhost:9410/account/addresses",
-    "at": "2026-10-19T11:34:02.311Z"
+    "at": "2026-10-19T11:44:13.148Z"
   },
   {
     "id": "LY-1",
@@ -253,7 +253,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"pts\":\"٢٥٠\",\"err\":null,\"rewards\":[\"off20:بدّل\",\"off50:مقفول\",\"ship:مقفول\",\"off150:مقفول\"],\"next\":\"٢٥٠ نقطة للمكافأة الجاية · قيمتها ٢٥ ج.م\"} redeem: \"ادفع بنقاطك نقاطك (٢٥٠) تساوي ٢٥ ج.م رصيد عندنا. فعّله وانت بتدفع. تمام → \" voucher→cart codes=[{\"code\":\"QA10\",\"applicable\":true}] ",
-    "at": "2026-10-19T11:34:39.542Z"
+    "at": "2026-10-19T11:44:50.357Z"
   },
   {
     "id": "AC-2",
@@ -261,7 +261,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"اشتراكاتي الاشتراك والتوفير مش متفعّل على الموقع لسه. متاح في تطبيق أوكا.\",\"buttons\":[\"\"]} ",
-    "at": "2026-10-19T11:34:41.012Z"
+    "at": "2026-10-19T11:44:51.872Z"
   },
   {
     "id": "AC-2",
@@ -269,7 +269,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"اشترك ووفّر الاشتراك والتوفير مش متفعّل على الموقع لسه. متاح في تطبيق أوكا.\",\"buttons\":[\"\"]} ",
-    "at": "2026-10-19T11:34:42.455Z"
+    "at": "2026-10-19T11:44:53.319Z"
   },
   {
     "id": "AC-2",
@@ -277,7 +277,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"المفضلة اضغط على القلب في أي منتج عشان تحفظه هنا. شوف الأكتر مبيعاً\",\"buttons\":[\"\",\"/\"]} ",
-    "at": "2026-10-19T11:34:43.905Z"
+    "at": "2026-10-19T11:44:54.786Z"
   },
   {
     "id": "AC-2",
@@ -285,7 +285,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"محتاج مساعدة؟ أسئلة بتتسأل كتير التوصيل بياخد قد إيه؟ القاهرة والجيزة والإسكندرية: ١-٢ يوم. الدلتا والقناة: ٢-٣ أيام. الصعيد وسيناء والبحر الأحمر ومطروح: ٣-٥ أي\",\"buttons\":[\"\",\"/policies/refund-policy\",\"/policies/shipping-policy\",\"/policies/privacy-policy\",\"/policies/terms-of-service\"]} ",
-    "at": "2026-10-19T11:34:45.419Z"
+    "at": "2026-10-19T11:44:56.385Z"
   },
   {
     "id": "AC-2",
@@ -293,7 +293,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"تواصل معانا الاسم الموبايل الإيميل رسالتك ابعت\",\"buttons\":[\"\",\"Sendابعت\"]} ",
-    "at": "2026-10-19T11:34:46.874Z"
+    "at": "2026-10-19T11:44:57.887Z"
   },
   {
     "id": "AC-2",
@@ -301,7 +301,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"عن أوكا بدأنا ٢٠٢٢ متصممة ومتجرّبة ومتصنّعة بالكامل في مصر. أوكا بدأت سنة ٢٠٢٢ واستثمارها الأساسي في العلم: إن تجربة الشيشة تبقى أوفر وأأمن وممتعة أكتر. لو كل ن\",\"buttons\":[\"\",\"/\"]} ",
-    "at": "2026-10-19T11:34:48.347Z"
+    "at": "2026-10-19T11:44:59.376Z"
   },
   {
     "id": "AC-2",
@@ -309,7 +309,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"طريقة الاستخدام املى القزازة املى القزازة بحوالي ٧٠٠ مللي مية — أكتر شوية من إزازة مية صغيرة. لو السحبة تقيلة قلّل المية، ولو خفيفة زوّدها. تركيب أوكا ستيم تركي\",\"buttons\":[\"\",\"/\"]} ",
-    "at": "2026-10-19T11:34:49.995Z"
+    "at": "2026-10-19T11:45:01.077Z"
   },
   {
     "id": "AC-2",
@@ -317,7 +317,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"FAQ The frequently asked questions about the brand-new game changer hookah \\\"OKA\\\" , know everything you need to know about the most efficient hookah in the world\",\"buttons\":[\"\"]} ",
-    "at": "2026-10-19T11:34:51.408Z"
+    "at": "2026-10-19T11:45:02.509Z"
   },
   {
     "id": "AC-2",
@@ -325,7 +325,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"طلباتي #9000101 ٣٢٧ ج.م أوكا ابيض و١ أخرى بنراجعه #9000102 ٢٦٤ ج.م أوكا اسود كاربون و١ أخرى خرجت للتوصيل مع المندوب #9000103 ٣٢٧ ج.م أوكا ابيض و٣ أخرى اتسلمت #9\",\"buttons\":[\"?order=%239000101\",\"?order=%239000102\",\"?order=%239000103\",\"?order=%239000104\",\"?order=%239000105\",\"?order=%239000106\",\"\",\"–\",\"+\",\"–\",\"+\",\"Edit orderعدّل الطلب\"]} ",
-    "at": "2026-10-19T11:34:52.972Z"
+    "at": "2026-10-19T11:45:04.076Z"
   },
   {
     "id": "AC-2",
@@ -333,7 +333,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "HTTP 200 {\"text\":\"عناويني القاهرة QA Tester 1 Test Street, Building 1, Floor 2, Apt 3 Nasr City +201000000001 بيوصل في ١-٢ يوم خليه الأساسي امسح الجيزة الأساسي QA Office 2 Sample\",\"buttons\":[\"\",\"Make defaultخليه الأساسي\",\"Deleteامسح\",\"Deleteامسح\",\"Make defaultخليه الأساسي\",\"Deleteامسح\",\"/pages/addresses?view=oka-add-\"]} ",
-    "at": "2026-10-19T11:34:54.458Z"
+    "at": "2026-10-19T11:45:05.606Z"
   },
   {
     "id": "SP-1",
@@ -341,7 +341,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "INFO",
     "note": "wa.me links=0 (SI-08 CONFIRMED); links=[\"/policies/refund-policy\",\"/policies/shipping-policy\",\"/policies/privacy-policy\",\"/policies/terms-of-service\"]",
-    "at": "2026-10-19T11:34:55.359Z"
+    "at": "2026-10-19T11:45:06.501Z"
   },
   {
     "id": "CF-1",
@@ -349,7 +349,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "fields=[\"contact[name]\",\"contact[phone]\",\"contact[email]\",\"contact[body]\"] url=http://localhost:9410/pages/contact?contact_posted=true#contact_form message=شكرًا — هنرد عليك قريب.",
-    "at": "2026-10-19T11:34:57.278Z"
+    "at": "2026-10-19T11:45:08.415Z"
   },
   {
     "id": "TK-1",
@@ -357,7 +357,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"body\":\"خرجت للتوصيل مع المندوب بنراجعه بيتجهز للشحن اتشحن وصل Out for delivery with courier QA Courier (01000000009) 2026-10-13 09:15:00 Parcel sen\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
-    "at": "2026-10-19T11:34:58.848Z"
+    "at": "2026-10-19T11:45:10.019Z"
   },
   {
     "id": "TK-1",
@@ -365,7 +365,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"body\":\"مفيش تحديثات لسه بنراجعه بيتجهز للشحن اتشحن وصل لسه مفيش تحديثات من شركة الشحن. أول ما J&T تستلم الشحنة هتلاقي التحديثات هنا.\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
-    "at": "2026-10-19T11:35:00.615Z"
+    "at": "2026-10-19T11:45:11.838Z"
   },
   {
     "id": "TK-1",
@@ -373,7 +373,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"body\":\"مقدرناش نوصل لـ J&T دلوقتي. اسحب لتحت وجرّب تاني.\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
-    "at": "2026-10-19T11:35:02.331Z"
+    "at": "2026-10-19T11:45:13.610Z"
   },
   {
     "id": "TK-1",
@@ -381,7 +381,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"body\":\"مقدرناش نوصل لـ J&T دلوقتي. اسحب لتحت وجرّب تاني.\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
-    "at": "2026-10-19T11:35:12.098Z"
+    "at": "2026-10-19T11:45:23.378Z"
   },
   {
     "id": "TK-1",
@@ -389,7 +389,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"body\":\"مقدرناش نوصل لـ J&T دلوقتي. اسحب لتحت وجرّب تاني.\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
-    "at": "2026-10-19T11:35:13.806Z"
+    "at": "2026-10-19T11:45:25.098Z"
   },
   {
     "id": "TK-1",
@@ -397,7 +397,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"body\":\"مفيش رقم شحنة.\",\"awb\":\"\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
-    "at": "2026-10-19T11:35:15.522Z"
+    "at": "2026-10-19T11:45:26.818Z"
   },
   {
     "id": "TK-1",
@@ -405,7 +405,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"body\":\"خرجت للتوصيل مع المندوب بنراجعه بيتجهز للشحن اتشحن وصل Out for delivery with courier QA Courier (01000000009) 2026-10-13 09:15:00 Parcel sen\",\"awb\":\"AWB <IMG SRC=X ONERROR=WINDOW.__T=1>\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
-    "at": "2026-10-19T11:35:17.093Z"
+    "at": "2026-10-19T11:45:28.399Z"
   },
   {
     "id": "AC-LOG",
@@ -413,7 +413,7 @@
     "ctx": "iPhone 13/ar/customer",
     "status": "PASS",
     "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
-    "at": "2026-10-19T11:35:17.094Z"
+    "at": "2026-10-19T11:45:28.401Z"
   },
   {
     "id": "OR-1",
@@ -421,7 +421,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "cards=[\"#9000101:Processingبنراجعه\",\"#9000102:Out for delivery\",\"#9000103:Delivered\",\"#9000104:Cancelledملغي\",\"#9000105:Out for delivery\",\"#9000106:Processingبنراجعه\"] detail={\"url\":\"?order=%239000102\",\"vis\":[\"#9000102\"],\"list\":false} back={\"url\":\"\",\"list\":true} forward=[\"#9000102\"] ",
-    "at": "2026-10-19T11:35:21.252Z"
+    "at": "2026-10-19T11:45:32.631Z"
   },
   {
     "id": "OR-2",
@@ -429,7 +429,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"url\":\"/pages/orders\",\"list\":true}",
-    "at": "2026-10-19T11:35:23.436Z"
+    "at": "2026-10-19T11:45:34.831Z"
   },
   {
     "id": "TR-1",
@@ -437,7 +437,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Delivered\",\"steps\":4,\"updates\":4,\"courier\":\"QA Courier\",\"wa\":\"https://wa.me/201000000009\",\"err\":null,\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Out for delivery\",\"#9000103:Delivered\",\"#9000104:Cancelledملغي\",\"#9000105:Out for delivery\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:25.363Z"
+    "at": "2026-10-19T11:45:36.710Z"
   },
   {
     "id": "TR-1",
@@ -445,7 +445,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Delivered\",\"steps\":4,\"updates\":4,\"courier\":\"QA Courier\",\"wa\":\"https://wa.me/201000000009\",\"err\":null,\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Out for delivery\",\"#9000103:Delivered\",\"#9000104:Cancelledملغي\",\"#9000105:Out for delivery\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:27.052Z"
+    "at": "2026-10-19T11:45:38.385Z"
   },
   {
     "id": "TR-1",
@@ -453,7 +453,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:28.980Z"
+    "at": "2026-10-19T11:45:40.266Z"
   },
   {
     "id": "TR-1",
@@ -461,7 +461,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:30.702Z"
+    "at": "2026-10-19T11:45:41.948Z"
   },
   {
     "id": "TR-1",
@@ -469,7 +469,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:32.549Z"
+    "at": "2026-10-19T11:45:43.839Z"
   },
   {
     "id": "TR-1",
@@ -477,7 +477,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:43.217Z"
+    "at": "2026-10-19T11:45:54.517Z"
   },
   {
     "id": "TR-1",
@@ -485,7 +485,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:44.902Z"
+    "at": "2026-10-19T11:45:56.192Z"
   },
   {
     "id": "TR-1",
@@ -493,7 +493,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:46.572Z"
+    "at": "2026-10-19T11:45:57.880Z"
   },
   {
     "id": "TR-1",
@@ -501,7 +501,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:48.252Z"
+    "at": "2026-10-19T11:45:59.581Z"
   },
   {
     "id": "TR-1",
@@ -509,23 +509,23 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
-    "at": "2026-10-19T11:35:49.932Z"
+    "at": "2026-10-19T11:46:01.329Z"
   },
   {
     "id": "OR-3",
     "scenario": "Edit order #9000101 via item + : sheet opens with preset, quote, save → customer_update_order",
     "ctx": "iPhone 13/en/customer",
-    "status": "PASS",
-    "note": "steppers=4 sheet={\"txt\":\"Edit order #9000101 ITEMS OKA white EGP 338 – 2 + Tobacco Bowls- Blue Cloud - 12g EGP 98 – 2 + ＋ Add products DELIVERY Receiver’s name Mobile number Governorate Choose… Cairo Giza 6th of October Helwan Alexandria Qalyubia Dakahlia Damietta Faiyum Ismailia Kafr el-Sheikh Monufia Port Said Suez Al Sha\",\"save\":\"Save changes\",\"dim\":false} alert=\"\" calls=[\"track_delivery\",\"customer_get_order\",\"customer_quote_order\",\"customer_update_order\",\"track_delivery\"]",
-    "at": "2026-10-19T11:36:27.451Z"
+    "status": "FAIL",
+    "note": "sheet not opened; alert=\"Can’t change it This order is already cancelled. OK\"",
+    "at": "2026-10-19T11:46:05.905Z"
   },
   {
     "id": "OR-4",
     "scenario": "Edit sheet: Add products picker (search, add, done → requote), − to 0, address field validation",
     "ctx": "iPhone 13/en/customer",
-    "status": "PASS",
-    "note": "picker results=2 rows=[\"OKA white EGP 169 – 1 +\",\"Tobacco Bowls- Blue Cloud - 12g EGP 98 – 2 +\",\"Tongs EGP 31 – 1 +\"] quotes=[\"customer_quote_order\"] caret after typing={\"focused\":\"name\",\"val\":\"QA Testerxy\",\"pos\":11} short-name msg=Enter the receiver’s name saveDim=true",
-    "at": "2026-10-19T11:36:37.166Z"
+    "status": "FAIL",
+    "note": "no sheet; alert=\"Can’t change it This order is already cancelled. OK\"",
+    "at": "2026-10-19T11:46:11.135Z"
   },
   {
     "id": "OR-5",
@@ -533,7 +533,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "alert=\"Can’t change it Something went wrong updating your order. Please try again. OK\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:36:41.068Z"
+    "at": "2026-10-19T11:46:15.075Z"
   },
   {
     "id": "OR-5",
@@ -541,7 +541,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "alert=\"Can’t change it Something went wrong updating your order. Please try again. OK\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:36:53.017Z"
+    "at": "2026-10-19T11:46:26.991Z"
   },
   {
     "id": "OR-5",
@@ -549,7 +549,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "alert=\"Can’t change it This order is already being prepared for shipping, so it can no longer be changed or cancelled. OK\" {\"disabled\":true,\"note\":\"This order has been shipped It’s on its way, so it can no lo\"}",
-    "at": "2026-10-19T11:36:56.916Z"
+    "at": "2026-10-19T11:46:30.925Z"
   },
   {
     "id": "OR-5",
@@ -557,7 +557,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "alert=\"Can’t change it We couldn't find an order with that order number and phone number. OK\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:37:00.837Z"
+    "at": "2026-10-19T11:46:34.846Z"
   },
   {
     "id": "OR-5",
@@ -565,7 +565,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "alert=\"Can’t change it Something went wrong updating your order. Please try again. OK\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:37:04.797Z"
+    "at": "2026-10-19T11:46:38.742Z"
   },
   {
     "id": "OR-5",
@@ -573,15 +573,15 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "alert=\"Can’t change it Please check the details you entered and try again. OK\" {\"disabled\":false,\"note\":null}",
-    "at": "2026-10-19T11:37:08.681Z"
+    "at": "2026-10-19T11:46:42.661Z"
   },
   {
     "id": "OR-6",
     "scenario": "customer_quote_order error while editing → sheet shows error, Save disabled",
     "ctx": "iPhone 13/en/customer",
-    "status": "PASS",
-    "note": "{\"txt\":\"Sharqia Beheira Gharbia Aswan Asyut Beni Suef Luxor Minya Qena Sohag Matrouh New Valley North Sinai South Sinai Red Sea Area Street and building Floor, flat, landmark (optional) Something went wrong updating your order. Please try again. Save changes\",\"dim\":true}",
-    "at": "2026-10-19T11:37:13.349Z"
+    "status": "FAIL",
+    "note": "null",
+    "at": "2026-10-19T11:47:17.215Z"
   },
   {
     "id": "OR-7",
@@ -589,7 +589,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "FAIL",
     "note": "confirm=\"Cancel order? Are you sure? Order #9000106 will be cancelled and this can’t be undone. Back Cancel order\" calls after Back=0; done=\"Order cancelled Your order #9000106 has been cancelled. OK\" {\"banner\":true,\"cancelled\":\"true\"}; after reload {\"banner\":false,\"cancelled\":\"false\"} oka.cancelled=null (harness fixture is not cancelled server-side, so after reload the theme relies on oka.cancelled, which nothing writes)",
-    "at": "2026-10-19T11:37:20.479Z"
+    "at": "2026-10-19T11:47:24.363Z"
   },
   {
     "id": "OR-8",
@@ -597,7 +597,7 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "alert=\"Could not cancel This order is already being prepared for shipping, so it can no longer be changed or cancelled. OK\" {\"editDisabled\":true,\"note\":true,\"cancelled\":\"false\"}",
-    "at": "2026-10-19T11:37:24.741Z"
+    "at": "2026-10-19T11:47:28.624Z"
   },
   {
     "id": "OR-8",
@@ -605,6 +605,574 @@
     "ctx": "iPhone 13/en/customer",
     "status": "PASS",
     "note": "alert=\"Could not cancel Something went wrong updating your order. Please try again. OK\" {\"editDisabled\":false,\"note\":false,\"cancelled\":\"false\"}",
-    "at": "2026-10-19T11:37:29.033Z"
+    "at": "2026-10-19T11:47:32.941Z"
+  },
+  {
+    "id": "OR-9",
+    "scenario": "Cancelled (#9000104) and fulfilled (#9000105) orders: edit/cancel give \"not available\" without API calls",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "#9000104 [data-edit-order]: \"\" | #9000104 [data-cancel-order]: \"\" | #9000105 [data-edit-order]: \"\" | #9000105 [data-cancel-order]: \"\"; orders-API calls=[\"customer_get_order\"]",
+    "at": "2026-10-19T11:49:37.984Z"
+  },
+  {
+    "id": "OR-10",
+    "scenario": "Order again (#9000105) → cart has its items, goes to /cart",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "order lines=[\"the-hexa-party×1\"] cart=the-hexa-party×1 url=http://localhost:9410/cart",
+    "at": "2026-10-19T11:49:40.586Z"
+  },
+  {
+    "id": "OR-11",
+    "scenario": "SEC-04: orders-API address with HTML → injected into the edit sheet / guest view?",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"fired\":0,\"imgs\":0} (signed-in order detail address comes from Liquid; SEC-04's innerHTML path was not reached via edit sheet)",
+    "at": "2026-10-19T11:49:44.814Z"
+  },
+  {
+    "id": "AC-1",
+    "scenario": "/pages/account: rows, each link resolves; Sign out clears local state and logs out",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "links=[\"/pages/addresses\",\"/pages/wishlist\",\"/pages/loyalty\",\"/pages/support\",\"/pages/support#legal\",\"/account/logout\"] bad=[] signout=/account/logout",
+    "at": "2026-10-19T11:49:46.150Z"
+  },
+  {
+    "id": "AD-1",
+    "scenario": "Addresses: list 3, labels, ETA; make Giza default → classic form post; result",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "cards=[\"9000000001:C:true:1–2 days\",\"9000000002:GZ:false:1–2 days\",\"9000000003:ASN:false:3–5 days\"]; posted=[\" undefined \\\"\\\"\"] landed=http://localhost:9410/account/addresses default now=9000000002 (SI-01: on the live store with new customer accounts this classic POST does not exist)",
+    "at": "2026-10-19T11:49:49.095Z"
+  },
+  {
+    "id": "AD-2",
+    "scenario": "Delete address (confirm) → classic form delete",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "confirm=\"Delete address Are you sure? Back Delete\" posts=1 addresses now=2",
+    "at": "2026-10-19T11:49:51.336Z"
+  },
+  {
+    "id": "AD-3",
+    "scenario": "Add address: missing-fields alert; GPS locate (Nominatim mock) fills; province chip; save → classic POST; back to list",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "missing alert=\"Missing details Please add: street, area, governorate OK\"; locate → {\"city\":\"Nasr City\",\"street\":\"1 QA Street\",\"found\":true,\"chip\":\"C\"} alert=\"\" nominatim calls=1; posted=[[\"country\",\"province\",\"first_name\",\"last_name\",\"address2\",\"default\",\"phone\",\"city\",\"address1\"]] landed=http://localhost:9410/account/addresses",
+    "at": "2026-10-19T11:50:26.670Z"
+  },
+  {
+    "id": "LY-1",
+    "scenario": "Loyalty: points shown (250), rewards, redeem/copy/apply with service not configured",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"pts\":\"250\",\"err\":null,\"rewards\":[\"off20:Redeem\",\"off50:Locked\",\"ship:Locked\",\"off150:Locked\"],\"next\":\"250 points to your next reward · worth EGP 25\"} redeem: \"Use your points at checkout Your 250 points are EGP 25 of store credit. Choose to apply it on the payment step at checkout. OK → \" voucher→cart codes=[{\"code\":\"QA10\",\"applicable\":true}] ",
+    "at": "2026-10-19T11:51:03.810Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/subscriptions: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"My Subscriptions Subscribe & Save isn’t switched on for the website yet. It’s available in the OKA app.\",\"buttons\":[\"\"]} ",
+    "at": "2026-10-19T11:51:05.246Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/subscriptions?view=oka-subscribe: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"Subscribe & Save Subscribe & Save isn’t switched on for the website yet. It’s available in the OKA app.\",\"buttons\":[\"\"]} ",
+    "at": "2026-10-19T11:51:06.703Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/wishlist: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"Wishlist Tap the heart on any product to save it here. Browse best sellers\",\"buttons\":[\"\",\"/\"]} ",
+    "at": "2026-10-19T11:51:08.156Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/support: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"Help & support Common questions How long does delivery take? Cairo, Giza and Alexandria: 1–2 days. Delta and Canal: 2–3 days. Upper Egypt, Sinai, Red Sea and Ma\",\"buttons\":[\"\",\"/policies/refund-policy\",\"/policies/shipping-policy\",\"/policies/privacy-policy\",\"/policies/terms-of-service\"]} ",
+    "at": "2026-10-19T11:51:09.657Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/contact: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"Contact Name Phone Email Message Send\",\"buttons\":[\"\",\"Sendابعت\"]} ",
+    "at": "2026-10-19T11:51:11.125Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/about-us: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"About us Started 2022 Fully designed, tested and manufactured in Egypt. OKA started in 2022 with its main investment in science: making smoking more economical,\",\"buttons\":[\"\",\"/\"]} ",
+    "at": "2026-10-19T11:51:12.600Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/how-to-use: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"How to use Fill the flask Fill the flask with about 700 ml of water — a little more than one small water bottle. If the draw feels heavy, use less water; if it \",\"buttons\":[\"\",\"/\"]} ",
+    "at": "2026-10-19T11:51:14.194Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/faq: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"FAQ The frequently asked questions about the brand-new game changer hookah \\\"OKA\\\" , know everything you need to know about the most efficient hookah in the world\",\"buttons\":[\"\"]} ",
+    "at": "2026-10-19T11:51:15.639Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /account: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"Orders #9000101 EGP 327 OKA white +1 more Processing #9000102 EGP 264 OKA Carbon Black +1 more Out for delivery #9000103 EGP 327 OKA white +3 more Delivered #90\",\"buttons\":[\"?order=%239000101\",\"?order=%239000102\",\"?order=%239000103\",\"?order=%239000104\",\"?order=%239000105\",\"?order=%239000106\",\"\",\"–\",\"+\",\"–\",\"+\",\"Edit orderعدّل الطلب\"]} ",
+    "at": "2026-10-19T11:51:17.205Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /account/addresses: renders, no errors; visible actions",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"My addresses Cairo QA Tester 1 Test Street, Building 1, Floor 2, Apt 3 Nasr City +201000000001 Delivery in 1–2 days Make default Delete Giza Default QA Office 2\",\"buttons\":[\"\",\"Make defaultخليه الأساسي\",\"Deleteامسح\",\"Deleteامسح\",\"Make defaultخليه الأساسي\",\"Deleteامسح\",\"/pages/addresses?view=oka-add-\"]} ",
+    "at": "2026-10-19T11:51:18.702Z"
+  },
+  {
+    "id": "SP-1",
+    "scenario": "Support: WhatsApp button hidden (whatsapp setting empty, SI-08); links work",
+    "ctx": "iPhone 13/en/customer",
+    "status": "INFO",
+    "note": "wa.me links=0 (SI-08 CONFIRMED); links=[\"/policies/refund-policy\",\"/policies/shipping-policy\",\"/policies/privacy-policy\",\"/policies/terms-of-service\"]",
+    "at": "2026-10-19T11:51:19.586Z"
+  },
+  {
+    "id": "CF-1",
+    "scenario": "Contact form: submit → posted, success message",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "fields=[\"contact[name]\",\"contact[phone]\",\"contact[email]\",\"contact[body]\"] url=http://localhost:9410/pages/contact?contact_posted=true#contact_form message=Thanks — we’ll get back to you soon.",
+    "at": "2026-10-19T11:51:21.427Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track?awb=JEGQA0000000002&order=%239000103 with track_delivery \"success\"",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"Out for delivery Processing Preparing to Ship Shipped Delivered Out for delivery with courier QA Courier (01000000009) 2026-10-13 09:15:00 P\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:51:23.008Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track?awb=JEGQA0000000002&order=%239000103 with track_delivery \"empty\"",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"No scans yet Processing Preparing to Ship Shipped Delivered No courier scans for this shipment yet. Updates appear here once J&T picks it up\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:51:24.749Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track?awb=JEGQA0000000002 with track_delivery \"error500\"",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"We couldn’t reach J&T just now. Pull down to try again.\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:51:26.492Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track?awb=JEGQA0000000002 with track_delivery \"timeout\"",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"We couldn’t reach J&T just now. Pull down to try again.\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:51:36.255Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track?awb=JEGQA0000000002 with track_delivery \"malformed\"",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"We couldn’t reach J&T just now. Pull down to try again.\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:51:37.975Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track (no awb) with track_delivery \"success\"",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"No shipment number was given.\",\"awb\":\"\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:51:39.707Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track?awb=%3Cimg%20src%3Dx%20onerror%3Dwindow.__t%3D1%3E with track_delivery \"success\"",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"Out for delivery Processing Preparing to Ship Shipped Delivered Out for delivery with courier QA Courier (01000000009) 2026-10-13 09:15:00 P\",\"awb\":\"AWB <IMG SRC=X ONERROR=WINDOW.__T=1>\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:51:41.271Z"
+  },
+  {
+    "id": "AC-LOG",
+    "scenario": "Account session error summary",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-19T11:51:41.272Z"
+  },
+  {
+    "id": "OR-1",
+    "scenario": "Orders list: 6 orders with states; tap opens detail (pushState); Back returns to list",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "cards=[\"#9000101:Processingبنراجعه\",\"#9000102:خرجت للتوصيل مع المندوب\",\"#9000103:اتسلمت\",\"#9000104:Cancelledملغي\",\"#9000105:خرجت للتوصيل مع المندوب\",\"#9000106:Processingبنراجعه\"] detail={\"url\":\"?order=%239000102\",\"vis\":[\"#9000102\"],\"list\":false} back={\"url\":\"\",\"list\":true} forward=[\"#9000102\"] ",
+    "at": "2026-10-19T11:51:45.742Z"
+  },
+  {
+    "id": "OR-2",
+    "scenario": "Detail header back button returns to list (in-page)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"url\":\"/pages/orders\",\"list\":true}",
+    "at": "2026-10-19T11:51:47.967Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"success\"",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"اتسلمت\",\"steps\":4,\"updates\":4,\"courier\":\"QA Courier\",\"wa\":\"https://wa.me/201000000009\",\"err\":null,\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:خرجت للتوصيل مع المندوب\",\"#9000103:اتسلمت\",\"#9000104:Cancelledملغي\",\"#9000105:خرجت للتوصيل مع المندوب\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:51:49.877Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"error500\"",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:51:51.771Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"timeout\"",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:52:02.510Z"
+  },
+  {
+    "id": "OR-3",
+    "scenario": "Edit order #9000101 via item + : sheet opens with preset, quote, save → customer_update_order",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "FAIL",
+    "note": "sheet not opened; alert=\"مينفعش يتغيّر الطلب ده ملغي بالفعل. تمام\"",
+    "at": "2026-10-19T11:52:07.069Z"
+  },
+  {
+    "id": "OR-7",
+    "scenario": "Cancel #9000106: \"Back\" keeps it; \"Cancel order\" calls API, marks cancelled; reload state",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "FAIL",
+    "note": "confirm=\"تلغي الطلب؟ متأكد؟ الطلب #9000106 هيتلغي ومينفعش نرجّعه. ارجع الغي الطلب\" calls after Back=0; done=\"الطلب اتلغى طلبك #9000106 اتلغى. تمام\" {\"banner\":true,\"cancelled\":\"true\"}; after reload {\"banner\":false,\"cancelled\":\"false\"} oka.cancelled=null (harness fixture is not cancelled server-side, so after reload the theme relies on oka.cancelled, which nothing writes)",
+    "at": "2026-10-19T11:52:14.266Z"
+  },
+  {
+    "id": "OR-9",
+    "scenario": "Cancelled (#9000104) and fulfilled (#9000105) orders: edit/cancel give \"not available\" without API calls",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "#9000104 [data-edit-order]: \"\" | #9000104 [data-cancel-order]: \"\" | #9000105 [data-edit-order]: \"\" | #9000105 [data-cancel-order]: \"\"; orders-API calls=[]",
+    "at": "2026-10-19T11:54:19.341Z"
+  },
+  {
+    "id": "OR-10",
+    "scenario": "Order again (#9000105) → cart has its items, goes to /cart",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "order lines=[\"the-hexa-party×1\"] cart=the-hexa-party×1 url=http://localhost:9410/cart",
+    "at": "2026-10-19T11:54:22.016Z"
+  },
+  {
+    "id": "AC-1",
+    "scenario": "/pages/account: rows, each link resolves; Sign out clears local state and logs out",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "links=[\"/pages/addresses\",\"/pages/wishlist\",\"/pages/loyalty\",\"/pages/support\",\"/pages/support#legal\",\"/account/logout\"] bad=[] signout=/account/logout",
+    "at": "2026-10-19T11:54:23.247Z"
+  },
+  {
+    "id": "AD-1",
+    "scenario": "Addresses: list 3, labels, ETA; make Giza default → classic form post; result",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "cards=[\"9000000001:C:true:١-٢ يوم\",\"9000000002:GZ:false:١-٢ يوم\",\"9000000003:ASN:false:٣-٥ أيام\"]; posted=[\" undefined \\\"\\\"\"] landed=http://localhost:9410/account/addresses default now=9000000002 (SI-01: on the live store with new customer accounts this classic POST does not exist)",
+    "at": "2026-10-19T11:54:26.229Z"
+  },
+  {
+    "id": "AD-2",
+    "scenario": "Delete address (confirm) → classic form delete",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "confirm=\"امسح العنوان متأكد؟ ارجع امسح\" posts=1 addresses now=2",
+    "at": "2026-10-19T11:54:28.444Z"
+  },
+  {
+    "id": "AD-3",
+    "scenario": "Add address: missing-fields alert; GPS locate (Nominatim mock) fills; province chip; save → classic POST; back to list",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "missing alert=\"ناقص بيانات محتاجين: الشارع، المنطقة، المحافظة تمام\"; locate → {\"city\":\"Nasr City\",\"street\":\"1 QA Street\",\"found\":true,\"chip\":\"C\"} alert=\"\" nominatim calls=1; posted=[[\"country\",\"province\",\"first_name\",\"last_name\",\"address2\",\"default\",\"phone\",\"city\",\"address1\"]] landed=http://localhost:9410/account/addresses",
+    "at": "2026-10-19T11:55:03.809Z"
+  },
+  {
+    "id": "LY-1",
+    "scenario": "Loyalty: points shown (250), rewards, redeem/copy/apply with service not configured",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"pts\":\"٢٥٠\",\"err\":null,\"rewards\":[\"off20:بدّل\",\"off50:مقفول\",\"ship:مقفول\",\"off150:مقفول\"],\"next\":\"٢٥٠ نقطة للمكافأة الجاية · قيمتها ٢٥ ج.م\"} redeem: \"ادفع بنقاطك نقاطك (٢٥٠) تساوي ٢٥ ج.م رصيد عندنا. فعّله وانت بتدفع. تمام → \" voucher→cart codes=[{\"code\":\"QA10\",\"applicable\":true}] ",
+    "at": "2026-10-19T11:55:40.902Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/subscriptions: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"اشتراكاتي الاشتراك والتوفير مش متفعّل على الموقع لسه. متاح في تطبيق أوكا.\",\"buttons\":[\"\"]} ",
+    "at": "2026-10-19T11:55:42.383Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/subscriptions?view=oka-subscribe: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"اشترك ووفّر الاشتراك والتوفير مش متفعّل على الموقع لسه. متاح في تطبيق أوكا.\",\"buttons\":[\"\"]} ",
+    "at": "2026-10-19T11:55:43.825Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/wishlist: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"المفضلة اضغط على القلب في أي منتج عشان تحفظه هنا. شوف الأكتر مبيعاً\",\"buttons\":[\"\",\"/\"]} ",
+    "at": "2026-10-19T11:55:45.270Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/support: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"محتاج مساعدة؟ أسئلة بتتسأل كتير التوصيل بياخد قد إيه؟ القاهرة والجيزة والإسكندرية: ١-٢ يوم. الدلتا والقناة: ٢-٣ أيام. الصعيد وسيناء والبحر الأحمر ومطروح: ٣-٥ أي\",\"buttons\":[\"\",\"/policies/refund-policy\",\"/policies/shipping-policy\",\"/policies/privacy-policy\",\"/policies/terms-of-service\"]} ",
+    "at": "2026-10-19T11:55:46.820Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/contact: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"تواصل معانا الاسم الموبايل الإيميل رسالتك ابعت\",\"buttons\":[\"\",\"Sendابعت\"]} ",
+    "at": "2026-10-19T11:55:48.282Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/about-us: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"عن أوكا بدأنا ٢٠٢٢ متصممة ومتجرّبة ومتصنّعة بالكامل في مصر. أوكا بدأت سنة ٢٠٢٢ واستثمارها الأساسي في العلم: إن تجربة الشيشة تبقى أوفر وأأمن وممتعة أكتر. لو كل ن\",\"buttons\":[\"\",\"/\"]} ",
+    "at": "2026-10-19T11:55:49.749Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/how-to-use: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"طريقة الاستخدام املى القزازة املى القزازة بحوالي ٧٠٠ مللي مية — أكتر شوية من إزازة مية صغيرة. لو السحبة تقيلة قلّل المية، ولو خفيفة زوّدها. تركيب أوكا ستيم تركي\",\"buttons\":[\"\",\"/\"]} ",
+    "at": "2026-10-19T11:55:51.349Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /pages/faq: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"FAQ The frequently asked questions about the brand-new game changer hookah \\\"OKA\\\" , know everything you need to know about the most efficient hookah in the world\",\"buttons\":[\"\"]} ",
+    "at": "2026-10-19T11:55:52.772Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /account: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"طلباتي #9000101 ٣٢٧ ج.م أوكا ابيض و١ أخرى بنراجعه #9000102 ٢٦٤ ج.م أوكا اسود كاربون و١ أخرى خرجت للتوصيل مع المندوب #9000103 ٣٢٧ ج.م أوكا ابيض و٣ أخرى اتسلمت #9\",\"buttons\":[\"?order=%239000101\",\"?order=%239000102\",\"?order=%239000103\",\"?order=%239000104\",\"?order=%239000105\",\"?order=%239000106\",\"\",\"–\",\"+\",\"–\",\"+\",\"Edit orderعدّل الطلب\"]} ",
+    "at": "2026-10-19T11:55:54.306Z"
+  },
+  {
+    "id": "AC-2",
+    "scenario": "Signed-in page /account/addresses: renders, no errors; visible actions",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 {\"text\":\"عناويني القاهرة QA Tester 1 Test Street, Building 1, Floor 2, Apt 3 Nasr City +201000000001 بيوصل في ١-٢ يوم خليه الأساسي امسح الجيزة الأساسي QA Office 2 Sample\",\"buttons\":[\"\",\"Make defaultخليه الأساسي\",\"Deleteامسح\",\"Deleteامسح\",\"Make defaultخليه الأساسي\",\"Deleteامسح\",\"/pages/addresses?view=oka-add-\"]} ",
+    "at": "2026-10-19T11:55:55.780Z"
+  },
+  {
+    "id": "SP-1",
+    "scenario": "Support: WhatsApp button hidden (whatsapp setting empty, SI-08); links work",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "INFO",
+    "note": "wa.me links=0 (SI-08 CONFIRMED); links=[\"/policies/refund-policy\",\"/policies/shipping-policy\",\"/policies/privacy-policy\",\"/policies/terms-of-service\"]",
+    "at": "2026-10-19T11:55:56.666Z"
+  },
+  {
+    "id": "CF-1",
+    "scenario": "Contact form: submit → posted, success message",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "fields=[\"contact[name]\",\"contact[phone]\",\"contact[email]\",\"contact[body]\"] url=http://localhost:9410/pages/contact?contact_posted=true#contact_form message=شكرًا — هنرد عليك قريب.",
+    "at": "2026-10-19T11:55:58.506Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track?awb=JEGQA0000000002&order=%239000103 with track_delivery \"success\"",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"خرجت للتوصيل مع المندوب بنراجعه بيتجهز للشحن اتشحن وصل Out for delivery with courier QA Courier (01000000009) 2026-10-13 09:15:00 Parcel sen\",\"awb\":\"AWB JEGQA0000000002\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:56:00.093Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track (no awb) with track_delivery \"success\"",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"مفيش رقم شحنة.\",\"awb\":\"\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:56:01.813Z"
+  },
+  {
+    "id": "TK-1",
+    "scenario": "/pages/track?awb=%3Cimg%20src%3Dx%20onerror%3Dwindow.__t%3D1%3E with track_delivery \"success\"",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"body\":\"خرجت للتوصيل مع المندوب بنراجعه بيتجهز للشحن اتشحن وصل Out for delivery with courier QA Courier (01000000009) 2026-10-13 09:15:00 Parcel sen\",\"awb\":\"AWB <IMG SRC=X ONERROR=WINDOW.__T=1>\",\"ext\":\"https://www.jtexpress-eg.com/\",\"xss\":0} ",
+    "at": "2026-10-19T11:56:03.387Z"
+  },
+  {
+    "id": "AC-LOG",
+    "scenario": "Account session error summary",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-19T11:56:03.388Z"
+  },
+  {
+    "id": "OR-1",
+    "scenario": "Orders list: 6 orders with states; tap opens detail (pushState); Back returns to list",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "cards=[\"#9000101:Processingبنراجعه\",\"#9000102:Out for delivery\",\"#9000103:Delivered\",\"#9000104:Cancelledملغي\",\"#9000105:Out for delivery\",\"#9000106:Processingبنراجعه\"] detail={\"url\":\"?order=%239000102\",\"vis\":[\"#9000102\"],\"list\":false} back={\"url\":\"\",\"list\":true} forward=[\"#9000102\"] ",
+    "at": "2026-10-19T11:56:07.533Z"
+  },
+  {
+    "id": "OR-2",
+    "scenario": "Detail header back button returns to list (in-page)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"url\":\"/pages/orders\",\"list\":true}",
+    "at": "2026-10-19T11:56:09.734Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"success\"",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Delivered\",\"steps\":4,\"updates\":4,\"courier\":\"QA Courier\",\"wa\":\"https://wa.me/201000000009\",\"err\":null,\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Out for delivery\",\"#9000103:Delivered\",\"#9000104:Cancelledملغي\",\"#9000105:Out for delivery\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:56:11.647Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"error500\"",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:56:13.492Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"timeout\"",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in 1–2 daysيوصل 1–2 days\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:56:24.148Z"
+  },
+  {
+    "id": "OR-3",
+    "scenario": "Edit order #9000101 via item + : sheet opens with preset, quote, save → customer_update_order",
+    "ctx": "Pixel 7/en/customer",
+    "status": "FAIL",
+    "note": "sheet not opened; alert=\"Can’t change it This order is already cancelled. OK\"",
+    "at": "2026-10-19T11:56:28.638Z"
+  },
+  {
+    "id": "OR-7",
+    "scenario": "Cancel #9000106: \"Back\" keeps it; \"Cancel order\" calls API, marks cancelled; reload state",
+    "ctx": "Pixel 7/en/customer",
+    "status": "FAIL",
+    "note": "confirm=\"Cancel order? Are you sure? Order #9000106 will be cancelled and this can’t be undone. Back Cancel order\" calls after Back=0; done=\"Order cancelled Your order #9000106 has been cancelled. OK\" {\"banner\":true,\"cancelled\":\"true\"}; after reload {\"banner\":false,\"cancelled\":\"false\"} oka.cancelled=null (harness fixture is not cancelled server-side, so after reload the theme relies on oka.cancelled, which nothing writes)",
+    "at": "2026-10-19T11:56:35.758Z"
+  },
+  {
+    "id": "OR-9",
+    "scenario": "Cancelled (#9000104) and fulfilled (#9000105) orders: edit/cancel give \"not available\" without API calls",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "#9000104 [data-edit-order]: \"\" | #9000104 [data-cancel-order]: \"\" | #9000105 [data-edit-order]: \"\" | #9000105 [data-cancel-order]: \"\"; orders-API calls=[]",
+    "at": "2026-10-19T11:58:40.774Z"
+  },
+  {
+    "id": "OR-10",
+    "scenario": "Order again (#9000105) → cart has its items, goes to /cart",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "order lines=[\"the-hexa-party×1\"] cart=the-hexa-party×1 url=http://localhost:9410/cart",
+    "at": "2026-10-19T11:58:43.446Z"
+  },
+  {
+    "id": "AC-1",
+    "scenario": "/pages/account: rows, each link resolves; Sign out clears local state and logs out",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "links=[\"/pages/addresses\",\"/pages/wishlist\",\"/pages/loyalty\",\"/pages/support\",\"/pages/support#legal\",\"/account/logout\"] bad=[] signout=/account/logout",
+    "at": "2026-10-19T11:58:44.699Z"
+  },
+  {
+    "id": "AD-1",
+    "scenario": "Addresses: list 3, labels, ETA; make Giza default → classic form post; result",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "cards=[\"9000000001:C:true:1–2 days\",\"9000000002:GZ:false:1–2 days\",\"9000000003:ASN:false:3–5 days\"]; posted=[\" undefined \\\"\\\"\"] landed=http://localhost:9410/account/addresses default now=9000000002 (SI-01: on the live store with new customer accounts this classic POST does not exist)",
+    "at": "2026-10-19T11:58:47.619Z"
+  },
+  {
+    "id": "AD-2",
+    "scenario": "Delete address (confirm) → classic form delete",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "confirm=\"Delete address Are you sure? Back Delete\" posts=1 addresses now=2",
+    "at": "2026-10-19T11:58:49.823Z"
+  },
+  {
+    "id": "AD-3",
+    "scenario": "Add address: missing-fields alert; GPS locate (Nominatim mock) fills; province chip; save → classic POST; back to list",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "missing alert=\"Missing details Please add: street, area, governorate OK\"; locate → {\"city\":\"Nasr City\",\"street\":\"1 QA Street\",\"found\":true,\"chip\":\"C\"} alert=\"\" nominatim calls=1; posted=[[\"country\",\"province\",\"first_name\",\"last_name\",\"address2\",\"default\",\"phone\",\"city\",\"address1\"]] landed=http://localhost:9410/account/addresses",
+    "at": "2026-10-19T11:59:25.119Z"
   }
 ]

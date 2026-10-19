@@ -10,3 +10,5 @@ Status: work in progress; sections are appended as each journey group completes.
 - 04 PDP + AR: iPhone done (F-05 confirmed, COM-07 confirmed, F-08 confirmed, F-10 confirmed, F-03 not reproduced); all devices running.
 - 04 PDP + AR: done, all devices (results/04-pdp.json). F-05, COM-07, F-08, F-10 confirmed; F-03 not reproduced.
 - 05 Cart / codes / fees / checkout: iPhone done (COM-01, COM-04, COM-06 confirmed; F-02 not reproduced without latency). Full-device rerun with a latency variant of F-02 is running (container restarted 2026-10-19; server restarted on 9410).
+- 06 Account / orders / tracking / edit / cancel / addresses / loyalty / support / track / contact: iPhone ar done; full run (iPhone 13 + Pixel 7, ar/en, + guest views) running. New: cancelled-here state lost on reload (`oka.cancelled` never written); tracking errors look identical to "no updates".
+- 07 Guest orders / misc pages / multi-tab / back-forward / reload / offline: iPhone pass done (COM-09, SEC-06, F-15, F-16 guest part confirmed); full run running.
