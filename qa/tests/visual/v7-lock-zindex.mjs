@@ -101,6 +101,7 @@ for (const dev of ['desk', 'tab-land']) {
   out.zindex = r;
   await s.close();
 }
-const prev = (() => { try { return JSON.parse((await import('node:fs')).readFileSync(new URL('./out/lock-zindex.json', import.meta.url))); } catch (e) { return {}; } })();
+import fs0 from "node:fs";
+const prev = (() => { try { return JSON.parse(fs0.readFileSync(new URL("./out/lock-zindex.json", import.meta.url))); } catch (e) { return {}; } })();
 save('lock-zindex.json', ONLY ? { ...prev, ...out } : out);
 console.log(JSON.stringify(out, null, 1).slice(0, 6000));

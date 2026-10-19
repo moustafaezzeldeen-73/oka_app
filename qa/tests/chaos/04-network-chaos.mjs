@@ -82,8 +82,7 @@ for (const kind of ['429', '502html']) {
   const s = await launch({ baseURL: BASE, device: 'Pixel 7', locale: 'en', agent: 'chaos', mocks: 'success' });
   await s.page.addInitScript(() => { try { localStorage.setItem('oka.age', 'true'); localStorage.setItem('__qa_seeded', '1'); } catch {} });
   await s.goto('/products/oka-cobra', { settle: 500 });
-  await s.page.evaluate(async () => { await window.Oka.addToCart(window.Oka.CFG && 0, 1).catch(() => {}); });
-  // add 2 to cart then go to cart page
+  // add to cart, then go to cart page
   await s.page.evaluate(() => document.querySelector('[data-buy],[data-add]')?.click());
   await s.page.waitForTimeout(500);
   let n = 0;

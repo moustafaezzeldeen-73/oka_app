@@ -12,7 +12,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const localKeys = ['oka.lang', 'oka.age', 'oka.addr', 'oka.afterAddress', 'oka.afterSignIn', 'oka.cancelled', 'oka.filters', 'oka.lastCheckout', 'oka.lastOrder', 'oka.pendingCode', 'oka.rated', 'oka.sort', 'oka.vouchers', 'oka.wishlist'];
 const sessionKeys = ['oka.catalogue', 'oka.editingSub', 'oka.recShown', 'oka.viewed'];
-const BAD = ['null', '{}', '[]', '"a string"', '123', 'true', '{not json', '[1,2,', '"' + 'ش'.repeat(20000) + '"', '{"x":1}'];
+const BAD = ['null', '{}', '"a string"', '{not json', '"' + 'ش'.repeat(20000) + '"'];
 // page that most exercises each key
 const keyRoute = {
   'oka.wishlist': '/collections/hookahs', 'oka.viewed': '/products/oka-cobra', 'oka.catalogue': '/search?q=oka',

@@ -1,0 +1,11 @@
+interaction cases: 10
+rapid-fire /products/oka-cobra               err=[] cerr=[] cartCount=0 items=[]   
+rapid-fire /collections/hookahs              err=[] cerr=[] cartCount=0 items=[]   
+rapid-fire /cart                             err=[] cerr=[] cartCount=0 items=[]   
+rapid-fire /                                 err=[] cerr=[] cartCount=8 items=[["oka-cloud-white-hookah",2],["tobacco-bowls-blueberry-12g",2],["tobacco-bowls-iced-lemon-mint-12g",2],["tongs",2]]   
+rapid-fire /pages/orders                     err=[] cerr=[] cartCount=30 items=[["oka-cloud-white-hookah",10],["tobacco-bowls-blueberry-12g",20]]   
+pdp triple-tap add                           err=[] cerr=[] cartCount=3 items=[["oka-cobra",3]]   
+contact double-submit + hostile input        err=[] cerr=[]    submitted=3 url=http://localhost:9440/pages/contact?contact_posted=true#contact_form
+add-address EG phone formats (theme regex)   err=[] cerr=[]   [{"phone":"01012345678","strippedPass":true,"arabicDigitsPass":true},{"phone":"01112345678","strippedPass":true,"arabicDigitsPass":true},{"phone":"01212345678","strippedPass":true,"arabicDigitsPass":true},{"phone":"01512345678","strippedPass":true,"arabicDigitsPass":true},{"phone":"+201012345678","strippedPass":true,"arabicDigitsPass":true},{"phone":"00201012345678","strippedPass":false,"arabicDigitsPass":false},{"phone":"٠١٠١٢٣٤٥٦٧٨٩","strippedPass":false,"arabicDigitsPass":false},{"phone":"0101234567","strippedPass":false,"arabicDigitsPass":false},{"phone":"010123456789","strippedPass":false,"arabicDigitsPass":false},{"phone":"0191234567","strippedPass":false,"arabicDigitsPass":false}] 
+menu+sheet+escape+rotate+zoom                err=[] cerr=[]  {"menuOpen":false,"scrims":1,"sheets":1,"overflow":0}  
+back during pending add                      err=[] cerr=[]    

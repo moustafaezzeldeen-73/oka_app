@@ -1,0 +1,66 @@
+{
+ "toast-ar": [
+  {
+   "left": 160,
+   "right": 561,
+   "width": 401,
+   "vw": 320,
+   "clippedByApp": true
+  },
+  {
+   "left": 160,
+   "right": 489,
+   "width": 329,
+   "vw": 320,
+   "clippedByApp": true
+  },
+  {
+   "left": 160,
+   "right": 294,
+   "width": 134,
+   "vw": 320,
+   "clippedByApp": false
+  }
+ ],
+ "longTitle-ar": {
+  "overflow": [
+   {
+    "cls": "gcard-row",
+    "sw": 111,
+    "cw": 105,
+    "r": 285,
+    "cr": 298
+   }
+  ],
+  "title": "2",
+  "priceRow": 105
+ },
+ "toast-en": [
+  {
+   "left": 160,
+   "right": 603,
+   "width": 443,
+   "vw": 320,
+   "clippedByApp": true
+  },
+  {
+   "left": 160,
+   "right": 510,
+   "width": 350,
+   "vw": 320,
+   "clippedByApp": true
+  },
+  {
+   "left": 160,
+   "right": 331,
+   "width": 171,
+   "vw": 320,
+   "clippedByApp": true
+  }
+ ],
+ "longTitle-en": {
+  "overflow": [],
+  "title": "2",
+  "priceRow": 105
+ }
+}

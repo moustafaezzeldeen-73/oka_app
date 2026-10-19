@@ -1,0 +1,21 @@
+{
+ "latencyOffline": {
+  "addCallsDuringLatency": 3,
+  "cartAfterDoubleTapUnderLatency": 2,
+  "offlineAlert": "Could not add\nFailed to fetch\nOK",
+  "pageErrors": [
+   "Failed to fetch"
+  ]
+ },
+ "outOfOrder": {
+  "qtyBefore": 2,
+  "quantitiesSent": [
+   3,
+   1
+  ],
+  "serverQtyAfter": 3,
+  "shownQtyAfter": "3",
+  "expected": 2,
+  "pageErrors": []
+ }
+}

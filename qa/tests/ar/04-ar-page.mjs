@@ -29,8 +29,8 @@ if (run('matrix')) {
 }
 if (run('failures')) {
   const cases = {
+    'cdn-hang-first': async (s) => s.page.route(/model-viewer/, () => {}),
     'cdn-abort': async (s) => s.page.route(/model-viewer/, (r) => r.abort('failed')),
-    'cdn-hang': async (s) => s.page.route(/model-viewer/, () => {}),
     'glb-404': async (s) => s.page.route(/\.glb/, (r) => r.fulfill({ status: 404, body: 'nope' })),
     'glb-corrupt': async (s) => s.page.route(/\.glb/, (r) => r.fulfill({ status: 200, contentType: 'model/gltf-binary', body: 'not a glb' })),
     'no-webgl': async (s) => s.context.addInitScript(() => { const g = HTMLCanvasElement.prototype.getContext; HTMLCanvasElement.prototype.getContext = function (t, ...a) { return /webgl/i.test(t) ? null : g.call(this, t, ...a); }; if (window.OffscreenCanvas) { const og = OffscreenCanvas.prototype.getContext; OffscreenCanvas.prototype.getContext = function (t, ...a) { return /webgl/i.test(t) ? null : og.call(this, t, ...a); }; } }),
@@ -40,12 +40,15 @@ if (run('failures')) {
       for (const perm of ['granted', 'denied']) {
         const s = await open({ cameraPermission: perm });
         await setup(s);
-        await s.goto(where === 'arpage' ? '/products/oka-cobra?view=ar' : '/products/oka-cobra');
+        let loadErr = null; const tl = Date.now();
+        await s.goto(where === 'arpage' ? '/products/oka-cobra?view=ar' : '/products/oka-cobra', { timeout: 12000 }).catch((e) => { loadErr = e.message.split('\n')[0]; });
+        const loadMs = Date.now() - tl;
         if (where === 'pdp') await s.page.evaluate(() => { const sc = document.querySelector('.screen[data-screen="product"]'); const a = document.querySelector('[data-ar-view]'); sc.scrollTo({ top: a.offsetTop - 76, behavior: 'instant' }); });
         await sleep(5000);
         const i = await arInfo(s.page);
-        await s.shot(`fail-${name}-${where}-${perm}`);
-        out(`${name} ${where} perm=${perm}`, { status: i.status, state: i.state, cls: i.cls, loading: i.loading, photoHidden: i.photoHidden, mv: !!i.mv, mvLoaded: i.mvLoaded, cam: await camState(s.page), errs: s.logs.pageErrors.map((e) => e.message.slice(0, 120)), console: s.logs.console.map((e) => e.text.slice(0, 120)).slice(0, 3) });
+        await s.shot(`fail-${name}-${where}-${perm}`, { timeout: 5000 }).catch(() => {});
+        const readyState = await s.page.evaluate(() => document.readyState);
+        out(`${name} ${where} perm=${perm}`, { loadMs, loadErr, readyState, status: i.status, state: i.state, cls: i.cls, loading: i.loading, photoHidden: i.photoHidden, mv: !!i.mv, mvLoaded: i.mvLoaded, cam: await camState(s.page), errs: s.logs.pageErrors.map((e) => e.message.slice(0, 120)), console: s.logs.console.map((e) => e.text.slice(0, 120)).slice(0, 3) });
         await s.close();
       }
     }

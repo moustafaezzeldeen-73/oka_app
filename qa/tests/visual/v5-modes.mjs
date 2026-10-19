@@ -76,7 +76,7 @@ for (const locale of ['ar', 'en']) {
 
 // 3. Chrome auto dark mode (Android "Dark theme for web pages" / Samsung Internet forced dark)
 {
-  const { chromium } = await import('/opt/node22/lib/node_modules/playwright/index.js').catch(async () => import('playwright'));
+  const { chromium } = (await import('node:module')).createRequire(import.meta.url)('/opt/node22/lib/node_modules/playwright');
   const b = await chromium.launch({ args: ['--enable-features=WebContentsForceDark', '--blink-settings=forceDarkModeEnabled=true'] });
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, baseURL: BASE });
   await ctx.addInitScript(() => { try { localStorage.setItem('oka.age', 'true'); localStorage.setItem('oka.lang', 'ar'); } catch (e) {} });

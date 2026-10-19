@@ -20,7 +20,7 @@ violation serious nested-interactive pages=2 nodes=24 :: Interactive controls mu
 violation serious target-size pages=2 nodes=24 :: All touch targets must be 24px large, or leave sufficient space
    .active > .addr-inner > div > .addr-actions > .red.addr-action[data-delete-addr=""] || div[data-addr="9000000002"] > .addr-inner > div > .addr-actions > .addr-action[data-make-default=""] || div[data-addr="9000000002"] > .addr-inner > div > .addr-actions > .red.addr-action[data-delete-addr=""]
    /pages/addresses /account/addresses
-violation serious color-contrast pages=2 nodes=12 :: Elements must meet minimum color contrast ratio thresholds
+violation serious color-contrast pages=2 nodes=6 :: Elements must meet minimum color contrast ratio thresholds
    .wa || div[data-qty="1"] > .line-body > .line-variant[data-replace=""] > b || div[data-qty="2"] > .line-body > .line-variant[data-replace=""] > b
    /pages/track?awb=JEGQA0000000002&order=%239000103 /cart
 violation serious document-title pages=1 nodes=8 :: Documents must have <title> element to aid in navigation
@@ -44,7 +44,7 @@ violation moderate heading-order pages=1 nodes=8 :: Heading levels should only i
 violation minor empty-heading pages=1 nodes=16 :: Headings should not be empty
    h2:nth-child(34) || h2:nth-child(51)
    /policies/privacy-policy
-incomplete serious color-contrast pages=56 nodes=3694 :: Elements must meet minimum color contrast ratio thresholds
+incomplete serious color-contrast pages=56 nodes=3243 :: Elements must meet minimum color contrast ratio thresholds
    span[data-lang-label=""] || .cat-row:nth-child(2) > span:nth-child(2) > .cat-count > .l-ar:nth-child(2) || a[href$="oka-parties"] > span:nth-child(2) > .cat-count > .l-ar:nth-child(2) || a[href$="oka-cobra"] > span:nth-child(2) > .cat-label > .l-ar || a[href$="oka-cobra"] > span:nth-child(2) > .cat-count > .l-ar:nth-child(2) || a[href$="dark-tobacco"] > span:nth-child(2) > .cat-label > .l-ar
    / /collections /collections/oka-cobra /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /collections/hookahs?page=2 /collections/does-not-exist /products/oka-cloud-white-hookah
 
@@ -53,136 +53,136 @@ outOfViewport: 0 distinct
 clipped: 0 distinct
 
 latinOnAr: 266 distinct
-  [5r arurl-ar-cust,root-ar-cust] QA Tester  :: /pages/account /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review
-  [4r arurl-ar-cust,root-ar-cust] 1 Test Street, Building 1, Floor 2, Apt 3  :: /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review /account/addresses
-  [4r arurl-ar-cust,root-ar-cust] Nasr City  :: /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review /account/addresses
-  [3r arurl-ar-cust,root-ar-cust] QA Office  :: /pages/addresses /account/addresses /account/orders/9100000003
-  [3r arurl-ar-cust,root-ar-cust] 2 Sample Road  :: /pages/addresses /account/addresses /account/orders/9100000003
-  [3r arurl-ar-cust,root-ar-cust] Dokki  :: /pages/addresses /account/addresses /account/orders/9100000003
-  [2r arurl-ar-cust,root-ar-cust] QA Far  :: /pages/addresses /account/addresses
-  [2r arurl-ar-cust,root-ar-cust] 3 Example Corniche, Villa 4  :: /pages/addresses /account/addresses
-  [2r arurl-ar-cust,root-ar-cust] Aswan  :: /pages/addresses /account/addresses
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Out for delivery with courier QA Courier (01000000009)  :: /account/orders/9100000003 /pages/track?awb=JEGQA0000000002&order=%239000103
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Parcel sent from Cairo hub  :: /account/orders/9100000003 /pages/track?awb=JEGQA0000000002&order=%239000103
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Your parcel has been picked up by J&T courier  :: /account/orders/9100000003 /pages/track?awb=JEGQA0000000002&order=%239000103
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] QA Courier  :: /account/orders/9100000003 /pages/track?awb=JEGQA0000000002&order=%239000103
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] oka-egypt@hotmail.com  :: /policies/refund-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Terms of service  :: /policies/privacy-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] By consenting to OKA’s SMS marketing in the checkout and initializing a purchase  :: /policies/privacy-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] If you wish to unsubscribe from receiving text marketing messages and notificati  :: /policies/privacy-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] For any questions, please text HELP to the number you received the messages from  :: /policies/privacy-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] https://oka-eg.com/pages/contact  :: /policies/privacy-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] for more information.  :: /policies/privacy-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] We have the right to modify any telephone number or short code we use to operate  :: /policies/privacy-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] To the extent permitted by applicable law, you agree that we will not be liable   :: /policies/privacy-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Your right to privacy is important to us. You can see our Privacy Policy https:/  :: /policies/privacy-policy /policies/terms-of-service
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Contact  :: /policies/privacy-policy /policies/contact-information
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] These steel hookah tongs provide a convenient way to handle and move hot coals.   :: /products/tongs?variant=46037718303018
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] OKA web OKA App Theme (test — unpublished)  :: /pages/account
-  [1r arurl-ar-cust,root-ar-cust] JEGQA0000000002  :: /account/orders/9100000003
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Refund policy  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] We have a 14-day return policy, which means you have 14 days after receiving you  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] The tobacco ready bowls are non-returnable  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] To be eligible for a return, your item must be in the same condition that you re  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] To start a return, you can contact us at  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] . Please note that returns will need to be sent to the following address:  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Syouf Tram Station - OKA Return Office - 01149242133 Alexandria; the customer be  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] If your return is accepted, we’ll send you a return shipping label, as well as i  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] You can always contact us for any return question at  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Damages and issues  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Please inspect your order after reception and contact us afterwards if the item   :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Exchanges  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] The fastest way to ensure you get what you want is to return the item you have,   :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Refunds  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] We will notify you once we’ve received and inspected your return, and let you kn  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] If more than 15 business days have passed since we’ve approved your return, plea  :: /policies/refund-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Privacy policy  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Last updated:  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] This Privacy Policy describes how OKA (the "  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Site  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] we  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] us  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] ", or "  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] our  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] ") collects, uses, and discloses your personal information when you visit, use o  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] ") or otherwise communicate with us (collectively, the "  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Services  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] "). For purposes of this Privacy Policy, "  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] you  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] " and "  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] your  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] " means you as the user of the Services, whether you are a customer, website vis  :: /policies/privacy-policy
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Please read this Privacy Policy carefully. By using and accessing any of the Ser  :: /policies/privacy-policy
+  [5r arurl-ar-cust,arurl-en-cust,root-ar-cust] QA Tester  :: /pages/account /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review
+  [4r arurl-ar-cust,arurl-en-cust,root-ar-cust] 1 Test Street, Building 1, Floor 2, Apt 3  :: /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review /account/addresses
+  [4r arurl-ar-cust,arurl-en-cust,root-ar-cust] Nasr City  :: /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review /account/addresses
+  [3r arurl-ar-cust,arurl-en-cust,root-ar-cust] QA Office  :: /pages/addresses /account/addresses /account/orders/9100000003
+  [3r arurl-ar-cust,arurl-en-cust,root-ar-cust] 2 Sample Road  :: /pages/addresses /account/addresses /account/orders/9100000003
+  [3r arurl-ar-cust,arurl-en-cust,root-ar-cust] Dokki  :: /pages/addresses /account/addresses /account/orders/9100000003
+  [2r arurl-ar-cust,arurl-en-cust,root-ar-cust] QA Far  :: /pages/addresses /account/addresses
+  [2r arurl-ar-cust,arurl-en-cust,root-ar-cust] 3 Example Corniche, Villa 4  :: /pages/addresses /account/addresses
+  [2r arurl-ar-cust,arurl-en-cust,root-ar-cust] Aswan  :: /pages/addresses /account/addresses
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Out for delivery with courier QA Courier (01000000009)  :: /account/orders/9100000003 /pages/track?awb=JEGQA0000000002&order=%239000103
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Parcel sent from Cairo hub  :: /account/orders/9100000003 /pages/track?awb=JEGQA0000000002&order=%239000103
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Your parcel has been picked up by J&T courier  :: /account/orders/9100000003 /pages/track?awb=JEGQA0000000002&order=%239000103
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] QA Courier  :: /account/orders/9100000003 /pages/track?awb=JEGQA0000000002&order=%239000103
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] oka-egypt@hotmail.com  :: /policies/refund-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Terms of service  :: /policies/privacy-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] By consenting to OKA’s SMS marketing in the checkout and initializing a purchase  :: /policies/privacy-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] If you wish to unsubscribe from receiving text marketing messages and notificati  :: /policies/privacy-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] For any questions, please text HELP to the number you received the messages from  :: /policies/privacy-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] https://oka-eg.com/pages/contact  :: /policies/privacy-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] for more information.  :: /policies/privacy-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] We have the right to modify any telephone number or short code we use to operate  :: /policies/privacy-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] To the extent permitted by applicable law, you agree that we will not be liable   :: /policies/privacy-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Your right to privacy is important to us. You can see our Privacy Policy https:/  :: /policies/privacy-policy /policies/terms-of-service
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Contact  :: /policies/privacy-policy /policies/contact-information
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] These steel hookah tongs provide a convenient way to handle and move hot coals.   :: /products/tongs?variant=46037718303018
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] OKA web OKA App Theme (test — unpublished)  :: /pages/account
+  [1r arurl-ar-cust,arurl-en-cust,root-ar-cust] JEGQA0000000002  :: /account/orders/9100000003
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Refund policy  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] We have a 14-day return policy, which means you have 14 days after receiving you  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] The tobacco ready bowls are non-returnable  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] To be eligible for a return, your item must be in the same condition that you re  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] To start a return, you can contact us at  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] . Please note that returns will need to be sent to the following address:  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Syouf Tram Station - OKA Return Office - 01149242133 Alexandria; the customer be  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] If your return is accepted, we’ll send you a return shipping label, as well as i  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] You can always contact us for any return question at  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Damages and issues  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Please inspect your order after reception and contact us afterwards if the item   :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Exchanges  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] The fastest way to ensure you get what you want is to return the item you have,   :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Refunds  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] We will notify you once we’ve received and inspected your return, and let you kn  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] If more than 15 business days have passed since we’ve approved your return, plea  :: /policies/refund-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Privacy policy  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Last updated:  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] This Privacy Policy describes how OKA (the "  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Site  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] we  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] us  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] ", or "  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] our  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] ") collects, uses, and discloses your personal information when you visit, use o  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] ") or otherwise communicate with us (collectively, the "  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Services  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] "). For purposes of this Privacy Policy, "  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] you  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] " and "  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] your  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] " means you as the user of the Services, whether you are a customer, website vis  :: /policies/privacy-policy
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Please read this Privacy Policy carefully. By using and accessing any of the Ser  :: /policies/privacy-policy
 
 arabicOnEn: 2 distinct
-  [1r arurl-ar-cust,arurl-ar-guest] أوكا ابيض  :: /checkout
-  [1r arurl-ar-cust,arurl-ar-guest] السما الزرقا - حجر حاهز للشرب- 12 جرام  :: /checkout
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest] أوكا ابيض  :: /checkout
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest] السما الزرقا - حجر حاهز للشرب- 12 جرام  :: /checkout
 
 latinDigitsOnAr: 66 distinct
-  [14r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] لمون نعناع ثلج - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /products/oka-cloud-white-hookah
-  [13r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] السما الزرقا - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /products/oka-cloud-white-hookah
-  [10r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] سته وستين - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /products/oka-cobra
-  [9r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] الفاتك بالحريم - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /products/oka-cobra
-  [7r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] كولا - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
-  [6r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] تفاحتين - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
-  [5r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] كنتالوب - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
-  [5r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] عنب - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
-  [5r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] نعناع - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
-  [5r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] علكة مستكة - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
-  [5r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] البيري الاعظم - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /cart
-  [5r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] #9000103  :: /pages/orders /account /account/login /account/orders/9100000003
-  [4r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] علكة - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /ar/
-  [4r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] علكة نعناع - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /ar/
-  [4r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] فستق - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /ar/
-  [4r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] بطيخ - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /ar/
-  [4r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] رأس سيراميك عادي - سعة 15جرام  :: / /collections/all?filter.v.availability=1 /search?q=hookah /ar/
-  [4r arurl-ar-cust,root-ar-cust] #9000101  :: /pages/orders /pages/orders?order=%239000101 /account /account/login
-  [4r arurl-ar-cust,root-ar-cust] 1 Test Street, Building 1, Floor 2, Apt 3  :: /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review /account/addresses
-  [4r arurl-ar-cust,root-ar-cust] +201000000001  :: /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review /account/addresses
-  [3r arurl-ar-cust,root-ar-cust] #9000102  :: /pages/orders /account /account/login
-  [3r arurl-ar-cust,root-ar-cust] #9000104  :: /pages/orders /account /account/login
-  [3r arurl-ar-cust,root-ar-cust] #9000105  :: /pages/orders /account /account/login
-  [3r arurl-ar-cust,root-ar-cust] #9000106  :: /pages/orders /account /account/login
-  [3r arurl-ar-cust,root-ar-cust] 2 Sample Road  :: /pages/addresses /account/addresses /account/orders/9100000003
+  [14r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] لمون نعناع ثلج - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /products/oka-cloud-white-hookah
+  [13r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] السما الزرقا - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /products/oka-cloud-white-hookah
+  [10r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] سته وستين - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /products/oka-cobra
+  [9r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] الفاتك بالحريم - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /products/oka-cobra
+  [7r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] كولا - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
+  [6r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] تفاحتين - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
+  [5r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] كنتالوب - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
+  [5r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] عنب - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
+  [5r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] نعناع - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
+  [5r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] علكة مستكة - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
+  [5r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] البيري الاعظم - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /cart
+  [5r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] #9000103  :: /pages/orders /account /account/login /account/orders/9100000003
+  [4r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] علكة - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /ar/
+  [4r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] علكة نعناع - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /ar/
+  [4r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] فستق - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /ar/
+  [4r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] بطيخ - حجر جاهز للشرب- 12 جرام  :: / /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /ar/
+  [4r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] رأس سيراميك عادي - سعة 15جرام  :: / /collections/all?filter.v.availability=1 /search?q=hookah /ar/
+  [4r arurl-ar-cust,arurl-en-cust,root-ar-cust] #9000101  :: /pages/orders /pages/orders?order=%239000101 /account /account/login
+  [4r arurl-ar-cust,arurl-en-cust,root-ar-cust] 1 Test Street, Building 1, Floor 2, Apt 3  :: /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review /account/addresses
+  [4r arurl-ar-cust,arurl-en-cust,root-ar-cust] +201000000001  :: /pages/orders?order=%239000101 /pages/addresses /pages/checkout-review /account/addresses
+  [3r arurl-ar-cust,arurl-en-cust,root-ar-cust] #9000102  :: /pages/orders /account /account/login
+  [3r arurl-ar-cust,arurl-en-cust,root-ar-cust] #9000104  :: /pages/orders /account /account/login
+  [3r arurl-ar-cust,arurl-en-cust,root-ar-cust] #9000105  :: /pages/orders /account /account/login
+  [3r arurl-ar-cust,arurl-en-cust,root-ar-cust] #9000106  :: /pages/orders /account /account/login
+  [3r arurl-ar-cust,arurl-en-cust,root-ar-cust] 2 Sample Road  :: /pages/addresses /account/addresses /account/orders/9100000003
 
 indicDigitsOnEn: 0 distinct
 
 tinyTargets: 19 distinct
-  [3r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] div.screen.fade-in > section.story.story-cobra > div.story-steps > a.story-link 78x16 "← إزاي تجهزها"  :: /products/oka-cobra /products/oka-cobra-oka-base /ar/products/oka-cobra
-  [2r arurl-ar-cust,root-ar-cust] div.addr-inner > div > div.addr-actions > button.addr-action.red 29x16 "امسح"  :: /pages/addresses /account/addresses
-  [2r arurl-ar-cust,root-ar-cust] div.addr-inner > div > div.addr-actions > button.addr-action 71x16 "خليه الأساسي"  :: /pages/addresses /account/addresses
-  [2r arurl-en-cust,arurl-en-guest,root-en-cust,root-en-guest] div.screen.fade-in > section.story.story-cobra > div.story-steps > a.story-link 124x16 "How to prepare it →"  :: /products/oka-cobra /products/oka-cobra-oka-base
-  [2r arurl-en-cust,root-en-cust] div.addr-inner > div > div.addr-actions > button.addr-action.red 39x15 "Delete"  :: /pages/addresses /account/addresses
-  [2r arurl-en-cust,root-en-cust] div.addr-inner > div > div.addr-actions > button.addr-action 80x15 "Make default"  :: /pages/addresses /account/addresses
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] div.screen.fade-in > section.story.story-oka > div.story-steps > a.story-link 127x16 "← الشرح الكامل بالصور"  :: /products/oka-cloud-white-hookah
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] div.screen.fade-in > section.story.story-black > div.story-steps > a.story-link 78x16 "← إزاي تجهزها"  :: /products/oka-black-tobacco
-  [1r arurl-ar-cust,root-ar-cust] form#address_form_new > button.default-row 346x20 "خليه العنوان الأساسي"  :: /pages/addresses?view=oka-add-address
+  [3r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] div.screen.fade-in > section.story.story-cobra > div.story-steps > a.story-link 78x16 "← إزاي تجهزها"  :: /products/oka-cobra /products/oka-cobra-oka-base /ar/products/oka-cobra
+  [2r arurl-ar-cust,arurl-en-cust,root-ar-cust] div.addr-inner > div > div.addr-actions > button.addr-action.red 29x16 "امسح"  :: /pages/addresses /account/addresses
+  [2r arurl-ar-cust,arurl-en-cust,root-ar-cust] div.addr-inner > div > div.addr-actions > button.addr-action 71x16 "خليه الأساسي"  :: /pages/addresses /account/addresses
+  [2r root-en-cust,root-en-guest] div.screen.fade-in > section.story.story-cobra > div.story-steps > a.story-link 124x16 "How to prepare it →"  :: /products/oka-cobra /products/oka-cobra-oka-base
+  [2r root-en-cust] div.addr-inner > div > div.addr-actions > button.addr-action.red 39x15 "Delete"  :: /pages/addresses /account/addresses
+  [2r root-en-cust] div.addr-inner > div > div.addr-actions > button.addr-action 80x15 "Make default"  :: /pages/addresses /account/addresses
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] div.screen.fade-in > section.story.story-oka > div.story-steps > a.story-link 127x16 "← الشرح الكامل بالصور"  :: /products/oka-cloud-white-hookah
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] div.screen.fade-in > section.story.story-black > div.story-steps > a.story-link 78x16 "← إزاي تجهزها"  :: /products/oka-black-tobacco
+  [1r arurl-ar-cust,arurl-en-cust,root-ar-cust] form#address_form_new > button.default-row 346x20 "خليه العنوان الأساسي"  :: /pages/addresses?view=oka-add-address
   [1r arurl-ar-cust,arurl-en-cust,root-ar-cust,root-en-cust] div.screen.fade-in > div > div.hero-row > a 16x16 "Cart"  :: /pages/checkout-review
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] div.swipe > div.line > div.line-body > button.line-variant 53x22 "غيّر"  :: /cart
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] div.swipe > div.line > div.line-body > button.line-variant 53x22 "غيّر"  :: /cart
   [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] div > div.swipe > div.line > button.line-remove 14x19 "Remove"  :: /cart
   [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] html > body > a 85x19 "Back to cart"  :: /checkout
-  [1r arurl-ar-guest,root-ar-cust,root-ar-guest] div#shopify-section-template--191458214186__main > div.screen.fade-in > a.track-external 346x16 "شوفها كمان على موقع J&T"  :: /pages/track?awb=JEGQA0000000002&order=%239000103
-  [1r arurl-en-cust,arurl-en-guest,root-en-cust,root-en-guest] div.screen.fade-in > section.story.story-oka > div.story-steps > a.story-link 156x16 "Full guide with photos →"  :: /products/oka-cloud-white-hookah
-  [1r arurl-en-cust,arurl-en-guest,root-en-cust,root-en-guest] div.screen.fade-in > section.story.story-black > div.story-steps > a.story-link 124x16 "How to prepare it →"  :: /products/oka-black-tobacco
-  [1r arurl-en-cust,root-en-cust] form#address_form_new > button.default-row 346x20 "Make this my default address"  :: /pages/addresses?view=oka-add-address
-  [1r arurl-en-cust,arurl-en-guest,root-en-cust,root-en-guest] div#shopify-section-template--191458214186__main > div.screen.fade-in > a.track-external 346x16 "Also see it on the J&T website"  :: /pages/track?awb=JEGQA0000000002&order=%239000103
-  [1r arurl-en-cust,arurl-en-guest,root-en-cust,root-en-guest] div.swipe > div.line > div.line-body > button.line-variant 81x22 "Change"  :: /cart
+  [1r arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] div#shopify-section-template--191458214186__main > div.screen.fade-in > a.track-external 346x16 "شوفها كمان على موقع J&T"  :: /pages/track?awb=JEGQA0000000002&order=%239000103
+  [1r root-en-cust,root-en-guest] div.screen.fade-in > section.story.story-oka > div.story-steps > a.story-link 156x16 "Full guide with photos →"  :: /products/oka-cloud-white-hookah
+  [1r root-en-cust,root-en-guest] div.screen.fade-in > section.story.story-black > div.story-steps > a.story-link 124x16 "How to prepare it →"  :: /products/oka-black-tobacco
+  [1r root-en-cust] form#address_form_new > button.default-row 346x20 "Make this my default address"  :: /pages/addresses?view=oka-add-address
+  [1r root-en-cust,root-en-guest] div#shopify-section-template--191458214186__main > div.screen.fade-in > a.track-external 346x16 "Also see it on the J&T website"  :: /pages/track?awb=JEGQA0000000002&order=%239000103
+  [1r root-en-cust,root-en-guest] div.swipe > div.line > div.line-body > button.line-variant 81x22 "Change"  :: /cart
 
 englishLabelsOnAr: 14 distinct
-  [52r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Menu  :: / /collections /collections/oka-cobra /collections/ready-to-smoke-bowls?sort_by=price-ascending
-  [52r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] OKA egypt  :: / /collections /collections/oka-cobra /collections/ready-to-smoke-bowls?sort_by=price-ascending
-  [42r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Back  :: /collections/oka-cobra /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /collections/hookahs?page=2
-  [9r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Less  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
-  [9r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] More  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
-  [8r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Cart  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
-  [7r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Share  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
-  [7r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Wishlist  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
-  [6r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Save to wishlist  :: / /collections/oka-cobra /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1
-  [3r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Full screen  :: /products/oka-cloud-white-hookah /products/oka-cobra /ar/products/oka-cobra
-  [3r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Search  :: /search /search?q=%D8%B4%D9%8A%D8%B4%D9%87 /search?q=hookah
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Customer photo  :: / /ar/
-  [2r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Sound  :: /products/oka-cloud-white-hookah /products/oka-black-tobacco
-  [1r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest] Remove  :: /cart
+  [52r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Menu  :: / /collections /collections/oka-cobra /collections/ready-to-smoke-bowls?sort_by=price-ascending
+  [52r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] OKA egypt  :: / /collections /collections/oka-cobra /collections/ready-to-smoke-bowls?sort_by=price-ascending
+  [42r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Back  :: /collections/oka-cobra /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1 /collections/hookahs?page=2
+  [9r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Less  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
+  [9r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] More  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
+  [8r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Cart  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
+  [7r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Share  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
+  [7r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Wishlist  :: /products/oka-cloud-white-hookah /products/oka-cobra /products/oka-black-tobacco /products/oka-cobra-oka-base
+  [6r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Save to wishlist  :: / /collections/oka-cobra /collections/ready-to-smoke-bowls?sort_by=price-ascending /collections/all?filter.v.availability=1
+  [3r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Full screen  :: /products/oka-cloud-white-hookah /products/oka-cobra /ar/products/oka-cobra
+  [3r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Search  :: /search /search?q=%D8%B4%D9%8A%D8%B4%D9%87 /search?q=hookah
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Customer photo  :: / /ar/
+  [2r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Sound  :: /products/oka-cloud-white-hookah /products/oka-black-tobacco
+  [1r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest] Remove  :: /cart
 
 englishAltOnAr: 52 distinct
   [5r root-ar-cust,root-ar-guest] OKA white  :: / /collections/all?filter.v.availability=1 /products/oka-cloud-white-hookah /search?q=%D8%B4%D9%8A%D8%B4%D9%87
@@ -190,7 +190,7 @@ englishAltOnAr: 52 distinct
   [5r root-ar-cust,root-ar-guest] OKA Cobra + OKA base  :: / /collections/oka-cobra /collections/all?filter.v.availability=1 /products/oka-cobra-oka-base
   [5r root-ar-cust,root-ar-guest] OKA Black Tobacco  :: / /collections/all?filter.v.availability=1 /products/oka-black-tobacco /search?q=%D8%B4%D9%8A%D8%B4%D9%87
   [5r root-ar-cust,root-ar-guest] Tongs  :: / /collections/all?filter.v.availability=1 /products/tongs?variant=46037718303018 /products/tongs?view=ar
-  [4r arurl-ar-cust,arurl-ar-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Tongs , Foil Combo  :: / /collections/all?filter.v.availability=1 /search?q=hookah /ar/
+  [4r arurl-ar-cust,arurl-ar-guest,arurl-en-cust,arurl-en-guest,root-ar-cust,root-ar-guest,root-en-cust,root-en-guest] Tongs , Foil Combo  :: / /collections/all?filter.v.availability=1 /search?q=hookah /ar/
   [4r root-ar-cust,root-ar-guest] OKA Pink  :: / /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87 /search?q=hookah
   [4r root-ar-cust,root-ar-guest] OKA Carbon Black  :: / /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87 /search?q=hookah
   [4r root-ar-cust,root-ar-guest] OKA Cobra LED Rechargeable Base  :: / /collections/oka-cobra /collections/all?filter.v.availability=1 /search?q=%D8%B4%D9%8A%D8%B4%D9%87
@@ -278,13 +278,11 @@ lang/dir per combo:
   arurl-ar-guest lang=ar dir=rtl 51
   arurl-ar-guest lang= dir= 1
   arurl-ar-guest lang=en dir= 2
-  arurl-en-cust lang=en dir=ltr 50
+  arurl-en-cust lang=ar dir=rtl 51
   arurl-en-cust lang= dir= 1
-  arurl-en-cust lang=ar dir=rtl 1
   arurl-en-cust lang=en dir= 2
-  arurl-en-guest lang=en dir=ltr 50
+  arurl-en-guest lang=ar dir=rtl 51
   arurl-en-guest lang= dir= 1
-  arurl-en-guest lang=ar dir=rtl 1
   arurl-en-guest lang=en dir= 2
   root-ar-cust lang=ar dir=rtl 55
   root-ar-cust lang= dir= 1
@@ -321,25 +319,25 @@ covered:
   arurl-ar-guest /pages/track?awb=JEGQA0000000002&order=%239000103: button.hdr-btn.flip"Back" by header.top-bar
   arurl-ar-guest /search?q=%D8%B4%D9%8A%D8%B4%D9%87: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
   arurl-ar-guest /search?q=hookah: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
-  arurl-en-cust /collections/oka-cobra: button.chip.dark"Featured ⇅" by header.top-bar | button.chip"In stock" by header.top-bar | button.chip"On sale" by header.top-bar
-  arurl-en-cust /collections/ready-to-smoke-bowls?sort_by=price-ascending: button.gcard-add"Add" by header.top-bar | button.gcard-add"Add" by header.top-bar
-  arurl-en-cust /collections/all?filter.v.availability=1: button.gcard-add"Add" by header.top-bar | button.gcard-add"Add" by header.top-bar
+  arurl-en-cust /collections/oka-cobra: button.chip.dark"المميز ⇅" by header.top-bar | button.chip"المتاح" by header.top-bar | button.chip"عليه خصم" by header.top-bar
+  arurl-en-cust /collections/ready-to-smoke-bowls?sort_by=price-ascending: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
+  arurl-en-cust /collections/all?filter.v.availability=1: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
   arurl-en-cust /products/1-pcs-of-foil: button.step-btn"–" by header.top-bar | button.step-btn"+" by header.top-bar
   arurl-en-cust /pages/addresses?view=oka-add-address: input.field-input"" by header.top-bar
   arurl-en-cust /pages/checkout-review: a."QA Tester
 1 Test Street, Build" by header.top-bar
   arurl-en-cust /pages/track?awb=JEGQA0000000002&order=%239000103: button.hdr-btn.flip"Back" by header.top-bar
-  arurl-en-cust /search?q=%D8%B4%D9%8A%D8%B4%D9%87: button.gcard-add"Add" by header.top-bar | button.gcard-add"Add" by header.top-bar
-  arurl-en-cust /search?q=hookah: button.gcard-add"Add" by header.top-bar | button.gcard-add"Add" by header.top-bar
-  arurl-en-cust /cart: input.discount-input"" by header.top-bar | button.apply-btn"Apply" by header.top-bar
-  arurl-en-cust /account/orders/9100000003: a.courier-btn.call"Call" by header.top-bar | a.courier-btn.wa"WhatsApp" by header.top-bar
-  arurl-en-guest /collections/oka-cobra: button.chip.dark"Featured ⇅" by header.top-bar | button.chip"In stock" by header.top-bar | button.chip"On sale" by header.top-bar
-  arurl-en-guest /collections/ready-to-smoke-bowls?sort_by=price-ascending: button.gcard-add"Add" by header.top-bar | button.gcard-add"Add" by header.top-bar
-  arurl-en-guest /collections/all?filter.v.availability=1: button.gcard-add"Add" by header.top-bar | button.gcard-add"Add" by header.top-bar
+  arurl-en-cust /search?q=%D8%B4%D9%8A%D8%B4%D9%87: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
+  arurl-en-cust /search?q=hookah: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
+  arurl-en-cust /cart: input.discount-input"" by header.top-bar | button.apply-btn"فعّل" by header.top-bar
+  arurl-en-cust /account/orders/9100000003: a.courier-btn.call"كلّمه" by header.top-bar | a.courier-btn.wa"واتساب" by header.top-bar
+  arurl-en-guest /collections/oka-cobra: button.chip.dark"المميز ⇅" by header.top-bar | button.chip"المتاح" by header.top-bar | button.chip"عليه خصم" by header.top-bar
+  arurl-en-guest /collections/ready-to-smoke-bowls?sort_by=price-ascending: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
+  arurl-en-guest /collections/all?filter.v.availability=1: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
   arurl-en-guest /products/1-pcs-of-foil: button.step-btn"–" by header.top-bar | button.step-btn"+" by header.top-bar
   arurl-en-guest /pages/track?awb=JEGQA0000000002&order=%239000103: button.hdr-btn.flip"Back" by header.top-bar
-  arurl-en-guest /search?q=%D8%B4%D9%8A%D8%B4%D9%87: button.gcard-add"Add" by header.top-bar | button.gcard-add"Add" by header.top-bar
-  arurl-en-guest /search?q=hookah: button.gcard-add"Add" by header.top-bar | button.gcard-add"Add" by header.top-bar
+  arurl-en-guest /search?q=%D8%B4%D9%8A%D8%B4%D9%87: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
+  arurl-en-guest /search?q=hookah: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
   root-ar-cust /collections/oka-cobra: button.chip.dark"المميز ⇅" by header.top-bar | button.chip"المتاح" by header.top-bar | button.chip"عليه خصم" by header.top-bar
   root-ar-cust /collections/ready-to-smoke-bowls?sort_by=price-ascending: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar
   root-ar-cust /collections/all?filter.v.availability=1: button.gcard-add"عبيلي فالشنطة" by header.top-bar | button.gcard-add"عبيلي فالشنطة" by header.top-bar

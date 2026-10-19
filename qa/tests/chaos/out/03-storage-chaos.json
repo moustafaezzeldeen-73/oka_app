@@ -1,0 +1,808 @@
+{
+ "base": "http://localhost:9440",
+ "corrupt": [
+  {
+   "key": "oka.lang",
+   "store": "local",
+   "bad": "null",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lang",
+   "store": "local",
+   "bad": "{}",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lang",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lang",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lang",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.age",
+   "store": "local",
+   "bad": "null",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.age",
+   "store": "local",
+   "bad": "{}",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.age",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.age",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.age",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.addr",
+   "store": "local",
+   "bad": "null",
+   "route": "/pages/checkout-review",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.addr",
+   "store": "local",
+   "bad": "{}",
+   "route": "/pages/checkout-review",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.addr",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/pages/checkout-review",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.addr",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/pages/checkout-review",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.addr",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/pages/checkout-review",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.afterAddress",
+   "store": "local",
+   "bad": "null",
+   "route": "/pages/addresses",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.afterAddress",
+   "store": "local",
+   "bad": "{}",
+   "route": "/pages/addresses",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.afterAddress",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/pages/addresses",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.afterAddress",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/pages/addresses",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.afterAddress",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/pages/addresses",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.afterSignIn",
+   "store": "local",
+   "bad": "null",
+   "route": "/pages/account",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.afterSignIn",
+   "bad": "{}",
+   "route": "/pages/account",
+   "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:9440/pages/account\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+   "key": "oka.afterSignIn",
+   "bad": "\"a string\"",
+   "route": "/pages/account",
+   "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:9440/pages/account\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+   "key": "oka.afterSignIn",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/pages/account",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.afterSignIn",
+   "bad": "\"ششششششششششششششششششش",
+   "route": "/pages/account",
+   "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:9440/pages/account\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+   "key": "oka.cancelled",
+   "store": "local",
+   "bad": "null",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.cancelled",
+   "store": "local",
+   "bad": "{}",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.cancelled",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.cancelled",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.cancelled",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.filters",
+   "store": "local",
+   "bad": "null",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.filters",
+   "store": "local",
+   "bad": "{}",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.filters",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.filters",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.filters",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastCheckout",
+   "store": "local",
+   "bad": "null",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastCheckout",
+   "store": "local",
+   "bad": "{}",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastCheckout",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastCheckout",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastCheckout",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastOrder",
+   "store": "local",
+   "bad": "null",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastOrder",
+   "store": "local",
+   "bad": "{}",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastOrder",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastOrder",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.lastOrder",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.pendingCode",
+   "store": "local",
+   "bad": "null",
+   "route": "/cart",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.pendingCode",
+   "store": "local",
+   "bad": "{}",
+   "route": "/cart",
+   "pageErrors": [
+    "code.trim is not a function"
+   ],
+   "appAlive": true
+  },
+  {
+   "key": "oka.pendingCode",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/cart",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.pendingCode",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/cart",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.pendingCode",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/cart",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.rated",
+   "store": "local",
+   "bad": "null",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.rated",
+   "store": "local",
+   "bad": "{}",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.rated",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.rated",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.rated",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.sort",
+   "store": "local",
+   "bad": "null",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.sort",
+   "store": "local",
+   "bad": "{}",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.sort",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.sort",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.sort",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.vouchers",
+   "store": "local",
+   "bad": "null",
+   "route": "/pages/loyalty",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.vouchers",
+   "store": "local",
+   "bad": "{}",
+   "route": "/pages/loyalty",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.vouchers",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/pages/loyalty",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.vouchers",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/pages/loyalty",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.vouchers",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/pages/loyalty",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.wishlist",
+   "store": "local",
+   "bad": "null",
+   "route": "/collections/hookahs",
+   "pageErrors": [
+    "Cannot read properties of null (reading 'oka-cloud-white-hookah')",
+    "Cannot read properties of null (reading 'oka-cloud-white-hookah')"
+   ],
+   "appAlive": true
+  },
+  {
+   "key": "oka.wishlist",
+   "store": "local",
+   "bad": "{}",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.wishlist",
+   "store": "local",
+   "bad": "\"a string\"",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.wishlist",
+   "store": "local",
+   "bad": "{not json",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.wishlist",
+   "store": "local",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.catalogue",
+   "store": "session",
+   "bad": "null",
+   "route": "/search?q=oka",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.catalogue",
+   "store": "session",
+   "bad": "{}",
+   "route": "/search?q=oka",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.catalogue",
+   "store": "session",
+   "bad": "\"a string\"",
+   "route": "/search?q=oka",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.catalogue",
+   "store": "session",
+   "bad": "{not json",
+   "route": "/search?q=oka",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.catalogue",
+   "store": "session",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/search?q=oka",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.editingSub",
+   "store": "session",
+   "bad": "null",
+   "route": "/pages/subscriptions",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.editingSub",
+   "store": "session",
+   "bad": "{}",
+   "route": "/pages/subscriptions",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.editingSub",
+   "store": "session",
+   "bad": "\"a string\"",
+   "route": "/pages/subscriptions",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.editingSub",
+   "store": "session",
+   "bad": "{not json",
+   "route": "/pages/subscriptions",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.editingSub",
+   "store": "session",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/pages/subscriptions",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.recShown",
+   "store": "session",
+   "bad": "null",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.recShown",
+   "store": "session",
+   "bad": "{}",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.recShown",
+   "store": "session",
+   "bad": "\"a string\"",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.recShown",
+   "store": "session",
+   "bad": "{not json",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.recShown",
+   "store": "session",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.viewed",
+   "store": "session",
+   "bad": "null",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.viewed",
+   "store": "session",
+   "bad": "{}",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.viewed",
+   "store": "session",
+   "bad": "\"a string\"",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.viewed",
+   "store": "session",
+   "bad": "{not json",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  },
+  {
+   "key": "oka.viewed",
+   "store": "session",
+   "bad": "\"ششششششششششششششششششش…(20002)",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "appAlive": true
+  }
+ ],
+ "modes": [
+  {
+   "mode": "quota-exceeded",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "console": [],
+   "alive": true
+  },
+  {
+   "mode": "quota-exceeded",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "console": [],
+   "alive": true
+  },
+  {
+   "mode": "quota-exceeded",
+   "route": "/cart",
+   "pageErrors": [],
+   "console": [],
+   "alive": true
+  },
+  {
+   "mode": "quota-exceeded",
+   "route": "/",
+   "pageErrors": [],
+   "console": [],
+   "alive": true
+  },
+  {
+   "mode": "storage-disabled",
+   "route": "/",
+   "pageErrors": [],
+   "alive": true
+  },
+  {
+   "mode": "storage-disabled",
+   "route": "/collections/hookahs",
+   "pageErrors": [],
+   "alive": true
+  },
+  {
+   "mode": "storage-disabled",
+   "route": "/products/oka-cobra",
+   "pageErrors": [],
+   "alive": true
+  },
+  {
+   "mode": "storage-disabled",
+   "route": "/cart",
+   "pageErrors": [],
+   "alive": true
+  },
+  {
+   "mode": "storage-disabled",
+   "route": "/search?q=oka",
+   "pageErrors": [],
+   "alive": true
+  },
+  {
+   "mode": "storage-disabled",
+   "route": "/pages/orders",
+   "pageErrors": [],
+   "alive": true
+  },
+  {
+   "mode": "cookies-cleared-between-navs",
+   "pageErrors": [],
+   "cartText": "ع\nCart\nYour cart is empty\nBrowse best sellers\nOKA Pink\nEGP 169\nAdd\nOKA white\nEGP 169\nAdd\nOKA Cobra LED Rechargeable Base"
+  },
+  {
+   "mode": "sessionStorage-cleared-midflow",
+   "pageErrors": [],
+   "results": "3 products\nOKA Cobra\nEGP 189\nAdd\nOKA Cobra + OKA base\nEGP 357\nAdd\nOKA Cobra LED "
+  },
+  {
+   "mode": "two-tabs-wishlist",
+   "finalWishlist": {
+    "oka-cloud-white-hookah": true,
+    "oka-victoria-pink-hookah": true
+   },
+   "pageErrors": []
+  }
+ ]
+}

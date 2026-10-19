@@ -1,0 +1,40 @@
+soak 15min, 1270 navigations; pageErrors=0 navErrors=0
+heap(CDP):   1.6→1.6MB
+DOM nodes:   982 -> 982 (CDP 2106->2040)
+listeners:   74 -> 75
+documents:   31 -> 15
+  start    heap=1.6MB dom=982 listeners=74 docs=31
+  iter40   heap=33.5MB dom=780 listeners=1425 docs=1250
+  iter80   heap=69.1MB dom=273 listeners=2878 docs=2364
+  iter120  heap=14.1MB dom=417 listeners=526 docs=1767
+  iter160  heap=37.6MB dom=417 listeners=810 docs=589
+  iter200  heap=12.0MB dom=982 listeners=117 docs=651
+  iter240  heap=13.0MB dom=417 listeners=65 docs=774
+  iter280  heap=16.6MB dom=172 listeners=107 docs=239
+  iter320  heap=24.4MB dom=185 listeners=584 docs=613
+  iter360  heap=25.2MB dom=982 listeners=655 docs=664
+  iter400  heap=20.9MB dom=897 listeners=410 docs=293
+  iter440  heap=21.3MB dom=982 listeners=795 docs=511
+  iter480  heap=8.1MB dom=780 listeners=115 docs=163
+  iter520  heap=14.5MB dom=142 listeners=356 docs=126
+  iter560  heap=15.2MB dom=142 listeners=167 docs=341
+  iter600  heap=18.7MB dom=780 listeners=229 docs=548
+  iter640  heap=8.9MB dom=172 listeners=107 docs=32
+  iter680  heap=39.2MB dom=273 listeners=828 docs=555
+  iter720  heap=28.9MB dom=228 listeners=722 docs=403
+  iter760  heap=17.3MB dom=273 listeners=219 docs=460
+  iter800  heap=32.4MB dom=982 listeners=888 docs=550
+  iter840  heap=28.2MB dom=417 listeners=616 docs=328
+  iter880  heap=4.9MB dom=273 listeners=67 docs=79
+  iter920  heap=17.6MB dom=1034 listeners=183 docs=296
+  iter960  heap=41.2MB dom=1034 listeners=993 docs=1230
+  iter1000 heap=15.1MB dom=982 listeners=254 docs=202
+  iter1040 heap=6.3MB dom=142 listeners=68 docs=66
+  iter1080 heap=18.5MB dom=417 listeners=150 docs=147
+  iter1120 heap=27.4MB dom=185 listeners=552 docs=564
+  iter1160 heap=34.6MB dom=185 listeners=760 docs=551
+  iter1200 heap=5.9MB dom=185 listeners=65 docs=24
+  iter1240 heap=22.8MB dom=1034 listeners=341 docs=342
+  end      heap=34.2MB dom=982 listeners=820 docs=903
+  after-gc heap=1.6MB dom=982 listeners=75 docs=15
+exit=0

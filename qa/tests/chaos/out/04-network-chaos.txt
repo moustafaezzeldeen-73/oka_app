@@ -1,0 +1,70 @@
+network cases: 17
+orders:customer_get_order [malformed]        err=[] cerr=[] => ع
+Orders
+No orders yet
+Sign in to see all your orders and track their delivery.
+orders:customer_get_order [error500]         err=[] cerr=["Failed to load resource: the server responded with a status of 500 (Internal Server Error)"] => ع
+Orders
+No orders yet
+Sign in to see all your orders and track their delivery.
+orders:customer_get_order [cors]             err=[] cerr=[] => ع
+Orders
+No orders yet
+Sign in to see all your orders and track their delivery.
+orders:customer_get_order [timeout]          err=[] cerr=["Failed to load resource: net::ERR_TIMED_OUT"] => ع
+Orders
+No orders yet
+Sign in to see all your orders and track their delivery.
+orders:customer_get_order [sse]              err=[] cerr=[] => Your last order
+#9000101
+Processing
+OKA white
+EGP 169
+–
+1
++
+Tobacco Bowls- Blue Cloud - 12g
+EGP 98
+–
+2
++
+Delivering to
+QA Tester · +20100000
+orders:customer_get_order [rpc-error]        err=[] cerr=[] => ع
+Orders
+No orders yet
+Sign in to see all your orders and track their delivery.
+orders:customer_get_order [not-found]        err=[] cerr=[] => ع
+Orders
+No orders yet
+Sign in to see all your orders and track their delivery.
+orders:customer_get_order [empty]            err=[] cerr=[] => Your last order
+#9000101
+Processing
+OKA white
+EGP 169
+–
+1
++
+Tobacco Bowls- Blue Cloud - 12g
+EGP 98
+–
+2
++
+Delivering to
+QA Tester · +20100000
+jt:track_delivery [malformed]                err=[] cerr=[] => We couldn’t reach J&T just now. Pull down to try again.
+jt:track_delivery [error500]                 err=[] cerr=["Failed to load resource: the server responded with a status of 500 (Internal Server Error)"] => We couldn’t reach J&T just now. Pull down to try again.
+jt:track_delivery [timeout]                  err=[] cerr=["Failed to load resource: net::ERR_TIMED_OUT"] => We couldn’t reach J&T just now. Pull down to try again.
+jt:track_delivery [empty]                    err=[] cerr=[] => No scans yet
+Processing
+Preparing to Ship
+Shipped
+Delivered
+No courier scans for this shipment yet. Updates appear here 
+jt:track_delivery [tool-error]               err=[] cerr=[] => We couldn’t reach J&T just now. Pull down to try again.
+orders:customer_get_order [429]              err=[] cerr=["Failed to load resource: the server responded with a status of 429 (Too Many Requests)"] => 
+orders:customer_get_order [502html]          err=[] cerr=["Failed to load resource: the server responded with a status of 502 (Bad Gateway)"] => 
+cart:add latency+offline [undefined]         err=[] cerr=[] => []
+cart:change out-of-order [undefined]         err=[] cerr=["Failed to load resource: the server responded with a status of 400 (Bad Request)"] => 
+exit=0

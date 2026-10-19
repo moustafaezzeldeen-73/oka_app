@@ -549,5 +549,19 @@
   "orientation": 90,
   "screenAngle": 90,
   "active": "BODY.t-index"
+ },
+ "zindex": {
+  "menuOverAgeGate": {
+   "menuOpen": true,
+   "topAtMenu": "side-menu",
+   "gate": true
+  },
+  "toastOverMenu": "side-lang",
+  "sheetCoversChrome": {
+   ".menu-handle": "scrim",
+   ".top-bar [data-menu-open]": "scrim",
+   ".top-bar [data-toggle-lang]": "scrim",
+   "sheetOpen": true
+  }
  }
 }

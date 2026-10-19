@@ -200,7 +200,7 @@
     "/pages/track?awb=JEGQA0000000002&order=%239000103",
     "/cart"
    ],
-   "nodes": 12,
+   "nodes": 6,
    "targets": [
     ".wa",
     "div[data-qty=\"1\"] > .line-body > .line-variant[data-replace=\"\"] > b",
@@ -409,7 +409,7 @@
     "/ar/collections/hookahs",
     "/ar/pages/support"
    ],
-   "nodes": 3694,
+   "nodes": 3243,
    "targets": [
     "span[data-lang-label=\"\"]",
     ".cat-row:nth-child(2) > span:nth-child(2) > .cat-count > .l-ar:nth-child(2)",

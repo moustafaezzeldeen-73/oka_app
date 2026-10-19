@@ -1,0 +1,1314 @@
+[
+  {
+    "id": "CL-1",
+    "scenario": "/collections list: rows, every link 200, counts",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "6 rows: oka-basic-hookahs-copy, oka-parties, oka-cobra, dark-tobacco, ready-to-smoke-bowls, oka-parts; bad=",
+    "at": "2026-10-15T10:44:51.976Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-basic-hookahs-copy: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"شيشة أوكا المتميزة\" cards=3 label=\"٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:52.524Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parties: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"أوكا بارتي\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:53.039Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-cobra: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"أوكا كوبرا\" cards=3 label=\"٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:53.516Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/dark-tobacco: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"معسل أسود\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:54.020Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/ready-to-smoke-bowls: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"حجر جاهز للتدخين\" cards=15 label=\"١٥ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:54.539Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parts: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"قطع الغيار\" cards=13 label=\"١٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:55.350Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/hookahs: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"شيشة أوكا الأساسية\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:56.147Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/hoses: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"الليات\" cards=3 label=\"٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:56.702Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/coal: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"الفحم\" cards=4 label=\"٤ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:57.207Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/bowls: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"رأس الشيشة (الحجر)\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:57.731Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/all: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"الكل\" cards=37 label=\"٣٧ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:44:58.355Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/bundles: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"حزم التوفير\" cards=0 label=\"٠ منتج\" emptyState=true ",
+    "at": "2026-10-15T10:44:59.098Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/sale: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"تخفيضات\" cards=0 label=\"٠ منتج\" emptyState=true ",
+    "at": "2026-10-15T10:44:59.622Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/heat-managment-device: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"راس شيشة معدن\" cards=0 label=\"٠ منتج\" emptyState=true ",
+    "at": "2026-10-15T10:45:00.141Z"
+  },
+  {
+    "id": "CL-3",
+    "scenario": "Sort chip cycles Featured → Price low→high → high→low; order correct",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "labels=[\"المميز ⇅\",\"الأرخص الأول ⇅\",\"الأغلى الأول ⇅\"] asc=true desc=true",
+    "at": "2026-10-15T10:45:01.601Z"
+  },
+  {
+    "id": "CL-4",
+    "scenario": "Filters: In stock hides sold-out (foil/coal); On sale shows only compare-at items; empty state",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "all=13 inStock=11 inStock+onSale=0 emptyShown=true; filters carried to another collection: {\"chips\":[\"inStock\",\"onSale\"],\"n\":1}",
+    "at": "2026-10-15T10:45:03.311Z"
+  },
+  {
+    "id": "CL-5",
+    "scenario": "Shopify ?sort_by / ?filter / ?page=2 URLs (deep links) are honoured by the screen",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "INFO",
+    "note": "sort_by=price-ascending → server order ascending=true, chip says \"المميز ⇅\"; ?page=2 cards=0 (paginate by 250, so page 2 is empty); all?filter availability cards=35",
+    "at": "2026-10-15T10:45:04.971Z"
+  },
+  {
+    "id": "CL-6",
+    "scenario": "Grid card Add / sold-out card (no add) / heart on collection grid",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "soldout tap → items=0; add → items=1; recSheet=true; grid steppers=1; heart aria-pressed=true",
+    "at": "2026-10-15T10:45:09.678Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic hookah (ه spelling) (شيشه)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=18 \"١٨ منتج أوكا فوشيا ١٦٩ ج.م عبيلي فالشنطة أوكا ابيض ١٦٩ ج.م عبيلي فالشنطة أوكا اسود كاربون ١٨٩ ج.م عبيلي فالشنطة أوكا كوب\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D9%87 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:11.715Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic hookah (ة) (شيشة)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=18 \"١٨ منتج أوكا فوشيا ١٦٩ ج.م عبيلي فالشنطة أوكا ابيض ١٦٩ ج.م عبيلي فالشنطة أوكا اسود كاربون ١٨٩ ج.م عبيلي فالشنطة أوكا كوب\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D8%A9 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:13.197Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"coal\" (فحم)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=21 \"٢١ منتج مصفاه فحم و رأس هديه ٩٤ ج.م عبيلي فالشنطة ثلاث فحم جوز هند مستورد ٢٥ ج.م عبيلي فالشنطة كماشة فحم ٣١ ج.م عبيلي فا\" chips=false url=?q=%D9%81%D8%AD%D9%85 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:14.791Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"tobacco\" (معسل)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=10 \"١٠ منتج أوكا معسل اسود + طاسة ٢٠٩ ج.م عبيلي فالشنطة أوكا معسل اسود ١٩٩ ج.م عبيلي فالشنطة السما الزرقا - حجر جاهز للشرب- \" chips=false url=?q=%D9%85%D8%B9%D8%B3%D9%84 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:16.308Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"bowl\" (حجر)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=15 \"١٥ منتج السما الزرقا - حجر جاهز للشرب- 12 جرام ٤٩ ج.م عبيلي فالشنطة كنتالوب - حجر جاهز للشرب- 12 جرام ٤٩ ج.م عبيلي فالشن\" chips=false url=?q=%D8%AD%D8%AC%D8%B1 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:17.914Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: English (hookah)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=11 \"١١ منتج أوكا فوشيا ١٦٩ ج.م عبيلي فالشنطة أوكا ابيض ١٦٩ ج.م عبيلي فالشنطة أوكا اسود كاربون ١٨٩ ج.م عبيلي فالشنطة أوكا معس\" chips=false url=?q=hookah xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:19.497Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: typo (hokah)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"hokah\"\" chips=false url=?q=hokah xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:20.965Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic typo (شيشا)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"شيشا\"\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D8%A7 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:22.490Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: whitespace only (  )",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=0 \"\" chips=true url= xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:23.915Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: no results (zzzzqqq)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"zzzzqqq\"\" chips=false url=?q=zzzzqqq xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:25.758Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: script tag (<script>window.__xss=1</script>)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"<script>window.__xss=1</script>\"\" chips=false url=?q=%3Cscript%3Ewindow.__xss%3D1%3C%2Fscript%3E xss=0 injected=0 serverHTTP=200 rawInServerHTML=true (in <title> via page_title: harness builds page_title unescaped; Shopify pre-escapes it — not a theme bug) ",
+    "at": "2026-10-15T10:45:27.515Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: attribute break-out (\"><img src=x onerror=window.__xss=2>)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"\"><img src=x onerror=window.__xss=2>\"\" chips=false url=?q=%22%3E%3Cimg+src%3Dx+onerror%3Dwindow.__xss%3D2%3E xss=0 injected=0 serverHTTP=200 rawInServerHTML=true (in <title> via page_title: harness builds page_title unescaped; Shopify pre-escapes it — not a theme bug) ",
+    "at": "2026-10-15T10:45:29.068Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: 600-char query (xxxxxxxxxxxxxxxxxxxx…)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" chips=false url=?q=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:30.599Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic-Indic digits (١٢)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=16 \"١٦ منتج حفلة الستة (متوسط سعر ١٢٩ جنية) ٧٧٤ ج.م عبيلي فالشنطة السما الزرقا - حجر جاهز للشرب- 12 جرام ٤٩ ج.م عبيلي فالشنط\" chips=false url=?q=%D9%A1%D9%A2 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:32.069Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: brand, uppercase (OKA)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=22 \"٢٢ منتج أوكا فوشيا ١٦٩ ج.م عبيلي فالشنطة أوكا ابيض ١٦٩ ج.م عبيلي فالشنطة أوكا اسود كاربون ١٨٩ ج.م عبيلي فالشنطة أوكا كوب\" chips=false url=?q=OKA xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:33.566Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: single Arabic letter (ب)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results=31 \"٣١ منتج أوكا ابيض ١٦٩ ج.م عبيلي فالشنطة أوكا اسود كاربون ١٨٩ ج.م عبيلي فالشنطة حفلة الثلاثة (بسعر متوسط ١٣٩ جنية) ٤٤٧ ج.\" chips=false url=?q=%D8%A8 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:45:35.063Z"
+  },
+  {
+    "id": "SR-2",
+    "scenario": "Deep link /search?q=فحم renders results on load; Enter blurs; clearing shows chips",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "results on load=21; chips visible after clearing=true",
+    "at": "2026-10-15T10:45:36.737Z"
+  },
+  {
+    "id": "SR-3",
+    "scenario": "Search category chips: each chip link resolves",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "chips=/collections/oka-basic-hookahs-copy /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /collections/hookahs /collections/hoses /collections/coal /collections/bowls bad=",
+    "at": "2026-10-15T10:45:37.631Z"
+  },
+  {
+    "id": "SR-4",
+    "scenario": "Search result card: Add → −/+ ; tap card opens PDP",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "stepper=1 recSheet=true → http://localhost:9410/products/oka-gourmets-hose-bowl",
+    "at": "2026-10-15T10:45:40.569Z"
+  },
+  {
+    "id": "SR-5",
+    "scenario": "Hidden collections searchable? product in hookahs-only collection found via search",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "INFO",
+    "note": "hookahs collection has 2 products; not in catalogue (search/home) = []",
+    "at": "2026-10-15T10:45:40.679Z"
+  },
+  {
+    "id": "CS-LOG",
+    "scenario": "Collections/search session error summary",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:45:40.683Z"
+  },
+  {
+    "id": "CL-1",
+    "scenario": "/collections list: rows, every link 200, counts",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "6 rows: oka-basic-hookahs-copy, oka-parties, oka-cobra, dark-tobacco, ready-to-smoke-bowls, oka-parts; bad=",
+    "at": "2026-10-15T10:45:41.947Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-basic-hookahs-copy: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Premium Hookahs\" cards=3 label=\"3 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:42.490Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parties: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Parties\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:43.083Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-cobra: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Cobra\" cards=3 label=\"3 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:43.642Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/dark-tobacco: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Dark Tobacco\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:44.166Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/ready-to-smoke-bowls: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Ready to smoke bowls\" cards=15 label=\"15 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:44.726Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parts: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Parts\" cards=13 label=\"13 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:45.783Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/hookahs: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA basic Hookahs\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:46.718Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/hoses: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Hoses\" cards=3 label=\"3 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:47.372Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/coal: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Coal\" cards=4 label=\"4 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:47.936Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/bowls: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Bowls\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:48.519Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/all: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"All\" cards=37 label=\"37 products\" emptyState=false ",
+    "at": "2026-10-15T10:45:49.121Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/bundles: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Couples\" cards=0 label=\"0 products\" emptyState=true ",
+    "at": "2026-10-15T10:45:49.835Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/sale: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Sale\" cards=0 label=\"0 products\" emptyState=true ",
+    "at": "2026-10-15T10:45:50.342Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/heat-managment-device: renders, count label = visible cards, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Heat Managment Device\" cards=0 label=\"0 products\" emptyState=true ",
+    "at": "2026-10-15T10:45:50.834Z"
+  },
+  {
+    "id": "CL-3",
+    "scenario": "Sort chip cycles Featured → Price low→high → high→low; order correct",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "labels=[\"Featured ⇅\",\"Price: low to high ⇅\",\"Price: high to low ⇅\"] asc=true desc=true",
+    "at": "2026-10-15T10:45:52.389Z"
+  },
+  {
+    "id": "CL-4",
+    "scenario": "Filters: In stock hides sold-out (foil/coal); On sale shows only compare-at items; empty state",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "all=13 inStock=11 inStock+onSale=0 emptyShown=true; filters carried to another collection: {\"chips\":[\"inStock\",\"onSale\"],\"n\":1}",
+    "at": "2026-10-15T10:45:54.258Z"
+  },
+  {
+    "id": "CL-5",
+    "scenario": "Shopify ?sort_by / ?filter / ?page=2 URLs (deep links) are honoured by the screen",
+    "ctx": "iPhone 13/en/guest",
+    "status": "INFO",
+    "note": "sort_by=price-ascending → server order ascending=true, chip says \"Featured ⇅\"; ?page=2 cards=0 (paginate by 250, so page 2 is empty); all?filter availability cards=35",
+    "at": "2026-10-15T10:45:56.029Z"
+  },
+  {
+    "id": "CL-6",
+    "scenario": "Grid card Add / sold-out card (no add) / heart on collection grid",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "soldout tap → items=0; add → items=1; recSheet=true; grid steppers=1; heart aria-pressed=true",
+    "at": "2026-10-15T10:46:00.630Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic hookah (ه spelling) (شيشه)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=18 \"18 products OKA Pink EGP 169 Add OKA white EGP 169 Add OKA Carbon Black EGP 189 Add OKA Cobra EGP 189 Add OKA Cobra + OK\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D9%87 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:02.404Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic hookah (ة) (شيشة)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=18 \"18 products OKA Pink EGP 169 Add OKA white EGP 169 Add OKA Carbon Black EGP 189 Add OKA Cobra EGP 189 Add OKA Cobra + OK\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D8%A9 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:03.949Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"coal\" (فحم)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=21 \"21 products Coal gaze protector + Bowl Free EGP 94 Add 3 Coconut Coal Pcs EGP 25 Add Tongs EGP 31 Add OKA Black Tobacco \" chips=false url=?q=%D9%81%D8%AD%D9%85 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:05.482Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"tobacco\" (معسل)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=10 \"10 products OKA Black Tobacco + Plate EGP 209 Add OKA Black Tobacco EGP 199 Add Tobacco Bowls- Blue Cloud - 12g EGP 49 A\" chips=false url=?q=%D9%85%D8%B9%D8%B3%D9%84 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:07.025Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"bowl\" (حجر)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=15 \"15 products Tobacco Bowls- Blue Cloud - 12g EGP 49 Add Tobacco Bowls- Cantaloup- 12g EGP 49 Add Tobacco Bowls- Grapes - \" chips=false url=?q=%D8%AD%D8%AC%D8%B1 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:08.563Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: English (hookah)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=11 \"11 products OKA Pink EGP 169 Add OKA white EGP 169 Add OKA Carbon Black EGP 189 Add OKA Black Tobacco + Plate EGP 209 Ad\" chips=false url=?q=hookah xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:10.017Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: typo (hokah)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=0 \"No results for “hokah”\" chips=false url=?q=hokah xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:11.516Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic typo (شيشا)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=0 \"No results for “شيشا”\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D8%A7 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:12.966Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: whitespace only (  )",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=0 \"\" chips=true url= xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:14.404Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: no results (zzzzqqq)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=0 \"No results for “zzzzqqq”\" chips=false url=?q=zzzzqqq xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:16.165Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: script tag (<script>window.__xss=1</script>)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=0 \"No results for “<script>window.__xss=1</script>”\" chips=false url=?q=%3Cscript%3Ewindow.__xss%3D1%3C%2Fscript%3E xss=0 injected=0 serverHTTP=200 rawInServerHTML=true (in <title> via page_title: harness builds page_title unescaped; Shopify pre-escapes it — not a theme bug) ",
+    "at": "2026-10-15T10:46:17.831Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: attribute break-out (\"><img src=x onerror=window.__xss=2>)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=0 \"No results for “\"><img src=x onerror=window.__xss=2>”\" chips=false url=?q=%22%3E%3Cimg+src%3Dx+onerror%3Dwindow.__xss%3D2%3E xss=0 injected=0 serverHTTP=200 rawInServerHTML=true (in <title> via page_title: harness builds page_title unescaped; Shopify pre-escapes it — not a theme bug) ",
+    "at": "2026-10-15T10:46:19.330Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: 600-char query (xxxxxxxxxxxxxxxxxxxx…)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=0 \"No results for “xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" chips=false url=?q=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:20.979Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic-Indic digits (١٢)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=16 \"16 products The Hexa Party (EGP129 each) EGP 774 Add Tobacco Bowls- Blue Cloud - 12g EGP 49 Add Tobacco Bowls- Cantaloup\" chips=false url=?q=%D9%A1%D9%A2 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:22.469Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: brand, uppercase (OKA)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=22 \"22 products OKA Pink EGP 169 Add OKA white EGP 169 Add OKA Carbon Black EGP 189 Add OKA Cobra EGP 189 Add OKA Cobra + OK\" chips=false url=?q=OKA xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:23.955Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: single Arabic letter (ب)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results=31 \"31 products OKA white EGP 169 Add OKA Carbon Black EGP 189 Add Trio Party (EGP139 each) EGP 447 Add OKA Cobra EGP 189 Ad\" chips=false url=?q=%D8%A8 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:25.412Z"
+  },
+  {
+    "id": "SR-2",
+    "scenario": "Deep link /search?q=فحم renders results on load; Enter blurs; clearing shows chips",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "results on load=21; chips visible after clearing=true",
+    "at": "2026-10-15T10:46:27.164Z"
+  },
+  {
+    "id": "SR-3",
+    "scenario": "Search category chips: each chip link resolves",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "chips=/collections/oka-basic-hookahs-copy /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /collections/hookahs /collections/hoses /collections/coal /collections/bowls bad=",
+    "at": "2026-10-15T10:46:28.001Z"
+  },
+  {
+    "id": "SR-4",
+    "scenario": "Search result card: Add → −/+ ; tap card opens PDP",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "stepper=1 recSheet=true → http://localhost:9410/products/oka-gourmets-hose-bowl",
+    "at": "2026-10-15T10:46:30.880Z"
+  },
+  {
+    "id": "SR-5",
+    "scenario": "Hidden collections searchable? product in hookahs-only collection found via search",
+    "ctx": "iPhone 13/en/guest",
+    "status": "INFO",
+    "note": "hookahs collection has 2 products; not in catalogue (search/home) = []",
+    "at": "2026-10-15T10:46:30.978Z"
+  },
+  {
+    "id": "CS-LOG",
+    "scenario": "Collections/search session error summary",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:46:30.981Z"
+  },
+  {
+    "id": "CL-1",
+    "scenario": "/collections list: rows, every link 200, counts",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "6 rows: oka-basic-hookahs-copy, oka-parties, oka-cobra, dark-tobacco, ready-to-smoke-bowls, oka-parts; bad=",
+    "at": "2026-10-15T10:46:32.197Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-basic-hookahs-copy: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"شيشة أوكا المتميزة\" cards=3 label=\"٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:46:32.744Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parties: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"أوكا بارتي\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:46:33.227Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-cobra: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"أوكا كوبرا\" cards=3 label=\"٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:46:33.698Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/dark-tobacco: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"معسل أسود\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:46:34.284Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/ready-to-smoke-bowls: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"حجر جاهز للتدخين\" cards=15 label=\"١٥ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:46:35.100Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parts: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"قطع الغيار\" cards=13 label=\"١٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:46:36.200Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/hookahs: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"شيشة أوكا الأساسية\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:46:37.132Z"
+  },
+  {
+    "id": "CL-3",
+    "scenario": "Sort chip cycles Featured → Price low→high → high→low; order correct",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "labels=[\"المميز ⇅\",\"الأرخص الأول ⇅\",\"الأغلى الأول ⇅\"] asc=true desc=true",
+    "at": "2026-10-15T10:46:38.653Z"
+  },
+  {
+    "id": "CL-4",
+    "scenario": "Filters: In stock hides sold-out (foil/coal); On sale shows only compare-at items; empty state",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "all=13 inStock=11 inStock+onSale=0 emptyShown=true; filters carried to another collection: {\"chips\":[\"inStock\",\"onSale\"],\"n\":1}",
+    "at": "2026-10-15T10:46:40.699Z"
+  },
+  {
+    "id": "CL-5",
+    "scenario": "Shopify ?sort_by / ?filter / ?page=2 URLs (deep links) are honoured by the screen",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "INFO",
+    "note": "sort_by=price-ascending → server order ascending=true, chip says \"المميز ⇅\"; ?page=2 cards=0 (paginate by 250, so page 2 is empty); all?filter availability cards=35",
+    "at": "2026-10-15T10:46:42.505Z"
+  },
+  {
+    "id": "CL-6",
+    "scenario": "Grid card Add / sold-out card (no add) / heart on collection grid",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "soldout tap → items=0; add → items=1; recSheet=true; grid steppers=1; heart aria-pressed=true",
+    "at": "2026-10-15T10:46:47.261Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic hookah (ه spelling) (شيشه)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "results=18 \"١٨ منتج أوكا فوشيا ١٦٩ ج.م عبيلي فالشنطة أوكا ابيض ١٦٩ ج.م عبيلي فالشنطة أوكا اسود كاربون ١٨٩ ج.م عبيلي فالشنطة أوكا كوب\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D9%87 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:49.112Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"coal\" (فحم)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "results=21 \"٢١ منتج مصفاه فحم و رأس هديه ٩٤ ج.م عبيلي فالشنطة ثلاث فحم جوز هند مستورد ٢٥ ج.م عبيلي فالشنطة كماشة فحم ٣١ ج.م عبيلي فا\" chips=false url=?q=%D9%81%D8%AD%D9%85 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:50.634Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: no results (zzzzqqq)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"zzzzqqq\"\" chips=false url=?q=zzzzqqq xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:46:52.310Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: script tag (<script>window.__xss=1</script>)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"<script>window.__xss=1</script>\"\" chips=false url=?q=%3Cscript%3Ewindow.__xss%3D1%3C%2Fscript%3E xss=0 injected=0 serverHTTP=200 rawInServerHTML=true (in <title> via page_title: harness builds page_title unescaped; Shopify pre-escapes it — not a theme bug) ",
+    "at": "2026-10-15T10:46:54.007Z"
+  },
+  {
+    "id": "SR-2",
+    "scenario": "Deep link /search?q=فحم renders results on load; Enter blurs; clearing shows chips",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "results on load=21; chips visible after clearing=true",
+    "at": "2026-10-15T10:46:55.723Z"
+  },
+  {
+    "id": "SR-3",
+    "scenario": "Search category chips: each chip link resolves",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "chips=/collections/oka-basic-hookahs-copy /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /collections/hookahs /collections/hoses /collections/coal /collections/bowls bad=",
+    "at": "2026-10-15T10:46:56.742Z"
+  },
+  {
+    "id": "SR-4",
+    "scenario": "Search result card: Add → −/+ ; tap card opens PDP",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "stepper=1 recSheet=true → http://localhost:9410/products/oka-gourmets-hose-bowl",
+    "at": "2026-10-15T10:46:59.748Z"
+  },
+  {
+    "id": "SR-5",
+    "scenario": "Hidden collections searchable? product in hookahs-only collection found via search",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "INFO",
+    "note": "hookahs collection has 2 products; not in catalogue (search/home) = []",
+    "at": "2026-10-15T10:46:59.899Z"
+  },
+  {
+    "id": "CS-LOG",
+    "scenario": "Collections/search session error summary",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:46:59.900Z"
+  },
+  {
+    "id": "CL-1",
+    "scenario": "/collections list: rows, every link 200, counts",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "6 rows: oka-basic-hookahs-copy, oka-parties, oka-cobra, dark-tobacco, ready-to-smoke-bowls, oka-parts; bad=",
+    "at": "2026-10-15T10:47:01.246Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-basic-hookahs-copy: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Premium Hookahs\" cards=3 label=\"3 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:01.833Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parties: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Parties\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:02.343Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-cobra: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Cobra\" cards=3 label=\"3 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:02.937Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/dark-tobacco: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Dark Tobacco\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:03.452Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/ready-to-smoke-bowls: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Ready to smoke bowls\" cards=15 label=\"15 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:04.054Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parts: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Parts\" cards=13 label=\"13 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:05.079Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/hookahs: renders, count label = visible cards, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA basic Hookahs\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:05.986Z"
+  },
+  {
+    "id": "CL-3",
+    "scenario": "Sort chip cycles Featured → Price low→high → high→low; order correct",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "labels=[\"Featured ⇅\",\"Price: low to high ⇅\",\"Price: high to low ⇅\"] asc=true desc=true",
+    "at": "2026-10-15T10:47:07.765Z"
+  },
+  {
+    "id": "CL-4",
+    "scenario": "Filters: In stock hides sold-out (foil/coal); On sale shows only compare-at items; empty state",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "all=13 inStock=11 inStock+onSale=0 emptyShown=true; filters carried to another collection: {\"chips\":[\"inStock\",\"onSale\"],\"n\":1}",
+    "at": "2026-10-15T10:47:09.599Z"
+  },
+  {
+    "id": "CL-5",
+    "scenario": "Shopify ?sort_by / ?filter / ?page=2 URLs (deep links) are honoured by the screen",
+    "ctx": "Pixel 7/en/customer",
+    "status": "INFO",
+    "note": "sort_by=price-ascending → server order ascending=true, chip says \"Featured ⇅\"; ?page=2 cards=0 (paginate by 250, so page 2 is empty); all?filter availability cards=35",
+    "at": "2026-10-15T10:47:11.561Z"
+  },
+  {
+    "id": "CL-6",
+    "scenario": "Grid card Add / sold-out card (no add) / heart on collection grid",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "soldout tap → items=0; add → items=1; recSheet=true; grid steppers=1; heart aria-pressed=true",
+    "at": "2026-10-15T10:47:16.470Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic hookah (ه spelling) (شيشه)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "results=18 \"18 products OKA Pink EGP 169 Add OKA white EGP 169 Add OKA Carbon Black EGP 189 Add OKA Cobra EGP 189 Add OKA Cobra + OK\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D9%87 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:47:18.284Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"coal\" (فحم)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "results=21 \"21 products Coal gaze protector + Bowl Free EGP 94 Add 3 Coconut Coal Pcs EGP 25 Add Tongs EGP 31 Add OKA Black Tobacco \" chips=false url=?q=%D9%81%D8%AD%D9%85 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:47:19.830Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: no results (zzzzqqq)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "results=0 \"No results for “zzzzqqq”\" chips=false url=?q=zzzzqqq xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:47:21.590Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: script tag (<script>window.__xss=1</script>)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "results=0 \"No results for “<script>window.__xss=1</script>”\" chips=false url=?q=%3Cscript%3Ewindow.__xss%3D1%3C%2Fscript%3E xss=0 injected=0 serverHTTP=200 rawInServerHTML=true (in <title> via page_title: harness builds page_title unescaped; Shopify pre-escapes it — not a theme bug) ",
+    "at": "2026-10-15T10:47:23.306Z"
+  },
+  {
+    "id": "SR-2",
+    "scenario": "Deep link /search?q=فحم renders results on load; Enter blurs; clearing shows chips",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "results on load=21; chips visible after clearing=true",
+    "at": "2026-10-15T10:47:25.001Z"
+  },
+  {
+    "id": "SR-3",
+    "scenario": "Search category chips: each chip link resolves",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "chips=/collections/oka-basic-hookahs-copy /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /collections/hookahs /collections/hoses /collections/coal /collections/bowls bad=",
+    "at": "2026-10-15T10:47:25.966Z"
+  },
+  {
+    "id": "SR-4",
+    "scenario": "Search result card: Add → −/+ ; tap card opens PDP",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "stepper=1 recSheet=true → http://localhost:9410/products/oka-gourmets-hose-bowl",
+    "at": "2026-10-15T10:47:28.978Z"
+  },
+  {
+    "id": "SR-5",
+    "scenario": "Hidden collections searchable? product in hookahs-only collection found via search",
+    "ctx": "Pixel 7/en/customer",
+    "status": "INFO",
+    "note": "hookahs collection has 2 products; not in catalogue (search/home) = []",
+    "at": "2026-10-15T10:47:29.073Z"
+  },
+  {
+    "id": "CS-LOG",
+    "scenario": "Collections/search session error summary",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:47:29.082Z"
+  },
+  {
+    "id": "CL-1",
+    "scenario": "/collections list: rows, every link 200, counts",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "6 rows: oka-basic-hookahs-copy, oka-parties, oka-cobra, dark-tobacco, ready-to-smoke-bowls, oka-parts; bad=",
+    "at": "2026-10-15T10:47:30.282Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-basic-hookahs-copy: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"شيشة أوكا المتميزة\" cards=3 label=\"٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:47:30.838Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parties: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"أوكا بارتي\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:47:31.379Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-cobra: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"أوكا كوبرا\" cards=3 label=\"٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:47:31.981Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/dark-tobacco: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"معسل أسود\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:47:32.545Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/ready-to-smoke-bowls: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"حجر جاهز للتدخين\" cards=15 label=\"١٥ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:47:33.254Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parts: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"قطع الغيار\" cards=13 label=\"١٣ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:47:33.866Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/hookahs: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"شيشة أوكا الأساسية\" cards=2 label=\"٢ منتج\" emptyState=false ",
+    "at": "2026-10-15T10:47:34.566Z"
+  },
+  {
+    "id": "CL-3",
+    "scenario": "Sort chip cycles Featured → Price low→high → high→low; order correct",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "labels=[\"المميز ⇅\",\"الأرخص الأول ⇅\",\"الأغلى الأول ⇅\"] asc=true desc=true",
+    "at": "2026-10-15T10:47:35.819Z"
+  },
+  {
+    "id": "CL-4",
+    "scenario": "Filters: In stock hides sold-out (foil/coal); On sale shows only compare-at items; empty state",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "all=13 inStock=11 inStock+onSale=0 emptyShown=true; filters carried to another collection: {\"chips\":[\"inStock\",\"onSale\"],\"n\":1}",
+    "at": "2026-10-15T10:47:37.508Z"
+  },
+  {
+    "id": "CL-5",
+    "scenario": "Shopify ?sort_by / ?filter / ?page=2 URLs (deep links) are honoured by the screen",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "INFO",
+    "note": "sort_by=price-ascending → server order ascending=true, chip says \"المميز ⇅\"; ?page=2 cards=0 (paginate by 250, so page 2 is empty); all?filter availability cards=35",
+    "at": "2026-10-15T10:47:39.288Z"
+  },
+  {
+    "id": "CL-6",
+    "scenario": "Grid card Add / sold-out card (no add) / heart on collection grid",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "soldout tap → items=0; add → items=1; recSheet=true; grid steppers=1; heart aria-pressed=true",
+    "at": "2026-10-15T10:47:43.694Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic hookah (ه spelling) (شيشه)",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "results=18 \"١٨ منتج أوكا فوشيا ١٦٩ ج.م عبيلي فالشنطة أوكا ابيض ١٦٩ ج.م عبيلي فالشنطة أوكا اسود كاربون ١٨٩ ج.م عبيلي فالشنطة أوكا كوب\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D9%87 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:47:45.277Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"coal\" (فحم)",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "results=21 \"٢١ منتج مصفاه فحم و رأس هديه ٩٤ ج.م عبيلي فالشنطة ثلاث فحم جوز هند مستورد ٢٥ ج.م عبيلي فالشنطة كماشة فحم ٣١ ج.م عبيلي فا\" chips=false url=?q=%D9%81%D8%AD%D9%85 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:47:46.773Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: no results (zzzzqqq)",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"zzzzqqq\"\" chips=false url=?q=zzzzqqq xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:47:48.385Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: script tag (<script>window.__xss=1</script>)",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "results=0 \"مفيش نتايج لـ \"<script>window.__xss=1</script>\"\" chips=false url=?q=%3Cscript%3Ewindow.__xss%3D1%3C%2Fscript%3E xss=0 injected=0 serverHTTP=200 rawInServerHTML=true (in <title> via page_title: harness builds page_title unescaped; Shopify pre-escapes it — not a theme bug) ",
+    "at": "2026-10-15T10:47:49.981Z"
+  },
+  {
+    "id": "SR-2",
+    "scenario": "Deep link /search?q=فحم renders results on load; Enter blurs; clearing shows chips",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "results on load=21; chips visible after clearing=true",
+    "at": "2026-10-15T10:47:51.699Z"
+  },
+  {
+    "id": "SR-3",
+    "scenario": "Search category chips: each chip link resolves",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "chips=/collections/oka-basic-hookahs-copy /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /collections/hookahs /collections/hoses /collections/coal /collections/bowls bad=",
+    "at": "2026-10-15T10:47:52.413Z"
+  },
+  {
+    "id": "SR-4",
+    "scenario": "Search result card: Add → −/+ ; tap card opens PDP",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "stepper=1 recSheet=true → http://localhost:9410/products/oka-gourmets-hose-bowl",
+    "at": "2026-10-15T10:47:55.208Z"
+  },
+  {
+    "id": "SR-5",
+    "scenario": "Hidden collections searchable? product in hookahs-only collection found via search",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "INFO",
+    "note": "hookahs collection has 2 products; not in catalogue (search/home) = []",
+    "at": "2026-10-15T10:47:55.310Z"
+  },
+  {
+    "id": "CS-LOG",
+    "scenario": "Collections/search session error summary",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:47:55.312Z"
+  },
+  {
+    "id": "CL-1",
+    "scenario": "/collections list: rows, every link 200, counts",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "6 rows: oka-basic-hookahs-copy, oka-parties, oka-cobra, dark-tobacco, ready-to-smoke-bowls, oka-parts; bad=",
+    "at": "2026-10-15T10:47:56.361Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-basic-hookahs-copy: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Premium Hookahs\" cards=3 label=\"3 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:56.954Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parties: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Parties\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:57.456Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-cobra: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Cobra\" cards=3 label=\"3 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:57.966Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/dark-tobacco: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Dark Tobacco\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:58.526Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/ready-to-smoke-bowls: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"Ready to smoke bowls\" cards=15 label=\"15 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:59.034Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/oka-parts: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA Parts\" cards=13 label=\"13 products\" emptyState=false ",
+    "at": "2026-10-15T10:47:59.698Z"
+  },
+  {
+    "id": "CL-2",
+    "scenario": "Collection /collections/hookahs: renders, count label = visible cards, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "HTTP 200 title=\"OKA basic Hookahs\" cards=2 label=\"2 products\" emptyState=false ",
+    "at": "2026-10-15T10:48:00.286Z"
+  },
+  {
+    "id": "CL-3",
+    "scenario": "Sort chip cycles Featured → Price low→high → high→low; order correct",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "labels=[\"Featured ⇅\",\"Price: low to high ⇅\",\"Price: high to low ⇅\"] asc=true desc=true",
+    "at": "2026-10-15T10:48:01.557Z"
+  },
+  {
+    "id": "CL-4",
+    "scenario": "Filters: In stock hides sold-out (foil/coal); On sale shows only compare-at items; empty state",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "all=13 inStock=11 inStock+onSale=0 emptyShown=true; filters carried to another collection: {\"chips\":[\"inStock\",\"onSale\"],\"n\":1}",
+    "at": "2026-10-15T10:48:03.205Z"
+  },
+  {
+    "id": "CL-5",
+    "scenario": "Shopify ?sort_by / ?filter / ?page=2 URLs (deep links) are honoured by the screen",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "INFO",
+    "note": "sort_by=price-ascending → server order ascending=true, chip says \"Featured ⇅\"; ?page=2 cards=0 (paginate by 250, so page 2 is empty); all?filter availability cards=35",
+    "at": "2026-10-15T10:48:04.848Z"
+  },
+  {
+    "id": "CL-6",
+    "scenario": "Grid card Add / sold-out card (no add) / heart on collection grid",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "soldout tap → items=0; add → items=1; recSheet=true; grid steppers=1; heart aria-pressed=true",
+    "at": "2026-10-15T10:48:09.262Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic hookah (ه spelling) (شيشه)",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "results=18 \"18 products OKA Pink EGP 169 Add OKA white EGP 169 Add OKA Carbon Black EGP 189 Add OKA Cobra EGP 189 Add OKA Cobra + OK\" chips=false url=?q=%D8%B4%D9%8A%D8%B4%D9%87 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:48:10.922Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: Arabic \"coal\" (فحم)",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "results=21 \"21 products Coal gaze protector + Bowl Free EGP 94 Add 3 Coconut Coal Pcs EGP 25 Add Tongs EGP 31 Add OKA Black Tobacco \" chips=false url=?q=%D9%81%D8%AD%D9%85 xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:48:12.394Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: no results (zzzzqqq)",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "results=0 \"No results for “zzzzqqq”\" chips=false url=?q=zzzzqqq xss=0 injected=0 serverHTTP=200 rawInServerHTML=false ",
+    "at": "2026-10-15T10:48:13.911Z"
+  },
+  {
+    "id": "SR-1",
+    "scenario": "Search typed: script tag (<script>window.__xss=1</script>)",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "results=0 \"No results for “<script>window.__xss=1</script>”\" chips=false url=?q=%3Cscript%3Ewindow.__xss%3D1%3C%2Fscript%3E xss=0 injected=0 serverHTTP=200 rawInServerHTML=true (in <title> via page_title: harness builds page_title unescaped; Shopify pre-escapes it — not a theme bug) ",
+    "at": "2026-10-15T10:48:15.501Z"
+  },
+  {
+    "id": "SR-2",
+    "scenario": "Deep link /search?q=فحم renders results on load; Enter blurs; clearing shows chips",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "results on load=21; chips visible after clearing=true",
+    "at": "2026-10-15T10:48:17.274Z"
+  },
+  {
+    "id": "SR-3",
+    "scenario": "Search category chips: each chip link resolves",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "chips=/collections/oka-basic-hookahs-copy /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /collections/hookahs /collections/hoses /collections/coal /collections/bowls bad=",
+    "at": "2026-10-15T10:48:18.175Z"
+  },
+  {
+    "id": "SR-4",
+    "scenario": "Search result card: Add → −/+ ; tap card opens PDP",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "stepper=1 recSheet=true → http://localhost:9410/products/oka-gourmets-hose-bowl",
+    "at": "2026-10-15T10:48:21.011Z"
+  },
+  {
+    "id": "SR-5",
+    "scenario": "Hidden collections searchable? product in hookahs-only collection found via search",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "INFO",
+    "note": "hookahs collection has 2 products; not in catalogue (search/home) = []",
+    "at": "2026-10-15T10:48:21.131Z"
+  },
+  {
+    "id": "CS-LOG",
+    "scenario": "Collections/search session error summary",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:48:21.132Z"
+  }
+]

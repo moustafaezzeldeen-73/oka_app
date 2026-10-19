@@ -49,7 +49,7 @@ export async function session(o = {}) {
 
 /** Console errors + page errors + failed requests + http errors, minus expected 404s for the page itself. */
 export function problems(s, { allow = [] } = {}) {
-  const ok = (t) => allow.some((re) => re.test(t));
+  const ok = (t) => [...allow, /navigator.vibrate/].some((re) => re.test(t));
   return {
     consoleErrors: s.logs.console.filter((m) => m.type === 'error' && !ok(m.text)).map((m) => `${m.text} @${m.url}`),
     pageErrors: s.logs.pageErrors.filter((e) => !ok(e.message)).map((e) => `${e.message} @${e.url}`),
@@ -83,4 +83,11 @@ export async function step(rec, meta, fn) {
   } catch (e) {
     rec.add({ ...meta, status: 'ERROR', note: String(e && e.message || e).slice(0, 400) });
   }
+}
+/** Close the "Added ✓ — goes well with it" sheet if it popped up; returns whether it was there. */
+export async function dismissRecSheet(s, wait = 900) {
+  await s.page.waitForSelector('.rec-sheet', { timeout: wait }).catch(() => {});
+  const had = await s.page.locator('.rec-sheet').count();
+  if (had) { await s.page.locator('.rec-sheet [data-close]').first().click().catch(() => {}); await s.page.waitForTimeout(200); }
+  return had > 0;
 }

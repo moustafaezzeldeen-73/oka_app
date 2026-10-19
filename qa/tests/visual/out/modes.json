@@ -1,0 +1,2721 @@
+{
+ "contrast-ar": {
+  "/": [
+   {
+    "cls": "l-ar",
+    "text": "شيشة أوكا المتميزة",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-ar",
+    "text": "أوكا ابيض",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "١٦٩ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "عبيلي فالشنطة",
+    "color": "rgb(255, 255, 255)",
+    "ratio": 4.03,
+    "need": 4.5,
+    "size": 15
+   },
+   {
+    "cls": "l-ar",
+    "text": "شوفها على طرابيزتك",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.59,
+    "need": 4.5,
+    "size": 13
+   },
+   {
+    "cls": "l-ar",
+    "text": "أوكا اسود كاربون",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "١٨٩ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "أوكا بارتي",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-ar",
+    "text": "حفلة الستة (متوسط سعر ١٢٩ جنية)",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٧٧٤ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "أوكا كوبرا",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-ar",
+    "text": "أوكا كوبرا + قاعدة مضيئة قابلة للشحن",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٣٥٧ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "قاعدة مضيئة قابلة للشحن",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "معسل أسود",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-ar",
+    "text": "أوكا معسل اسود",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "١٩٩ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "حجر جاهز للتدخين",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-ar",
+    "text": "كنتالوب - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٤٩ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "عنب - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "علكة - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "علكة نعناع - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "نعناع - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٣٩ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "فستق - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "سته وستين - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "تفاحتين - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "بطيخ - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "كولا - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "علكة مستكة - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "لمون نعناع ثلج - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "الفاتك بالحريم - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "البيري الاعظم - حجر جاهز للشرب- 12 جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "قطع الغيار",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-ar",
+    "text": "طاسة أوكا",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "عمود اوكا قطعة واحدة",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٥٩ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "مصفاه فحم و رأس هديه",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٩٤ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "ثلاث فحم جوز هند مستورد",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٢٥ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "قطعه فويل جاهزة للاستخدام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٥ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "تخشينات سيليكون لي و راس",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "١٠ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "لي مخصوص",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٤٥ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "لي أوكا العادي",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٣٠ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "رأس سيراميك عادي - سعة 15جرام",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٢٩ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "كماشة فحم",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٣١ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "كماشة + فويل",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٦٩ ج.م",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-ar",
+    "text": "من عند عملائنا",
+    "color": "rgb(255, 255, 255)",
+    "ratio": 1,
+    "need": 3,
+    "size": 22
+   }
+  ],
+  "/collections/oka-cobra": [
+   {
+    "cls": "count",
+    "text": "٣ منتج",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.95,
+    "need": 4.5,
+    "size": 12.5
+   }
+  ],
+  "/products/oka-cobra": [
+   {
+    "cls": "l-ar",
+    "text": "متوفر",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.99,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "ship-txt",
+    "text": "الشحن ٣٦ ج.م — أقل سعر لمنطقتك",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.59,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "العدد",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.76,
+    "need": 4.5,
+    "size": 13
+   },
+   {
+    "cls": "deliver-muted",
+    "text": "١-٢ يوم",
+    "color": "rgba(110, 110, 115, 0.6)",
+    "ratio": 2.33,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "مصاريف الشحن",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.99,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "fee",
+    "text": "٣٦ ج.م",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.99,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "كاش عند الاستلام",
+    "color": "rgba(110, 110, 115, 0.45)",
+    "ratio": 1.84,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "هتاخد ~١٨٩ نقطة لما يوصلك",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.77,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "اسحب عشان تلفّها · قرّب بصباعين عشان تكب",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.72,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "تصميم بزوايا",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "شكل جريء ووظيفة متقدمة في نفس الوقت.",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "معمولة للسحبة",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "مساحة أكبر جوّه يعني سحبة أخف وسحاب أتقل",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "نوّرها",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "بتتركب على القاعدة الخشب المضيئة اللي بت",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "كمالياتك العادية",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "استخدم الحجارة والليّات العادية.",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "rcard-why",
+    "text": "بيتشروا مع بعض",
+    "color": "rgb(31, 143, 78)",
+    "ratio": 3.8,
+    "need": 4.5,
+    "size": 10
+   },
+   {
+    "cls": "rcard-why",
+    "text": "مطلوب دلوقتي",
+    "color": "rgb(31, 143, 78)",
+    "ratio": 3.8,
+    "need": 4.5,
+    "size": 10
+   }
+  ],
+  "/cart": [
+   {
+    "cls": "",
+    "text": "غيّر",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.62,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "earn",
+    "text": "هتاخد ٢٦٧ نقطة لما يوصلك",
+    "color": "rgb(31, 143, 78)",
+    "ratio": 3.8,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "cs-why ship",
+    "text": "يوصّلك لشحن أرخص",
+    "color": "rgb(176, 90, 0)",
+    "ratio": 4.48,
+    "need": 4.5,
+    "size": 10.5
+   },
+   {
+    "cls": "cs-why",
+    "text": "بيتشروا مع بعض",
+    "color": "rgb(31, 143, 78)",
+    "ratio": 3.78,
+    "need": 4.5,
+    "size": 10.5
+   }
+  ],
+  "/pages/checkout-review": [
+   {
+    "cls": "ship-txt",
+    "text": "ضيف ٣٣ ج.م كمان والشحن ينزل لـ ٣٦ ج.م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.52,
+    "need": 4.5,
+    "size": 11.5
+   }
+  ],
+  "/pages/orders?order=%239000101": [
+   {
+    "cls": "l-ar",
+    "text": "الفاتورة",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.84,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "item-qty",
+    "text": "×",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "١",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "١٦٩ ج.م",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٢",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٤٩ ج.م",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "المجموع قبل الشحن",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "الشحن",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "كاش عند الاستلام",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "— هتدفع للمندوب",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "٣٢٧ ج.م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-ar",
+    "text": "بيتجهز للشحن",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 11
+   },
+   {
+    "cls": "l-ar",
+    "text": "اتشحن",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 11
+   },
+   {
+    "cls": "l-ar",
+    "text": "وصل",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 11
+   },
+   {
+    "cls": "l-ar",
+    "text": "لسه معملناش بوليصة شحن للطلب ده. أول ما ",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.56,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "هيتشحن على",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 14
+   },
+   {
+    "cls": "l-ar",
+    "text": "التوصيل",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 14
+   },
+   {
+    "cls": "l-ar",
+    "text": "رقم الطلب",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 14
+   },
+   {
+    "cls": "l-ar",
+    "text": "تقدر تعدّله أو تلغيه لحد ما نبدأ نجهّزه ",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 12
+   }
+  ],
+  "/pages/addresses?view=oka-add-address": [
+   {
+    "cls": "l-ar",
+    "text": "الاسم",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "رقم الموبايل",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "المنطقة / المدينة",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "الشارع",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "العمارة والدور والشقة",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "علامة مميزة جنبك (لو حابب)",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "المحافظة",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "نوع العنوان",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   }
+  ],
+  "/pages/support": [
+   {
+    "cls": "l-ar",
+    "text": "القاهرة والجيزة والإسكندرية: ١-٢ يوم. ال",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "نفس أسعار موقعنا: القاهرة والجيزة والإسك",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "nums",
+    "text": "/",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٦٠ ج.م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٣٦ ج.م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٧٠ ج.م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٤٦ ج.م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٨٠ ج.م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٥٦ ج.م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "٣٠٠ ج.م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "بتدفع كاش لما الطلب يوصلك. جهّز المبلغ ل",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "أيوه، من صفحة طلباتي، طول ما الطلب لسه م",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "بتاخد نقطة على كل جنيه منتجات لما طلبك ي",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-ar",
+    "text": "ابعتلنا على واتساب في خلال ٤٨ ساعة بصورة",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   }
+  ],
+  "/search?q=hookah": [
+   {
+    "cls": "count",
+    "text": "١١ منتج",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.95,
+    "need": 4.5,
+    "size": 12.5
+   }
+  ]
+ },
+ "contrast-en": {
+  "/": [
+   {
+    "cls": "l-en",
+    "text": "OKA Premium Hookahs",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA white",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 169",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Add to cart",
+    "color": "rgb(255, 255, 255)",
+    "ratio": 4.03,
+    "need": 4.5,
+    "size": 15
+   },
+   {
+    "cls": "l-en",
+    "text": "See it on your table",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.59,
+    "need": 4.5,
+    "size": 13
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA Carbon Black",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 189",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA Parties",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-en",
+    "text": "The Hexa Party (EGP129 each)",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 774",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA Cobra",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA Cobra + OKA base",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 357",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA Cobra LED Rechargeable Base",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Dark Tobacco",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA Black Tobacco",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 199",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Ready to smoke bowls",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls- Cantaloup- 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 49",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls- Grapes - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls- Gum - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls- Gum mint  - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls- Mint - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 39",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls- Pistachio - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls- Sixty Six - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls- Two apples- 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls- Watermelon - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls-Cola- 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls-Gum Mustic- 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls-Iced Lemon Mint - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls-Lady Killer - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Tobacco Bowls-Mega berry - 12g",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA Parts",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.44,
+    "need": 3,
+    "size": 22
+   },
+   {
+    "cls": "l-en",
+    "text": "Steel Plate",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA-STEM 1 piece",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 59",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Coal gaze protector + Bowl Free",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 94",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "3 Coconut Coal Pcs",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 25",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "1 Pcs of Foil",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 5",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "OKA Silicon Gourmets - Hose / bowl",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 10",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Premium 1.5 m Hose",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 45",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Standard 1.5 m Hose",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 30",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Standard 15 g Bowl - Glazed",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 29",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Tongs",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 31",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "Tongs , Foil Combo",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 14.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 69",
+    "color": "rgb(29, 29, 31)",
+    "ratio": 2.57,
+    "need": 4.5,
+    "size": 16
+   },
+   {
+    "cls": "l-en",
+    "text": "From our customers",
+    "color": "rgb(255, 255, 255)",
+    "ratio": 1,
+    "need": 3,
+    "size": 22
+   }
+  ],
+  "/collections/oka-cobra": [
+   {
+    "cls": "count",
+    "text": "3 products",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.95,
+    "need": 4.5,
+    "size": 12.5
+   }
+  ],
+  "/products/oka-cobra": [
+   {
+    "cls": "l-en",
+    "text": "In stock",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.99,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "ship-txt",
+    "text": "Shipping EGP 36 — the best rate for your",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.59,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Quantity",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.76,
+    "need": 4.5,
+    "size": 13
+   },
+   {
+    "cls": "deliver-muted",
+    "text": "1–2 days",
+    "color": "rgba(110, 110, 115, 0.6)",
+    "ratio": 2.33,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Shipping fee",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.99,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "fee",
+    "text": "EGP 36",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.99,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Cash on delivery",
+    "color": "rgba(110, 110, 115, 0.45)",
+    "ratio": 1.84,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Earn ~189 points when delivered",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.77,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Drag to turn it · pinch to resize",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.72,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Angular design",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Bold looks balanced with advanced functi",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Built for the draw",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "More room inside means a lighter pull an",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Light it up",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Pairs with the rechargeable LED wooden b",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Standard gear",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Use standard bowls and hoses.",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.82,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "rcard-why",
+    "text": "Often bought together",
+    "color": "rgb(31, 143, 78)",
+    "ratio": 3.8,
+    "need": 4.5,
+    "size": 10
+   },
+   {
+    "cls": "rcard-why",
+    "text": "Popular now",
+    "color": "rgb(31, 143, 78)",
+    "ratio": 3.8,
+    "need": 4.5,
+    "size": 10
+   }
+  ],
+  "/cart": [
+   {
+    "cls": "",
+    "text": "Change",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.62,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "earn",
+    "text": "You'll earn 267 points on delivery",
+    "color": "rgb(31, 143, 78)",
+    "ratio": 3.8,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "cs-why ship",
+    "text": "Unlocks cheaper shipping",
+    "color": "rgb(176, 90, 0)",
+    "ratio": 4.48,
+    "need": 4.5,
+    "size": 10.5
+   },
+   {
+    "cls": "cs-why",
+    "text": "Often bought together",
+    "color": "rgb(31, 143, 78)",
+    "ratio": 3.78,
+    "need": 4.5,
+    "size": 10.5
+   }
+  ],
+  "/pages/checkout-review": [
+   {
+    "cls": "ship-txt",
+    "text": "Add 33 EGP more and shipping drops to EG",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.52,
+    "need": 4.5,
+    "size": 11.5
+   }
+  ],
+  "/pages/orders?order=%239000101": [
+   {
+    "cls": "l-en",
+    "text": "Invoice",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.84,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "item-qty",
+    "text": "×",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-en",
+    "text": "1",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 169",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-en",
+    "text": "2",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 49",
+    "color": "rgba(110, 110, 115, 0.9)",
+    "ratio": 3.85,
+    "need": 4.5,
+    "size": 11.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Subtotal",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Shipping",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Cash on delivery",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "— pay the courier",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 327",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 12
+   },
+   {
+    "cls": "l-en",
+    "text": "Preparing to Ship",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 11
+   },
+   {
+    "cls": "l-en",
+    "text": "Shipped",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 11
+   },
+   {
+    "cls": "l-en",
+    "text": "Delivered",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 11
+   },
+   {
+    "cls": "l-en",
+    "text": "No AWB has been issued for this order ye",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.56,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Ships to",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 14
+   },
+   {
+    "cls": "l-en",
+    "text": "Delivers",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 14
+   },
+   {
+    "cls": "l-en",
+    "text": "Order number",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 14
+   },
+   {
+    "cls": "l-en",
+    "text": "You can change or cancel it until we sta",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 12
+   }
+  ],
+  "/pages/addresses?view=oka-add-address": [
+   {
+    "cls": "l-en",
+    "text": "Full name",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Mobile number",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Area / city",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Street address",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Building, floor, apartment",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Nearby landmark (optional)",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Governorate",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Address type",
+    "color": "rgba(110, 110, 115, 0.95)",
+    "ratio": 4.23,
+    "need": 4.5,
+    "size": 12.5
+   }
+  ],
+  "/pages/support": [
+   {
+    "cls": "l-en",
+    "text": "Cairo, Giza and Alexandria: 1–2 days. De",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "The same as our website: Cairo, Giza and",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "nums",
+    "text": "/",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 60",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 36",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 70",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 46",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 80",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 56",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "EGP 300",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Cash on delivery. Please have the exact ",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Yes, from the Orders tab, until it has b",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "You earn 1 point for every EGP of produc",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   },
+   {
+    "cls": "l-en",
+    "text": "Message us on WhatsApp within 48 hours w",
+    "color": "rgba(110, 110, 115, 0.7)",
+    "ratio": 2.69,
+    "need": 4.5,
+    "size": 13.5
+   }
+  ],
+  "/search?q=hookah": [
+   {
+    "cls": "count",
+    "text": "11 products",
+    "color": "rgba(110, 110, 115, 0.5)",
+    "ratio": 1.95,
+    "need": 4.5,
+    "size": 12.5
+   }
+  ]
+ },
+ "darkPref": {
+  "light": {
+   "body": "rgb(245, 245, 247)",
+   "app": "radial-gradient(110px at 108% -80px, rgba(255, 124, 48, 0.14",
+   "ink": "rgb(29, 29, 31)",
+   "colorScheme": "normal",
+   "metaColorScheme": null
+  },
+  "dark": {
+   "body": "rgb(245, 245, 247)",
+   "app": "radial-gradient(110px at 108% -80px, rgba(255, 124, 48, 0.14",
+   "ink": "rgb(29, 29, 31)",
+   "colorScheme": "normal",
+   "metaColorScheme": null
+  }
+ },
+ "forceDark": "screenshots mode-forcedark-*.png",
+ "forcedColors": {
+  "/": {
+   "chips": [],
+   "iconBtns": [
+    {
+     "cls": "circle-34 press s94",
+     "border": "solid",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    }
+   ],
+   "forcedRules": false
+  },
+  "/collections/oka-cobra": {
+   "chips": [
+    {
+     "cls": "chip dark",
+     "bg": "rgba(255, 255, 255, 0)",
+     "border": "solid 1px",
+     "color": "rgb(0, 0, 0)"
+    },
+    {
+     "cls": "chip",
+     "bg": "rgba(255, 255, 255, 0.06)",
+     "border": "solid 1px",
+     "color": "rgb(0, 0, 0)"
+    },
+    {
+     "cls": "chip",
+     "bg": "rgba(255, 255, 255, 0.06)",
+     "border": "solid 1px",
+     "color": "rgb(0, 0, 0)"
+    }
+   ],
+   "iconBtns": [
+    {
+     "cls": "circle-34 press s94",
+     "border": "solid",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "coll-back flip",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    },
+    {
+     "cls": "heart-btn",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": "none"
+    },
+    {
+     "cls": "side-close",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "side-lang",
+     "border": "none"
+    }
+   ],
+   "forcedRules": false
+  },
+  "/products/oka-cobra": {
+   "chips": [],
+   "iconBtns": [
+    {
+     "cls": "circle-34 press s94",
+     "border": "solid",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "circle-38 flip",
+     "border": "solid",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "circle-38",
+     "border": "solid",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "side-close",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "side-lang",
+     "border": "none"
+    }
+   ],
+   "forcedRules": false
+  },
+  "/cart": {
+   "chips": [],
+   "iconBtns": [
+    {
+     "cls": "circle-34 press s94",
+     "border": "solid",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "side-close",
+     "border": "none",
+     "svgStroke": "currentColor",
+     "svgFill": null
+    },
+    {
+     "cls": "side-lang",
+     "border": "none"
+    }
+   ],
+   "forcedRules": false
+  }
+ },
+ "zoom200-phone-ar": {
+  "/": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/collections/oka-cobra": {
+   "docOverflow": false,
+   "oov": [
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > button.gcard-add",
+     "left": -34,
+     "right": 78,
+     "text": "عبيلي فالشنطة"
+    },
+    {
+     "sel": "div.gcard-body > div.gcard-row > button.gcard-add > span",
+     "left": -22,
+     "right": 66,
+     "text": "عبيلي فالشنطة"
+    }
+   ],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/products/oka-cobra": {
+   "docOverflow": false,
+   "oov": [
+    {
+     "sel": "div#shopify-section-template--191458214186__main > div.buy-bar > button.cta.glow",
+     "left": -15,
+     "right": 113,
+     "text": "عبيلي فالشنطة\n١٨٩ ج.م"
+    }
+   ],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/cart": {
+   "docOverflow": false,
+   "oov": [
+    {
+     "sel": "div.line > div.line-body > div.line-foot > span.line-total",
+     "left": -19,
+     "right": 2,
+     "text": "١٦٩ ج.م"
+    },
+    {
+     "sel": "div.line > div.line-body > div.line-foot > span.line-total",
+     "left": -19,
+     "right": 2,
+     "text": "٩٨ ج.م"
+    }
+   ],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/checkout-review": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/orders?order=%239000101": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/addresses?view=oka-add-address": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/support": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/search?q=hookah": {
+   "docOverflow": false,
+   "oov": [
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > div.card-qty.is-grid",
+     "left": -24,
+     "right": 78,
+     "text": "–\n١\n+"
+    },
+    {
+     "sel": "div.gcard-body > div.gcard-row > div.card-qty.is-grid > button",
+     "left": -24,
+     "right": 14,
+     "text": "+"
+    },
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > button.gcard-add",
+     "left": -34,
+     "right": 78,
+     "text": "عبيلي فالشنطة"
+    },
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > button.gcard-add",
+     "left": -34,
+     "right": 78,
+     "text": "عبيلي فالشنطة"
+    }
+   ],
+   "clipped": [],
+   "lock": "none"
+  }
+ },
+ "zoom200-phone-en": {
+  "/": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/collections/oka-cobra": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/products/oka-cobra": {
+   "docOverflow": false,
+   "oov": [
+    {
+     "sel": "div.snap-pg.pdp-top > div.pdp-card > div.qty-row > div.stepper",
+     "left": 94,
+     "right": 212,
+     "text": "–\n1\n+"
+    },
+    {
+     "sel": "div.pdp-card > div.qty-row > div.stepper > button.step-btn",
+     "left": 174,
+     "right": 212,
+     "text": "+"
+    }
+   ],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/cart": {
+   "docOverflow": false,
+   "oov": [
+    {
+     "sel": "div.line > div.line-body > div.line-foot > span.line-total",
+     "left": 193,
+     "right": 219,
+     "text": "EGP 169"
+    },
+    {
+     "sel": "div.line > div.line-body > div.line-foot > span.line-total",
+     "left": 193,
+     "right": 219,
+     "text": "EGP 98"
+    }
+   ],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/checkout-review": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/orders?order=%239000101": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/addresses?view=oka-add-address": {
+   "docOverflow": false,
+   "oov": [
+    {
+     "sel": "div.screen.fade-in > div.hdr > div.hdr-title > span",
+     "left": 60,
+     "right": 204,
+     "text": "Add new address"
+    }
+   ],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/support": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/search?q=hookah": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  }
+ },
+ "zoom200-desk-ar": {
+  "/": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/collections/oka-cobra": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/products/oka-cobra": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/cart": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/checkout-review": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/orders?order=%239000101": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/addresses?view=oka-add-address": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/support": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/search?q=hookah": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  }
+ },
+ "zoom200-desk-en": {
+  "/": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/collections/oka-cobra": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/products/oka-cobra": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/cart": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/checkout-review": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/orders?order=%239000101": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/addresses?view=oka-add-address": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/pages/support": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  },
+  "/search?q=hookah": {
+   "docOverflow": false,
+   "oov": [],
+   "clipped": [],
+   "lock": "none"
+  }
+ },
+ "textScale200-ar": {
+  "/": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/collections/oka-cobra": {
+   "docOverflow": false,
+   "oov": [
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > button.gcard-add",
+     "left": -23,
+     "right": 175,
+     "text": "عبيلي فالشنطة"
+    },
+    {
+     "sel": "div.gcard-body > div.gcard-row > button.gcard-add > span",
+     "left": -11,
+     "right": 163,
+     "text": "عبيلي فالشنطة"
+    }
+   ],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/products/oka-cobra": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/cart": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 6
+  },
+  "/pages/checkout-review": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/pages/orders?order=%239000101": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/pages/addresses?view=oka-add-address": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/pages/support": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/search?q=hookah": {
+   "docOverflow": false,
+   "oov": [
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > button.gcard-add",
+     "left": -23,
+     "right": 175,
+     "text": "عبيلي فالشنطة"
+    },
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > button.gcard-add",
+     "left": -23,
+     "right": 175,
+     "text": "عبيلي فالشنطة"
+    },
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > button.gcard-add",
+     "left": -23,
+     "right": 175,
+     "text": "عبيلي فالشنطة"
+    },
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > button.gcard-add",
+     "left": -23,
+     "right": 175,
+     "text": "عبيلي فالشنطة"
+    },
+    {
+     "sel": "div.gcard > div.gcard-body > div.gcard-row > button.gcard-add",
+     "left": -23,
+     "right": 175,
+     "text": "عبيلي فالشنطة"
+    }
+   ],
+   "clippedHard": [],
+   "clippedCount": 2
+  }
+ },
+ "defaultFont32-ar": {
+  "title": "21px",
+  "body": "32px",
+  "pxRules": 293,
+  "remRules": 0
+ },
+ "textScale200-en": {
+  "/": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/collections/oka-cobra": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/products/oka-cobra": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 2
+  },
+  "/cart": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 7
+  },
+  "/pages/checkout-review": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/pages/orders?order=%239000101": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/pages/addresses?view=oka-add-address": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/pages/support": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 0
+  },
+  "/search?q=hookah": {
+   "docOverflow": false,
+   "oov": [],
+   "clippedHard": [],
+   "clippedCount": 4
+  }
+ },
+ "defaultFont32-en": {
+  "title": "21px",
+  "body": "32px",
+  "pxRules": 293,
+  "remRules": 0
+ },
+ "fonts": {
+  "fontRequests": [],
+  "h1PlatformFonts": [
+   {
+    "familyName": "DejaVu Sans",
+    "postScriptName": "DejaVuSans",
+    "isCustomFont": false,
+    "glyphCount": 9
+   },
+   {
+    "familyName": "Inter ExtraBold",
+    "postScriptName": "Inter-ExtraBold",
+    "isCustomFont": false,
+    "glyphCount": 1
+   }
+  ],
+  "stack": "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"SF Pro Display\", \"SF Arabic\", \"Segoe UI\", Roboto, \"Noto Sans Arabic\", \"Helvetica Neue\", Arial, sans-serif"
+ }
+}

@@ -1,0 +1,116 @@
+{
+ "reorder": {
+  "order": "#9000105",
+  "reorderVisible": true,
+  "orderLines": [],
+  "cartAfter3Taps": [
+   [
+    "the-hexa-party",
+    2
+   ]
+  ],
+  "url": "http://localhost:9440/cart"
+ },
+ "phones": [
+  {
+   "phone": "01012345678",
+   "phoneRejected": false,
+   "alert": "",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  },
+  {
+   "phone": "+201012345678",
+   "phoneRejected": false,
+   "alert": "",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  },
+  {
+   "phone": "00201012345678",
+   "phoneRejected": true,
+   "alert": "Missing details Please add: a valid mobile number OK",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  },
+  {
+   "phone": "٠١٠١٢٣٤٥٦٧٨",
+   "phoneRejected": true,
+   "alert": "Missing details Please add: a valid mobile number OK",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  },
+  {
+   "phone": "0100 123 4567",
+   "phoneRejected": false,
+   "alert": "",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  },
+  {
+   "phone": "0100-123-4567",
+   "phoneRejected": false,
+   "alert": "",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  },
+  {
+   "phone": "  01012345678  ",
+   "phoneRejected": false,
+   "alert": "",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  },
+  {
+   "phone": "+20 100 123 4567",
+   "phoneRejected": false,
+   "alert": "",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  },
+  {
+   "phone": "0101234567",
+   "phoneRejected": true,
+   "alert": "Missing details Please add: a valid mobile number OK",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  },
+  {
+   "phone": "01912345678",
+   "phoneRejected": true,
+   "alert": "Missing details Please add: a valid mobile number OK",
+   "fieldsFound": {
+    "street": true,
+    "city": true,
+    "phone": true
+   }
+  }
+ ]
+}

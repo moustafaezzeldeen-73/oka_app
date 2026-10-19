@@ -29,9 +29,9 @@ for (const device of ALL_DEVICES) for (const locale of ['ar', 'en']) for (const 
     return { status: ok ? 'PASS' : 'FAIL', note: JSON.stringify(res) };
   });
   await step(rec, { id: 'HM-3', scenario: 'Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)', ctx }, async () => {
-    const shown = await pg.evaluate(() => [...document.querySelectorAll('[data-feed] .page[data-i]')].map((p) => (p.querySelector('a[href^="/collections/"]') || {}).getAttribute?.('href')));
-    const want = ['hookahs', 'hoses', 'coal', 'bowls'];
-    const missing = want.filter((h) => !shown.some((x) => x && x.includes(`/collections/${h}`)));
+    const shown = await pg.evaluate(() => [...document.querySelectorAll('[data-feed] .page[data-i] .page-title .l-en')].map((e) => e.textContent.trim()));
+    const titles = { hookahs: 'OKA Hookahs', hoses: 'Hoses', coal: 'Coal', bowls: 'Bowls' };
+    const missing = Object.keys(titles).filter((h) => !shown.some((x) => new RegExp(`^(oka )?${h}$`, 'i').test(x)));
     return { status: missing.length ? 'FAIL' : 'PASS', note: `collection pages link to: ${JSON.stringify(shown)}; setting collections absent from feed: ${missing.join(', ')} (SI-02 ${missing.length === 4 ? 'CONFIRMED' : 'partly'})` };
   });
   await step(rec, { id: 'HM-4', scenario: 'Every feed link (banners, offer cards, collection titles) resolves 200', ctx }, async () => {
@@ -46,9 +46,11 @@ for (const device of ALL_DEVICES) for (const locale of ['ar', 'en']) for (const 
     await pg.evaluate(() => { const f = document.querySelector('[data-feed]'); const r = document.querySelector('.rail.offers'); const pg = r.closest('.page'); f.scrollTo({ top: pg.offsetTop }); });
     await sleep(800);
     const slots = await pg.evaluate(() => [...document.querySelectorAll('.rail.offers [data-slot]')].map((s) => { const r = s.getBoundingClientRect(); return { active: s.classList.contains('active'), l: Math.round(r.left), r: Math.round(r.right), w: innerWidth }; }));
-    const second = pg.locator('.rail.offers [data-slot]').nth(1);
     const fully = slots[1] && slots[1].l >= 0 && slots[1].r <= slots[1].w;
-    await second.locator('.offer-cta').click({ force: true });
+    // tap the visible sliver of the side card (no scrollIntoView)
+    const sx = slots[1].l < 0 ? Math.max(2, slots[1].r / 2) : (slots[1].l + slots[1].w) / 2;
+    const sb = await pg.locator('.rail.offers [data-slot]').nth(1).boundingBox();
+    await pg.mouse.click(sx, sb.y + sb.height * 0.85);
     await sleep(900);
     const after = await pg.evaluate(() => ({ url: location.pathname, active: [...document.querySelectorAll('.rail.offers [data-slot]')].map((s) => s.classList.contains('active')) }));
     const c1 = await cartJs(s);
@@ -101,20 +103,20 @@ for (const device of ALL_DEVICES) for (const locale of ['ar', 'en']) for (const 
   }
   await step(rec, { id: 'HM-9', scenario: 'Product card: single tap opens PDP after 280ms', ctx }, async () => {
     await clearCart(s); await s.goto('/', { settle: 800 });
-    await pg.evaluate(() => { const f = document.querySelector('[data-feed]'); const p = document.querySelector('.page[data-i="0"]'); f.scrollTo({ top: p.offsetTop }); });
+    await pg.evaluate(() => { const f = document.querySelector('[data-feed]'); const p = document.querySelector('.page[data-i="1"]'); f.scrollTo({ top: p.offsetTop }); });
     await sleep(700);
-    const card = pg.locator('.page[data-i="0"] [data-slot].active [data-tap]').first();
+    const card = pg.locator('.page[data-i="1"] [data-slot].active [data-tap]').first();
     const href = await card.getAttribute('href');
-    await Promise.all([pg.waitForURL(`**${href}`, { timeout: 5000 }).catch(() => {}), card.click({ position: { x: 30, y: 30 } })]);
+    await Promise.all([pg.waitForURL(`**${href}`, { timeout: 5000 }).catch(() => {}), card.click({ position: { x: 100, y: 110 } })]);
     return { status: pg.url().includes(href) ? 'PASS' : 'FAIL', note: `card href=${href} landed=${pg.url()}` };
   });
   await step(rec, { id: 'HM-10', scenario: 'Product card: double tap adds to cart (no navigation)', ctx }, async () => {
     await clearCart(s); await s.goto('/', { settle: 800 });
-    await pg.evaluate(() => { const f = document.querySelector('[data-feed]'); const p = document.querySelector('.page[data-i="0"]'); f.scrollTo({ top: p.offsetTop }); });
+    await pg.evaluate(() => { const f = document.querySelector('[data-feed]'); const p = document.querySelector('.page[data-i="1"]'); f.scrollTo({ top: p.offsetTop }); });
     await sleep(700);
-    const card = pg.locator('.page[data-i="0"] [data-slot].active [data-tap]').first();
+    const card = pg.locator('.page[data-i="1"] [data-slot].active [data-tap]').first();
     const vid = await card.getAttribute('data-variant');
-    await card.dblclick({ position: { x: 30, y: 30 } });
+    await card.dblclick({ position: { x: 100, y: 110 } });
     await sleep(1200);
     const c = await cartJs(s);
     const q = c.items.filter((i) => String(i.variant_id) === vid).reduce((a, i) => a + i.quantity, 0);
@@ -122,9 +124,9 @@ for (const device of ALL_DEVICES) for (const locale of ['ar', 'en']) for (const 
   });
   await step(rec, { id: 'HM-11', scenario: 'Card "Add" turns into −/+; + and − update the cart; − to 0 restores Add', ctx }, async () => {
     await clearCart(s); await s.goto('/', { settle: 800 });
-    await pg.evaluate(() => { const f = document.querySelector('[data-feed]'); const p = document.querySelector('.page[data-i="0"]'); f.scrollTo({ top: p.offsetTop }); });
+    await pg.evaluate(() => { const f = document.querySelector('[data-feed]'); const p = document.querySelector('.page[data-i="1"]'); f.scrollTo({ top: p.offsetTop }); });
     await sleep(700);
-    const slot = pg.locator('.page[data-i="0"] [data-slot].active').first();
+    const slot = pg.locator('.page[data-i="1"] [data-slot].active').first();
     const add = slot.locator('.add-btn[data-add]');
     const vid = await add.getAttribute('data-add');
     await add.click(); await sleep(1200);
@@ -142,10 +144,10 @@ for (const device of ALL_DEVICES) for (const locale of ['ar', 'en']) for (const 
   });
   await step(rec, { id: 'HM-12', scenario: 'F-04: card shows −/+ on page load for a product already in the cart', ctx }, async () => {
     await clearCart(s);
-    const vid = await pg.evaluate(() => document.querySelector('.page[data-i="0"] .add-btn[data-add]').dataset.add);
+    const vid = await pg.evaluate(() => document.querySelector('.page[data-i="1"] .add-btn[data-add]').dataset.add);
     await pg.evaluate(async (vid) => fetch('/cart/add.js', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: [{ id: Number(vid), quantity: 2 }] }) }), vid);
     await s.goto('/', { settle: 1500 });
-    const st = await pg.evaluate((vid) => { const b = document.querySelector(`.page[data-i="0"] .add-btn[data-add="${vid}"]`); return { addHidden: b.hidden, stepper: Boolean(b.nextElementSibling?.matches('.card-qty')), badge: document.querySelector('[data-cart-count]')?.textContent }; }, vid);
+    const st = await pg.evaluate((vid) => { const b = document.querySelector(`.page[data-i="1"] .add-btn[data-add="${vid}"]`); return { addHidden: b.hidden, stepper: Boolean(b.nextElementSibling?.matches('.card-qty')), badge: document.querySelector('[data-cart-count]')?.textContent }; }, vid);
     await s.shot(`home-F04-reload-${tag}`);
     return { status: st.addHidden && st.stepper ? 'PASS' : 'FAIL', note: `after reload with qty 2 in cart: ${JSON.stringify(st)} → F-04 ${st.stepper ? 'REFUTED' : 'CONFIRMED'}` };
   });
@@ -200,7 +202,7 @@ for (const device of ALL_DEVICES) for (const locale of ['ar', 'en']) for (const 
     await sleep(800);
     const top0 = await pg.evaluate(() => document.querySelector('[data-feed]').scrollTop);
     const card = pg.locator('.page[data-i="2"] [data-slot].active [data-tap]').first();
-    await Promise.all([pg.waitForNavigation().catch(() => {}), card.click({ position: { x: 30, y: 30 } })]);
+    await Promise.all([pg.waitForNavigation().catch(() => {}), card.click({ position: { x: 100, y: 110 } })]);
     await sleep(500);
     await pg.goBack({ waitUntil: 'load' }); await sleep(2000);
     const top1 = await pg.evaluate(() => document.querySelector('[data-feed]').scrollTop);
