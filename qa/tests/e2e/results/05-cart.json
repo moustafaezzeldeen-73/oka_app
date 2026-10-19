@@ -1350,5 +1350,13 @@
     "status": "PASS",
     "note": "after delete-swipe items=1; wishlist after save-swipe={\"premium-1-5-m-hose\":true}",
     "at": "2026-10-19T11:59:31.142Z"
+  },
+  {
+    "id": "CT-9",
+    "scenario": "\"Change\" sheet swaps a bowl flavour for a same-price sibling",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "options=12; cart now tobacco-bowls-cantaloup-12g×2",
+    "at": "2026-10-19T11:59:35.155Z"
   }
 ]
