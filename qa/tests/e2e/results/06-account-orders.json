@@ -1,0 +1,130 @@
+[
+  {
+    "id": "OR-1",
+    "scenario": "Orders list: 6 orders with states; tap opens detail (pushState); Back returns to list",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "cards=[\"#9000101:Processingبنراجعه\",\"#9000102:خرجت للتوصيل مع المندوب\",\"#9000103:اتسلمت\",\"#9000104:Cancelledملغي\",\"#9000105:خرجت للتوصيل مع المندوب\",\"#9000106:Processingبنراجعه\"] detail={\"url\":\"?order=%239000102\",\"vis\":[\"#9000102\"],\"list\":false} back={\"url\":\"\",\"list\":true} forward=[\"#9000102\"] ",
+    "at": "2026-10-19T11:28:59.772Z"
+  },
+  {
+    "id": "OR-2",
+    "scenario": "Detail header back button returns to list (in-page)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"url\":\"/pages/orders\",\"list\":true}",
+    "at": "2026-10-19T11:29:01.988Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"success\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"اتسلمت\",\"steps\":4,\"updates\":4,\"courier\":\"QA Courier\",\"wa\":\"https://wa.me/201000000009\",\"err\":null,\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:خرجت للتوصيل مع المندوب\",\"#9000103:اتسلمت\",\"#9000104:Cancelledملغي\",\"#9000105:خرجت للتوصيل مع المندوب\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:03.891Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"sse\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"اتسلمت\",\"steps\":4,\"updates\":4,\"courier\":\"QA Courier\",\"wa\":\"https://wa.me/201000000009\",\"err\":null,\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:خرجت للتوصيل مع المندوب\",\"#9000103:اتسلمت\",\"#9000104:Cancelledملغي\",\"#9000105:خرجت للتوصيل مع المندوب\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:05.594Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"empty\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:07.522Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"error401\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:09.239Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"error500\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:11.292Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"timeout\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:21.990Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"malformed\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:23.676Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"rpc-error\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:25.359Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"tool-error\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:27.044Z"
+  },
+  {
+    "id": "TR-1",
+    "scenario": "Order tracking (#9000102/#9000103 with AWB) — track_delivery mock \"cors\"",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"label\":\"Arrives in ١-٢ يوميوصل ١-٢ يوم\",\"steps\":3,\"updates\":0,\"courier\":null,\"wa\":null,\"err\":\"No updates for this order yet.مفيش تحديثات للطلب ده لسه.\",\"rate\":false} list=[\"#9000101:Processingبنراجعه\",\"#9000102:Preparing to Shipبيتجهز للشحن\",\"#9000103:Shippedاتشحن\",\"#9000104:Cancelledملغي\",\"#9000105:Shippedاتشحن\",\"#9000106:Processingبنراجعه\"] ",
+    "at": "2026-10-19T11:29:28.746Z"
+  },
+  {
+    "id": "OR-3",
+    "scenario": "Edit order #9000101 via item + : sheet opens with preset, quote, save → customer_update_order",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "steppers=4 sheet={\"txt\":\"عدّل الطلب #9000101 المنتجات OKA white ٣٣٨ ج.م – ٢ + Tobacco Bowls- Blue Cloud - 12g ٩٨ ج.م – ٢ + ＋ ضيف منتجات التوصيل اسم المستلم رقم الموبايل المحافظة اختار… القاهرة الجيزة ٦ أكتوبر حلوان الإسكندرية القليوبية الدقهلية دمياط الفيوم الإسماعيلية كفر الشيخ المنوفية بورسعيد السويس الشرقية البحيرة الغرب\",\"save\":\"احفظ التعديلات\",\"dim\":false} alert=\"\" calls=[\"track_delivery\",\"customer_get_order\",\"customer_quote_order\",\"customer_update_order\",\"track_delivery\"]",
+    "at": "2026-10-19T11:30:06.434Z"
+  },
+  {
+    "id": "OR-4",
+    "scenario": "Edit sheet: Add products picker (search, add, done → requote), − to 0, address field validation",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "picker results=2 rows=[\"OKA white ١٦٩ ج.م – ١ +\",\"Tobacco Bowls- Blue Cloud - 12g ٩٨ ج.م – ٢ +\",\"كماشة فحم ٣١ ج.م – ١ +\"] quotes=[\"customer_quote_order\"] caret after typing={\"focused\":\"name\",\"val\":\"QA Testerxy\",\"pos\":11} short-name msg=اكتب اسم المستلم saveDim=true",
+    "at": "2026-10-19T11:30:16.361Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"error500\": friendly alert, state",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "alert=\"مينفعش يتغيّر حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. تمام\" {\"disabled\":false,\"note\":null}",
+    "at": "2026-10-19T11:30:20.262Z"
+  },
+  {
+    "id": "OR-5",
+    "scenario": "Edit order when customer_get_order → \"timeout\": friendly alert, state",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "alert=\"مينفعش يتغيّر حصلت مشكلة وإحنا بنعدّل طلبك. جرّب تاني. تمام\" {\"disabled\":false,\"note\":null}",
+    "at": "2026-10-19T11:30:32.198Z"
+  }
+]

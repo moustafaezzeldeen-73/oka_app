@@ -1,6 +1,6 @@
 // Cart, discount codes, fees per zone, thresholds, checkout hand-off, checkout review.
 // Run: node qa/tests/e2e/05-cart.mjs
-import { session, recorder, step, problems, hasProblems, MOBILES, sleep, cartJs, clearCart, addVia, readJsonl, V } from './lib.mjs';
+import { session, recorder, step, problems, hasProblems, MOBILES, sleep, cartJs, clearCart, addVia, readJsonl, V, dismissRecSheet } from './lib.mjs';
 const rec = recorder('05-cart');
 const dig = (x) => Number(String(x ?? '').replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[^\d.-]/g, '')) || 0;
 const rowsOf = (s) => s.page.evaluate(() => [...document.querySelectorAll('.totals > *')].map((r) => r.innerText.replace(/\s+/g, ' ').trim()));
@@ -58,17 +58,33 @@ for (const device of [...MOBILES, 'Desktop 1440']) for (const locale of ['ar', '
     return { status: q === 6 ? 'PASS' : 'FAIL', note: `expected 6 after 5 fast +, cart=${q} shown=${shown}; after 8 fast − cart=${after} → F-02 ${q !== 6 ? 'CONFIRMED (taps lost)' : 'not reproduced'}` };
   });
   if (full) {
+    await step(rec, { id: 'CT-4b', scenario: 'F-02 with 400–900 ms server latency: five fast + taps then three fast − taps', ctx }, async () => {
+      await clearCart(s); await addVia(s, items([[V.mint, 1]]));
+      await s.goto('/cart', { settle: 1200 });
+      let n = 0;
+      await pg.route('**/cart/change.js', async (r) => { const d = [900, 400, 700, 450, 800, 500, 650, 420][n++ % 8]; await new Promise((x) => setTimeout(x, d)); await r.continue(); });
+      for (let i = 0; i < 5; i++) { await pg.locator(`.line[data-variant="${V.mint}"] [data-step="1"]`).click({ noWaitAfter: true, timeout: 2000 }).catch(() => {}); await sleep(120); }
+      await sleep(5000);
+      const q = (await cartJs(s)).items.find((i) => String(i.variant_id) === V.mint)?.quantity;
+      for (let i = 0; i < 3; i++) { await pg.locator(`.line[data-variant="${V.mint}"] [data-step="-1"]`).click({ noWaitAfter: true, timeout: 2000 }).catch(() => {}); await sleep(120); }
+      await sleep(5000);
+      const q2 = (await cartJs(s)).items.find((i) => String(i.variant_id) === V.mint)?.quantity;
+      const shown = await pg.locator(`.line[data-variant="${V.mint}"]`).getAttribute('data-qty').catch(() => null);
+      await pg.unroute('**/cart/change.js');
+      return { status: q === 6 && q2 === 3 ? 'PASS' : 'FAIL', note: `5 fast + (120 ms apart) → cart ${q} (expected 6); then 3 fast − → cart ${q2} (expected 3), shown ${shown} → F-02 ${q !== 6 || q2 !== 3 ? 'CONFIRMED' : 'not reproduced'}` };
+    });
     await step(rec, { id: 'CT-5', scenario: 'Card −/+ (home) fast taps are serialised (contrast with F-02)', ctx }, async () => {
       await clearCart(s); await s.goto('/collections/oka-parts', { settle: 900 });
       const btn = pg.locator(`.gcard-add[data-add="${HOSE}"]`);
       await btn.click(); await sleep(400);
-      await pg.locator('.rec-sheet [data-close]').click({ timeout: 1500 }).catch(() => {});
+      const sheet = await dismissRecSheet(s, 2500);
+      await sleep(300);
       await pg.locator('.added-bar').evaluate((e) => e.remove()).catch(() => {});
       const plus = pg.locator(`.card-qty[data-cq-variant="${HOSE}"] [data-cq="1"]`);
       for (let i = 0; i < 5; i++) await plus.click({ noWaitAfter: true }).catch(() => {});
       await sleep(3500);
       const q = (await cartJs(s)).items.find((i) => String(i.variant_id) === HOSE)?.quantity;
-      return { status: q === 6 ? 'PASS' : 'FAIL', note: `card stepper: expected 6, cart=${q}` };
+      return { status: q === 6 ? 'PASS' : 'FAIL', note: `card stepper: expected 6, cart=${q} (rec sheet shown=${sheet})` };
     });
     await step(rec, { id: 'CT-6', scenario: 'Server 422 on line change → alert with message, cart re-renders', ctx }, async () => {
       await clearCart(s); await addVia(s, items([[V.mint, 1]]));
@@ -193,7 +209,7 @@ for (const device of [...MOBILES, 'Desktop 1440']) for (const locale of ['ar', '
           const cf = dig(shipRow(await rowsOf(s)));
           await s.goto('/pages/checkout-review', { settle: 1500 });
           const rv = await pg.evaluate(() => [...document.querySelectorAll('[data-checkout-root] .spread')].map((r) => r.innerText.replace(/\s+/g, ' ')));
-          const rvShip = dig((rv.find((r) => /Shipping|الشحن/.test(r)) || ''));
+          const rvShip = dig((rv.find((r) => /^(Shipping|الشحن)/.test(r.trim())) || ''));
           out.push({ cart: cf, review: rvShip });
         }
         await s.shot(`checkout-review-${a.prov}-${tag}`, { fullPage: true });
