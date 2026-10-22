@@ -1,0 +1,18 @@
+{
+  "name": "oka-warehouse-app",
+  "version": "1.0.0",
+  "description": "OKA Egypt warehouse app — Shopify orders in, Bosta AWBs out.",
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

@@ -1,0 +1,1 @@
+{"ranking_threshold":70,"cod_fee_multiplier":2.0,"step_ranking":3,"step_multiplier":0.1,"bounds":{"ranking_min":50,"ranking_max":90,"multiplier_min":1.2,"multiplier_max":3.0},"target_false_negative_rate":0.15,"target_false_positive_rate":0.40,"min_sample_size":20,"evaluation_window":100,"min_age_days_before_outcome_check":4,"last_updated":null,"adjustment_count":0}
