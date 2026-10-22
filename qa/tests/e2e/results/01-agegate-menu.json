@@ -1,0 +1,1218 @@
+[
+  {
+    "id": "AG-1",
+    "scenario": "Age gate shown on first visit to /",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate count=1, title=\"عندك ١٨ سنة أو أكتر؟\"",
+    "at": "2026-10-15T10:29:48.504Z"
+  },
+  {
+    "id": "AG-2",
+    "scenario": "Age gate: is there a decline (\"No\"/\"under 18\") path?",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "buttons=[\"أيوه، عندي ١٨+\",\"English\"]; Escape leaves gate=true. No decline/exit option exists.",
+    "at": "2026-10-15T10:29:48.742Z"
+  },
+  {
+    "id": "AG-3",
+    "scenario": "Age gate blocks interaction / keyboard focus behind it",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "focus escaped gate on 6/6 Tab presses; role=null; covers viewport=true",
+    "at": "2026-10-15T10:29:48.946Z"
+  },
+  {
+    "id": "AG-4",
+    "scenario": "Age gate language button toggles language",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "ar -> en/ltr -> ar",
+    "at": "2026-10-15T10:29:49.378Z"
+  },
+  {
+    "id": "AG-5",
+    "scenario": "Accept gate → hidden, stored, not shown after reload",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "after click=0, oka.age=true, after reload=0",
+    "at": "2026-10-15T10:29:50.276Z"
+  },
+  {
+    "id": "AG-6",
+    "scenario": "localStorage cleared → gate returns",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate on /collections after clearing=1",
+    "at": "2026-10-15T10:29:51.323Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /products/oka-cobra",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:29:53.491Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /products/oka-cloud-white-hookah?view=ar",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:30:00.460Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /cart",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:30:01.472Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /pages/orders",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:30:02.794Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /search?q=x",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:30:04.224Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /nope-404",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:30:05.319Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /password",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=0, theme JS loaded=false",
+    "at": "2026-10-15T10:30:06.081Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /policies/refund-policy",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:30:07.308Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /checkout",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "gate=0, theme JS loaded=false",
+    "at": "2026-10-15T10:30:08.282Z"
+  },
+  {
+    "id": "AG-8",
+    "scenario": "Gate with storage blocked (localStorage throws) — gate shows every page, accept still dismisses",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "shown=1 dismissed=true shown again next page=1 (expected with blocked storage) errors=[]",
+    "at": "2026-10-15T10:30:10.558Z"
+  },
+  {
+    "id": "MN-1",
+    "scenario": "Side menu opens from header ☰, aria-expanded, inert removed, focus on panel",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"open\":true,\"inert\":false,\"exp\":[\"true\",\"true\"],\"focus\":\"side-menu\",\"links\":[\"/\",\"/collections\",\"/search\",\"/cart\",\"/pages/orders\",\"/pages/account\",\"/pages/loyalty\",\"/pages/wishlist\",\"/pages/support\"]}",
+    "at": "2026-10-15T10:30:44.364Z"
+  },
+  {
+    "id": "MN-2",
+    "scenario": "Side menu closes with Escape and returns focus to opener",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"open\":false,\"inert\":true,\"focusMenuOpen\":true}",
+    "at": "2026-10-15T10:30:44.686Z"
+  },
+  {
+    "id": "MN-3",
+    "scenario": "Side menu closes via scrim tap and via ✕",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "open after scrim=false, after ✕=false",
+    "at": "2026-10-15T10:30:46.656Z"
+  },
+  {
+    "id": "MN-4",
+    "scenario": "Side menu: Tab cannot reach links while closed (inert)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "menu elements focused 0/25",
+    "at": "2026-10-15T10:30:47.270Z"
+  },
+  {
+    "id": "MN-5",
+    "scenario": "Side menu: swipe towards edge closes (touch)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "open after swipe=false",
+    "at": "2026-10-15T10:30:48.154Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → / (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "active link: just closes (open=false)",
+    "at": "2026-10-15T10:30:50.041Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /collections (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /collections; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:30:53.442Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /search (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /search; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:30:56.539Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /cart (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /cart; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:30:59.232Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/orders (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/orders; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:31:02.258Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/account (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/account; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:31:05.553Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/loyalty (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/loyalty; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:31:08.719Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/wishlist (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/wishlist; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:31:12.171Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/support (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/support; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:31:15.516Z"
+  },
+  {
+    "id": "MN-7",
+    "scenario": "Menu handle (edge) opens the menu on inner pages",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "handle visible=true, open=true",
+    "at": "2026-10-15T10:31:16.994Z"
+  },
+  {
+    "id": "LG-1",
+    "scenario": "Header language switch toggles dir/lang, label, persists across navigation",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "before=ar/rtl/EN after=en/ltr/ع/en next page=en; on /ar/ URL=ar (F-07: CONFIRMED: English does not stick on /ar/ URLs)",
+    "at": "2026-10-15T10:31:20.282Z"
+  },
+  {
+    "id": "AG-1",
+    "scenario": "Age gate shown on first visit to /",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate count=1, title=\"Are you 18 or older?\"",
+    "at": "2026-10-15T10:31:22.067Z"
+  },
+  {
+    "id": "AG-2",
+    "scenario": "Age gate: is there a decline (\"No\"/\"under 18\") path?",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "buttons=[\"Yes, I’m 18+\",\"العربية\"]; Escape leaves gate=true. No decline/exit option exists.",
+    "at": "2026-10-15T10:31:22.110Z"
+  },
+  {
+    "id": "AG-3",
+    "scenario": "Age gate blocks interaction / keyboard focus behind it",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "focus escaped gate on 6/6 Tab presses; role=null; covers viewport=true",
+    "at": "2026-10-15T10:31:22.181Z"
+  },
+  {
+    "id": "AG-4",
+    "scenario": "Age gate language button toggles language",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "en -> ar/rtl -> en",
+    "at": "2026-10-15T10:31:22.537Z"
+  },
+  {
+    "id": "AG-5",
+    "scenario": "Accept gate → hidden, stored, not shown after reload",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "after click=0, oka.age=true, after reload=0",
+    "at": "2026-10-15T10:31:23.359Z"
+  },
+  {
+    "id": "AG-6",
+    "scenario": "localStorage cleared → gate returns",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate on /collections after clearing=1",
+    "at": "2026-10-15T10:31:23.989Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /products/oka-cobra",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:31:24.808Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /products/oka-cloud-white-hookah?view=ar",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:31:27.051Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /cart",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:31:27.817Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /pages/orders",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:31:28.635Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /search?q=x",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:31:29.486Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /nope-404",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:31:30.294Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /password",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=0, theme JS loaded=false",
+    "at": "2026-10-15T10:31:30.968Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /policies/refund-policy",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=1, theme JS loaded=true",
+    "at": "2026-10-15T10:31:31.783Z"
+  },
+  {
+    "id": "AG-7",
+    "scenario": "Deep link with no prior visit shows gate: /checkout",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "gate=0, theme JS loaded=false",
+    "at": "2026-10-15T10:31:32.450Z"
+  },
+  {
+    "id": "AG-8",
+    "scenario": "Gate with storage blocked (localStorage throws) — gate shows every page, accept still dismisses",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "shown=1 dismissed=true shown again next page=1 (expected with blocked storage) errors=[]",
+    "at": "2026-10-15T10:31:34.251Z"
+  },
+  {
+    "id": "MN-1",
+    "scenario": "Side menu opens from header ☰, aria-expanded, inert removed, focus on panel",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"open\":true,\"inert\":false,\"exp\":[\"true\",\"true\"],\"focus\":\"side-menu\",\"links\":[\"/\",\"/collections\",\"/search\",\"/cart\",\"/pages/orders\",\"/pages/account\",\"/pages/loyalty\",\"/pages/wishlist\",\"/pages/support\"]}",
+    "at": "2026-10-15T10:32:06.560Z"
+  },
+  {
+    "id": "MN-2",
+    "scenario": "Side menu closes with Escape and returns focus to opener",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"open\":false,\"inert\":true,\"focusMenuOpen\":true}",
+    "at": "2026-10-15T10:32:06.877Z"
+  },
+  {
+    "id": "MN-3",
+    "scenario": "Side menu closes via scrim tap and via ✕",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "open after scrim=false, after ✕=false",
+    "at": "2026-10-15T10:32:08.692Z"
+  },
+  {
+    "id": "MN-4",
+    "scenario": "Side menu: Tab cannot reach links while closed (inert)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "menu elements focused 0/25",
+    "at": "2026-10-15T10:32:09.020Z"
+  },
+  {
+    "id": "MN-5",
+    "scenario": "Side menu: swipe towards edge closes (touch)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "open after swipe=false",
+    "at": "2026-10-15T10:32:09.876Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → / (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "active link: just closes (open=false)",
+    "at": "2026-10-15T10:32:11.575Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /collections (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "landed /collections; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:32:15.099Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /search (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "landed /search; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:32:17.348Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /cart (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "landed /cart; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:32:19.422Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/orders (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/orders; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:32:21.874Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/account (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/account; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:32:24.253Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/loyalty (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/loyalty; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:32:26.454Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/wishlist (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/wishlist; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:32:28.867Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/support (\"\") navigates, active state, menu closed after Back",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/support; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:32:31.463Z"
+  },
+  {
+    "id": "MN-7",
+    "scenario": "Menu handle (edge) opens the menu on inner pages",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "handle visible=true, open=true",
+    "at": "2026-10-15T10:32:32.602Z"
+  },
+  {
+    "id": "LG-1",
+    "scenario": "Header language switch toggles dir/lang, label, persists across navigation",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "before=en/ltr/ع after=ar/rtl/EN/ar next page=ar; on /ar/ URL=ar (F-07: n/a)",
+    "at": "2026-10-15T10:32:35.648Z"
+  },
+  {
+    "id": "AG-1",
+    "scenario": "Age gate shown on first visit to /",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "gate count=1, title=\"عندك ١٨ سنة أو أكتر؟\"",
+    "at": "2026-10-15T10:32:37.808Z"
+  },
+  {
+    "id": "AG-2",
+    "scenario": "Age gate: is there a decline (\"No\"/\"under 18\") path?",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "buttons=[\"أيوه، عندي ١٨+\",\"English\"]; Escape leaves gate=true. No decline/exit option exists.",
+    "at": "2026-10-15T10:32:37.881Z"
+  },
+  {
+    "id": "AG-3",
+    "scenario": "Age gate blocks interaction / keyboard focus behind it",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "focus escaped gate on 6/6 Tab presses; role=null; covers viewport=true",
+    "at": "2026-10-15T10:32:37.938Z"
+  },
+  {
+    "id": "AG-4",
+    "scenario": "Age gate language button toggles language",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "ar -> en/ltr -> ar",
+    "at": "2026-10-15T10:32:38.223Z"
+  },
+  {
+    "id": "AG-5",
+    "scenario": "Accept gate → hidden, stored, not shown after reload",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "after click=0, oka.age=true, after reload=0",
+    "at": "2026-10-15T10:32:39.036Z"
+  },
+  {
+    "id": "AG-6",
+    "scenario": "localStorage cleared → gate returns",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "gate on /collections after clearing=1",
+    "at": "2026-10-15T10:32:39.753Z"
+  },
+  {
+    "id": "MN-1",
+    "scenario": "Side menu opens from header ☰, aria-expanded, inert removed, focus on panel",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"open\":true,\"inert\":false,\"exp\":[\"true\",\"true\"],\"focus\":\"side-menu\",\"links\":[\"/\",\"/collections\",\"/search\",\"/cart\",\"/pages/orders\",\"/pages/account\",\"/pages/loyalty\",\"/pages/wishlist\",\"/pages/support\"]}",
+    "at": "2026-10-15T10:33:12.112Z"
+  },
+  {
+    "id": "MN-2",
+    "scenario": "Side menu closes with Escape and returns focus to opener",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"open\":false,\"inert\":true,\"focusMenuOpen\":true}",
+    "at": "2026-10-15T10:33:12.431Z"
+  },
+  {
+    "id": "MN-3",
+    "scenario": "Side menu closes via scrim tap and via ✕",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "open after scrim=false, after ✕=false",
+    "at": "2026-10-15T10:33:14.143Z"
+  },
+  {
+    "id": "MN-4",
+    "scenario": "Side menu: Tab cannot reach links while closed (inert)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "menu elements focused 0/25",
+    "at": "2026-10-15T10:33:14.532Z"
+  },
+  {
+    "id": "MN-5",
+    "scenario": "Side menu: swipe towards edge closes (touch)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "open after swipe=false",
+    "at": "2026-10-15T10:33:15.372Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → / (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "active link: just closes (open=false)",
+    "at": "2026-10-15T10:33:17.034Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /collections (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "landed /collections; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:33:19.658Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /search (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "landed /search; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:33:21.835Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /cart (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "landed /cart; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:33:24.148Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/orders (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/orders; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:33:26.649Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/account (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/account; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:33:28.746Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/loyalty (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/loyalty; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:33:30.931Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/wishlist (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/wishlist; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:33:33.000Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/support (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/support; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:33:35.033Z"
+  },
+  {
+    "id": "MN-7",
+    "scenario": "Menu handle (edge) opens the menu on inner pages",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "handle visible=true, open=true",
+    "at": "2026-10-15T10:33:36.104Z"
+  },
+  {
+    "id": "LG-1",
+    "scenario": "Header language switch toggles dir/lang, label, persists across navigation",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "before=ar/rtl/EN after=en/ltr/ع/en next page=en; on /ar/ URL=ar (F-07: CONFIRMED: English does not stick on /ar/ URLs)",
+    "at": "2026-10-15T10:33:39.226Z"
+  },
+  {
+    "id": "AG-1",
+    "scenario": "Age gate shown on first visit to /",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "gate count=1, title=\"Are you 18 or older?\"",
+    "at": "2026-10-15T10:33:41.096Z"
+  },
+  {
+    "id": "AG-2",
+    "scenario": "Age gate: is there a decline (\"No\"/\"under 18\") path?",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "buttons=[\"Yes, I’m 18+\",\"العربية\"]; Escape leaves gate=true. No decline/exit option exists.",
+    "at": "2026-10-15T10:33:41.139Z"
+  },
+  {
+    "id": "AG-3",
+    "scenario": "Age gate blocks interaction / keyboard focus behind it",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "focus escaped gate on 6/6 Tab presses; role=null; covers viewport=true",
+    "at": "2026-10-15T10:33:41.173Z"
+  },
+  {
+    "id": "AG-4",
+    "scenario": "Age gate language button toggles language",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "en -> ar/rtl -> en",
+    "at": "2026-10-15T10:33:41.525Z"
+  },
+  {
+    "id": "AG-5",
+    "scenario": "Accept gate → hidden, stored, not shown after reload",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "after click=0, oka.age=true, after reload=0",
+    "at": "2026-10-15T10:33:42.344Z"
+  },
+  {
+    "id": "AG-6",
+    "scenario": "localStorage cleared → gate returns",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "gate on /collections after clearing=1",
+    "at": "2026-10-15T10:33:43.145Z"
+  },
+  {
+    "id": "MN-1",
+    "scenario": "Side menu opens from header ☰, aria-expanded, inert removed, focus on panel",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "{\"open\":true,\"inert\":false,\"exp\":[\"true\",\"true\"],\"focus\":\"side-menu\",\"links\":[\"/\",\"/collections\",\"/search\",\"/cart\",\"/pages/orders\",\"/pages/account\",\"/pages/loyalty\",\"/pages/wishlist\",\"/pages/support\"]}",
+    "at": "2026-10-15T10:34:15.292Z"
+  },
+  {
+    "id": "MN-2",
+    "scenario": "Side menu closes with Escape and returns focus to opener",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "{\"open\":false,\"inert\":true,\"focusMenuOpen\":true}",
+    "at": "2026-10-15T10:34:15.662Z"
+  },
+  {
+    "id": "MN-3",
+    "scenario": "Side menu closes via scrim tap and via ✕",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "open after scrim=false, after ✕=false",
+    "at": "2026-10-15T10:34:17.544Z"
+  },
+  {
+    "id": "MN-4",
+    "scenario": "Side menu: Tab cannot reach links while closed (inert)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "menu elements focused 0/25",
+    "at": "2026-10-15T10:34:18.026Z"
+  },
+  {
+    "id": "MN-5",
+    "scenario": "Side menu: swipe towards edge closes (touch)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "open after swipe=false",
+    "at": "2026-10-15T10:34:18.892Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → / (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "active link: just closes (open=false)",
+    "at": "2026-10-15T10:34:20.745Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /collections (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "landed /collections; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:34:23.055Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /search (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "landed /search; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:34:25.403Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /cart (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "landed /cart; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:34:27.649Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/orders (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/orders; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:34:29.749Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/account (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/account; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:34:31.932Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/loyalty (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/loyalty; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:34:34.126Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/wishlist (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/wishlist; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:34:36.280Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/support (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/support; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:34:38.448Z"
+  },
+  {
+    "id": "MN-7",
+    "scenario": "Menu handle (edge) opens the menu on inner pages",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "handle visible=true, open=true",
+    "at": "2026-10-15T10:34:39.468Z"
+  },
+  {
+    "id": "LG-1",
+    "scenario": "Header language switch toggles dir/lang, label, persists across navigation",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "before=en/ltr/ع after=ar/rtl/EN/ar next page=ar; on /ar/ URL=ar (F-07: n/a)",
+    "at": "2026-10-15T10:34:42.113Z"
+  },
+  {
+    "id": "AG-1",
+    "scenario": "Age gate shown on first visit to /",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "gate count=1, title=\"عندك ١٨ سنة أو أكتر؟\"",
+    "at": "2026-10-15T10:34:43.510Z"
+  },
+  {
+    "id": "AG-2",
+    "scenario": "Age gate: is there a decline (\"No\"/\"under 18\") path?",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "FAIL",
+    "note": "buttons=[\"أيوه، عندي ١٨+\",\"English\"]; Escape leaves gate=true. No decline/exit option exists.",
+    "at": "2026-10-15T10:34:43.630Z"
+  },
+  {
+    "id": "AG-3",
+    "scenario": "Age gate blocks interaction / keyboard focus behind it",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "FAIL",
+    "note": "focus escaped gate on 6/6 Tab presses; role=null; covers viewport=false",
+    "at": "2026-10-15T10:34:43.680Z"
+  },
+  {
+    "id": "AG-4",
+    "scenario": "Age gate language button toggles language",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "ar -> en/ltr -> ar",
+    "at": "2026-10-15T10:34:43.987Z"
+  },
+  {
+    "id": "AG-5",
+    "scenario": "Accept gate → hidden, stored, not shown after reload",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "after click=0, oka.age=true, after reload=0",
+    "at": "2026-10-15T10:34:44.922Z"
+  },
+  {
+    "id": "AG-6",
+    "scenario": "localStorage cleared → gate returns",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "gate on /collections after clearing=1",
+    "at": "2026-10-15T10:34:45.674Z"
+  },
+  {
+    "id": "MN-1",
+    "scenario": "Side menu opens from header ☰, aria-expanded, inert removed, focus on panel",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"open\":true,\"inert\":false,\"exp\":[\"true\",\"true\"],\"focus\":\"side-menu\",\"links\":[\"/\",\"/collections\",\"/search\",\"/cart\",\"/pages/orders\",\"/pages/account\",\"/pages/loyalty\",\"/pages/wishlist\",\"/pages/support\"]}",
+    "at": "2026-10-15T10:35:17.094Z"
+  },
+  {
+    "id": "MN-2",
+    "scenario": "Side menu closes with Escape and returns focus to opener",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"open\":false,\"inert\":true,\"focusMenuOpen\":true}",
+    "at": "2026-10-15T10:35:17.409Z"
+  },
+  {
+    "id": "MN-3",
+    "scenario": "Side menu closes via scrim tap and via ✕",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "open after scrim=false, after ✕=false",
+    "at": "2026-10-15T10:35:19.155Z"
+  },
+  {
+    "id": "MN-3b",
+    "scenario": "Desktop: click outside the 430px app column closes the menu",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "FAIL",
+    "note": "menu still open after clicking the page backdrop outside #app: true",
+    "at": "2026-10-15T10:35:20.309Z"
+  },
+  {
+    "id": "MN-4",
+    "scenario": "Side menu: Tab cannot reach links while closed (inert)",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "menu elements focused 0/25",
+    "at": "2026-10-15T10:35:20.680Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → / (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "active link: just closes (open=false)",
+    "at": "2026-10-15T10:35:22.390Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /collections (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "landed /collections; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:35:24.639Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /search (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "landed /search; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:35:27.187Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /cart (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "landed /cart; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:35:29.818Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/orders (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/orders; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:35:32.496Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/account (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/account; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:35:35.063Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/loyalty (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/loyalty; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:35:37.242Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/wishlist (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/wishlist; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:35:39.573Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/support (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "landed /pages/support; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:35:41.890Z"
+  },
+  {
+    "id": "MN-7",
+    "scenario": "Menu handle (edge) opens the menu on inner pages",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "handle visible=true, open=true",
+    "at": "2026-10-15T10:35:42.959Z"
+  },
+  {
+    "id": "LG-1",
+    "scenario": "Header language switch toggles dir/lang, label, persists across navigation",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "before=ar/rtl/EN after=en/ltr/ع/en next page=en; on /ar/ URL=ar (F-07: CONFIRMED: English does not stick on /ar/ URLs)",
+    "at": "2026-10-15T10:35:45.224Z"
+  },
+  {
+    "id": "AG-1",
+    "scenario": "Age gate shown on first visit to /",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "gate count=1, title=\"Are you 18 or older?\"",
+    "at": "2026-10-15T10:35:46.342Z"
+  },
+  {
+    "id": "AG-2",
+    "scenario": "Age gate: is there a decline (\"No\"/\"under 18\") path?",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "FAIL",
+    "note": "buttons=[\"Yes, I’m 18+\",\"العربية\"]; Escape leaves gate=true. No decline/exit option exists.",
+    "at": "2026-10-15T10:35:46.392Z"
+  },
+  {
+    "id": "AG-3",
+    "scenario": "Age gate blocks interaction / keyboard focus behind it",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "FAIL",
+    "note": "focus escaped gate on 6/6 Tab presses; role=null; covers viewport=false",
+    "at": "2026-10-15T10:35:46.436Z"
+  },
+  {
+    "id": "AG-4",
+    "scenario": "Age gate language button toggles language",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "en -> ar/rtl -> en",
+    "at": "2026-10-15T10:35:46.803Z"
+  },
+  {
+    "id": "AG-5",
+    "scenario": "Accept gate → hidden, stored, not shown after reload",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "after click=0, oka.age=true, after reload=0",
+    "at": "2026-10-15T10:35:47.706Z"
+  },
+  {
+    "id": "AG-6",
+    "scenario": "localStorage cleared → gate returns",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "gate on /collections after clearing=1",
+    "at": "2026-10-15T10:35:48.410Z"
+  },
+  {
+    "id": "MN-1",
+    "scenario": "Side menu opens from header ☰, aria-expanded, inert removed, focus on panel",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"open\":true,\"inert\":false,\"exp\":[\"true\",\"true\"],\"focus\":\"side-menu\",\"links\":[\"/\",\"/collections\",\"/search\",\"/cart\",\"/pages/orders\",\"/pages/account\",\"/pages/loyalty\",\"/pages/wishlist\",\"/pages/support\"]}",
+    "at": "2026-10-15T10:36:19.782Z"
+  },
+  {
+    "id": "MN-2",
+    "scenario": "Side menu closes with Escape and returns focus to opener",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"open\":false,\"inert\":true,\"focusMenuOpen\":true}",
+    "at": "2026-10-15T10:36:20.093Z"
+  },
+  {
+    "id": "MN-3",
+    "scenario": "Side menu closes via scrim tap and via ✕",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "open after scrim=false, after ✕=false",
+    "at": "2026-10-15T10:36:21.811Z"
+  },
+  {
+    "id": "MN-3b",
+    "scenario": "Desktop: click outside the 430px app column closes the menu",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "FAIL",
+    "note": "menu still open after clicking the page backdrop outside #app: true",
+    "at": "2026-10-15T10:36:22.925Z"
+  },
+  {
+    "id": "MN-4",
+    "scenario": "Side menu: Tab cannot reach links while closed (inert)",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "menu elements focused 0/25",
+    "at": "2026-10-15T10:36:23.166Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → / (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "active link: just closes (open=false)",
+    "at": "2026-10-15T10:36:24.679Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /collections (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "landed /collections; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:36:26.723Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /search (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "landed /search; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:36:28.845Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /cart (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "landed /cart; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:36:30.923Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/orders (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/orders; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:36:33.163Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/account (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/account; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:36:35.487Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/loyalty (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/loyalty; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:36:38.077Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/wishlist (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/wishlist; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:36:41.048Z"
+  },
+  {
+    "id": "MN-6",
+    "scenario": "Side menu link → /pages/support (\"\") navigates, active state, menu closed after Back",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "landed /pages/support; active=true; menu open after Back=false; ",
+    "at": "2026-10-15T10:36:44.182Z"
+  },
+  {
+    "id": "MN-7",
+    "scenario": "Menu handle (edge) opens the menu on inner pages",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "handle visible=true, open=true",
+    "at": "2026-10-15T10:36:45.316Z"
+  },
+  {
+    "id": "LG-1",
+    "scenario": "Header language switch toggles dir/lang, label, persists across navigation",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "before=en/ltr/ع after=ar/rtl/EN/ar next page=ar; on /ar/ URL=ar (F-07: n/a)",
+    "at": "2026-10-15T10:36:48.395Z"
+  }
+]

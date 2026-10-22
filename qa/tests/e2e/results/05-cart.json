@@ -1,0 +1,1802 @@
+[
+  {
+    "id": "CT-1",
+    "scenario": "Empty cart: message + best-seller rail with working Add",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "\"سلتك فاضية\" rail=4 after Add items=1",
+    "at": "2026-10-21T21:56:06.498Z"
+  },
+  {
+    "id": "CT-2",
+    "scenario": "Add multiple products; lines, totals, ship bar render; line titles in chosen language",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "lines=[\"أوكا كوبرا×1\",\"نعناع - حجر جاهز للشرب- 12 جرام×2\",\"لي مخصوص×1\"] rows=[\"المجموع قبل الشحن ٣١٢ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٤٨ ج.م\",\"هتاخد ٣١٢ نقطة لما يوصلك\"]",
+    "at": "2026-10-21T21:56:08.426Z"
+  },
+  {
+    "id": "CT-3",
+    "scenario": "Line + and − (single taps, waiting) update qty and totals; ✕ removes",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "after +:3 after −:2 lines after ✕: cart=2 shown=2",
+    "at": "2026-10-21T21:56:11.277Z"
+  },
+  {
+    "id": "CT-4",
+    "scenario": "F-02: five fast + taps on a cart line",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "expected 6 after 5 fast +, cart=6 shown=6; after 8 fast − cart=0 → F-02 not reproduced",
+    "at": "2026-10-21T21:56:21.826Z"
+  },
+  {
+    "id": "CT-4b",
+    "scenario": "F-02 with 400–900 ms server latency: five fast + taps then three fast − taps",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "5 fast + (120 ms apart) → cart 3 (expected 6); then 3 fast − → cart 2 (expected 3), shown 2 → F-02 CONFIRMED",
+    "at": "2026-10-21T21:56:34.564Z"
+  },
+  {
+    "id": "CT-5",
+    "scenario": "Card −/+ (home) fast taps are serialised (contrast with F-02)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "card stepper: expected 6, cart=6 (rec sheet shown=true)",
+    "at": "2026-10-21T21:56:41.057Z"
+  },
+  {
+    "id": "CT-6",
+    "scenario": "Server 422 on line change → alert with message, cart re-renders",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "alert=\"معرفناش نحدّث You can only add 1 Mint to the cart. تمام\" qty shown=1",
+    "at": "2026-10-21T21:56:43.443Z"
+  },
+  {
+    "id": "CT-7",
+    "scenario": "Cart stepper upper bound (data-max 99) and AJAX add of sold-out (422) message text",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "+ at 99 → cart 99 (silently ignored, no message); sold-out add → [422,\"The product '3 Coconut Coal Pcs' is already sold out.\"]",
+    "at": "2026-10-21T21:56:45.403Z"
+  },
+  {
+    "id": "CT-8",
+    "scenario": "Swipe a cart row to delete / to wishlist (touch drag)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "after delete-swipe items=1; wishlist after save-swipe={\"premium-1-5-m-hose\":true}",
+    "at": "2026-10-21T21:56:49.328Z"
+  },
+  {
+    "id": "CT-9",
+    "scenario": "\"Change\" sheet swaps a bowl flavour for a same-price sibling",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "options=12; cart now tobacco-bowls-cantaloup-12g×2",
+    "at": "2026-10-21T21:56:53.338Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA10\" on a 300 EGP cart → applied 10%",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T21:57:26.157Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"qa10\" on a 300 EGP cart → case-insensitive",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"qa10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T21:57:59.048Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \" QA10 \" on a 300 EGP cart → whitespace trimmed",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"فعّل\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T21:58:31.846Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA50OFF\" on a 300 EGP cart → 50 off",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QA50OFF:true\"],\"total\":250,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٥٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣١٠ ج.م\",\"هتاخد ٢٥٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T21:59:04.719Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAFREESHIP\" on a 300 EGP cart → free shipping (COM-04)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QAFREESHIP:true\"],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]} → COM-04 CONFIRMED (shipping still charged in cart)",
+    "at": "2026-10-21T21:59:37.929Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAEXPIRED\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T21:59:40.773Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"NOPE123\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T21:59:43.953Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"<b>x</b>\" on a 300 EGP cart → rejected, escaped",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T21:59:46.793Z"
+  },
+  {
+    "id": "DC-2",
+    "scenario": "QAMIN300: rejected at 299, accepted at 300; then cart drops below 300 → code state",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "299: {\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":299,\"rows\":[\"المجموع قبل الشحن ٢٩٩ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٩ ج.م\",\"هتاخد ٢٩٩ نقطة لما يوصلك\"]} | 300: {\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QAMIN300:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]} | after dropping to 270: {\"codes\":[\"QAMIN300:false\"],\"total\":270,\"btn\":\"اتفعّل\",\"rows\":[\"المجموع قبل الشحن ٢٧٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:00:23.802Z"
+  },
+  {
+    "id": "DC-3",
+    "scenario": "COM-06: invalid code after a valid one removes the valid code",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "after QA10 total=270; after NOPE123 total=300 codes=[] err=\"الكود ده مينفعش على السلة دي.\" → COM-06 CONFIRMED",
+    "at": "2026-10-21T22:00:58.528Z"
+  },
+  {
+    "id": "DC-4",
+    "scenario": "Clearing the code field + Apply removes the code; code survives reload",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "after reload {\"val\":\"QA10\",\"btn\":\"اتفعّل\",\"total\":270}; after clearing total=300",
+    "at": "2026-10-21T22:02:04.224Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 299 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "cart total=299 fee=60 (expected metro 60) bar=\"ضيف ١ ج.م كمان والشحن ينزل لـ ٣٦ ج.م\"",
+    "at": "2026-10-21T22:02:05.577Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 300 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "cart total=300 fee=36 (expected metro 36) bar=\"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"",
+    "at": "2026-10-21T22:02:06.944Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 301 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "cart total=301 fee=36 (expected metro 36) bar=\"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"",
+    "at": "2026-10-21T22:02:08.318Z"
+  },
+  {
+    "id": "FE-3",
+    "scenario": "COM-01: guest always quoted Cairo fee (no address known)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "guest fee shown=60 as a firm number; estimate wording=null → COM-01 CONFIRMED at runtime (Aswan guest would pay 80 at checkout)",
+    "at": "2026-10-21T22:02:09.413Z"
+  },
+  {
+    "id": "FE-4",
+    "scenario": "Automatic \"tong free\": hookah ≥266 EGP from hookahs/bowls + tongs → tongs free",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "original=325 total=294 rows=[\"المجموع قبل الشحن ٣٢٥ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٤ ج.م\",\"هتاخد ٢٩٤ نقطة لما يوصلك\"]",
+    "at": "2026-10-21T22:02:11.037Z"
+  },
+  {
+    "id": "CO-1",
+    "scenario": "Checkout button → /checkout stub; checkouts.jsonl has the items, code and token",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"url\":\"http://localhost:9410/checkout\",\"newRecord\":true,\"items\":[\"50678215508266×1\",\"49399990976810×2\"],\"codes\":[{\"code\":\"QA10\",\"applicable\":true}],\"note\":\"\",\"attributes\":{},\"total\":24030,\"tokenMatch\":true} lastCheckout={\"cartToken\":\"qa4a36a6e8b8f1be5ef62086d9?key=7a4b5f38072d619f9b4ceb2d12594fed\",\"at\":1792620133775}",
+    "at": "2026-10-21T22:02:14.599Z"
+  },
+  {
+    "id": "CO-2",
+    "scenario": "Back from checkout: cart page usable, Checkout button not stuck as spinner (F-16)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "nav type=back_forward; button={\"html\":\"الدفع\",\"text\":\"الدفع\"} (harness Chromium bfcache not restoring spinner)",
+    "at": "2026-10-21T22:02:15.697Z"
+  },
+  {
+    "id": "CO-3",
+    "scenario": "Checkout review page (/pages/checkout-review): guest gets join card; customer gets address/total/COD; Place → /checkout",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"join\":true,\"placeHidden\":true} → http://localhost:9410/checkout",
+    "at": "2026-10-21T22:02:17.760Z"
+  },
+  {
+    "id": "CO-4",
+    "scenario": "Guest \"Sign in & check out\" → hosted login stub with return; locale param",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "→ /customer_authentication/login?return_to=%2Fpages%2Fcheckout-review&locale=en&ui_hint=full&region_country=EG; oka.afterSignIn=\"/pages/checkout-review\" (login URL hard-codes return_to=/ and locale=en; the theme resumes from localStorage after sign-in)",
+    "at": "2026-10-21T22:02:19.160Z"
+  },
+  {
+    "id": "CO-5",
+    "scenario": "Cart permalink /cart/VARIANT:QTY → checkout stub records items",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart/50678215508266:2,49399990976810:1 last=[\"50678215508266×2\",\"49399990976810×1\"]",
+    "at": "2026-10-21T22:02:19.583Z"
+  },
+  {
+    "id": "CT-LOG",
+    "scenario": "Cart session error summary",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST h",
+    "at": "2026-10-21T22:02:19.584Z"
+  },
+  {
+    "id": "CT-1",
+    "scenario": "Empty cart: message + best-seller rail with working Add",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "\"سلتك فاضية\" rail=4 after Add items=1",
+    "at": "2026-10-21T22:02:23.433Z"
+  },
+  {
+    "id": "CT-2",
+    "scenario": "Add multiple products; lines, totals, ship bar render; line titles in chosen language",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "lines=[\"أوكا كوبرا×1\",\"نعناع - حجر جاهز للشرب- 12 جرام×2\",\"لي مخصوص×1\"] rows=[\"المجموع قبل الشحن ٣١٢ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٤٨ ج.م\",\"هتاخد ٣١٢ نقطة لما يوصلك\"]",
+    "at": "2026-10-21T22:02:25.473Z"
+  },
+  {
+    "id": "CT-3",
+    "scenario": "Line + and − (single taps, waiting) update qty and totals; ✕ removes",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "after +:3 after −:2 lines after ✕: cart=2 shown=2",
+    "at": "2026-10-21T22:02:28.375Z"
+  },
+  {
+    "id": "CT-4",
+    "scenario": "F-02: five fast + taps on a cart line",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "expected 6 after 5 fast +, cart=6 shown=6; after 8 fast − cart=0 → F-02 not reproduced",
+    "at": "2026-10-21T22:02:38.806Z"
+  },
+  {
+    "id": "CT-4b",
+    "scenario": "F-02 with 400–900 ms server latency: five fast + taps then three fast − taps",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "FAIL",
+    "note": "5 fast + (120 ms apart) → cart 3 (expected 6); then 3 fast − → cart 2 (expected 3), shown 2 → F-02 CONFIRMED",
+    "at": "2026-10-21T22:02:51.568Z"
+  },
+  {
+    "id": "CT-5",
+    "scenario": "Card −/+ (home) fast taps are serialised (contrast with F-02)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "card stepper: expected 6, cart=6 (rec sheet shown=true)",
+    "at": "2026-10-21T22:02:58.166Z"
+  },
+  {
+    "id": "CT-6",
+    "scenario": "Server 422 on line change → alert with message, cart re-renders",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "alert=\"معرفناش نحدّث You can only add 1 Mint to the cart. تمام\" qty shown=1",
+    "at": "2026-10-21T22:03:00.706Z"
+  },
+  {
+    "id": "CT-7",
+    "scenario": "Cart stepper upper bound (data-max 99) and AJAX add of sold-out (422) message text",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "+ at 99 → cart 99 (silently ignored, no message); sold-out add → [422,\"The product '3 Coconut Coal Pcs' is already sold out.\"]",
+    "at": "2026-10-21T22:03:02.736Z"
+  },
+  {
+    "id": "CT-8",
+    "scenario": "Swipe a cart row to delete / to wishlist (touch drag)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "after delete-swipe items=1; wishlist after save-swipe={\"premium-1-5-m-hose\":true}",
+    "at": "2026-10-21T22:03:06.711Z"
+  },
+  {
+    "id": "CT-9",
+    "scenario": "\"Change\" sheet swaps a bowl flavour for a same-price sibling",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "options=12; cart now tobacco-bowls-cantaloup-12g×2",
+    "at": "2026-10-21T22:03:10.831Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA10\" on a 300 EGP cart → applied 10%",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:03:43.644Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"qa10\" on a 300 EGP cart → case-insensitive",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"qa10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:04:16.443Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \" QA10 \" on a 300 EGP cart → whitespace trimmed",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"فعّل\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:04:49.252Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA50OFF\" on a 300 EGP cart → 50 off",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QA50OFF:true\"],\"total\":250,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٥٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣١٠ ج.م\",\"هتاخد ٢٥٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:05:22.092Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAFREESHIP\" on a 300 EGP cart → free shipping (COM-04)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "FAIL",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QAFREESHIP:true\"],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]} → COM-04 CONFIRMED (shipping still charged in cart)",
+    "at": "2026-10-21T22:05:55.283Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAEXPIRED\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:05:58.125Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"NOPE123\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:06:01.203Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"<b>x</b>\" on a 300 EGP cart → rejected, escaped",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:06:03.968Z"
+  },
+  {
+    "id": "DC-2",
+    "scenario": "QAMIN300: rejected at 299, accepted at 300; then cart drops below 300 → code state",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "299: {\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":299,\"rows\":[\"المجموع قبل الشحن ٢٩٩ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٩ ج.م\",\"هتاخد ٢٩٩ نقطة لما يوصلك\"]} | 300: {\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QAMIN300:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]} | after dropping to 270: {\"codes\":[\"QAMIN300:false\"],\"total\":270,\"btn\":\"اتفعّل\",\"rows\":[\"المجموع قبل الشحن ٢٧٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:06:40.933Z"
+  },
+  {
+    "id": "DC-3",
+    "scenario": "COM-06: invalid code after a valid one removes the valid code",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "FAIL",
+    "note": "after QA10 total=270; after NOPE123 total=300 codes=[] err=\"الكود ده مينفعش على السلة دي.\" → COM-06 CONFIRMED",
+    "at": "2026-10-21T22:07:15.467Z"
+  },
+  {
+    "id": "DC-4",
+    "scenario": "Clearing the code field + Apply removes the code; code survives reload",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "after reload {\"val\":\"QA10\",\"btn\":\"اتفعّل\",\"total\":270}; after clearing total=300",
+    "at": "2026-10-21T22:08:21.142Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 299 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "cart total=299 fee=60 (expected metro 60) bar=\"ضيف ١ ج.م كمان والشحن ينزل لـ ٣٦ ج.م\"",
+    "at": "2026-10-21T22:08:22.458Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 300 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "cart total=300 fee=36 (expected metro 36) bar=\"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"",
+    "at": "2026-10-21T22:08:23.776Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 301 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "cart total=301 fee=36 (expected metro 36) bar=\"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"",
+    "at": "2026-10-21T22:08:25.103Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in C (299 and 300 carts) — cart and checkout-review",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "addr 9000000001 C/Nasr City default=true: 299→cart 60 review 60; 300→cart 36 review 36; zone table 60,36",
+    "at": "2026-10-21T22:08:30.756Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in GZ (299 and 300 carts) — cart and checkout-review",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "addr 9000000002 GZ/Dokki default=false: 299→cart 60 review 60; 300→cart 36 review 36; zone table 60,36",
+    "at": "2026-10-21T22:08:36.539Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in ASN (299 and 300 carts) — cart and checkout-review",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "addr 9000000003 ASN/Aswan default=false: 299→cart 80 review 80; 300→cart 56 review 56; zone table 80,56",
+    "at": "2026-10-21T22:08:42.142Z"
+  },
+  {
+    "id": "FE-4",
+    "scenario": "Automatic \"tong free\": hookah ≥266 EGP from hookahs/bowls + tongs → tongs free",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "original=325 total=294 rows=[\"المجموع قبل الشحن ٣٢٥ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٤ ج.م\",\"هتاخد ٢٩٤ نقطة لما يوصلك\"]",
+    "at": "2026-10-21T22:08:43.851Z"
+  },
+  {
+    "id": "CO-1",
+    "scenario": "Checkout button → /checkout stub; checkouts.jsonl has the items, code and token",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"url\":\"http://localhost:9410/checkout\",\"newRecord\":true,\"items\":[\"50678215508266×1\",\"49399990976810×2\"],\"codes\":[{\"code\":\"QA10\",\"applicable\":true}],\"note\":\"\",\"attributes\":{},\"total\":24030,\"tokenMatch\":true} lastCheckout={\"cartToken\":\"qa9a43188b24c5321c1bdd8835?key=b935e4c0586eca07c1c4b2ae43182b83\",\"at\":1792620526666}",
+    "at": "2026-10-21T22:08:47.506Z"
+  },
+  {
+    "id": "CO-2",
+    "scenario": "Back from checkout: cart page usable, Checkout button not stuck as spinner (F-16)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "nav type=back_forward; button={\"html\":\"الدفع\",\"text\":\"الدفع\"} (harness Chromium bfcache not restoring spinner)",
+    "at": "2026-10-21T22:08:48.623Z"
+  },
+  {
+    "id": "CO-3",
+    "scenario": "Checkout review page (/pages/checkout-review): guest gets join card; customer gets address/total/COD; Place → /checkout",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"join\":false,\"placeHidden\":false,\"ships\":\"QA Tester\",\"cod\":\"جهّز المبلغ ده للمندوب: ٢٣٠ ج.م\"} → http://localhost:9410/checkout",
+    "at": "2026-10-21T22:08:50.570Z"
+  },
+  {
+    "id": "CT-LOG",
+    "scenario": "Cart session error summary",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST h",
+    "at": "2026-10-21T22:08:50.571Z"
+  },
+  {
+    "id": "CT-1",
+    "scenario": "Empty cart: message + best-seller rail with working Add",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "\"Your cart is empty\" rail=4 after Add items=1",
+    "at": "2026-10-21T22:08:54.232Z"
+  },
+  {
+    "id": "CT-2",
+    "scenario": "Add multiple products; lines, totals, ship bar render; line titles in chosen language",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "lines=[\"OKA Cobra×1\",\"Tobacco Bowls- Mint - 12g×2\",\"Premium 1.5 m Hose×1\"] rows=[\"Subtotal EGP 312\",\"Shipping EGP 36\",\"Total EGP 348\",\"You'll earn 312 points on delivery\"]",
+    "at": "2026-10-21T22:08:56.244Z"
+  },
+  {
+    "id": "CT-3",
+    "scenario": "Line + and − (single taps, waiting) update qty and totals; ✕ removes",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "after +:3 after −:2 lines after ✕: cart=2 shown=2",
+    "at": "2026-10-21T22:08:59.110Z"
+  },
+  {
+    "id": "CT-4",
+    "scenario": "F-02: five fast + taps on a cart line",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "expected 6 after 5 fast +, cart=6 shown=6; after 8 fast − cart=0 → F-02 not reproduced",
+    "at": "2026-10-21T22:09:09.572Z"
+  },
+  {
+    "id": "CT-4b",
+    "scenario": "F-02 with 400–900 ms server latency: five fast + taps then three fast − taps",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "5 fast + (120 ms apart) → cart 3 (expected 6); then 3 fast − → cart 2 (expected 3), shown 2 → F-02 CONFIRMED",
+    "at": "2026-10-21T22:09:22.325Z"
+  },
+  {
+    "id": "CT-5",
+    "scenario": "Card −/+ (home) fast taps are serialised (contrast with F-02)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "card stepper: expected 6, cart=6 (rec sheet shown=true)",
+    "at": "2026-10-21T22:09:28.687Z"
+  },
+  {
+    "id": "CT-6",
+    "scenario": "Server 422 on line change → alert with message, cart re-renders",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "alert=\"Could not update You can only add 1 Mint to the cart. OK\" qty shown=1",
+    "at": "2026-10-21T22:09:31.149Z"
+  },
+  {
+    "id": "CT-7",
+    "scenario": "Cart stepper upper bound (data-max 99) and AJAX add of sold-out (422) message text",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "+ at 99 → cart 99 (silently ignored, no message); sold-out add → [422,\"The product '3 Coconut Coal Pcs' is already sold out.\"]",
+    "at": "2026-10-21T22:09:33.143Z"
+  },
+  {
+    "id": "CT-8",
+    "scenario": "Swipe a cart row to delete / to wishlist (touch drag)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "after delete-swipe items=1; wishlist after save-swipe={\"premium-1-5-m-hose\":true}",
+    "at": "2026-10-21T22:09:37.110Z"
+  },
+  {
+    "id": "CT-9",
+    "scenario": "\"Change\" sheet swaps a bowl flavour for a same-price sibling",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "options=12; cart now tobacco-bowls-cantaloup-12g×2",
+    "at": "2026-10-21T22:09:41.123Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA10\" on a 300 EGP cart → applied 10%",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:10:13.916Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"qa10\" on a 300 EGP cart → case-insensitive",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"qa10:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:10:46.794Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \" QA10 \" on a 300 EGP cart → whitespace trimmed",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Apply\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:11:19.659Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA50OFF\" on a 300 EGP cart → 50 off",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QA50OFF:true\"],\"total\":250,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 50\",\"Shipping EGP 60\",\"Total EGP 310\",\"You'll earn 250 points on delivery\"]}",
+    "at": "2026-10-21T22:11:52.437Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAFREESHIP\" on a 300 EGP cart → free shipping (COM-04)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QAFREESHIP:true\"],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]} → COM-04 CONFIRMED (shipping still charged in cart)",
+    "at": "2026-10-21T22:12:25.559Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAEXPIRED\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]}",
+    "at": "2026-10-21T22:12:28.385Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"NOPE123\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]}",
+    "at": "2026-10-21T22:12:31.539Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"<b>x</b>\" on a 300 EGP cart → rejected, escaped",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]}",
+    "at": "2026-10-21T22:12:34.369Z"
+  },
+  {
+    "id": "DC-2",
+    "scenario": "QAMIN300: rejected at 299, accepted at 300; then cart drops below 300 → code state",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "299: {\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":299,\"rows\":[\"Subtotal EGP 299\",\"Shipping EGP 60\",\"Total EGP 359\",\"You'll earn 299 points on delivery\"]} | 300: {\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QAMIN300:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]} | after dropping to 270: {\"codes\":[\"QAMIN300:false\"],\"total\":270,\"btn\":\"Applied\",\"rows\":[\"Subtotal EGP 270\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:13:11.340Z"
+  },
+  {
+    "id": "DC-3",
+    "scenario": "COM-06: invalid code after a valid one removes the valid code",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "after QA10 total=270; after NOPE123 total=300 codes=[] err=\"This code can’t be used on this basket.\" → COM-06 CONFIRMED",
+    "at": "2026-10-21T22:13:45.887Z"
+  },
+  {
+    "id": "DC-4",
+    "scenario": "Clearing the code field + Apply removes the code; code survives reload",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "after reload {\"val\":\"QA10\",\"btn\":\"Applied\",\"total\":270}; after clearing total=300",
+    "at": "2026-10-21T22:14:51.509Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 299 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "cart total=299 fee=60 (expected metro 60) bar=\"Add 1 EGP more and shipping drops to EGP 36\"",
+    "at": "2026-10-21T22:14:52.827Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 300 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "cart total=300 fee=36 (expected metro 36) bar=\"Shipping EGP 36 — the best rate for your area\"",
+    "at": "2026-10-21T22:14:54.143Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 301 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "cart total=301 fee=36 (expected metro 36) bar=\"Shipping EGP 36 — the best rate for your area\"",
+    "at": "2026-10-21T22:14:55.455Z"
+  },
+  {
+    "id": "FE-3",
+    "scenario": "COM-01: guest always quoted Cairo fee (no address known)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "guest fee shown=60 as a firm number; estimate wording=null → COM-01 CONFIRMED at runtime (Aswan guest would pay 80 at checkout)",
+    "at": "2026-10-21T22:14:56.541Z"
+  },
+  {
+    "id": "FE-4",
+    "scenario": "Automatic \"tong free\": hookah ≥266 EGP from hookahs/bowls + tongs → tongs free",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "original=325 total=294 rows=[\"Subtotal EGP 325\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 354\",\"You'll earn 294 points on delivery\"]",
+    "at": "2026-10-21T22:14:58.177Z"
+  },
+  {
+    "id": "CO-1",
+    "scenario": "Checkout button → /checkout stub; checkouts.jsonl has the items, code and token",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"url\":\"http://localhost:9410/checkout\",\"newRecord\":true,\"items\":[\"50678215508266×1\",\"49399990976810×2\"],\"codes\":[{\"code\":\"QA10\",\"applicable\":true}],\"note\":\"\",\"attributes\":{},\"total\":24030,\"tokenMatch\":true} lastCheckout={\"cartToken\":\"qa6cb790a368ed7519d060dd80?key=27bad0ad0b39222659ca41424c08d2d7\",\"at\":1792620900962}",
+    "at": "2026-10-21T22:15:01.792Z"
+  },
+  {
+    "id": "CO-2",
+    "scenario": "Back from checkout: cart page usable, Checkout button not stuck as spinner (F-16)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "nav type=back_forward; button={\"html\":\"Checkout\",\"text\":\"Checkout\"} (harness Chromium bfcache not restoring spinner)",
+    "at": "2026-10-21T22:15:02.886Z"
+  },
+  {
+    "id": "CO-3",
+    "scenario": "Checkout review page (/pages/checkout-review): guest gets join card; customer gets address/total/COD; Place → /checkout",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"join\":true,\"placeHidden\":true} → http://localhost:9410/checkout",
+    "at": "2026-10-21T22:15:04.879Z"
+  },
+  {
+    "id": "CO-4",
+    "scenario": "Guest \"Sign in & check out\" → hosted login stub with return; locale param",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "→ /customer_authentication/login?return_to=%2Fpages%2Fcheckout-review&locale=en&ui_hint=full&region_country=EG; oka.afterSignIn=\"/pages/checkout-review\" (login URL hard-codes return_to=/ and locale=en; the theme resumes from localStorage after sign-in)",
+    "at": "2026-10-21T22:15:06.229Z"
+  },
+  {
+    "id": "CO-5",
+    "scenario": "Cart permalink /cart/VARIANT:QTY → checkout stub records items",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart/50678215508266:2,49399990976810:1 last=[\"50678215508266×2\",\"49399990976810×1\"]",
+    "at": "2026-10-21T22:15:06.650Z"
+  },
+  {
+    "id": "CT-LOG",
+    "scenario": "Cart session error summary",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST h",
+    "at": "2026-10-21T22:15:06.651Z"
+  },
+  {
+    "id": "CT-1",
+    "scenario": "Empty cart: message + best-seller rail with working Add",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "\"Your cart is empty\" rail=4 after Add items=1",
+    "at": "2026-10-21T22:15:10.229Z"
+  },
+  {
+    "id": "CT-2",
+    "scenario": "Add multiple products; lines, totals, ship bar render; line titles in chosen language",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "lines=[\"OKA Cobra×1\",\"Tobacco Bowls- Mint - 12g×2\",\"Premium 1.5 m Hose×1\"] rows=[\"Subtotal EGP 312\",\"Shipping EGP 36\",\"Total EGP 348\",\"You'll earn 312 points on delivery\"]",
+    "at": "2026-10-21T22:15:12.071Z"
+  },
+  {
+    "id": "CT-3",
+    "scenario": "Line + and − (single taps, waiting) update qty and totals; ✕ removes",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "after +:3 after −:2 lines after ✕: cart=2 shown=2",
+    "at": "2026-10-21T22:15:14.945Z"
+  },
+  {
+    "id": "CT-4",
+    "scenario": "F-02: five fast + taps on a cart line",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "expected 6 after 5 fast +, cart=6 shown=6; after 8 fast − cart=0 → F-02 not reproduced",
+    "at": "2026-10-21T22:15:25.510Z"
+  },
+  {
+    "id": "CT-4b",
+    "scenario": "F-02 with 400–900 ms server latency: five fast + taps then three fast − taps",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "5 fast + (120 ms apart) → cart 3 (expected 6); then 3 fast − → cart 2 (expected 3), shown 2 → F-02 CONFIRMED",
+    "at": "2026-10-21T22:15:38.162Z"
+  },
+  {
+    "id": "CT-5",
+    "scenario": "Card −/+ (home) fast taps are serialised (contrast with F-02)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "card stepper: expected 6, cart=6 (rec sheet shown=true)",
+    "at": "2026-10-21T22:15:44.592Z"
+  },
+  {
+    "id": "CT-6",
+    "scenario": "Server 422 on line change → alert with message, cart re-renders",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "alert=\"Could not update You can only add 1 Mint to the cart. OK\" qty shown=1",
+    "at": "2026-10-21T22:15:47.033Z"
+  },
+  {
+    "id": "CT-7",
+    "scenario": "Cart stepper upper bound (data-max 99) and AJAX add of sold-out (422) message text",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "+ at 99 → cart 99 (silently ignored, no message); sold-out add → [422,\"The product '3 Coconut Coal Pcs' is already sold out.\"]",
+    "at": "2026-10-21T22:15:49.040Z"
+  },
+  {
+    "id": "CT-8",
+    "scenario": "Swipe a cart row to delete / to wishlist (touch drag)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "after delete-swipe items=1; wishlist after save-swipe={\"premium-1-5-m-hose\":true}",
+    "at": "2026-10-21T22:15:52.945Z"
+  },
+  {
+    "id": "CT-9",
+    "scenario": "\"Change\" sheet swaps a bowl flavour for a same-price sibling",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "options=12; cart now tobacco-bowls-cantaloup-12g×2",
+    "at": "2026-10-21T22:15:56.957Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA10\" on a 300 EGP cart → applied 10%",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:16:29.739Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"qa10\" on a 300 EGP cart → case-insensitive",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"qa10:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:17:02.502Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \" QA10 \" on a 300 EGP cart → whitespace trimmed",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Apply\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:17:35.303Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA50OFF\" on a 300 EGP cart → 50 off",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QA50OFF:true\"],\"total\":250,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 50\",\"Shipping EGP 60\",\"Total EGP 310\",\"You'll earn 250 points on delivery\"]}",
+    "at": "2026-10-21T22:18:08.100Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAFREESHIP\" on a 300 EGP cart → free shipping (COM-04)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QAFREESHIP:true\"],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]} → COM-04 CONFIRMED (shipping still charged in cart)",
+    "at": "2026-10-21T22:18:41.242Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAEXPIRED\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]}",
+    "at": "2026-10-21T22:18:44.053Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"NOPE123\" on a 300 EGP cart → rejected",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]}",
+    "at": "2026-10-21T22:18:47.151Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"<b>x</b>\" on a 300 EGP cart → rejected, escaped",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]}",
+    "at": "2026-10-21T22:18:49.966Z"
+  },
+  {
+    "id": "DC-2",
+    "scenario": "QAMIN300: rejected at 299, accepted at 300; then cart drops below 300 → code state",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "299: {\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":299,\"rows\":[\"Subtotal EGP 299\",\"Shipping EGP 60\",\"Total EGP 359\",\"You'll earn 299 points on delivery\"]} | 300: {\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QAMIN300:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]} | after dropping to 270: {\"codes\":[\"QAMIN300:false\"],\"total\":270,\"btn\":\"Applied\",\"rows\":[\"Subtotal EGP 270\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:19:26.921Z"
+  },
+  {
+    "id": "DC-3",
+    "scenario": "COM-06: invalid code after a valid one removes the valid code",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "after QA10 total=270; after NOPE123 total=300 codes=[] err=\"This code can’t be used on this basket.\" → COM-06 CONFIRMED",
+    "at": "2026-10-21T22:20:01.473Z"
+  },
+  {
+    "id": "DC-4",
+    "scenario": "Clearing the code field + Apply removes the code; code survives reload",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "after reload {\"val\":\"QA10\",\"btn\":\"Applied\",\"total\":270}; after clearing total=300",
+    "at": "2026-10-21T22:21:07.036Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 299 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "cart total=299 fee=60 (expected metro 60) bar=\"Add 1 EGP more and shipping drops to EGP 36\"",
+    "at": "2026-10-21T22:21:08.360Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 300 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "cart total=300 fee=36 (expected metro 36) bar=\"Shipping EGP 36 — the best rate for your area\"",
+    "at": "2026-10-21T22:21:09.663Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 301 EGP → fee tier (selected/default address zone)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "cart total=301 fee=36 (expected metro 36) bar=\"Shipping EGP 36 — the best rate for your area\"",
+    "at": "2026-10-21T22:21:10.984Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in C (299 and 300 carts) — cart and checkout-review",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "addr 9000000001 C/Nasr City default=true: 299→cart 60 review 60; 300→cart 36 review 36; zone table 60,36",
+    "at": "2026-10-21T22:21:16.527Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in GZ (299 and 300 carts) — cart and checkout-review",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "addr 9000000002 GZ/Dokki default=false: 299→cart 60 review 60; 300→cart 36 review 36; zone table 60,36",
+    "at": "2026-10-21T22:21:22.214Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in ASN (299 and 300 carts) — cart and checkout-review",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "addr 9000000003 ASN/Aswan default=false: 299→cart 80 review 80; 300→cart 56 review 56; zone table 80,56",
+    "at": "2026-10-21T22:21:27.851Z"
+  },
+  {
+    "id": "FE-4",
+    "scenario": "Automatic \"tong free\": hookah ≥266 EGP from hookahs/bowls + tongs → tongs free",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "original=325 total=294 rows=[\"Subtotal EGP 325\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 354\",\"You'll earn 294 points on delivery\"]",
+    "at": "2026-10-21T22:21:29.420Z"
+  },
+  {
+    "id": "CO-1",
+    "scenario": "Checkout button → /checkout stub; checkouts.jsonl has the items, code and token",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"url\":\"http://localhost:9410/checkout\",\"newRecord\":true,\"items\":[\"50678215508266×1\",\"49399990976810×2\"],\"codes\":[{\"code\":\"QA10\",\"applicable\":true}],\"note\":\"\",\"attributes\":{},\"total\":24030,\"tokenMatch\":true} lastCheckout={\"cartToken\":\"qace3eeb2cbdb5e4173658c0c7?key=78232d3c1732ed2212517b039974f19d\",\"at\":1792621292130}",
+    "at": "2026-10-21T22:21:32.963Z"
+  },
+  {
+    "id": "CO-2",
+    "scenario": "Back from checkout: cart page usable, Checkout button not stuck as spinner (F-16)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "nav type=back_forward; button={\"html\":\"Checkout\",\"text\":\"Checkout\"} (harness Chromium bfcache not restoring spinner)",
+    "at": "2026-10-21T22:21:34.031Z"
+  },
+  {
+    "id": "CO-3",
+    "scenario": "Checkout review page (/pages/checkout-review): guest gets join card; customer gets address/total/COD; Place → /checkout",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"join\":false,\"placeHidden\":false,\"ships\":\"QA Tester\",\"cod\":\"Have this amount ready for the courier: EGP 230\"} → http://localhost:9410/checkout",
+    "at": "2026-10-21T22:21:35.940Z"
+  },
+  {
+    "id": "CT-LOG",
+    "scenario": "Cart session error summary",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST h",
+    "at": "2026-10-21T22:21:35.941Z"
+  },
+  {
+    "id": "CT-1",
+    "scenario": "Empty cart: message + best-seller rail with working Add",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "\"سلتك فاضية\" rail=4 after Add items=1",
+    "at": "2026-10-21T22:21:39.652Z"
+  },
+  {
+    "id": "CT-2",
+    "scenario": "Add multiple products; lines, totals, ship bar render; line titles in chosen language",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "lines=[\"أوكا كوبرا×1\",\"نعناع - حجر جاهز للشرب- 12 جرام×2\",\"لي مخصوص×1\"] rows=[\"المجموع قبل الشحن ٣١٢ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٤٨ ج.م\",\"هتاخد ٣١٢ نقطة لما يوصلك\"]",
+    "at": "2026-10-21T22:21:41.628Z"
+  },
+  {
+    "id": "CT-3",
+    "scenario": "Line + and − (single taps, waiting) update qty and totals; ✕ removes",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "after +:3 after −:2 lines after ✕: cart=2 shown=2",
+    "at": "2026-10-21T22:21:44.548Z"
+  },
+  {
+    "id": "CT-4",
+    "scenario": "F-02: five fast + taps on a cart line",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "expected 6 after 5 fast +, cart=6 shown=6; after 8 fast − cart=0 → F-02 not reproduced",
+    "at": "2026-10-21T22:21:55.615Z"
+  },
+  {
+    "id": "CT-4b",
+    "scenario": "F-02 with 400–900 ms server latency: five fast + taps then three fast − taps",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "5 fast + (120 ms apart) → cart 3 (expected 6); then 3 fast − → cart 2 (expected 3), shown 2 → F-02 CONFIRMED",
+    "at": "2026-10-21T22:22:08.345Z"
+  },
+  {
+    "id": "CT-5",
+    "scenario": "Card −/+ (home) fast taps are serialised (contrast with F-02)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "card stepper: expected 6, cart=6 (rec sheet shown=true)",
+    "at": "2026-10-21T22:22:14.714Z"
+  },
+  {
+    "id": "CT-6",
+    "scenario": "Server 422 on line change → alert with message, cart re-renders",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "alert=\"معرفناش نحدّث You can only add 1 Mint to the cart. تمام\" qty shown=1",
+    "at": "2026-10-21T22:22:17.216Z"
+  },
+  {
+    "id": "CT-7",
+    "scenario": "Cart stepper upper bound (data-max 99) and AJAX add of sold-out (422) message text",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "+ at 99 → cart 99 (silently ignored, no message); sold-out add → [422,\"The product '3 Coconut Coal Pcs' is already sold out.\"]",
+    "at": "2026-10-21T22:22:19.223Z"
+  },
+  {
+    "id": "CT-8",
+    "scenario": "Swipe a cart row to delete / to wishlist (touch drag)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "after delete-swipe items=1; wishlist after save-swipe={\"premium-1-5-m-hose\":true}",
+    "at": "2026-10-21T22:22:23.169Z"
+  },
+  {
+    "id": "CT-9",
+    "scenario": "\"Change\" sheet swaps a bowl flavour for a same-price sibling",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "options=12; cart now tobacco-bowls-cantaloup-12g×2",
+    "at": "2026-10-21T22:22:27.302Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA10\" on a 300 EGP cart → applied 10%",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:23:00.152Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"qa10\" on a 300 EGP cart → case-insensitive",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"qa10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:23:33.037Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \" QA10 \" on a 300 EGP cart → whitespace trimmed",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"فعّل\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:24:05.942Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA50OFF\" on a 300 EGP cart → 50 off",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QA50OFF:true\"],\"total\":250,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٥٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣١٠ ج.م\",\"هتاخد ٢٥٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:24:38.801Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAFREESHIP\" on a 300 EGP cart → free shipping (COM-04)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QAFREESHIP:true\"],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]} → COM-04 CONFIRMED (shipping still charged in cart)",
+    "at": "2026-10-21T22:25:12.036Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAEXPIRED\" on a 300 EGP cart → rejected",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:25:14.944Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"NOPE123\" on a 300 EGP cart → rejected",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:25:18.084Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"<b>x</b>\" on a 300 EGP cart → rejected, escaped",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:25:20.876Z"
+  },
+  {
+    "id": "DC-2",
+    "scenario": "QAMIN300: rejected at 299, accepted at 300; then cart drops below 300 → code state",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "299: {\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":299,\"rows\":[\"المجموع قبل الشحن ٢٩٩ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٩ ج.م\",\"هتاخد ٢٩٩ نقطة لما يوصلك\"]} | 300: {\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QAMIN300:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]} | after dropping to 270: {\"codes\":[\"QAMIN300:false\"],\"total\":270,\"btn\":\"اتفعّل\",\"rows\":[\"المجموع قبل الشحن ٢٧٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:25:57.844Z"
+  },
+  {
+    "id": "DC-3",
+    "scenario": "COM-06: invalid code after a valid one removes the valid code",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "after QA10 total=270; after NOPE123 total=300 codes=[] err=\"الكود ده مينفعش على السلة دي.\" → COM-06 CONFIRMED",
+    "at": "2026-10-21T22:26:32.442Z"
+  },
+  {
+    "id": "DC-4",
+    "scenario": "Clearing the code field + Apply removes the code; code survives reload",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "after reload {\"val\":\"QA10\",\"btn\":\"اتفعّل\",\"total\":270}; after clearing total=300",
+    "at": "2026-10-21T22:27:38.135Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 299 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "cart total=299 fee=60 (expected metro 60) bar=\"ضيف ١ ج.م كمان والشحن ينزل لـ ٣٦ ج.م\"",
+    "at": "2026-10-21T22:27:39.471Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 300 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "cart total=300 fee=36 (expected metro 36) bar=\"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"",
+    "at": "2026-10-21T22:27:40.770Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 301 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "cart total=301 fee=36 (expected metro 36) bar=\"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"",
+    "at": "2026-10-21T22:27:42.075Z"
+  },
+  {
+    "id": "FE-3",
+    "scenario": "COM-01: guest always quoted Cairo fee (no address known)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "guest fee shown=60 as a firm number; estimate wording=null → COM-01 CONFIRMED at runtime (Aswan guest would pay 80 at checkout)",
+    "at": "2026-10-21T22:27:43.150Z"
+  },
+  {
+    "id": "FE-4",
+    "scenario": "Automatic \"tong free\": hookah ≥266 EGP from hookahs/bowls + tongs → tongs free",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "original=325 total=294 rows=[\"المجموع قبل الشحن ٣٢٥ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٤ ج.م\",\"هتاخد ٢٩٤ نقطة لما يوصلك\"]",
+    "at": "2026-10-21T22:27:44.752Z"
+  },
+  {
+    "id": "CO-1",
+    "scenario": "Checkout button → /checkout stub; checkouts.jsonl has the items, code and token",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"url\":\"http://localhost:9410/checkout\",\"newRecord\":true,\"items\":[\"50678215508266×1\",\"49399990976810×2\"],\"codes\":[{\"code\":\"QA10\",\"applicable\":true}],\"note\":\"\",\"attributes\":{},\"total\":24030,\"tokenMatch\":true} lastCheckout={\"cartToken\":\"qab165384dee11e8f763938e69?key=a57f20af7ecbec59cec654f1acb5c250\",\"at\":1792621667514}",
+    "at": "2026-10-21T22:27:48.339Z"
+  },
+  {
+    "id": "CO-2",
+    "scenario": "Back from checkout: cart page usable, Checkout button not stuck as spinner (F-16)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "nav type=back_forward; button={\"html\":\"الدفع\",\"text\":\"الدفع\"} (harness Chromium bfcache not restoring spinner)",
+    "at": "2026-10-21T22:27:49.398Z"
+  },
+  {
+    "id": "CO-3",
+    "scenario": "Checkout review page (/pages/checkout-review): guest gets join card; customer gets address/total/COD; Place → /checkout",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"join\":true,\"placeHidden\":true} → http://localhost:9410/checkout",
+    "at": "2026-10-21T22:27:51.370Z"
+  },
+  {
+    "id": "CO-4",
+    "scenario": "Guest \"Sign in & check out\" → hosted login stub with return; locale param",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "→ /customer_authentication/login?return_to=%2Fpages%2Fcheckout-review&locale=en&ui_hint=full&region_country=EG; oka.afterSignIn=\"/pages/checkout-review\" (login URL hard-codes return_to=/ and locale=en; the theme resumes from localStorage after sign-in)",
+    "at": "2026-10-21T22:27:52.705Z"
+  },
+  {
+    "id": "CO-5",
+    "scenario": "Cart permalink /cart/VARIANT:QTY → checkout stub records items",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart/50678215508266:2,49399990976810:1 last=[\"50678215508266×2\",\"49399990976810×1\"]",
+    "at": "2026-10-21T22:27:53.126Z"
+  },
+  {
+    "id": "CT-LOG",
+    "scenario": "Cart session error summary",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST h",
+    "at": "2026-10-21T22:27:53.128Z"
+  },
+  {
+    "id": "CT-1",
+    "scenario": "Empty cart: message + best-seller rail with working Add",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "\"سلتك فاضية\" rail=4 after Add items=1",
+    "at": "2026-10-21T22:27:56.665Z"
+  },
+  {
+    "id": "CT-2",
+    "scenario": "Add multiple products; lines, totals, ship bar render; line titles in chosen language",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "lines=[\"أوكا كوبرا×1\",\"نعناع - حجر جاهز للشرب- 12 جرام×2\",\"لي مخصوص×1\"] rows=[\"المجموع قبل الشحن ٣١٢ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٤٨ ج.م\",\"هتاخد ٣١٢ نقطة لما يوصلك\"]",
+    "at": "2026-10-21T22:27:58.527Z"
+  },
+  {
+    "id": "CT-3",
+    "scenario": "Line + and − (single taps, waiting) update qty and totals; ✕ removes",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "after +:3 after −:2 lines after ✕: cart=2 shown=2",
+    "at": "2026-10-21T22:28:01.381Z"
+  },
+  {
+    "id": "CT-4",
+    "scenario": "F-02: five fast + taps on a cart line",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "expected 6 after 5 fast +, cart=6 shown=6; after 8 fast − cart=0 → F-02 not reproduced",
+    "at": "2026-10-21T22:28:11.776Z"
+  },
+  {
+    "id": "CT-4b",
+    "scenario": "F-02 with 400–900 ms server latency: five fast + taps then three fast − taps",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "FAIL",
+    "note": "5 fast + (120 ms apart) → cart 3 (expected 6); then 3 fast − → cart 2 (expected 3), shown 2 → F-02 CONFIRMED",
+    "at": "2026-10-21T22:28:24.401Z"
+  },
+  {
+    "id": "CT-5",
+    "scenario": "Card −/+ (home) fast taps are serialised (contrast with F-02)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "card stepper: expected 6, cart=6 (rec sheet shown=true)",
+    "at": "2026-10-21T22:28:30.815Z"
+  },
+  {
+    "id": "CT-6",
+    "scenario": "Server 422 on line change → alert with message, cart re-renders",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "alert=\"معرفناش نحدّث You can only add 1 Mint to the cart. تمام\" qty shown=1",
+    "at": "2026-10-21T22:28:33.232Z"
+  },
+  {
+    "id": "CT-7",
+    "scenario": "Cart stepper upper bound (data-max 99) and AJAX add of sold-out (422) message text",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "+ at 99 → cart 99 (silently ignored, no message); sold-out add → [422,\"The product '3 Coconut Coal Pcs' is already sold out.\"]",
+    "at": "2026-10-21T22:28:35.223Z"
+  },
+  {
+    "id": "CT-8",
+    "scenario": "Swipe a cart row to delete / to wishlist (touch drag)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "after delete-swipe items=1; wishlist after save-swipe={\"premium-1-5-m-hose\":true}",
+    "at": "2026-10-21T22:28:39.132Z"
+  },
+  {
+    "id": "CT-9",
+    "scenario": "\"Change\" sheet swaps a bowl flavour for a same-price sibling",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "options=12; cart now tobacco-bowls-cantaloup-12g×2",
+    "at": "2026-10-21T22:28:43.159Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA10\" on a 300 EGP cart → applied 10%",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:29:15.977Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"qa10\" on a 300 EGP cart → case-insensitive",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"qa10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:29:48.796Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \" QA10 \" on a 300 EGP cart → whitespace trimmed",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"فعّل\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:30:21.621Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA50OFF\" on a 300 EGP cart → 50 off",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QA50OFF:true\"],\"total\":250,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٥٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣١٠ ج.م\",\"هتاخد ٢٥٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:30:54.419Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAFREESHIP\" on a 300 EGP cart → free shipping (COM-04)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "FAIL",
+    "note": "{\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QAFREESHIP:true\"],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]} → COM-04 CONFIRMED (shipping still charged in cart)",
+    "at": "2026-10-21T22:31:27.545Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAEXPIRED\" on a 300 EGP cart → rejected",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:31:30.309Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"NOPE123\" on a 300 EGP cart → rejected",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:31:33.447Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"<b>x</b>\" on a 300 EGP cart → rejected, escaped",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":300,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٣٣٦ ج.م\",\"هتاخد ٣٠٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:31:36.221Z"
+  },
+  {
+    "id": "DC-2",
+    "scenario": "QAMIN300: rejected at 299, accepted at 300; then cart drops below 300 → code state",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "299: {\"err\":\"الكود ده مينفعش على السلة دي.\",\"btn\":\"فعّل\",\"codes\":[],\"total\":299,\"rows\":[\"المجموع قبل الشحن ٢٩٩ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٩ ج.م\",\"هتاخد ٢٩٩ نقطة لما يوصلك\"]} | 300: {\"err\":\"\",\"btn\":\"اتفعّل\",\"codes\":[\"QAMIN300:true\"],\"total\":270,\"rows\":[\"المجموع قبل الشحن ٣٠٠ ج.م\",\"الخصم -٣٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]} | after dropping to 270: {\"codes\":[\"QAMIN300:false\"],\"total\":270,\"btn\":\"اتفعّل\",\"rows\":[\"المجموع قبل الشحن ٢٧٠ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٣٠ ج.م\",\"هتاخد ٢٧٠ نقطة لما يوصلك\"]}",
+    "at": "2026-10-21T22:32:13.221Z"
+  },
+  {
+    "id": "DC-3",
+    "scenario": "COM-06: invalid code after a valid one removes the valid code",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "FAIL",
+    "note": "after QA10 total=270; after NOPE123 total=300 codes=[] err=\"الكود ده مينفعش على السلة دي.\" → COM-06 CONFIRMED",
+    "at": "2026-10-21T22:32:47.786Z"
+  },
+  {
+    "id": "DC-4",
+    "scenario": "Clearing the code field + Apply removes the code; code survives reload",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "after reload {\"val\":\"QA10\",\"btn\":\"اتفعّل\",\"total\":270}; after clearing total=300",
+    "at": "2026-10-21T22:33:53.388Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 299 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "cart total=299 fee=60 (expected metro 60) bar=\"ضيف ١ ج.م كمان والشحن ينزل لـ ٣٦ ج.م\"",
+    "at": "2026-10-21T22:33:54.704Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 300 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "cart total=300 fee=36 (expected metro 36) bar=\"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"",
+    "at": "2026-10-21T22:33:56.016Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 301 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "cart total=301 fee=36 (expected metro 36) bar=\"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"",
+    "at": "2026-10-21T22:33:57.333Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in C (299 and 300 carts) — cart and checkout-review",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "addr 9000000001 C/Nasr City default=true: 299→cart 60 review 60; 300→cart 36 review 36; zone table 60,36",
+    "at": "2026-10-21T22:34:02.899Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in GZ (299 and 300 carts) — cart and checkout-review",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "addr 9000000002 GZ/Dokki default=false: 299→cart 60 review 60; 300→cart 36 review 36; zone table 60,36",
+    "at": "2026-10-21T22:34:08.514Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in ASN (299 and 300 carts) — cart and checkout-review",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "addr 9000000003 ASN/Aswan default=false: 299→cart 80 review 80; 300→cart 56 review 56; zone table 80,56",
+    "at": "2026-10-21T22:34:14.067Z"
+  },
+  {
+    "id": "FE-4",
+    "scenario": "Automatic \"tong free\": hookah ≥266 EGP from hookahs/bowls + tongs → tongs free",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "original=325 total=294 rows=[\"المجموع قبل الشحن ٣٢٥ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٤ ج.م\",\"هتاخد ٢٩٤ نقطة لما يوصلك\"]",
+    "at": "2026-10-21T22:34:15.691Z"
+  },
+  {
+    "id": "CO-1",
+    "scenario": "Checkout button → /checkout stub; checkouts.jsonl has the items, code and token",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"url\":\"http://localhost:9410/checkout\",\"newRecord\":true,\"items\":[\"50678215508266×1\",\"49399990976810×2\"],\"codes\":[{\"code\":\"QA10\",\"applicable\":true}],\"note\":\"\",\"attributes\":{},\"total\":24030,\"tokenMatch\":true} lastCheckout={\"cartToken\":\"qa93045158a0a38fd7a74748c0?key=e13c8e110835960ed378c36fce56e115\",\"at\":1792622058470}",
+    "at": "2026-10-21T22:34:19.305Z"
+  },
+  {
+    "id": "CO-2",
+    "scenario": "Back from checkout: cart page usable, Checkout button not stuck as spinner (F-16)",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "nav type=back_forward; button={\"html\":\"الدفع\",\"text\":\"الدفع\"} (harness Chromium bfcache not restoring spinner)",
+    "at": "2026-10-21T22:34:20.427Z"
+  },
+  {
+    "id": "CO-3",
+    "scenario": "Checkout review page (/pages/checkout-review): guest gets join card; customer gets address/total/COD; Place → /checkout",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"join\":false,\"placeHidden\":false,\"ships\":\"QA Tester\",\"cod\":\"جهّز المبلغ ده للمندوب: ٢٣٠ ج.م\"} → http://localhost:9410/checkout",
+    "at": "2026-10-21T22:34:22.282Z"
+  },
+  {
+    "id": "CT-LOG",
+    "scenario": "Cart session error summary",
+    "ctx": "Pixel 7/ar/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST h",
+    "at": "2026-10-21T22:34:22.283Z"
+  },
+  {
+    "id": "CT-1",
+    "scenario": "Empty cart: message + best-seller rail with working Add",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "\"Your cart is empty\" rail=4 after Add items=1",
+    "at": "2026-10-21T22:34:25.831Z"
+  },
+  {
+    "id": "CT-2",
+    "scenario": "Add multiple products; lines, totals, ship bar render; line titles in chosen language",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "lines=[\"OKA Cobra×1\",\"Tobacco Bowls- Mint - 12g×2\",\"Premium 1.5 m Hose×1\"] rows=[\"Subtotal EGP 312\",\"Shipping EGP 36\",\"Total EGP 348\",\"You'll earn 312 points on delivery\"]",
+    "at": "2026-10-21T22:34:27.663Z"
+  },
+  {
+    "id": "CT-3",
+    "scenario": "Line + and − (single taps, waiting) update qty and totals; ✕ removes",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "after +:3 after −:2 lines after ✕: cart=2 shown=2",
+    "at": "2026-10-21T22:34:30.515Z"
+  },
+  {
+    "id": "CT-4",
+    "scenario": "F-02: five fast + taps on a cart line",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "expected 6 after 5 fast +, cart=6 shown=6; after 8 fast − cart=0 → F-02 not reproduced",
+    "at": "2026-10-21T22:34:40.931Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA10\" on a 300 EGP cart → applied 10%",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:35:13.716Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAFREESHIP\" on a 300 EGP cart → free shipping (COM-04)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QAFREESHIP:true\"],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]} → COM-04 CONFIRMED (shipping still charged in cart)",
+    "at": "2026-10-21T22:35:46.811Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"NOPE123\" on a 300 EGP cart → rejected",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "{\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]}",
+    "at": "2026-10-21T22:35:49.866Z"
+  },
+  {
+    "id": "DC-2",
+    "scenario": "QAMIN300: rejected at 299, accepted at 300; then cart drops below 300 → code state",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "299: {\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":299,\"rows\":[\"Subtotal EGP 299\",\"Shipping EGP 60\",\"Total EGP 359\",\"You'll earn 299 points on delivery\"]} | 300: {\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QAMIN300:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]} | after dropping to 270: {\"codes\":[\"QAMIN300:false\"],\"total\":270,\"btn\":\"Applied\",\"rows\":[\"Subtotal EGP 270\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:36:26.844Z"
+  },
+  {
+    "id": "DC-3",
+    "scenario": "COM-06: invalid code after a valid one removes the valid code",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "after QA10 total=270; after NOPE123 total=300 codes=[] err=\"This code can’t be used on this basket.\" → COM-06 CONFIRMED",
+    "at": "2026-10-21T22:37:01.383Z"
+  },
+  {
+    "id": "DC-4",
+    "scenario": "Clearing the code field + Apply removes the code; code survives reload",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "after reload {\"val\":\"QA10\",\"btn\":\"Applied\",\"total\":270}; after clearing total=300",
+    "at": "2026-10-21T22:38:06.894Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 299 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "cart total=299 fee=60 (expected metro 60) bar=\"Add 1 EGP more and shipping drops to EGP 36\"",
+    "at": "2026-10-21T22:38:08.204Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 300 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "cart total=300 fee=36 (expected metro 36) bar=\"Shipping EGP 36 — the best rate for your area\"",
+    "at": "2026-10-21T22:38:09.515Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 301 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "cart total=301 fee=36 (expected metro 36) bar=\"Shipping EGP 36 — the best rate for your area\"",
+    "at": "2026-10-21T22:38:10.833Z"
+  },
+  {
+    "id": "FE-3",
+    "scenario": "COM-01: guest always quoted Cairo fee (no address known)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "guest fee shown=60 as a firm number; estimate wording=null → COM-01 CONFIRMED at runtime (Aswan guest would pay 80 at checkout)",
+    "at": "2026-10-21T22:38:11.919Z"
+  },
+  {
+    "id": "FE-4",
+    "scenario": "Automatic \"tong free\": hookah ≥266 EGP from hookahs/bowls + tongs → tongs free",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "original=325 total=294 rows=[\"Subtotal EGP 325\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 354\",\"You'll earn 294 points on delivery\"]",
+    "at": "2026-10-21T22:38:13.528Z"
+  },
+  {
+    "id": "CO-1",
+    "scenario": "Checkout button → /checkout stub; checkouts.jsonl has the items, code and token",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "{\"url\":\"http://localhost:9410/checkout\",\"newRecord\":true,\"items\":[\"50678215508266×1\",\"49399990976810×2\"],\"codes\":[{\"code\":\"QA10\",\"applicable\":true}],\"note\":\"\",\"attributes\":{},\"total\":24030,\"tokenMatch\":true} lastCheckout={\"cartToken\":\"qabc9dbb0996785fdbdee13598?key=d9aa92e047ef2d186a21c03898b5829c\",\"at\":1792622296242}",
+    "at": "2026-10-21T22:38:17.071Z"
+  },
+  {
+    "id": "CO-2",
+    "scenario": "Back from checkout: cart page usable, Checkout button not stuck as spinner (F-16)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "nav type=back_forward; button={\"html\":\"Checkout\",\"text\":\"Checkout\"} (harness Chromium bfcache not restoring spinner)",
+    "at": "2026-10-21T22:38:18.137Z"
+  },
+  {
+    "id": "CO-3",
+    "scenario": "Checkout review page (/pages/checkout-review): guest gets join card; customer gets address/total/COD; Place → /checkout",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "{\"join\":true,\"placeHidden\":true} → http://localhost:9410/checkout",
+    "at": "2026-10-21T22:38:20.087Z"
+  },
+  {
+    "id": "CT-LOG",
+    "scenario": "Cart session error summary",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST h",
+    "at": "2026-10-21T22:38:20.090Z"
+  },
+  {
+    "id": "CT-1",
+    "scenario": "Empty cart: message + best-seller rail with working Add",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "\"Your cart is empty\" rail=4 after Add items=1",
+    "at": "2026-10-21T22:38:23.624Z"
+  },
+  {
+    "id": "CT-2",
+    "scenario": "Add multiple products; lines, totals, ship bar render; line titles in chosen language",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "lines=[\"OKA Cobra×1\",\"Tobacco Bowls- Mint - 12g×2\",\"Premium 1.5 m Hose×1\"] rows=[\"Subtotal EGP 312\",\"Shipping EGP 36\",\"Total EGP 348\",\"You'll earn 312 points on delivery\"]",
+    "at": "2026-10-21T22:38:25.440Z"
+  },
+  {
+    "id": "CT-3",
+    "scenario": "Line + and − (single taps, waiting) update qty and totals; ✕ removes",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "after +:3 after −:2 lines after ✕: cart=2 shown=2",
+    "at": "2026-10-21T22:38:28.303Z"
+  },
+  {
+    "id": "CT-4",
+    "scenario": "F-02: five fast + taps on a cart line",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "expected 6 after 5 fast +, cart=6 shown=6; after 8 fast − cart=0 → F-02 not reproduced",
+    "at": "2026-10-21T22:38:38.733Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QA10\" on a 300 EGP cart → applied 10%",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QA10:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:39:11.533Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"QAFREESHIP\" on a 300 EGP cart → free shipping (COM-04)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "FAIL",
+    "note": "{\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QAFREESHIP:true\"],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]} → COM-04 CONFIRMED (shipping still charged in cart)",
+    "at": "2026-10-21T22:39:44.568Z"
+  },
+  {
+    "id": "DC-1",
+    "scenario": "Discount code \"NOPE123\" on a 300 EGP cart → rejected",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":300,\"rows\":[\"Subtotal EGP 300\",\"Shipping EGP 36\",\"Total EGP 336\",\"You'll earn 300 points on delivery\"]}",
+    "at": "2026-10-21T22:39:47.548Z"
+  },
+  {
+    "id": "DC-2",
+    "scenario": "QAMIN300: rejected at 299, accepted at 300; then cart drops below 300 → code state",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "299: {\"err\":\"This code can’t be used on this basket.\",\"btn\":\"Apply\",\"codes\":[],\"total\":299,\"rows\":[\"Subtotal EGP 299\",\"Shipping EGP 60\",\"Total EGP 359\",\"You'll earn 299 points on delivery\"]} | 300: {\"err\":\"\",\"btn\":\"Applied\",\"codes\":[\"QAMIN300:true\"],\"total\":270,\"rows\":[\"Subtotal EGP 300\",\"Discount -EGP 30\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]} | after dropping to 270: {\"codes\":[\"QAMIN300:false\"],\"total\":270,\"btn\":\"Applied\",\"rows\":[\"Subtotal EGP 270\",\"Shipping EGP 60\",\"Total EGP 330\",\"You'll earn 270 points on delivery\"]}",
+    "at": "2026-10-21T22:40:24.502Z"
+  },
+  {
+    "id": "DC-3",
+    "scenario": "COM-06: invalid code after a valid one removes the valid code",
+    "ctx": "Pixel 7/en/customer",
+    "status": "FAIL",
+    "note": "after QA10 total=270; after NOPE123 total=300 codes=[] err=\"This code can’t be used on this basket.\" → COM-06 CONFIRMED",
+    "at": "2026-10-21T22:40:59.042Z"
+  },
+  {
+    "id": "DC-4",
+    "scenario": "Clearing the code field + Apply removes the code; code survives reload",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "after reload {\"val\":\"QA10\",\"btn\":\"Applied\",\"total\":270}; after clearing total=300",
+    "at": "2026-10-21T22:42:04.587Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 299 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "cart total=299 fee=60 (expected metro 60) bar=\"Add 1 EGP more and shipping drops to EGP 36\"",
+    "at": "2026-10-21T22:42:05.889Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 300 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "cart total=300 fee=36 (expected metro 36) bar=\"Shipping EGP 36 — the best rate for your area\"",
+    "at": "2026-10-21T22:42:07.201Z"
+  },
+  {
+    "id": "FE-1",
+    "scenario": "Threshold: merchandise 301 EGP → fee tier (selected/default address zone)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "cart total=301 fee=36 (expected metro 36) bar=\"Shipping EGP 36 — the best rate for your area\"",
+    "at": "2026-10-21T22:42:08.505Z"
+  },
+  {
+    "id": "FE-2",
+    "scenario": "Logged-in fee with selected address in C (299 and 300 carts) — cart and checkout-review",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "addr 9000000001 C/Nasr City default=true: 299→cart 60 review 60; 300→cart 36 review 36; zone table 60,36",
+    "at": "2026-10-21T22:42:14.018Z"
+  }
+]

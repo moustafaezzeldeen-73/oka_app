@@ -1,0 +1,200 @@
+<title>OKA Test Theme QA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@500&family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column, verdict first, then a ranked fix list with severity stripes, then coverage and limits. */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#1d2420; --muted:#5d6a63; --line:#dde3dd; --accent:#1f6b52;
+  --blocker:#b42318; --critical:#c4320a; --high:#b54708; --medium:#8a6d00; --low:#4b6b8a; --ok:#227a4f;
+  --tint-blocker:#fdecea; --tint-ok:#e8f4ec;
+  --display:"Fraunces",Georgia,serif; --body:"IBM Plex Sans","IBM Plex Sans Arabic",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121614; --surface:#1a201d; --fg:#e4ebe6; --muted:#9aa8a0; --line:#2c3531; --accent:#5fc49b;
+  --blocker:#ff8a80; --critical:#ff9a6b; --high:#f5b35c; --medium:#e3c55a; --low:#8fb4d9; --ok:#6fd39d;
+  --tint-blocker:#3a1d1a; --tint-ok:#17301f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121614; --surface:#1a201d; --fg:#e4ebe6; --muted:#9aa8a0; --line:#2c3531; --accent:#5fc49b;
+  --blocker:#ff8a80; --critical:#ff9a6b; --high:#f5b35c; --medium:#e3c55a; --low:#8fb4d9; --ok:#6fd39d;
+  --tint-blocker:#3a1d1a; --tint-ok:#17301f; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+main{max-width:860px;margin:0 auto;display:grid;gap:40px}
+h1,h2{font-family:var(--display);font-weight:600;text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2rem} h2{font-size:1.35rem}
+h3{font-size:1rem;margin:0;font-weight:600}
+p{margin:0;max-width:68ch}
+.eyebrow{font:500 .72rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mono,code{font-family:var(--mono);font-size:.85em}
+section{display:grid;gap:16px}
+header{display:grid;gap:12px}
+.verdict{background:var(--tint-blocker);border:1px solid var(--blocker);border-radius:10px;padding:18px 20px;display:grid;gap:8px}
+.verdict strong{color:var(--blocker)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.stat{border-top:2px solid var(--line);padding-top:8px;font-variant-numeric:tabular-nums}
+.stat b{display:block;font:600 1.5rem/1.2 var(--mono)}
+.stat span{color:var(--muted);font-size:.85rem}
+ol.actions{margin:0;padding-inline-start:1.3em;display:grid;gap:8px}
+.list{display:grid;gap:10px}
+.item{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--sev);border-radius:6px;padding:12px 16px;display:grid;gap:4px;min-width:0}
+.item .top{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.sev{font:600 .7rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--sev)}
+.refs{font:400 .75rem/1.4 var(--mono);color:var(--muted)}
+.item p{color:var(--fg);font-size:.93rem}
+.blocker{--sev:var(--blocker)} .critical{--sev:var(--critical)} .high{--sev:var(--high)} .medium{--sev:var(--medium)} .low{--sev:var(--low)}
+.ok-box{background:var(--tint-ok);border-radius:8px;padding:14px 18px}
+ul{margin:0;padding-inline-start:1.2em;display:grid;gap:4px}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem;font-variant-numeric:tabular-nums}
+th,td{text-align:start;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .72rem/1.2 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+a{color:var(--accent)}
+.note{color:var(--muted);font-size:.88rem}
+</style>
+
+<main>
+<header>
+  <div class="eyebrow">QA audit · theme 191458214186 · source <code>theme/</code> on claude/quirky-edison-53gb9h</div>
+  <h1>OKA App Theme (test) — QA results</h1>
+  <p>Nine testers audited the unpublished test theme: security, money, store data, code, shopping journeys, layout and accessibility, AR and camera, and abuse testing. Everything ran read-only against the live store and against a local copy of the theme rendered with your real products, collections and discounts.</p>
+</header>
+
+<div class="verdict">
+  <strong>Do not publish this theme yet.</strong>
+  <p>Two blockers expose customer data today, even while the theme is unpublished: its settings hand an API key to every visitor of the preview. Fix the blockers and the critical shipping-fee bug before launch. Most other findings are medium-sized polish.</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><b>2</b><span>Blockers</span></div>
+  <div class="stat"><b>2</b><span>Critical</span></div>
+  <div class="stat"><b>11</b><span>High (deduplicated)</span></div>
+  <div class="stat"><b>~125</b><span>Findings across 8 reports</span></div>
+  <div class="stat"><b>4,000+</b><span>Browser page loads tested</span></div>
+</div>
+
+<section>
+  <h2>Do these first</h2>
+  <ol class="actions">
+    <li><b>Rotate the key</b> stored in the test theme's <code>orders_api_key</code> / <code>jt_tracking_key</code> settings (the run.app J&amp;T connector). It has been sitting in a theme setting that renders into every page.</li>
+    <li><b>Restrict the connector:</b> set its <code>ALLOWED_TOOLS</code> to tracking only, and check whether <code>SHOPIFY_ADMIN_TOKEN</code> is set there. Only you can check the live service.</li>
+    <li><b>Take both keys out of the theme.</b> Route order and tracking calls through the app proxy, which already verifies a signature per customer.</li>
+    <li><b>Fix the shipping-fee quote for guests</b> (COM-01) and the rate gap in Shopify's shipping settings: set the under-300 rate's maximum to 299.99 (COM-02).</li>
+    <li>Work through the High list below, then the Medium groups.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Blockers and critical</h2>
+  <div class="list">
+    <div class="item blocker"><div class="top"><span class="sev">Blocker</span><h3>The API key reaches every visitor</h3></div>
+      <p><code>layout/theme.liquid</code> writes the orders and J&amp;T key into <code>window.OKA</code>. Confirmed in raw HTML on 40 of 40 theme pages for a guest, including 404 and <code>/ar/</code> pages; only the password page is clean.</p>
+      <div class="refs">SEC-01 · CH-01 · checked by hand</div></div>
+    <div class="item blocker"><div class="top"><span class="sev">Blocker</span><h3>That key looks up any customer by phone number</h3></div>
+      <p>It unlocks the connector's <code>track_by_phone</code> tool, which returns a customer's shipments and Shopify order contents. A script on a guest page read the key and called it (against a local mock only).</p>
+      <div class="refs">SEC-02 · CH-01</div></div>
+    <div class="item critical"><div class="top"><span class="sev">Critical</span><h3>The same key may create and cancel shipments</h3></div>
+      <p>Orders and tracking share one URL and key. Unless <code>ALLOWED_TOOLS</code> is restricted on the live service, all 19 connector tools are open, including create/cancel shipments, shipment finance and a name-and-phone report.</p>
+      <div class="refs">SEC-03 · needs owner check</div></div>
+    <div class="item critical"><div class="top"><span class="sev">Critical</span><h3>Guests are quoted the Cairo delivery fee everywhere</h3></div>
+      <p>The cart shows 60 (36 over 300) for all governorates; Shopify charges 70/46 in the delta and 80/56 in the far zone. 72 of 87 cases wrong, no "estimate" label, and the cart's Checkout skips the review page that corrects it.</p>
+      <div class="refs">COM-01</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>High</h2>
+  <div class="list">
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>Code in a shipping address runs on the order pages</h3></div>
+      <p>Name, address lines and city render unescaped in <code>snippets/order-detail.liquid:139-142</code>; script executed in Chromium on the orders list, order detail and edit sheet.</p><div class="refs">SEC-04 · CH-02</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>A shared phone shows the previous guest's order</h3></div>
+      <p>Name, phone, address and items stay in <code>localStorage</code> with no expiry and appear with Edit and Cancel buttons for the next visitor. Sign-out doesn't clear it.</p><div class="refs">SEC-06 · CH-12</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>The camera can stay on with nothing showing it</h3></div>
+      <p>Scrolling away and back, or switching tabs, while the permission prompt is open starts a second stream that is never stopped.</p><div class="refs">AR-01 · AR-02 · F-03</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>The keyboard rotates the shop sideways</h3></div>
+      <p>The portrait lock reads the viewport shape, so an open keyboard in portrait counts as landscape. Reproduced at 360×300 and on landscape tablets. Likely worst in Facebook/Instagram/TikTok browsers.</p><div class="refs">F-01 · V-19</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>Saved addresses won't work with new customer accounts</h3></div>
+      <p>The store uses new customer accounts; the theme posts addresses to the classic <code>/account/addresses</code>, and its classic login/register templates are never used.</p><div class="refs">SI-01 · needs device check</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>Four categories are missing from the home page</h3></div>
+      <p>Hookahs, hoses, coal and bowls are dropped because their products already appear under Premium or Parts. Search chips still show all ten. Confirmed in the browser.</p><div class="refs">SI-02 · E2E HM-3</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>Checkout blocked between 299.01 and 299.99</h3></div>
+      <p>Shopify's under-300 rate stops at 299.00 in four zones, so no shipping method exists there. Not reachable with today's whole-pound prices. Fix in Shopify shipping settings.</p><div class="refs">COM-02</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>Governorate matching misses common spellings</h3></div>
+      <p>39 of 108 spellings fail; "القناطر الخيرية" lands in Qena (80 instead of 70). The order service's matcher gets most of these right and could be reused.</p><div class="refs">COM-03</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>Free-shipping discounts never show</h3></div>
+      <p>The fee stays in the total and in the cash-on-delivery amount. No such codes are active today.</p><div class="refs">COM-04</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>"Pay the courier" shows the full order total</h3></div>
+      <p>It ignores store credit already spent and later edits; four live orders show 259 due when 70 is outstanding.</p><div class="refs">COM-05</div></div>
+    <div class="item high"><div class="top"><span class="sev">High</span><h3>The staff J&amp;T lookup panel ships in the theme</h3></div>
+      <p>Off in live settings, but one toggle shows a phone-to-shipments search on the public orders page.</p><div class="refs">SEC-05</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Medium, grouped</h2>
+  <div class="list">
+    <div class="item medium"><div class="top"><span class="sev">Medium</span><h3>Cart counts go wrong under fast taps</h3></div>
+      <p>Cart −/+ isn't queued (5 fast + taps → 3 with latency); double tap on Add to Cart adds twice; "Order again" double-adds; cards show "Add" instead of −/+ after reload; no sync across tabs or after Back.</p><div class="refs">F-02 · F-04 · F-05 · CH-07 · CH-10 · COM-09 · E2E CT-4b, PD-3, HM-12</div></div>
+    <div class="item medium"><div class="top"><span class="sev">Medium</span><h3>Fees and discounts disagree between screens</h3></div>
+      <p>An invalid code removes a valid one; the product page shows 36 where the cart shows 60 for the same basket; Subscribe &amp; Save totals differ from what would be charged; the "20 off over 300" voucher can raise the total.</p><div class="refs">COM-06 · COM-07 · COM-08 · COM-10 · E2E PD-10</div></div>
+    <div class="item medium"><div class="top"><span class="sev">Medium</span><h3>Language mixing and English-only labels</h3></div>
+      <p>English doesn't stick on <code>/ar/</code> URLs; the catalogue cache mixes languages for 60 s; checkout and page links drop <code>/ar</code>; icon-button labels, alt text, 5 product descriptions and 3 policies are English on Arabic pages.</p><div class="refs">F-07 · V-02 · SI-05 · V-06 · SI-10 · SI-06 · AR-13</div></div>
+    <div class="item medium"><div class="top"><span class="sev">Medium</span><h3>AR and camera experience</h3></div>
+      <p>No feedback after Add to cart on the AR screen; camera requested with no tap, on Back, and again after each denial, with no off button; it can start in a hidden tab; broken 3D or no WebGL leaves "Loading 3D…" forever; desktop wheel gets captured or snapped back.</p><div class="refs">AR-03 to AR-08 · F-08 · F-10</div></div>
+    <div class="item medium"><div class="top"><span class="sev">Medium</span><h3>Orders flow</h3></div>
+      <p>Any orders-API failure makes a guest's order vanish ("No orders yet"); the edit sheet rebuilds on every keystroke; phones in Arabic digits or with <code>0020</code> are rejected.</p><div class="refs">CH-06 · F-06 · CH-09</div></div>
+    <div class="item medium"><div class="top"><span class="sev">Medium</span><h3>Accessibility</h3></div>
+      <p>Toasts off-centre and unannounced; dialogs and the age gate don't hold focus; grey secondary text at 1.8–2.8:1; 504 unlabeled image links; zoom blocked on 54 pages; 14–16 px touch targets.</p><div class="refs">V-01 · V-03 · V-04 · V-05 · V-07 · V-08 · V-09</div></div>
+    <div class="item medium"><div class="top"><span class="sev">Medium</span><h3>Store content and settings</h3></div>
+      <p><code>/pages/account</code>, <code>/pages/orders</code> and the rest are already live as empty pages on okaegypt.com; 3 hookahs and FAQ use templates this theme lacks; empty WhatsApp and order-service settings hide features; older browsers may hide the bottom buy bar.</p><div class="refs">SI-04 · SI-03 · SI-08 · SI-09 · F-09</div></div>
+    <div class="item medium"><div class="top"><span class="sev">Medium</span><h3>Security hardening</h3></div>
+      <p>Product and collection titles render unescaped (<code>snippets/bi.liquid</code>, staff-controlled); model-viewer and Nominatim load without integrity hashes; the server's express dependency carries 1 critical and 3 moderate advisories.</p><div class="refs">CH-03 · SEC-07 · SEC-08</div></div>
+    <div class="item medium"><div class="top"><span class="sev">Medium</span><h3>Age gate</h3></div>
+      <p>There is no "under 18" path, keyboard focus escapes it, and the side menu opens above it. It runs only in the browser.</p><div class="refs">E2E AG-2 · AG-3 · V-14 · SEC-09</div></div>
+  </div>
+  <p class="note">Low and Info items (about 50) are in each report: unclear error messages, rounding display, Arabic digit formatting, missing <code>&lt;h1&gt;</code>, dead code, out-of-date README/CHANGELOG, theme check's 4 offenses.</p>
+</section>
+
+<section>
+  <h2>What works</h2>
+  <div class="ok-box">
+    <ul>
+      <li>For a recognised address, the theme's zone table and its 60/36, 70/46, 80/56 fees match Shopify's delivery zones exactly, including at 300.</li>
+      <li>All 10 collections exist and are published; all 5 bundle variants are purchasable; all 42 images and videos resolve.</li>
+      <li>No horizontal overflow at any of 17 screen sizes in Arabic or English; numbers, phones and prices order correctly in RTL.</li>
+      <li>Collections and search passed 152 of 152 browser checks, including Arabic search.</li>
+      <li>The order service is solid: signed app-proxy requests, replay protection, ownership checks; 66/66 tests pass. No secrets in either repo's git history.</li>
+      <li>A 15-minute, 1,270-page session showed no memory leaks and no errors. 3D loads only when used.</li>
+      <li>Static checks: JavaScript parses, lint 0 errors, all templates and schemas valid.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Reports</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Report</th><th>Scope</th><th>Findings</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">02-security.md</td><td>Keys, data exposure, XSS, storage, server</td><td>10</td></tr>
+      <tr><td class="mono">03-commerce.md</td><td>Fees, zones, discounts, loyalty, COD — 790 checks</td><td>18</td></tr>
+      <tr><td class="mono">04-store-integration.md</td><td>Live store data vs what the theme needs</td><td>20</td></tr>
+      <tr><td class="mono">05-code-correctness.md</td><td>Every theme file, lint, theme check, recent commits</td><td>21</td></tr>
+      <tr><td class="mono">06-e2e-journeys.md</td><td>Shopping journeys on iPhone, Pixel, desktop (in progress)</td><td>5 of ~10 groups run</td></tr>
+      <tr><td class="mono">07-visual-rtl-a11y.md</td><td>1,938 layout loads, axe on every page, keyboard, performance</td><td>21</td></tr>
+      <tr><td class="mono">08-ar-camera-media.md</td><td>Camera states, stream leaks, 3D fallbacks, video, snap</td><td>18</td></tr>
+      <tr><td class="mono">09-adversarial-chaos.md</td><td>Hostile data, storage, network, rapid taps, soak</td><td>13</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">All files are in <code>qa/</code> on the PR branch, with the local test store (<code>qa/harness/</code>) and every test script.</p>
+</section>
+
+<section>
+  <h2>Not covered here</h2>
+  <ul>
+    <li>The live preview: this environment's network blocks okaegypt.com and Shopify's CDN, so everything ran on a local copy. Real checkout, product images and videos were not exercised.</li>
+    <li>Whether Shopify applies the 300 threshold before or after discounts: needs one real checkout.</li>
+    <li>The live run.app service: its tool restrictions, and whether one customer can edit another's order through it.</li>
+    <li>Real devices: iOS Safari, Android Chrome, Samsung Internet and in-app browsers for AR, the keyboard rotation, older-browser layout and screen readers. Each report lists its device tests.</li>
+    <li>Shopping journeys groups 6–10 (account, orders, guest orders, offline) were still running when this summary was written.</li>
+  </ul>
+</section>
+</main>

@@ -1,0 +1,11 @@
+TypeError: Cannot read properties of null (reading 'h')
+localStorage oka.wishlist = 'null' → [
+  "Cannot read properties of null (reading 'h')",
+  "recommend(): Cannot read properties of null (reading 'x')"
+]
+sessionStorage oka.viewed = '{}' → [
+  'recommend(): object is not iterable (cannot read property Symbol(Symbol.iterator))',
+  'viewed.add(): viewed.list(...).filter is not a function'
+]
+Control (valid values) → []
+TypeError: Cannot read properties of null (reading 'h')

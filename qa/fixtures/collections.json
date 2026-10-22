@@ -1,0 +1,561 @@
+[
+  {
+    "id": 455694057770,
+    "handle": "oka-parts",
+    "title": "OKA Parts",
+    "body_html": "<p>your OKA hookah is growing old, or starting to collect tastes. all you have to do is to replace some parts and it is good as new again. no need to buy a whole new shisha. just choose the parts that needs replacement.</p>",
+    "sort_order": "manual",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/OKA-Stem_0.5x.webp?v=1692161510",
+      "width": 667,
+      "height": 734,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "قطع الغيار"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": "قطع الغيار"
+      }
+    },
+    "product_handles": [
+      "oka-stem",
+      "steel-plate",
+      "copy-of-oka-stem-3-pieces",
+      "untitled-sep8_15-46",
+      "oka-cobra-led-rechargeable-base",
+      "3-coconut-coal-pcs",
+      "3-oka-stems",
+      "1-pcs-of-foil",
+      "oka-gourmets-hose-bowl",
+      "premium-1-5-m-hose",
+      "standard-1-5-m-hose",
+      "standard-15-g-bowl-glazed",
+      "tongs",
+      "tongs-foil-combo"
+    ]
+  },
+  {
+    "id": 455694614826,
+    "handle": "hoses",
+    "title": "Hoses",
+    "body_html": "A wide selection of premium and standard hoses that fits into your OKA hookahs , customize your shisha experience.",
+    "sort_order": "best-selling",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/58a99c28-ecf1-40ce-a45a-9589924fe701.webp?v=1692161893",
+      "width": 1334,
+      "height": 1467,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "الليات"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": "الليات"
+      }
+    },
+    "product_handles": [
+      "oka-gourmets-hose-bowl",
+      "premium-1-5-m-hose",
+      "standard-1-5-m-hose"
+    ]
+  },
+  {
+    "id": 455694811434,
+    "handle": "hookahs",
+    "title": "OKA basic Hookahs",
+    "body_html": "Choose your OKA shisha set from here including Elite bowl and hose and free OKA Stem",
+    "sort_order": "manual",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/Untitled-4.webp?v=1728652641",
+      "width": 1080,
+      "height": 1365,
+      "alt": "Hookah with coal and foil free"
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "شيشة أوكا الأساسية"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": " شيشة اوكا المتميزة ",
+        "body_html": "أحصل على شيشة اوكا معها کاملة جاهزة للتدخين"
+      }
+    },
+    "product_handles": [
+      "oka-cloud-white-hookah",
+      "oka-victoria-pink-hookah"
+    ]
+  },
+  {
+    "id": 455695073578,
+    "handle": "coal",
+    "title": "Coal",
+    "body_html": "All types of hookah coal, that complements your shisha smoking experience. all the tools and accessories needed to heat your shisha properly.",
+    "sort_order": "best-selling",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/coal.webp?v=1692162318",
+      "width": 1200,
+      "height": 1200,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "الفحم"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": "الفحم"
+      }
+    },
+    "product_handles": [
+      "tongs",
+      "tongs-foil-combo",
+      "3-coconut-coal-pcs",
+      "foil",
+      "1-pcs-of-foil",
+      "self-lighted-coal-capsules-10-pcs",
+      "coconut-coal-250-g"
+    ]
+  },
+  {
+    "id": 455695466794,
+    "handle": "bundles",
+    "title": "OKA Couples",
+    "body_html": "Get free gifts when purchasing the bundles of hookahs of OKA, gifts include foil, shisha coal, tongs.",
+    "sort_order": "created-descending",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-06T07:26:13Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/collection_3.webp?v=1692345079",
+      "width": 667,
+      "height": 734,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "حزم التوفير"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": "حزم التوفير",
+        "body_html": "احصل على هدايا اضافية عند شرائك ممجموعة من اراجيل أوكا"
+      }
+    },
+    "product_handles": []
+  },
+  {
+    "id": 455695532330,
+    "handle": "fakher-tobacco",
+    "title": "Fakher Tobacco",
+    "body_html": "Select from Al Fakher tobacco for your shisha , wide selection of fakher hookah tobacco",
+    "sort_order": "best-selling",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-06T07:26:13Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/fakher.webp?v=1692162846",
+      "width": 1334,
+      "height": 1467,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "معسل الفاخر الأصلي"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": "معسل الفاخر الاصلي"
+      }
+    },
+    "product_handles": [
+      "black-silicon-35-gram-bowl-free-oka",
+      "white-silicon-35-gram-bowl-free-oka",
+      "pink-silicon-35-gram-bowl-free-oka"
+    ]
+  },
+  {
+    "id": 455695761706,
+    "handle": "bowls",
+    "title": "Bowls",
+    "body_html": "Wide selection of hookah bowls guaranteed to fit your OKA set. these bowls are updated each week so stay tuned.",
+    "sort_order": "created-descending",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/phunnel_bowl.webp?v=1692162984",
+      "width": 1024,
+      "height": 1024,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "رأس الشيشة (الحجر)"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": "رأس الشيشة (الحجر)"
+      }
+    },
+    "product_handles": [
+      "copy-of-elite-waxed-phunnel-25-g-bowl-white",
+      "black-silicon-35-gram-bowl-free-oka",
+      "pink-silicon-35-gram-bowl-free-oka",
+      "white-silicon-35-gram-bowl-free-oka",
+      "untitled-sep8_15-46",
+      "standard-15-g-bowl-glazed",
+      "hookah-phunnel-25-g-bowl"
+    ]
+  },
+  {
+    "id": 455716176170,
+    "handle": "heat-managment-device",
+    "title": "Heat Managment Device",
+    "body_html": "Control the puffs of your hookah to your taste. manage the heat going from the coal to the tobacco either for longer sessions or heavier puffs..",
+    "sort_order": "best-selling",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-06T07:26:13Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/hmd.webp?v=1692167837",
+      "width": 1334,
+      "height": 1467,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "راس شيشة معدن"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": "راس شيشة معدن"
+      }
+    },
+    "product_handles": []
+  },
+  {
+    "id": 455716962602,
+    "handle": "dark-tobacco",
+    "title": "Dark Tobacco",
+    "body_html": "The authenticity of the hookah smoking with the dark unflavored tobacco.",
+    "sort_order": "best-selling",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/moassel-collection.webp?v=1692168191",
+      "width": 1334,
+      "height": 1467,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "معسل أسود"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": "معسل اسود"
+      }
+    },
+    "product_handles": [
+      "oka-black-tobacco-plate",
+      "oka-black-tobacco"
+    ]
+  },
+  {
+    "id": 455743340842,
+    "handle": "sale",
+    "title": "Sale",
+    "body_html": "",
+    "sort_order": "manual",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-06T07:26:13Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/OIP.jpg?v=1692191735",
+      "width": 474,
+      "height": 474,
+      "alt": ""
+    },
+    "rules": [
+      {
+        "column": "VARIANT_COMPARE_AT_PRICE",
+        "relation": "EQUALS",
+        "condition": "129"
+      }
+    ],
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "تخفيضات"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "title": "تخفيضات"
+      }
+    },
+    "product_handles": []
+  },
+  {
+    "id": 483813392682,
+    "handle": "ready-to-smoke-bowls",
+    "title": "Ready to smoke bowls",
+    "body_html": "<p>Get ready-to-smoke tobacco bowls that last 45 to 60 minutes, packed with different flavors from Al Kabeer Tobacco. Each bowl holds around 12 grams, already pre-poked with a folded coal crown to keep the coals safe and steady.</p>",
+    "sort_order": "title-ascending",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/Banner_2-1.png?v=1728660042",
+      "width": 428,
+      "height": 542,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "حجر جاهز للتدخين"
+        }
+      }
+    },
+    "translations": {
+      "ar": {}
+    },
+    "product_handles": [
+      "tobacco-bowls-blueberry-12g",
+      "tobacco-bowls-cantaloup-12g",
+      "tobacco-bowls-grapes-12g",
+      "tobacco-bowls-gum-12g",
+      "tobacco-bowls-gum-mint-12g",
+      "tobacco-bowls-mint-12g",
+      "tobacco-bowls-pistachio-12g",
+      "tobacco-bowls-love-sixty-six-12g",
+      "tobacco-bowls-two-apples-12g",
+      "tobacco-bowls-watermelon-12g",
+      "tobacco-bowls-cola-12g",
+      "tobacco-bowls-gum-mustic-12g",
+      "tobacco-bowls-iced-lemon-mint-12g",
+      "tobacco-bowls-lady-killer-12g",
+      "tobacco-bowls-mega-berry-12g"
+    ]
+  },
+  {
+    "id": 500146831658,
+    "handle": "oka-cobra",
+    "title": "OKA Cobra",
+    "body_html": "",
+    "sort_order": "manual",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/cobra_english.png?v=1760182563",
+      "width": 800,
+      "height": 1200,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "أوكا كوبرا"
+        }
+      }
+    },
+    "translations": {
+      "ar": {}
+    },
+    "product_handles": [
+      "oka-cobra",
+      "oka-cobra-oka-base",
+      "oka-cobra-led-rechargeable-base"
+    ]
+  },
+  {
+    "id": 500588773674,
+    "handle": "people-also-buy",
+    "title": "People also buy",
+    "body_html": "",
+    "sort_order": "manual",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": null,
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "الناس كمان بتشتري"
+        }
+      }
+    },
+    "translations": {
+      "ar": {}
+    },
+    "product_handles": [
+      "oka-gourmets-hose-bowl",
+      "steel-plate",
+      "premium-1-5-m-hose",
+      "tobacco-bowls-love-sixty-six-12g",
+      "tobacco-bowls-lady-killer-12g",
+      "copy-of-oka-stem-3-pieces",
+      "tongs",
+      "untitled-sep8_15-46"
+    ]
+  },
+  {
+    "id": 501506244906,
+    "handle": "oka-basic-hookahs-copy",
+    "title": "OKA Premium Hookahs",
+    "body_html": "Choose your OKA shisha set from here including Elite bowl and hose and free OKA Stem",
+    "sort_order": "manual",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-14T11:13:36Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/Untitled-4.webp?v=1762673989",
+      "width": 1080,
+      "height": 1365,
+      "alt": "Hookah with coal and foil free"
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "شيشة أوكا المتميزة"
+        }
+      }
+    },
+    "translations": {
+      "ar": {
+        "body_html": "أحصل على شيشة اوكا معها کاملة جاهزة للتدخين",
+        "title": " شيشة اوكا المتميزة "
+      }
+    },
+    "product_handles": [
+      "oka-victoria-pink-hookah",
+      "oka-cloud-white-hookah",
+      "oka-victoria-pink-copy",
+      "oka-carbon-black-hookah",
+      "oka-victoria-pink-premium-copy"
+    ]
+  },
+  {
+    "id": 510658904362,
+    "handle": "oka-parties",
+    "title": "OKA Parties",
+    "body_html": "",
+    "sort_order": "best-selling",
+    "template_suffix": null,
+    "published": true,
+    "updated_at": "2026-10-13T11:14:02Z",
+    "image": {
+      "src": "https://cdn.shopify.com/s/files/1/0812/4881/3354/collections/3F742C9C-A2A2-42E6-B986-120B9D28FAF5.png?v=1779128854",
+      "width": 1376,
+      "height": 768,
+      "alt": ""
+    },
+    "rules": null,
+    "disjunctive": false,
+    "metafields": {
+      "oka": {
+        "title_ar": {
+          "type": "single_line_text_field",
+          "value": "أوكا بارتي"
+        }
+      }
+    },
+    "translations": {
+      "ar": {}
+    },
+    "product_handles": [
+      "trio-party",
+      "the-hexa-party"
+    ]
+  }
+]

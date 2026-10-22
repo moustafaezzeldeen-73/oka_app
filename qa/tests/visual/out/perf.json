@@ -1,0 +1,636 @@
+{
+ "none /": {
+  "tLoad": 488,
+  "tOka": 633,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 73,
+   "document": 92,
+   "fetch": 79,
+   "other": 0,
+   "media": 0,
+   "font": 0
+  },
+  "dcl": 330,
+  "load": 465,
+  "fcp": 284,
+  "lcp": 324,
+  "cls": 0,
+  "shifts": [],
+  "longTasks": [
+   84
+  ],
+  "tbtish": 34,
+  "domNodes": 982,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 64,
+  "imgNoDims": [],
+  "imgNoDimsCount": 0,
+  "imgEager": 7,
+  "imgLazy": 57,
+  "jsHeapMB": 10
+ },
+ "none /products/oka-cobra": {
+  "tLoad": 339,
+  "tOka": 439,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 68,
+   "document": 24,
+   "fetch": 84,
+   "other": 0,
+   "media": 0,
+   "font": 0
+  },
+  "dcl": 328,
+  "load": 336,
+  "fcp": 312,
+  "lcp": 608,
+  "cls": 0,
+  "shifts": [
+   {
+    "v": 0,
+    "src": [
+     "I"
+    ]
+   }
+  ],
+  "longTasks": [
+   114
+  ],
+  "tbtish": 64,
+  "domNodes": 372,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 10,
+  "imgNoDims": [
+   "arx-fallback",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img"
+  ],
+  "imgNoDimsCount": 7,
+  "imgEager": 3,
+  "imgLazy": 7,
+  "jsHeapMB": 10
+ },
+ "none /products/oka-cloud-white-hookah": {
+  "tLoad": 695,
+  "tOka": 729,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 69,
+   "document": 28,
+   "fetch": 84,
+   "other": 0,
+   "media": 1,
+   "font": 0
+  },
+  "dcl": 390,
+  "load": 691,
+  "fcp": 360,
+  "lcp": 564,
+  "cls": 0,
+  "shifts": [
+   {
+    "v": 0,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0,
+    "src": [
+     "I"
+    ]
+   }
+  ],
+  "longTasks": [
+   227,
+   66
+  ],
+  "tbtish": 193,
+  "domNodes": 432,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 11,
+  "imgNoDims": [
+   "arx-fallback",
+   "reel-item",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img"
+  ],
+  "imgNoDimsCount": 8,
+  "imgEager": 4,
+  "imgLazy": 7,
+  "jsHeapMB": 10
+ },
+ "none /collections/all?filter.v.availability=1": {
+  "tLoad": 359,
+  "tOka": 458,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 80,
+   "document": 65,
+   "fetch": 79,
+   "other": 0,
+   "media": 0,
+   "font": 0
+  },
+  "dcl": 212,
+  "load": 313,
+  "fcp": 240,
+  "lcp": 364,
+  "cls": 0,
+  "shifts": [],
+  "longTasks": [
+   121
+  ],
+  "tbtish": 71,
+  "domNodes": 746,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 37,
+  "imgNoDims": [],
+  "imgNoDimsCount": 0,
+  "imgEager": 2,
+  "imgLazy": 35,
+  "jsHeapMB": 10
+ },
+ "none /cart": {
+  "tLoad": 295,
+  "tOka": 539,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 71,
+   "document": 19,
+   "fetch": 79,
+   "other": 0,
+   "media": 0,
+   "font": 0
+  },
+  "dcl": 212,
+  "load": 275,
+  "fcp": 200,
+  "lcp": 572,
+  "cls": 0,
+  "shifts": [],
+  "longTasks": [
+   67,
+   57,
+   68
+  ],
+  "tbtish": 42,
+  "domNodes": 292,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 14,
+  "imgNoDims": [
+   "line-img",
+   "line-img",
+   "cs-card",
+   "cs-card",
+   "cs-card",
+   "cs-card",
+   "cs-card",
+   "cs-card"
+  ],
+  "imgNoDimsCount": 12,
+  "imgEager": 2,
+  "imgLazy": 12,
+  "jsHeapMB": 10
+ },
+ "none /pages/orders?order=%239000101": {
+  "tLoad": 457,
+  "tOka": 587,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 74,
+   "document": 72,
+   "fetch": 81,
+   "other": 0,
+   "media": 0,
+   "font": 0
+  },
+  "dcl": 440,
+  "load": 454,
+  "fcp": 268,
+  "lcp": 492,
+  "cls": 0,
+  "shifts": [],
+  "longTasks": [
+   116,
+   110
+  ],
+  "tbtish": 126,
+  "domNodes": 1383,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 26,
+  "imgNoDims": [],
+  "imgNoDimsCount": 0,
+  "imgEager": 26,
+  "imgLazy": 0,
+  "jsHeapMB": 10
+ },
+ "slow-4g /": {
+  "tLoad": 2798,
+  "tOka": 2949,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 71,
+   "document": 92,
+   "fetch": 79,
+   "other": 0,
+   "media": 0,
+   "font": 0
+  },
+  "dcl": 2769,
+  "load": 2795,
+  "fcp": 2284,
+  "lcp": 2368,
+  "cls": 0,
+  "shifts": [],
+  "longTasks": [
+   698,
+   57,
+   57
+  ],
+  "tbtish": 662,
+  "domNodes": 982,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 64,
+  "imgNoDims": [],
+  "imgNoDimsCount": 0,
+  "imgEager": 7,
+  "imgLazy": 57,
+  "jsHeapMB": 10
+ },
+ "slow-4g /products/oka-cobra": {
+  "tLoad": 2496,
+  "tOka": 2805,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 64,
+   "document": 24,
+   "fetch": 79,
+   "other": 0,
+   "media": 0,
+   "font": 0
+  },
+  "dcl": 2462,
+  "load": 2466,
+  "fcp": 1980,
+  "lcp": 2608,
+  "cls": 0.0011,
+  "shifts": [
+   {
+    "v": 0.0006,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0002,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0,
+    "src": [
+     "I"
+    ]
+   }
+  ],
+  "longTasks": [
+   562,
+   134,
+   91,
+   140,
+   62
+  ],
+  "tbtish": 739,
+  "domNodes": 372,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 10,
+  "imgNoDims": [
+   "arx-fallback",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img"
+  ],
+  "imgNoDimsCount": 7,
+  "imgEager": 3,
+  "imgLazy": 7,
+  "jsHeapMB": 10
+ },
+ "slow-4g /products/oka-cloud-white-hookah": {
+  "tLoad": 2940,
+  "tOka": 3178,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 65,
+   "document": 28,
+   "fetch": 79,
+   "other": 0,
+   "media": 1,
+   "font": 0
+  },
+  "dcl": 2548,
+  "load": 2931,
+  "fcp": 2136,
+  "lcp": 2700,
+  "cls": 0.0005,
+  "shifts": [
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   }
+  ],
+  "longTasks": [
+   641,
+   63,
+   67,
+   70,
+   80,
+   51
+  ],
+  "tbtish": 672,
+  "domNodes": 432,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 11,
+  "imgNoDims": [
+   "arx-fallback",
+   "reel-item",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img"
+  ],
+  "imgNoDimsCount": 8,
+  "imgEager": 4,
+  "imgLazy": 7,
+  "jsHeapMB": 10
+ },
+ "3g /": {
+  "tLoad": 6613,
+  "tOka": 6760,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 72,
+   "document": 92,
+   "fetch": 79,
+   "other": 0,
+   "media": 0,
+   "font": 0
+  },
+  "dcl": 6577,
+  "load": 6607,
+  "fcp": 4036,
+  "lcp": 5372,
+  "cls": 0,
+  "shifts": [],
+  "longTasks": [
+   480,
+   453,
+   112,
+   67
+  ],
+  "tbtish": 912,
+  "domNodes": 982,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 64,
+  "imgNoDims": [],
+  "imgNoDimsCount": 0,
+  "imgEager": 7,
+  "imgLazy": 57,
+  "jsHeapMB": 10
+ },
+ "3g /products/oka-cobra": {
+  "tLoad": 5922,
+  "tOka": 6171,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 68,
+   "document": 24,
+   "fetch": 79,
+   "other": 0,
+   "media": 0,
+   "font": 0
+  },
+  "dcl": 5890,
+  "load": 5903,
+  "fcp": 2892,
+  "lcp": 6136,
+  "cls": 0.0009,
+  "shifts": [
+   {
+    "v": 0.0003,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   }
+  ],
+  "longTasks": [
+   260,
+   253,
+   53
+  ],
+  "tbtish": 416,
+  "domNodes": 372,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 10,
+  "imgNoDims": [
+   "arx-fallback",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img"
+  ],
+  "imgNoDimsCount": 7,
+  "imgEager": 3,
+  "imgLazy": 7,
+  "jsHeapMB": 10
+ },
+ "3g /products/oka-cloud-white-hookah": {
+  "tLoad": 6402,
+  "tOka": 6518,
+  "bytesKB": {
+   "script": 227,
+   "stylesheet": 103,
+   "image": 65,
+   "document": 28,
+   "fetch": 79,
+   "other": 0,
+   "media": 1,
+   "font": 0
+  },
+  "dcl": 5995,
+  "load": 6002,
+  "fcp": 3436,
+  "lcp": 6260,
+  "cls": 0.001,
+  "shifts": [
+   {
+    "v": 0,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0005,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0001,
+    "src": [
+     "I"
+    ]
+   },
+   {
+    "v": 0.0003,
+    "src": [
+     "I"
+    ]
+   }
+  ],
+  "longTasks": [
+   620,
+   58,
+   178
+  ],
+  "tbtish": 706,
+  "domNodes": 432,
+  "renderBlocking": [
+   "http://localhost:9420/cdn/shop/t/191458214186/assets/oka.css?v=1792010627"
+  ],
+  "images": 11,
+  "imgNoDims": [
+   "arx-fallback",
+   "reel-item",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img",
+   "rcard-img"
+  ],
+  "imgNoDimsCount": 8,
+  "imgEager": 4,
+  "imgLazy": 7,
+  "jsHeapMB": 10
+ }
+}

@@ -1,0 +1,956 @@
+{
+ "base": "http://localhost:9440",
+ "keyPlaceholder": "REDA… (24 chars placeholder)",
+ "httpRoutes": [
+  {
+   "route": "/",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/collections",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/collections/all",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/collections/hookahs",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/collections/sale",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/collections/hookahs?page=2&sort_by=price-ascending",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/collections/all?view=oka-data",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/collections/all/products.json",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/collections/all?sections=main",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/collections/all?section_id=main",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/products/oka-cobra",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/products/oka-cobra?view=ar",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/products/oka-cobra.js",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/products/oka-cobra.json",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/products/oka-cobra?sections=main",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/products/foil",
+   "status": 404,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/collections/hookahs/products/oka-cobra",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/contact",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/about-us",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/how-to-use",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/online-store",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/faq",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/account",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/orders",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/addresses",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/loyalty",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/subscriptions",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/wishlist",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/support",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/checkout-review",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/track",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/addresses?view=oka-add-address",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/subscriptions?view=oka-subscribe",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/pages/orders?sections=main",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/pages/track?awb=JEGQA0000000001&order=%239000102",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/search?q=oka",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/search?q=%3Cscript%3E",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/search/suggest.json?q=oka",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/search/suggest?q=oka&section_id=predictive-search",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/recommendations/products.json?product_id=1&limit=4",
+   "status": 404,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/cart",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/cart.js",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/cart?sections=main-cart",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/cart.js?sections=main-cart",
+   "status": 200,
+   "type": "application/json",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/account/login",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/account/register",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/account/login?return_url=/pages/orders",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/customer_authentication/login?return_to=/",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/policies/privacy-policy",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/policies/refund-policy",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/password",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/gift_cards/abc",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/this-does-not-exist",
+   "status": 404,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/checkout",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/ar/",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/ar/pages/orders",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/ar/products/oka-cobra",
+   "status": 200,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/ar/this-does-not-exist",
+   "status": 404,
+   "type": "text/html",
+   "keyHits": 2,
+   "runAppHits": 2,
+   "hasWindowOKA": true
+  },
+  {
+   "route": "/robots.txt",
+   "status": 200,
+   "type": "text/plain",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  },
+  {
+   "route": "/sitemap.xml",
+   "status": 200,
+   "type": "application/xml",
+   "keyHits": 0,
+   "runAppHits": 0,
+   "hasWindowOKA": false
+  }
+ ],
+ "browser": [
+  {
+   "route": "/",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/collections",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/collections/all",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/collections/hookahs",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/collections/sale",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/collections/hookahs?page=2&sort_by=price-ascending",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/products/oka-cobra",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/products/oka-cobra?view=ar",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/products/foil",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/collections/hookahs/products/oka-cobra",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/contact",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/about-us",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/how-to-use",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/online-store",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/faq",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/account",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/orders",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/addresses",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/loyalty",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/subscriptions",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/wishlist",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/support",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/checkout-review",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/track",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/addresses?view=oka-add-address",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/subscriptions?view=oka-subscribe",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/pages/track?awb=JEGQA0000000001&order=%239000102",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/search?q=oka",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/search?q=%3Cscript%3E",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/cart",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/account/login",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/account/register",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/account/login?return_url=/pages/orders",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/customer_authentication/login?return_to=/",
+   "present": false,
+   "inWindowOKA": false,
+   "inOkaGlobal": false
+  },
+  {
+   "route": "/policies/privacy-policy",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/policies/refund-policy",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/password",
+   "present": false,
+   "inWindowOKA": false,
+   "inOkaGlobal": false
+  },
+  {
+   "route": "/gift_cards/abc",
+   "present": false,
+   "inWindowOKA": false,
+   "inOkaGlobal": false
+  },
+  {
+   "route": "/this-does-not-exist",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/checkout",
+   "present": false,
+   "inWindowOKA": false,
+   "inOkaGlobal": false
+  },
+  {
+   "route": "/ar/",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/ar/pages/orders",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/ar/products/oka-cobra",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  },
+  {
+   "route": "/ar/this-does-not-exist",
+   "present": true,
+   "ordersKeyLen": 24,
+   "jtKeyLen": 24,
+   "sameKey": true,
+   "sameUrl": true,
+   "customer": null,
+   "inWindowOKA": true,
+   "inOkaGlobal": true
+  }
+ ],
+ "replay": {
+  "status": 200,
+  "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"shipments\\\":[{\\\"billCode\\\":\\\"JEGQA0000000001\\\",\\\"createdAt\\\":\\\"2026-10-12 09:00:00\\\",\\\"status\\\":\\\"out_for_delivery\\\",\\\"order\\\":\\\""
+ }
+}

@@ -1,0 +1,1106 @@
+[
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cloud-white-hookah (3D model + video + story (oka family)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا ابيض\",\"price\":\"١٦٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:31:58.928Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra (model + cobra story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا كوبرا\",\"price\":\"١٨٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:32:00.925Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-black-tobacco (video + black story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا معسل اسود\",\"price\":\"١٩٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:32:03.061Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra-oka-base (compare-at price): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا كوبرا + قاعدة مضيئة قابلة للشحن\",\"price\":\"٣٥٧ ج.م\",\"compare\":\"٤٠٩ ج.م\",\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٣٦ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:32:05.112Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP trio-party (compare-at, no description_ar): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"حفلة الثلاثة (بسعر متوسط ١٣٩ جنية)\",\"price\":\"٤٤٧ ج.م\",\"compare\":\"٥٠٧ ج.م\",\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"the choice for your small at home gatherings , movie nights,\",\"snap\":\"y mandatory\",\"fee\":\"٣٦ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:32:06.970Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP 1-pcs-of-foil (sold out (deny)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"قطعه فويل جاهزة للاستخدام\",\"price\":\"٥ ج.م\",\"compare\":null,\"buy\":false,\"soldOut\":\"خلصان\",\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"رقائق من الفويل المخرم الجاهز للاستخدام\",\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:32:08.693Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP tongs (no description_ar, tong-free automatic discount): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"كماشة فحم\",\"price\":\"٣١ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"These steel hookah tongs provide a convenient way to handle \",\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:32:10.565Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP tobacco-bowls-blueberry-12g (bowl): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"السما الزرقا - حجر جاهز للشرب- 12 جرام\",\"price\":\"٤٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"حجر معسل جاهزة للتدخين بتقعد من 45 لـ 60 دقيقة، بنكهات مختلف\",\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:32:12.713Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra-led-rechargeable-base (base story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"قاعدة مضيئة قابلة للشحن\",\"price\":\"١٨٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:32:14.438Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-carbon-black-hookah (hookah): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا اسود كاربون\",\"price\":\"١٨٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:32:16.152Z"
+  },
+  {
+    "id": "PD-2",
+    "scenario": "Quantity −/+ (min 1), buy price follows; Add to Cart adds chosen qty; added bar has View cart / Check out",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "after − at 1: ١; after +++: ٤; buy price \"٧٥٦ ج.م\"; cart qty=4; added-bar links=[\"/cart\",\"/checkout\"]; rec sheet=true",
+    "at": "2026-10-21T15:32:19.337Z"
+  },
+  {
+    "id": "PD-3",
+    "scenario": "F-05: double-tap \"Add to Cart\" adds the quantity twice",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "cart qty after double-tap=2 → F-05 CONFIRMED",
+    "at": "2026-10-21T15:32:22.239Z"
+  },
+  {
+    "id": "PD-4",
+    "scenario": "Sold-out PDP: no Add button, \"Out of stock\" bar; AJAX add returns 422",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "buy=0 soldout=\"خلصان\" add.js → [422,\"The product '1 Pcs of Foil' is already sold out.\"]",
+    "at": "2026-10-21T15:32:22.770Z"
+  },
+  {
+    "id": "PD-5",
+    "scenario": "Wishlist heart on PDP toggles, persists, appears on /pages/wishlist",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "fill after tap=#1d1d1f; wishlist page has cobra=2 \"أوكا كوبرا ١٨٩ ج.م عبيلي فالشنطة سجّل دخولك عشان المفضلة تتحفظ على حسابك.\"; after reload fill=#1d1d1f",
+    "at": "2026-10-21T15:32:25.656Z"
+  },
+  {
+    "id": "PD-6",
+    "scenario": "Share: navigator.share used on mobile; clipboard + toast fallback; URL is shop.url + product",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "share=null toast=\"اتنسخ اللينك\" clipboard=\"أوكا كوبرا — ١٨٩ ج.م\\nhttp://localhost:9410/products/oka-cobra\"",
+    "at": "2026-10-21T15:32:26.770Z"
+  },
+  {
+    "id": "PD-7",
+    "scenario": "Snap scrolling on PDP: sections snap; story sections present in chosen language",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "INFO",
+    "note": "{\"snapTargets\":[64,830,1412,2004,2025,2596,3188,3840],\"landed\":[164,766,1348]} story heading in ar visible=true",
+    "at": "2026-10-21T15:32:33.205Z"
+  },
+  {
+    "id": "PD-8",
+    "scenario": "Video reel: videos muted/inline, tap toggles play, speaker toggles sound",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "items=1 before={\"muted\":true,\"inline\":true,\"src\":\"5fc2c874414.HD-720p-4.5Mbps-97634596.mp4\"} after sound tap={\"muted\":false,\"sound\":true} (harness videos are empty files: playback itself untestable)",
+    "at": "2026-10-21T15:32:35.672Z"
+  },
+  {
+    "id": "PD-9",
+    "scenario": "?variant= valid, invalid and foreign variant ids",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "valid→200 46037718303018; bogus→200 46037718303018; other product's variant→200 46037718303018",
+    "at": "2026-10-21T15:32:37.277Z"
+  },
+  {
+    "id": "PD-10",
+    "scenario": "COM-07: PDP fee vs cart fee with \"tong free\" discount in cart",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "PDP fee \"٣٦ ج.م\" bar \"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"; after adding: cart original=327 merch=296; cart rows=[\"المجموع قبل الشحن ٣٢٧ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٦ ج.م\",\"هتاخد ٢٩٦ نقطة لما يوصلك\"] → COM-07 CONFIRMED",
+    "at": "2026-10-21T15:32:41.852Z"
+  },
+  {
+    "id": "PD-11",
+    "scenario": "Related \"Goes well with it\" rail: + adds; recommendations exclude drafts",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "related=[\"/products/oka-carbon-black-hookah\",\"/products/tongs\",\"/products/tobacco-bowls-blueberry-12g\",\"/products/tobacco-bowls-iced-lemon-mint-12g\",\"/products/oka-black-tobacco\",\"/products/oka-cobra\"] bad= cart after +=1",
+    "at": "2026-10-21T15:32:45.653Z"
+  },
+  {
+    "id": "PD-12",
+    "scenario": "PDP back button: from home → PDP → back returns to home; direct deep link → back goes to /",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "back after same-origin direct goto → /; back after collection→PDP → /collections/oka-cobra",
+    "at": "2026-10-21T15:32:48.649Z"
+  },
+  {
+    "id": "AR-1",
+    "scenario": "?view=ar with model: camera starts, model-viewer loads, add-to-cart from AR, feedback visible (F-08)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "{\"tracks\":[\"live\"],\"mv\":true,\"status\":\"بندوّر على سطح…\",\"add\":true} cart=1 feedback={\"cls\":\"added-bar\",\"onTop\":false,\"topEl\":\"arx-cam\"} → F-08 CONFIRMED",
+    "at": "2026-10-21T15:32:52.671Z"
+  },
+  {
+    "id": "AR-2",
+    "scenario": "Leaving AR screen stops camera tracks (back)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "INFO",
+    "note": "tracks before leaving=[\"live\"] (page unload releases the stream; per-page state not observable after navigation)",
+    "at": "2026-10-21T15:32:53.477Z"
+  },
+  {
+    "id": "AR-3",
+    "scenario": "?view=ar without a model shows \"coming soon\", no camera request",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"text\":\"صورة كماشة فحم ٣١ ج.م عبيلي فالشنطة موديل ٣D للمنتج ده جاي قريب.\",\"tracks\":0}",
+    "at": "2026-10-21T15:32:55.448Z"
+  },
+  {
+    "id": "AR-4",
+    "scenario": "F-03/F-10: PDP AR section auto-starts camera on scroll and stops when scrolled away",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "in view: [\"live\"]; scrolled away: [\"ended\"]; after fast in/out: [\"ended\",\"ended\",\"ended\",\"ended\",\"ended\"] → camera auto-requested on scroll (F-10 CONFIRMED); orphan live tracks=0 (F-03 not reproduced)",
+    "at": "2026-10-21T15:33:05.209Z"
+  },
+  {
+    "id": "PD-LOG",
+    "scenario": "PDP session error summary",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-21T15:33:05.210Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cloud-white-hookah (3D model + video + story (oka family)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA white\",\"price\":\"EGP 169\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:07.341Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra (model + cobra story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Cobra\",\"price\":\"EGP 189\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:09.039Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-black-tobacco (video + black story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Black Tobacco\",\"price\":\"EGP 199\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:10.725Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra-oka-base (compare-at price): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Cobra + OKA base\",\"price\":\"EGP 357\",\"compare\":\"EGP 409\",\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 36\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:12.356Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP trio-party (compare-at, no description_ar): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"Trio Party (EGP139 each)\",\"price\":\"EGP 447\",\"compare\":\"EGP 507\",\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"the choice for your small at home gatherings , movie nights,\",\"snap\":\"y mandatory\",\"fee\":\"EGP 36\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:13.927Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP 1-pcs-of-foil (sold out (deny)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"1 Pcs of Foil\",\"price\":\"EGP 5\",\"compare\":null,\"buy\":false,\"soldOut\":\"Out of stock\",\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"1 Piece of foil for one OKA session\",\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:15.422Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP tongs (no description_ar, tong-free automatic discount): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"Tongs\",\"price\":\"EGP 31\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"These steel hookah tongs provide a convenient way to handle \",\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:17.082Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP tobacco-bowls-blueberry-12g (bowl): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"Tobacco Bowls- Blue Cloud - 12g\",\"price\":\"EGP 49\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"Get ready-to-smoke tobacco bowls that last 45 to 60 minutes,\",\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:18.709Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra-led-rechargeable-base (base story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Cobra LED Rechargeable Base\",\"price\":\"EGP 189\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:20.355Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-carbon-black-hookah (hookah): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Carbon Black\",\"price\":\"EGP 189\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:33:22.025Z"
+  },
+  {
+    "id": "PD-2",
+    "scenario": "Quantity −/+ (min 1), buy price follows; Add to Cart adds chosen qty; added bar has View cart / Check out",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "after − at 1: 1; after +++: 4; buy price \"EGP 756\"; cart qty=4; added-bar links=[\"/cart\",\"/checkout\"]; rec sheet=true",
+    "at": "2026-10-21T15:33:25.117Z"
+  },
+  {
+    "id": "PD-3",
+    "scenario": "F-05: double-tap \"Add to Cart\" adds the quantity twice",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "cart qty after double-tap=2 → F-05 CONFIRMED",
+    "at": "2026-10-21T15:33:27.957Z"
+  },
+  {
+    "id": "PD-4",
+    "scenario": "Sold-out PDP: no Add button, \"Out of stock\" bar; AJAX add returns 422",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "buy=0 soldout=\"Out of stock\" add.js → [422,\"The product '1 Pcs of Foil' is already sold out.\"]",
+    "at": "2026-10-21T15:33:28.533Z"
+  },
+  {
+    "id": "PD-5",
+    "scenario": "Wishlist heart on PDP toggles, persists, appears on /pages/wishlist",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "fill after tap=#1d1d1f; wishlist page has cobra=2 \"OKA Cobra EGP 189 Add\"; after reload fill=#1d1d1f",
+    "at": "2026-10-21T15:33:31.564Z"
+  },
+  {
+    "id": "PD-6",
+    "scenario": "Share: navigator.share used on mobile; clipboard + toast fallback; URL is shop.url + product",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "share=null toast=\"Link copied\" clipboard=\"OKA Cobra — EGP 189\\nhttp://localhost:9410/products/oka-cobra\"",
+    "at": "2026-10-21T15:33:32.647Z"
+  },
+  {
+    "id": "PD-7",
+    "scenario": "Snap scrolling on PDP: sections snap; story sections present in chosen language",
+    "ctx": "iPhone 13/en/customer",
+    "status": "INFO",
+    "note": "{\"snapTargets\":[64,829,1411,2003,2024,2595,3187,3870],\"landed\":[163,765,1347]} story heading in en visible=true",
+    "at": "2026-10-21T15:33:37.547Z"
+  },
+  {
+    "id": "PD-8",
+    "scenario": "Video reel: videos muted/inline, tap toggles play, speaker toggles sound",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "items=1 before={\"muted\":true,\"inline\":true,\"src\":\"5fc2c874414.HD-720p-4.5Mbps-97634596.mp4\"} after sound tap={\"muted\":false,\"sound\":true} (harness videos are empty files: playback itself untestable)",
+    "at": "2026-10-21T15:33:39.794Z"
+  },
+  {
+    "id": "PD-9",
+    "scenario": "?variant= valid, invalid and foreign variant ids",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "valid→200 46037718303018; bogus→200 46037718303018; other product's variant→200 46037718303018",
+    "at": "2026-10-21T15:33:41.317Z"
+  },
+  {
+    "id": "PD-10",
+    "scenario": "COM-07: PDP fee vs cart fee with \"tong free\" discount in cart",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "PDP fee \"EGP 36\" bar \"Shipping EGP 36 — the best rate for your area\"; after adding: cart original=327 merch=296; cart rows=[\"Subtotal EGP 327\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 356\",\"You'll earn 296 points on delivery\"] → COM-07 CONFIRMED",
+    "at": "2026-10-21T15:33:45.781Z"
+  },
+  {
+    "id": "PD-11",
+    "scenario": "Related \"Goes well with it\" rail: + adds; recommendations exclude drafts",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "related=[\"/products/oka-carbon-black-hookah\",\"/products/tobacco-bowls-iced-lemon-mint-12g\",\"/products/tongs\",\"/products/tobacco-bowls-blueberry-12g\",\"/products/tobacco-bowls-cola-12g\",\"/products/oka-black-tobacco\"] bad= cart after +=1",
+    "at": "2026-10-21T15:33:49.271Z"
+  },
+  {
+    "id": "PD-12",
+    "scenario": "PDP back button: from home → PDP → back returns to home; direct deep link → back goes to /",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "back after same-origin direct goto → /; back after collection→PDP → /collections/oka-cobra",
+    "at": "2026-10-21T15:33:52.133Z"
+  },
+  {
+    "id": "AR-1",
+    "scenario": "?view=ar with model: camera starts, model-viewer loads, add-to-cart from AR, feedback visible (F-08)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "{\"tracks\":[\"live\"],\"mv\":true,\"status\":\"Looking for a surface…\",\"add\":true} cart=1 feedback={\"cls\":\"added-bar\",\"onTop\":false,\"topEl\":\"arx-cam\"} → F-08 CONFIRMED",
+    "at": "2026-10-21T15:33:55.965Z"
+  },
+  {
+    "id": "AR-2",
+    "scenario": "Leaving AR screen stops camera tracks (back)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "INFO",
+    "note": "tracks before leaving=[\"live\"] (page unload releases the stream; per-page state not observable after navigation)",
+    "at": "2026-10-21T15:33:56.769Z"
+  },
+  {
+    "id": "AR-3",
+    "scenario": "?view=ar without a model shows \"coming soon\", no camera request",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"text\":\"Photo Tongs EGP 31 Add to cart A 3D model for this product is coming soon.\",\"tracks\":0}",
+    "at": "2026-10-21T15:33:58.653Z"
+  },
+  {
+    "id": "AR-4",
+    "scenario": "F-03/F-10: PDP AR section auto-starts camera on scroll and stops when scrolled away",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "in view: [\"live\"]; scrolled away: [\"ended\"]; after fast in/out: [\"ended\",\"ended\",\"ended\",\"ended\",\"ended\"] → camera auto-requested on scroll (F-10 CONFIRMED); orphan live tracks=0 (F-03 not reproduced)",
+    "at": "2026-10-21T15:34:07.901Z"
+  },
+  {
+    "id": "PD-LOG",
+    "scenario": "PDP session error summary",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-21T15:34:07.902Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cloud-white-hookah (3D model + video + story (oka family)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا ابيض\",\"price\":\"١٦٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:34:10.138Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra (model + cobra story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا كوبرا\",\"price\":\"١٨٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:34:11.787Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-black-tobacco (video + black story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا معسل اسود\",\"price\":\"١٩٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:34:13.514Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra-oka-base (compare-at price): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا كوبرا + قاعدة مضيئة قابلة للشحن\",\"price\":\"٣٥٧ ج.م\",\"compare\":\"٤٠٩ ج.م\",\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٣٦ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:34:15.196Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP trio-party (compare-at, no description_ar): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"حفلة الثلاثة (بسعر متوسط ١٣٩ جنية)\",\"price\":\"٤٤٧ ج.م\",\"compare\":\"٥٠٧ ج.م\",\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"the choice for your small at home gatherings , movie nights,\",\"snap\":\"y mandatory\",\"fee\":\"٣٦ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:34:16.795Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP 1-pcs-of-foil (sold out (deny)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"قطعه فويل جاهزة للاستخدام\",\"price\":\"٥ ج.م\",\"compare\":null,\"buy\":false,\"soldOut\":\"خلصان\",\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"رقائق من الفويل المخرم الجاهز للاستخدام\",\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:34:18.316Z"
+  },
+  {
+    "id": "PD-2",
+    "scenario": "Quantity −/+ (min 1), buy price follows; Add to Cart adds chosen qty; added bar has View cart / Check out",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "after − at 1: ١; after +++: ٤; buy price \"٧٥٦ ج.م\"; cart qty=4; added-bar links=[\"/cart\",\"/checkout\"]; rec sheet=true",
+    "at": "2026-10-21T15:34:21.395Z"
+  },
+  {
+    "id": "PD-3",
+    "scenario": "F-05: double-tap \"Add to Cart\" adds the quantity twice",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "cart qty after double-tap=2 → F-05 CONFIRMED",
+    "at": "2026-10-21T15:34:24.247Z"
+  },
+  {
+    "id": "PD-4",
+    "scenario": "Sold-out PDP: no Add button, \"Out of stock\" bar; AJAX add returns 422",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "buy=0 soldout=\"خلصان\" add.js → [422,\"The product '1 Pcs of Foil' is already sold out.\"]",
+    "at": "2026-10-21T15:34:24.774Z"
+  },
+  {
+    "id": "PD-5",
+    "scenario": "Wishlist heart on PDP toggles, persists, appears on /pages/wishlist",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "fill after tap=#1d1d1f; wishlist page has cobra=2 \"أوكا كوبرا ١٨٩ ج.م عبيلي فالشنطة سجّل دخولك عشان المفضلة تتحفظ على حسابك.\"; after reload fill=#1d1d1f",
+    "at": "2026-10-21T15:34:27.647Z"
+  },
+  {
+    "id": "PD-6",
+    "scenario": "Share: navigator.share used on mobile; clipboard + toast fallback; URL is shop.url + product",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "share=null toast=\"اتنسخ اللينك\" clipboard=\"أوكا كوبرا — ١٨٩ ج.م\\nhttp://localhost:9410/products/oka-cobra\"",
+    "at": "2026-10-21T15:34:28.727Z"
+  },
+  {
+    "id": "PD-7",
+    "scenario": "Snap scrolling on PDP: sections snap; story sections present in chosen language",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "INFO",
+    "note": "{\"snapTargets\":[64,841,1598,2365,2386,3132,3899,4666],\"landed\":[777,777,1534]} story heading in ar visible=true",
+    "at": "2026-10-21T15:34:33.492Z"
+  },
+  {
+    "id": "PD-8",
+    "scenario": "Video reel: videos muted/inline, tap toggles play, speaker toggles sound",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "items=1 before={\"muted\":true,\"inline\":true,\"src\":\"5fc2c874414.HD-720p-4.5Mbps-97634596.mp4\"} after sound tap={\"muted\":false,\"sound\":true} (harness videos are empty files: playback itself untestable)",
+    "at": "2026-10-21T15:34:35.954Z"
+  },
+  {
+    "id": "PD-9",
+    "scenario": "?variant= valid, invalid and foreign variant ids",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "valid→200 46037718303018; bogus→200 46037718303018; other product's variant→200 46037718303018",
+    "at": "2026-10-21T15:34:37.541Z"
+  },
+  {
+    "id": "PD-10",
+    "scenario": "COM-07: PDP fee vs cart fee with \"tong free\" discount in cart",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "PDP fee \"٣٦ ج.م\" bar \"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"; after adding: cart original=327 merch=296; cart rows=[\"المجموع قبل الشحن ٣٢٧ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٦ ج.م\",\"هتاخد ٢٩٦ نقطة لما يوصلك\"] → COM-07 CONFIRMED",
+    "at": "2026-10-21T15:34:42.066Z"
+  },
+  {
+    "id": "PD-11",
+    "scenario": "Related \"Goes well with it\" rail: + adds; recommendations exclude drafts",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "related=[\"/products/oka-carbon-black-hookah\",\"/products/tongs\",\"/products/tobacco-bowls-blueberry-12g\",\"/products/tobacco-bowls-iced-lemon-mint-12g\",\"/products/oka-black-tobacco\",\"/products/oka-cobra\"] bad= cart after +=1",
+    "at": "2026-10-21T15:34:45.671Z"
+  },
+  {
+    "id": "PD-12",
+    "scenario": "PDP back button: from home → PDP → back returns to home; direct deep link → back goes to /",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "back after same-origin direct goto → /; back after collection→PDP → /collections/oka-cobra",
+    "at": "2026-10-21T15:34:48.396Z"
+  },
+  {
+    "id": "AR-1",
+    "scenario": "?view=ar with model: camera starts, model-viewer loads, add-to-cart from AR, feedback visible (F-08)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "{\"tracks\":[\"live\"],\"mv\":true,\"status\":\"بندوّر على سطح…\",\"add\":true} cart=1 feedback={\"cls\":\"added-bar\",\"onTop\":false,\"topEl\":\"arx-cam\"} → F-08 CONFIRMED",
+    "at": "2026-10-21T15:34:52.399Z"
+  },
+  {
+    "id": "AR-2",
+    "scenario": "Leaving AR screen stops camera tracks (back)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "INFO",
+    "note": "tracks before leaving=[\"live\"] (page unload releases the stream; per-page state not observable after navigation)",
+    "at": "2026-10-21T15:34:53.202Z"
+  },
+  {
+    "id": "AR-3",
+    "scenario": "?view=ar without a model shows \"coming soon\", no camera request",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"text\":\"صورة كماشة فحم ٣١ ج.م عبيلي فالشنطة موديل ٣D للمنتج ده جاي قريب.\",\"tracks\":0}",
+    "at": "2026-10-21T15:34:55.075Z"
+  },
+  {
+    "id": "PD-LOG",
+    "scenario": "PDP session error summary",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-21T15:34:55.076Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cloud-white-hookah (3D model + video + story (oka family)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA white\",\"price\":\"EGP 169\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:34:57.183Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra (model + cobra story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Cobra\",\"price\":\"EGP 189\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:34:58.790Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-black-tobacco (video + black story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Black Tobacco\",\"price\":\"EGP 199\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:00.439Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra-oka-base (compare-at price): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Cobra + OKA base\",\"price\":\"EGP 357\",\"compare\":\"EGP 409\",\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 36\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:02.100Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP trio-party (compare-at, no description_ar): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"Trio Party (EGP139 each)\",\"price\":\"EGP 447\",\"compare\":\"EGP 507\",\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"the choice for your small at home gatherings , movie nights,\",\"snap\":\"y mandatory\",\"fee\":\"EGP 36\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:03.781Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP 1-pcs-of-foil (sold out (deny)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"title\":\"1 Pcs of Foil\",\"price\":\"EGP 5\",\"compare\":null,\"buy\":false,\"soldOut\":\"Out of stock\",\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"1 Piece of foil for one OKA session\",\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–2 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:05.336Z"
+  },
+  {
+    "id": "PD-2",
+    "scenario": "Quantity −/+ (min 1), buy price follows; Add to Cart adds chosen qty; added bar has View cart / Check out",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "after − at 1: 1; after +++: 4; buy price \"EGP 756\"; cart qty=4; added-bar links=[\"/cart\",\"/checkout\"]; rec sheet=true",
+    "at": "2026-10-21T15:35:08.492Z"
+  },
+  {
+    "id": "PD-3",
+    "scenario": "F-05: double-tap \"Add to Cart\" adds the quantity twice",
+    "ctx": "Pixel 7/en/customer",
+    "status": "FAIL",
+    "note": "cart qty after double-tap=2 → F-05 CONFIRMED",
+    "at": "2026-10-21T15:35:11.411Z"
+  },
+  {
+    "id": "PD-4",
+    "scenario": "Sold-out PDP: no Add button, \"Out of stock\" bar; AJAX add returns 422",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "buy=0 soldout=\"Out of stock\" add.js → [422,\"The product '1 Pcs of Foil' is already sold out.\"]",
+    "at": "2026-10-21T15:35:11.952Z"
+  },
+  {
+    "id": "PD-5",
+    "scenario": "Wishlist heart on PDP toggles, persists, appears on /pages/wishlist",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "fill after tap=#1d1d1f; wishlist page has cobra=2 \"OKA Cobra EGP 189 Add\"; after reload fill=#1d1d1f",
+    "at": "2026-10-21T15:35:15.381Z"
+  },
+  {
+    "id": "PD-6",
+    "scenario": "Share: navigator.share used on mobile; clipboard + toast fallback; URL is shop.url + product",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "share=null toast=\"Link copied\" clipboard=\"OKA Cobra — EGP 189\\nhttp://localhost:9410/products/oka-cobra\"",
+    "at": "2026-10-21T15:35:16.567Z"
+  },
+  {
+    "id": "PD-7",
+    "scenario": "Snap scrolling on PDP: sections snap; story sections present in chosen language",
+    "ctx": "Pixel 7/en/customer",
+    "status": "INFO",
+    "note": "{\"snapTargets\":[64,841,1598,2365,2386,3132,3899,4666],\"landed\":[777,777,1534]} story heading in en visible=true",
+    "at": "2026-10-21T15:35:23.116Z"
+  },
+  {
+    "id": "PD-8",
+    "scenario": "Video reel: videos muted/inline, tap toggles play, speaker toggles sound",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "items=1 before={\"muted\":true,\"inline\":true,\"src\":\"5fc2c874414.HD-720p-4.5Mbps-97634596.mp4\"} after sound tap={\"muted\":false,\"sound\":true} (harness videos are empty files: playback itself untestable)",
+    "at": "2026-10-21T15:35:25.552Z"
+  },
+  {
+    "id": "PD-9",
+    "scenario": "?variant= valid, invalid and foreign variant ids",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "valid→200 46037718303018; bogus→200 46037718303018; other product's variant→200 46037718303018",
+    "at": "2026-10-21T15:35:27.162Z"
+  },
+  {
+    "id": "PD-10",
+    "scenario": "COM-07: PDP fee vs cart fee with \"tong free\" discount in cart",
+    "ctx": "Pixel 7/en/customer",
+    "status": "FAIL",
+    "note": "PDP fee \"EGP 36\" bar \"Shipping EGP 36 — the best rate for your area\"; after adding: cart original=327 merch=296; cart rows=[\"Subtotal EGP 327\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 356\",\"You'll earn 296 points on delivery\"] → COM-07 CONFIRMED",
+    "at": "2026-10-21T15:35:31.714Z"
+  },
+  {
+    "id": "PD-11",
+    "scenario": "Related \"Goes well with it\" rail: + adds; recommendations exclude drafts",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "related=[\"/products/oka-carbon-black-hookah\",\"/products/tobacco-bowls-iced-lemon-mint-12g\",\"/products/tongs\",\"/products/tobacco-bowls-blueberry-12g\",\"/products/tobacco-bowls-cola-12g\",\"/products/oka-black-tobacco\"] bad= cart after +=1",
+    "at": "2026-10-21T15:35:35.026Z"
+  },
+  {
+    "id": "PD-12",
+    "scenario": "PDP back button: from home → PDP → back returns to home; direct deep link → back goes to /",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "back after same-origin direct goto → /; back after collection→PDP → /collections/oka-cobra",
+    "at": "2026-10-21T15:35:37.729Z"
+  },
+  {
+    "id": "AR-1",
+    "scenario": "?view=ar with model: camera starts, model-viewer loads, add-to-cart from AR, feedback visible (F-08)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "FAIL",
+    "note": "{\"tracks\":[\"live\"],\"mv\":true,\"status\":\"Looking for a surface…\",\"add\":true} cart=1 feedback={\"cls\":\"added-bar\",\"onTop\":false,\"topEl\":\"arx-cam\"} → F-08 CONFIRMED",
+    "at": "2026-10-21T15:35:41.620Z"
+  },
+  {
+    "id": "AR-2",
+    "scenario": "Leaving AR screen stops camera tracks (back)",
+    "ctx": "Pixel 7/en/customer",
+    "status": "INFO",
+    "note": "tracks before leaving=[\"live\"] (page unload releases the stream; per-page state not observable after navigation)",
+    "at": "2026-10-21T15:35:42.427Z"
+  },
+  {
+    "id": "AR-3",
+    "scenario": "?view=ar without a model shows \"coming soon\", no camera request",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"text\":\"Photo Tongs EGP 31 Add to cart A 3D model for this product is coming soon.\",\"tracks\":0}",
+    "at": "2026-10-21T15:35:44.299Z"
+  },
+  {
+    "id": "PD-LOG",
+    "scenario": "PDP session error summary",
+    "ctx": "Pixel 7/en/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-21T15:35:44.300Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cloud-white-hookah (3D model + video + story (oka family)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا ابيض\",\"price\":\"١٦٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:46.132Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra (model + cobra story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا كوبرا\",\"price\":\"١٨٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:47.526Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-black-tobacco (video + black story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا معسل اسود\",\"price\":\"١٩٩ ج.م\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:48.983Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra-oka-base (compare-at price): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"أوكا كوبرا + قاعدة مضيئة قابلة للشحن\",\"price\":\"٣٥٧ ج.م\",\"compare\":\"٤٠٩ ج.م\",\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"٣٦ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:50.409Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP trio-party (compare-at, no description_ar): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"حفلة الثلاثة (بسعر متوسط ١٣٩ جنية)\",\"price\":\"٤٤٧ ج.م\",\"compare\":\"٥٠٧ ج.م\",\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"the choice for your small at home gatherings , movie nights,\",\"snap\":\"y mandatory\",\"fee\":\"٣٦ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:51.836Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP 1-pcs-of-foil (sold out (deny)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"قطعه فويل جاهزة للاستخدام\",\"price\":\"٥ ج.م\",\"compare\":null,\"buy\":false,\"soldOut\":\"خلصان\",\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"رقائق من الفويل المخرم الجاهز للاستخدام\",\"snap\":\"y mandatory\",\"fee\":\"٦٠ ج.م\",\"eta\":\"١-٥ أيام\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:35:53.227Z"
+  },
+  {
+    "id": "PD-2",
+    "scenario": "Quantity −/+ (min 1), buy price follows; Add to Cart adds chosen qty; added bar has View cart / Check out",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "after − at 1: ١; after +++: ٤; buy price \"٧٥٦ ج.م\"; cart qty=4; added-bar links=[\"/cart\",\"/checkout\"]; rec sheet=true",
+    "at": "2026-10-21T15:35:56.197Z"
+  },
+  {
+    "id": "PD-3",
+    "scenario": "F-05: double-tap \"Add to Cart\" adds the quantity twice",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "FAIL",
+    "note": "cart qty after double-tap=2 → F-05 CONFIRMED",
+    "at": "2026-10-21T15:35:59.024Z"
+  },
+  {
+    "id": "PD-4",
+    "scenario": "Sold-out PDP: no Add button, \"Out of stock\" bar; AJAX add returns 422",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "buy=0 soldout=\"خلصان\" add.js → [422,\"The product '1 Pcs of Foil' is already sold out.\"]",
+    "at": "2026-10-21T15:35:59.556Z"
+  },
+  {
+    "id": "PD-5",
+    "scenario": "Wishlist heart on PDP toggles, persists, appears on /pages/wishlist",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "fill after tap=#1d1d1f; wishlist page has cobra=2 \"أوكا كوبرا ١٨٩ ج.م عبيلي فالشنطة سجّل دخولك عشان المفضلة تتحفظ على حسابك.\"; after reload fill=#1d1d1f",
+    "at": "2026-10-21T15:36:02.328Z"
+  },
+  {
+    "id": "PD-6",
+    "scenario": "Share: navigator.share used on mobile; clipboard + toast fallback; URL is shop.url + product",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "share=null toast=\"اتنسخ اللينك\" clipboard=\"أوكا كوبرا — ١٨٩ ج.م\\nhttp://localhost:9410/products/oka-cobra\"",
+    "at": "2026-10-21T15:36:03.411Z"
+  },
+  {
+    "id": "PD-7",
+    "scenario": "Snap scrolling on PDP: sections snap; story sections present in chosen language",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "INFO",
+    "note": "{\"snapTargets\":[64,902,1720,2548,2569,3376,4204,5032],\"landed\":[0,838,1656]} story heading in ar visible=true",
+    "at": "2026-10-21T15:36:07.840Z"
+  },
+  {
+    "id": "PD-8",
+    "scenario": "Video reel: videos muted/inline, tap toggles play, speaker toggles sound",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "items=1 before={\"muted\":true,\"inline\":true,\"src\":\"5fc2c874414.HD-720p-4.5Mbps-97634596.mp4\"} after sound tap={\"muted\":false,\"sound\":true} (harness videos are empty files: playback itself untestable)",
+    "at": "2026-10-21T15:36:10.026Z"
+  },
+  {
+    "id": "PD-9",
+    "scenario": "?variant= valid, invalid and foreign variant ids",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "valid→200 46037718303018; bogus→200 46037718303018; other product's variant→200 46037718303018",
+    "at": "2026-10-21T15:36:11.597Z"
+  },
+  {
+    "id": "PD-10",
+    "scenario": "COM-07: PDP fee vs cart fee with \"tong free\" discount in cart",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "FAIL",
+    "note": "PDP fee \"٣٦ ج.م\" bar \"الشحن ٣٦ ج.م — أقل سعر لمنطقتك\"; after adding: cart original=327 merch=296; cart rows=[\"المجموع قبل الشحن ٣٢٧ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٥٦ ج.م\",\"هتاخد ٢٩٦ نقطة لما يوصلك\"] → COM-07 CONFIRMED",
+    "at": "2026-10-21T15:36:15.924Z"
+  },
+  {
+    "id": "PD-11",
+    "scenario": "Related \"Goes well with it\" rail: + adds; recommendations exclude drafts",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "related=[\"/products/oka-carbon-black-hookah\",\"/products/tongs\",\"/products/tobacco-bowls-blueberry-12g\",\"/products/tobacco-bowls-iced-lemon-mint-12g\",\"/products/oka-black-tobacco\",\"/products/oka-cobra\"] bad= cart after +=1",
+    "at": "2026-10-21T15:36:19.483Z"
+  },
+  {
+    "id": "PD-12",
+    "scenario": "PDP back button: from home → PDP → back returns to home; direct deep link → back goes to /",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "back after same-origin direct goto → /; back after collection→PDP → /collections/oka-cobra",
+    "at": "2026-10-21T15:36:22.347Z"
+  },
+  {
+    "id": "AR-1",
+    "scenario": "?view=ar with model: camera starts, model-viewer loads, add-to-cart from AR, feedback visible (F-08)",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "FAIL",
+    "note": "{\"tracks\":[\"live\"],\"mv\":true,\"status\":\"بندوّر على سطح…\",\"add\":true} cart=1 feedback={\"cls\":\"added-bar\",\"onTop\":false,\"topEl\":\"arx-cam\"} → F-08 CONFIRMED",
+    "at": "2026-10-21T15:36:26.297Z"
+  },
+  {
+    "id": "AR-2",
+    "scenario": "Leaving AR screen stops camera tracks (back)",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "INFO",
+    "note": "tracks before leaving=[\"live\"] (page unload releases the stream; per-page state not observable after navigation)",
+    "at": "2026-10-21T15:36:27.100Z"
+  },
+  {
+    "id": "AR-3",
+    "scenario": "?view=ar without a model shows \"coming soon\", no camera request",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"text\":\"صورة كماشة فحم ٣١ ج.م عبيلي فالشنطة موديل ٣D للمنتج ده جاي قريب.\",\"tracks\":0}",
+    "at": "2026-10-21T15:36:28.891Z"
+  },
+  {
+    "id": "PD-LOG",
+    "scenario": "PDP session error summary",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-21T15:36:28.892Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cloud-white-hookah (3D model + video + story (oka family)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA white\",\"price\":\"EGP 169\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–5 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:36:30.771Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra (model + cobra story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Cobra\",\"price\":\"EGP 189\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":true,\"btn3d\":true,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–5 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:36:32.242Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-black-tobacco (video + black story): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Black Tobacco\",\"price\":\"EGP 199\",\"compare\":null,\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":1,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–5 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:36:33.689Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP oka-cobra-oka-base (compare-at price): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"OKA Cobra + OKA base\",\"price\":\"EGP 357\",\"compare\":\"EGP 409\",\"buy\":true,\"soldOut\":null,\"story\":2,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":null,\"snap\":\"y mandatory\",\"fee\":\"EGP 36\",\"eta\":\"1–5 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:36:35.143Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP trio-party (compare-at, no description_ar): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"Trio Party (EGP139 each)\",\"price\":\"EGP 447\",\"compare\":\"EGP 507\",\"buy\":true,\"soldOut\":null,\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"the choice for your small at home gatherings , movie nights,\",\"snap\":\"y mandatory\",\"fee\":\"EGP 36\",\"eta\":\"1–5 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:36:36.574Z"
+  },
+  {
+    "id": "PD-1",
+    "scenario": "PDP 1-pcs-of-foil (sold out (deny)): renders title/price/buy-bar, story, media, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"title\":\"1 Pcs of Foil\",\"price\":\"EGP 5\",\"compare\":null,\"buy\":false,\"soldOut\":\"Out of stock\",\"story\":0,\"reel\":0,\"ar\":false,\"btn3d\":false,\"desc\":\"1 Piece of foil for one OKA session\",\"snap\":\"y mandatory\",\"fee\":\"EGP 60\",\"eta\":\"1–5 days\",\"related\":true,\"relatedN\":6} ",
+    "at": "2026-10-21T15:36:37.901Z"
+  },
+  {
+    "id": "PD-2",
+    "scenario": "Quantity −/+ (min 1), buy price follows; Add to Cart adds chosen qty; added bar has View cart / Check out",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "after − at 1: 1; after +++: 4; buy price \"EGP 756\"; cart qty=4; added-bar links=[\"/cart\",\"/checkout\"]; rec sheet=true",
+    "at": "2026-10-21T15:36:40.739Z"
+  },
+  {
+    "id": "PD-3",
+    "scenario": "F-05: double-tap \"Add to Cart\" adds the quantity twice",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "FAIL",
+    "note": "cart qty after double-tap=2 → F-05 CONFIRMED",
+    "at": "2026-10-21T15:36:43.541Z"
+  },
+  {
+    "id": "PD-4",
+    "scenario": "Sold-out PDP: no Add button, \"Out of stock\" bar; AJAX add returns 422",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "buy=0 soldout=\"Out of stock\" add.js → [422,\"The product '1 Pcs of Foil' is already sold out.\"]",
+    "at": "2026-10-21T15:36:44.053Z"
+  },
+  {
+    "id": "PD-5",
+    "scenario": "Wishlist heart on PDP toggles, persists, appears on /pages/wishlist",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "fill after tap=#1d1d1f; wishlist page has cobra=2 \"OKA Cobra EGP 189 Add Sign in to keep your wishlist on your account.\"; after reload fill=#1d1d1f",
+    "at": "2026-10-21T15:36:46.806Z"
+  },
+  {
+    "id": "PD-6",
+    "scenario": "Share: navigator.share used on mobile; clipboard + toast fallback; URL is shop.url + product",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "share=null toast=\"Link copied\" clipboard=\"OKA Cobra — EGP 189\\nhttp://localhost:9410/products/oka-cobra\"",
+    "at": "2026-10-21T15:36:47.906Z"
+  },
+  {
+    "id": "PD-7",
+    "scenario": "Snap scrolling on PDP: sections snap; story sections present in chosen language",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "INFO",
+    "note": "{\"snapTargets\":[64,902,1720,2548,2569,3376,4204,5032],\"landed\":[0,838,1656]} story heading in en visible=true",
+    "at": "2026-10-21T15:36:52.608Z"
+  },
+  {
+    "id": "PD-8",
+    "scenario": "Video reel: videos muted/inline, tap toggles play, speaker toggles sound",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "items=1 before={\"muted\":true,\"inline\":true,\"src\":\"5fc2c874414.HD-720p-4.5Mbps-97634596.mp4\"} after sound tap={\"muted\":false,\"sound\":true} (harness videos are empty files: playback itself untestable)",
+    "at": "2026-10-21T15:36:54.882Z"
+  },
+  {
+    "id": "PD-9",
+    "scenario": "?variant= valid, invalid and foreign variant ids",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "valid→200 46037718303018; bogus→200 46037718303018; other product's variant→200 46037718303018",
+    "at": "2026-10-21T15:36:56.518Z"
+  },
+  {
+    "id": "PD-10",
+    "scenario": "COM-07: PDP fee vs cart fee with \"tong free\" discount in cart",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "FAIL",
+    "note": "PDP fee \"EGP 36\" bar \"Shipping EGP 36 — the best rate for your area\"; after adding: cart original=327 merch=296; cart rows=[\"Subtotal EGP 327\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 356\",\"You'll earn 296 points on delivery\"] → COM-07 CONFIRMED",
+    "at": "2026-10-21T15:37:00.860Z"
+  },
+  {
+    "id": "PD-11",
+    "scenario": "Related \"Goes well with it\" rail: + adds; recommendations exclude drafts",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "related=[\"/products/oka-carbon-black-hookah\",\"/products/tongs\",\"/products/tobacco-bowls-blueberry-12g\",\"/products/tobacco-bowls-iced-lemon-mint-12g\",\"/products/oka-black-tobacco\",\"/products/oka-cobra\"] bad= cart after +=1",
+    "at": "2026-10-21T15:37:04.678Z"
+  },
+  {
+    "id": "PD-12",
+    "scenario": "PDP back button: from home → PDP → back returns to home; direct deep link → back goes to /",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "back after same-origin direct goto → /; back after collection→PDP → /collections/oka-cobra",
+    "at": "2026-10-21T15:37:07.903Z"
+  },
+  {
+    "id": "AR-1",
+    "scenario": "?view=ar with model: camera starts, model-viewer loads, add-to-cart from AR, feedback visible (F-08)",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "FAIL",
+    "note": "{\"tracks\":[\"live\"],\"mv\":true,\"status\":\"Looking for a surface…\",\"add\":true} cart=1 feedback={\"cls\":\"added-bar\",\"onTop\":false,\"topEl\":\"arx-cam\"} → F-08 CONFIRMED",
+    "at": "2026-10-21T15:37:11.965Z"
+  },
+  {
+    "id": "AR-2",
+    "scenario": "Leaving AR screen stops camera tracks (back)",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "INFO",
+    "note": "tracks before leaving=[\"live\"] (page unload releases the stream; per-page state not observable after navigation)",
+    "at": "2026-10-21T15:37:12.779Z"
+  },
+  {
+    "id": "AR-3",
+    "scenario": "?view=ar without a model shows \"coming soon\", no camera request",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"text\":\"Photo Tongs EGP 31 Add to cart A 3D model for this product is coming soon.\",\"tracks\":0}",
+    "at": "2026-10-21T15:37:14.593Z"
+  },
+  {
+    "id": "PD-LOG",
+    "scenario": "PDP session error summary",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\"],\"httpErrors\":[]}",
+    "at": "2026-10-21T15:37:14.594Z"
+  },
+  {
+    "id": "AR-5",
+    "scenario": "AR screen with camera denied: message shown, model still viewable",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"status\":\"٣D · اسحب عشان تلفّها\",\"mv\":true}",
+    "at": "2026-10-21T15:37:18.438Z"
+  },
+  {
+    "id": "AR-5",
+    "scenario": "AR screen with camera none: message shown, model still viewable",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"status\":\"٣D · اسحب عشان تلفّها\",\"mv\":true}",
+    "at": "2026-10-21T15:37:21.969Z"
+  }
+]

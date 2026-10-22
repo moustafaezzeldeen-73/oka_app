@@ -1,0 +1,38 @@
+# FIXER-CSS report (owner: theme/assets/oka.css)
+
+Status: done. Commits: 3f474d9, a7a81ad, 94ae399, 54ffafc, 761b386, ad11432, 164dcdc (only `theme/assets/oka.css`).
+
+| ID | Status | File(s) | What changed | How verified |
+|---|---|---|---|---|
+| F-01 / V-19 | FIXED | oka.css | Rotation now keys on `html.portrait-lock.oka-landscape` (both set by FIXER-CORE's head script only when a phone-sized *device* is sideways and nothing is being typed). Fallback for the old head script (`portrait-lock` always on, no `oka-landscape`): old media query tightened with `min-aspect-ratio: 3/2` and `max-width: 1000px`, so a keyboard-shrunk portrait viewport and landscape tablets never rotate. | `v7-lock-zindex.mjs` on 9530 (new JS) and 9531 (baseline JS + new CSS): landscape 90/270 rotated, taps hit; keyboard phone 390x300 and tablet 1180x450 → `transform: none` on all 4 inputs; desktop/tablet unlocked. |
+| F-08 / AR-04 | FIXED | oka.css | `.toast` z 45→55, `.added-bar` 46→56 (above `.ar-screen` 50); on `.t-product-ar` the `#app > .scrim/.sheet/.join-sheet` go to 52/53; `.alert-scrim` 50→58 so alerts stay above those sheets. | `tests/ar/04-ar-page.mjs add` en+ar: addedBar z56 visibleOnTop:true, rec-sheet z53 visibleOnTop:true (was covered by arx-cam/arx-panel); error alert still on top. |
+| V-14 | FIXED (CSS side) | oka.css | `.age-gate` z 40→70: above menu (40/41), AR (50), toasts, alerts. FIXER-CORE also makes the app inert behind it. | `v7` §4 on 9531 (CSS only): with the old JS the menu still *opens* via keyboard but the gate now paints above it; on 9530 menuOpen:false. |
+| V-01 | FIXED | oka.css | Toast centred with `left/right:12px; margin:0 auto; width:max-content; max-width` (no translateX, so the fade keyframes can't break it); `white-space: normal`, centred text, wraps. Single-line toasts look identical. | `v8-long-text.mjs` @320: ar/en long toasts 12→308 (were 160→561), short toast centred (93–227), clippedByApp:false. |
+| V-05 | FIXED | oka.css | `--muted/--ink-softer` #6b6b70, `--ink-soft` #636368, `--ink-90/95` #5f5f64/#5a5a5f (opaque; ≥4.5:1 on #fff, #f5f5f7 and 5%-grey boxes); hard-coded `.pay`, `.deliver-muted`, `.build-tag`, `.sub-hist` greys → tokens; new `--green-text` #177a41 (5.4:1) for green *text* (.earn, .rcard-why, .cs-why, .rec-why, .order-state.green, .inv-row.green, .contact-ok, .eo-diff.down); green fills unchanged. WhatsApp courier button #25D366→#0e7a55 (white text 2:1→5.3:1). | Contrast computed (WCAG formula); screenshot diff only greys darker. |
+| V-09 | FIXED | oka.css | Hit areas grown without changing visuals: cart ✕ `::after` (~42×45 px); address Delete/Make default `padding 14px 9px` + equal negative margin (44 px tall); checkout-review cart chevron link 44×44 with −14px margin (icon stays put); cart "Change" `::after` (~34 px); story links / track "J&T website" link padded to ~40 px with compensating margins. | Screenshot diff (no visual shift); bounding boxes probed. |
+| V-10 | FIXED (safeguard) | oka.css | `:focus` inside the PDP screen gets `scroll-margin-bottom: buy-bar + 12px` (checkout: 110px for the place bar). Only the focused control's margin; snap pages untouched. | Tab walk ×40 on /products/oka-cobra (iPhone 13, ar): 0 focused controls obscured. A control run without the margin was also 0, because the newest commit's page padding already clears the bar; the margin covers taller pages. |
+| F-13 / V-12 / AR-11 (CSS) | FIXED (CSS part) | oka.css | `prefers-reduced-motion: reduce`: all animations/transitions ~instant, single iteration; buy-button glow, AR reticle/chip pulse, swipe-up cue off; spinner keeps turning (essential). Reel autoplay/pause button are JS → FIXER-SCREENS (oka-screens.js already checks reduced motion/Save-Data at the reel). | Computed `animation-name/iteration` under emulated reduce. |
+| V-16 | FIXED | oka.css | `@media (forced-colors: active)`: selected chips/sort/filter/province/variant/address/payment/side-link get a 3px `Highlight` outline (side link also underlined). | Emulated forced-colors screenshot. |
+| F-09 | FIXED | oka.css | `.app` height `100%` (body = visible/small viewport) with `@supports (height:100dvh)` override → modern unchanged. PDP `--pg-h` now 100vh-based with an `@supports (height:100svh)` override, and the AR section's fallback is 100vh, so pre-svh browsers keep page heights instead of an invalid value. | Modern Chromium unchanged (screenshots); old engines → device check. |
+| F-12 / AR-12 | ALREADY FIXED + hardened | oka.css | Newest commit's snap rules have no `:has()` in the selector list; `.story-steps:not(:has(ol))` is already its own rule. Added the svh fallback above (the other half of F-12). | grep: no `:has(` in any selector list. |
+| AR-15 | FIXED | oka.css | `.story { overflow-wrap: anywhere }`. | 13-story-perf long (see below). |
+| AR-08 | FIXED | oka.css | `@media (hover:hover) and (pointer:fine)`: PDP `scroll-snap-type: none` (touch keeps one page per swipe). | `10-wheel-check.mjs` Desktop 1440: 10×100px slow wheel was `0 0 0…` → `100 200 … 700`; 6×400px was all 0 → 400 800. Stops at ~700–800 = model-viewer captures the wheel (AR-07). |
+| AR-07 | HANDOFF | oka-screens.js | Needs `disable-zoom` on the inline model-viewer for fine pointers (JS). A CSS `pointer-events:none` would kill desktop drag-to-rotate, so not done. | — |
+| V-11 | FIXED (CSS side) | oka.css | `input[type=email|tel|url] { direction: ltr }` (FIXER-LIQUID also added `dir="ltr"` to contact email). | computed direction on /pages/contact ar. |
+| V-15 | N/A | — | Content/digit data, not CSS. | — |
+| V-08 follow-up (FIXER-CORE handoff) | FIXED | oka.css | On iOS only (`@supports (-webkit-touch-callout: none)`), `.search-input`, `.field-input` and `.discount-input` are 16px, so focusing a field no longer zooms the page now that pinch-zoom is allowed. | Parses in Chromium; iOS → device check. |
+
+## Verification
+- **Isolation:** a baseline-theme copy whose `oka.css` is a symlink to the fixed file (port 9531) showed my CSS alone. Port 9530 showed the full fixed theme with the other fixers' work.
+- **Screenshots** (before/after, 360/390/430/1440 × ar/en × 9 routes: home, 2 PDPs, cart, checkout-review, collection, addresses, contact, order detail): the layout is identical. The only differences are the darker secondary greys and green text. Noise between two baseline runs was of the same size on home and cart (swipe cue, rail).
+- **Overflow matrix** (`run-widths.sh`, all 17 viewports × all routes × ar/en, full theme on 9530): **docOverflow 0 on every viewport**.
+  - The `oov` hits on phones are the visually-hidden `.a11y-name` spans that FIXER-LIQUID added (1px clipped, inline style). The 6 `clipped` hits are the visually-hidden `<h1>`s. Both are probe artefacts.
+  - Landscape `oov` is the known rotation artefact.
+- **CSS parse check:** braces balance (949/949). Chromium `CSSStyleSheet.replaceSync` gives 918 rules, and every new block is present. theme-check isn't installed here.
+- **Tests:** `v7-lock-zindex`, `ar/04-ar-page add`, `v8-long-text`, `ar/10-wheel-check`, `ar/13-story-perf long` and a contrast, reduced-motion and forced-colours probe. Results are in the table above.
+- **Contrast probe** (v5 computed, 9 routes, ar+en): 0 failures everywhere except home. The orange `.cs-why.ship` was at 4.48 and is now #a35300.
+  - Home's 2.4–2.6 hits are the off-centre rail cards, dimmed by design with `opacity:.42` on `.prod-slot` (a carousel effect; the centred card passes). Left as is.
+
+## Not changed / notes
+- Placeholder colour `rgba(110,110,115,.6)` is unchanged; it was not in the finding.
+- Home feed `.feed` is also `scroll-snap-type: y mandatory`. Its pages are each a full screen tall, and this was not reported, so it is unchanged.

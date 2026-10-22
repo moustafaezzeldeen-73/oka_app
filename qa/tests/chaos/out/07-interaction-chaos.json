@@ -1,0 +1,168 @@
+{
+ "base": "http://localhost:9440",
+ "cases": [
+  {
+   "name": "rapid-fire /products/oka-cobra",
+   "navigatedAway": true,
+   "note": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
+   "serverItemCount": 0,
+   "serverItems": [],
+   "pageErrors": [],
+   "consoleErr": []
+  },
+  {
+   "name": "rapid-fire /collections/hookahs",
+   "navigatedAway": true,
+   "note": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
+   "serverItemCount": 0,
+   "serverItems": [],
+   "pageErrors": [],
+   "consoleErr": []
+  },
+  {
+   "name": "rapid-fire /cart",
+   "buttons": 9,
+   "clicks": 90,
+   "serverItemCount": 0,
+   "serverItems": [],
+   "pageErrors": [],
+   "consoleErr": []
+  },
+  {
+   "name": "rapid-fire /",
+   "navigatedAway": true,
+   "note": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
+   "serverItemCount": 8,
+   "serverItems": [
+    [
+     "oka-cloud-white-hookah",
+     2
+    ],
+    [
+     "tobacco-bowls-blueberry-12g",
+     2
+    ],
+    [
+     "tobacco-bowls-iced-lemon-mint-12g",
+     2
+    ],
+    [
+     "tongs",
+     2
+    ]
+   ],
+   "pageErrors": [],
+   "consoleErr": []
+  },
+  {
+   "name": "rapid-fire /pages/orders",
+   "navigatedAway": true,
+   "note": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
+   "serverItemCount": 30,
+   "serverItems": [
+    [
+     "oka-cloud-white-hookah",
+     10
+    ],
+    [
+     "tobacco-bowls-blueberry-12g",
+     20
+    ]
+   ],
+   "pageErrors": [],
+   "consoleErr": []
+  },
+  {
+   "name": "pdp triple-tap add",
+   "serverItemCount": 3,
+   "items": [
+    [
+     "oka-cobra",
+     3
+    ]
+   ],
+   "pageErrors": [],
+   "consoleErr": []
+  },
+  {
+   "name": "contact double-submit + hostile input",
+   "forms": 1,
+   "submitted": 3,
+   "url": "http://localhost:9440/pages/contact?contact_posted=true#contact_form",
+   "pageErrors": [],
+   "consoleErr": []
+  },
+  {
+   "name": "add-address EG phone formats (theme regex)",
+   "results": [
+    {
+     "phone": "01012345678",
+     "strippedPass": true,
+     "arabicDigitsPass": true
+    },
+    {
+     "phone": "01112345678",
+     "strippedPass": true,
+     "arabicDigitsPass": true
+    },
+    {
+     "phone": "01212345678",
+     "strippedPass": true,
+     "arabicDigitsPass": true
+    },
+    {
+     "phone": "01512345678",
+     "strippedPass": true,
+     "arabicDigitsPass": true
+    },
+    {
+     "phone": "+201012345678",
+     "strippedPass": true,
+     "arabicDigitsPass": true
+    },
+    {
+     "phone": "00201012345678",
+     "strippedPass": false,
+     "arabicDigitsPass": false
+    },
+    {
+     "phone": "٠١٠١٢٣٤٥٦٧٨٩",
+     "strippedPass": false,
+     "arabicDigitsPass": false
+    },
+    {
+     "phone": "0101234567",
+     "strippedPass": false,
+     "arabicDigitsPass": false
+    },
+    {
+     "phone": "010123456789",
+     "strippedPass": false,
+     "arabicDigitsPass": false
+    },
+    {
+     "phone": "0191234567",
+     "strippedPass": false,
+     "arabicDigitsPass": false
+    }
+   ]
+  },
+  {
+   "name": "menu+sheet+escape+rotate+zoom",
+   "stuck": {
+    "menuOpen": false,
+    "scrims": 1,
+    "sheets": 1,
+    "overflow": 0
+   },
+   "pageErrors": [],
+   "consoleErr": []
+  },
+  {
+   "name": "back during pending add",
+   "url": "http://localhost:9440/collections/hookahs",
+   "pageErrors": [],
+   "consoleErr": []
+  }
+ ]
+}

@@ -2,8 +2,22 @@
   ScreenHeader: `grid-template-columns: 40px 1fr 40px`, back chevron, centred title.
   `back` is where to go when there's no history to pop.
 {%- endcomment -%}
+{%- liquid
+  # F-14: a root-relative `back` stays in the shopper's locale (/ar/… on the Arabic URL).
+  assign bk = back | default: routes.root_url
+  if back != blank and routes.root_url != '/'
+    assign bk_first = back | slice: 0
+    assign bk_root = routes.root_url | append: '/'
+    if bk_first == '/'
+      unless back contains bk_root
+        assign bk = routes.root_url | append: back
+      endunless
+    endif
+  endif
+-%}
 <div class="hdr">
-  <button class="hdr-btn flip" data-back="{{ back | default: routes.root_url }}" aria-label="Back">{% render 'icon', name: 'chevron-left', px: 20 %}</button>
-  <div class="hdr-title">{% render 'bi', en: en, ar: ar %}</div>
+  <button class="hdr-btn flip" data-back="{{ bk }}">{% render 'a11y-name', en: 'Back', ar: 'رجوع' %}{% render 'icon', name: 'chevron-left', px: 20 %}</button>
+  {%- comment -%} V-13: the screen title is the page's h1 (oka.css resets h1 margin/size/weight, so it looks the same). {%- endcomment -%}
+  <h1 class="hdr-title">{% render 'bi', en: en, ar: ar %}</h1>
   <div class="hdr-btn"></div>
 </div>

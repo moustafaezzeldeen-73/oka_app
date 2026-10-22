@@ -1,0 +1,42 @@
+{
+ "base": "http://localhost:9440",
+ "sec06": {
+  "shownToNextVisitor": "Your last order #9000101 Processing OKA white EGP 169 – 1 + Tobacco Bowls- Blue Cloud - 12g EGP 98 – 2 + Delivering to QA Tester · +201000000001 1 Test Street, Building 1, Floor 2, Apt 3 Nasr City, Cairo Subtotal EGP 267 Shipping EGP 60 Total (cash on delivery) EGP 327 Edit order Cancel Order Change",
+  "editOrCancelOffered": true,
+  "snapshotStillPersisted": true,
+  "apiCalls": [
+   {
+    "url": "https://website-app-649584328410.europe-west1.run.app/mcp",
+    "status": 200
+   }
+  ]
+ },
+ "requestShape": {
+  "outgoing": [
+   {
+    "method": "customer_get_order",
+    "args": [
+     "session"
+    ],
+    "sentOrderNumber": null,
+    "sentPhone": null,
+    "session": {
+     "checkoutToken": "another-guess",
+     "cartToken": "other-token-guess"
+    }
+   }
+  ]
+ },
+ "signedInRequests": [
+  {
+   "method": "track_delivery",
+   "hasOrderNumber": false,
+   "hasPhone": false
+  }
+ ],
+ "clientRateLimit": {
+  "pageRequestsObserved": 26,
+  "loopAccepted": 0,
+  "note": "theme does not throttle; each attempt reaches the endpoint (mock). Rate limiting must be server-side (see server auth/testLogin + ownership)."
+ }
+}

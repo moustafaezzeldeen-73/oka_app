@@ -1,0 +1,5 @@
+SEC-06 shownToNextVisitor: Your last order #9000101 Processing OKA white EGP 169 – 1 + Tobacco Bowls- Blue Cloud - 12g EGP 98 – 2 + Delivering to QA Tester · +201000000001 1 Test Street, 
+SEC-06 edit/cancel offered to next visitor: true | snapshot persisted: true
+guest request shape: {"outgoing":[{"method":"customer_get_order","args":["session"],"sentOrderNumber":null,"sentPhone":null,"session":{"checkoutToken":"another-guess","cartToken":"other-token-guess"}}]}
+signed-in request shape: [{"method":"track_delivery","hasOrderNumber":false,"hasPhone":false}]
+client rate limit: {"pageRequestsObserved":26,"loopAccepted":0,"note":"theme does not throttle; each attempt reaches the endpoint (mock). Rate limiting must be server-side (see server auth/testLogin + ownership)."}

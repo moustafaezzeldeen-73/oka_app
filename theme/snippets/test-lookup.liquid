@@ -11,6 +11,16 @@
   To remove: delete this file, its render line in sections/oka-orders.liquid,
   the test_panel setting, and testLookup() in assets/oka-screens.js.
 {%- endcomment -%}
+{%- liquid
+  # SEC-05: render only for signed-in staff (customer tag 'staff' or 'oka-staff'), whatever the caller does.
+  assign tl_staff = false
+  if settings.test_panel and customer
+    if customer.tags contains 'staff' or customer.tags contains 'oka-staff'
+      assign tl_staff = true
+    endif
+  endif
+-%}
+{%- if tl_staff -%}
 <div class="test-panel" data-test-lookup>
   <div class="test-badge">TESTING — staff only</div>
   {%- if settings.jt_tracking_url == blank or settings.jt_tracking_key == blank -%}
@@ -32,3 +42,4 @@
   <div class="error-txt" data-tl-error hidden></div>
 </div>
 <div data-tl-results></div>
+{%- endif -%}

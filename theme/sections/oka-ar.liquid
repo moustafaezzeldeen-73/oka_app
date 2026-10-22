@@ -33,20 +33,24 @@
   <div class="arx-stage" data-ar-stage>
     {%- comment -%} The photo shows until the 3D model has loaded, and stays if it can't. {%- endcomment -%}
     {%- if p.featured_image -%}
-      <img class="arx-fallback" data-ar-photo src="{{ p.featured_image | image_url: width: 900 }}" alt="{{ p.title | escape }}">
+      {%- liquid
+  # Theme check ImgWidthAndHeight: intrinsic size (never wider than the source) + height:auto, so layout is unchanged.
+  assign fw = p.featured_image.width | default: 900 | at_most: 900
+  assign fh = fw | divided_by: p.featured_image.aspect_ratio | round
+-%}<img class="arx-fallback" data-ar-photo src="{{ p.featured_image | image_url: width: 900 }}" alt="{{ p.title | escape }}" width="{{ fw }}" height="{{ fh }}" style="height:auto">
     {%- endif -%}
     <div class="arx-loading" data-ar-loading>{% render 'bi', en: 'Loading 3D…', ar: 'بنحمّل الـ ٣D…' %}</div>
   </div>
 
   <div class="arx-top">
-    <a class="arx-circle press flip" href="{{ p.url }}" aria-label="Back">{% render 'icon', name: 'chevron-left' %}</a>
-    <div class="arx-chip" data-ar-status><i></i><span data-ar-status-text>{% if glb != '' %}{% render 'bi', en: 'Opening camera…', ar: 'بنفتح الكاميرا…' %}{% else %}{% render 'bi', en: 'Photo', ar: 'صورة' %}{% endif %}</span></div>
+    <a class="arx-circle press flip" href="{{ p.url }}">{% render 'a11y-name', en: 'Back', ar: 'رجوع' %}{% render 'icon', name: 'chevron-left' %}</a>
+    <div class="arx-chip" data-ar-status role="status" aria-live="polite"><i></i><span data-ar-status-text>{% if glb != '' %}{% render 'bi', en: '3D', ar: '٣D' %}{% else %}{% render 'bi', en: 'Photo', ar: 'صورة' %}{% endif %}</span></div>
   </div>
 
   <div class="arx-panel">
     <div class="arx-head">
       <div style="min-width:0">
-        <div class="arx-title">{% render 'ptitle', p: p %}</div>
+        <h1 class="arx-title">{% render 'ptitle', p: p %}</h1>
         <div class="arx-price">{% render 'price', cents: v.price %}</div>
       </div>
       {%- if p.available -%}

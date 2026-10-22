@@ -16,11 +16,15 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
   /* ── storage that never throws (private mode, blocked cookies) ───────── */
+  /* A stored value of another shape than the caller's fallback (null, "{}", a string…)
+   * gives the fallback instead of crashing the caller (F-11 / CH-04). */
+  const kind = (v) => (v === null ? 'null' : Array.isArray(v) ? 'array' : typeof v);
+  const shaped = (v, fallback) => (fallback != null && kind(v) !== kind(fallback) ? fallback : v);
   const store = {
     get(k, fallback = null) {
       try {
         const v = localStorage.getItem(k);
-        return v == null ? fallback : JSON.parse(v);
+        return v == null ? fallback : shaped(JSON.parse(v), fallback);
       } catch (e) { return fallback; }
     },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
@@ -28,7 +32,7 @@
     sget(k, fallback = null) {
       try {
         const v = sessionStorage.getItem(k);
-        return v == null ? fallback : JSON.parse(v);
+        return v == null ? fallback : shaped(JSON.parse(v), fallback);
       } catch (e) { return fallback; }
     },
     sset(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
@@ -44,7 +48,26 @@
     applyAttrs();
     document.dispatchEvent(new CustomEvent('oka:lang'));
   }
-  const toggleLang = () => setLang(isRtl() ? 'en' : 'ar');
+  /**
+   * On a non-primary locale URL (okaegypt.com/ar/…) Shopify's own links keep
+   * the /ar prefix and the page is rendered for that locale, so switching
+   * language only on the client was undone by the next tap (F-07). Choosing
+   * the other language there goes to the same page on the primary-locale URL,
+   * where the theme follows the shopper's saved choice.
+   */
+  function otherLocaleUrl(l) {
+    const root = String(html.dataset.root || '/').replace(/\/+$/, '');
+    if (!root || html.hasAttribute('data-locale-primary') || html.dataset.locale === l) return null;
+    const p = location.pathname;
+    if (p !== root && p.indexOf(`${root}/`) !== 0) return null;
+    return (p.slice(root.length) || '/') + location.search + location.hash;
+  }
+  function toggleLang() {
+    const next = isRtl() ? 'en' : 'ar';
+    const url = otherLocaleUrl(next);
+    setLang(next);
+    if (url) location.assign(url);
+  }
   const langLabel = () => (isRtl() ? 'EN' : 'ع');
 
   /** Placeholders and labels that can't hold two spans. */
@@ -143,6 +166,11 @@
     const code = String(addr.provinceCode || '').toUpperCase();
     const byCode = PROVINCES.find((p) => p.code === code);
     if (byCode) return byCode;
+    // COM-03: the server's resolver (whole words, aliases), ported in oka-screens.js, when it's there.
+    try {
+      const c = window.Oka?.resolveGov?.(addr.province, addr.city);
+      if (c) { const p = PROVINCES.find((x) => x.code === c); if (p) return p; }
+    } catch (e) { /* fall back to the substring match below */ }
     const hay = fold(`${addr.province || ''} ${addr.city || ''}`);
     return PROVINCES.find((p) => hay && (hay.includes(fold(p.en)) || hay.includes(fold(p.ar)))) || null;
   }
@@ -183,17 +211,43 @@
   const days = (min, max) => (isRtl() ? `${arDigits(min)}-${arDigits(max)} ${max > 2 ? 'أيام' : 'يوم'}` : `${min}–${max} days`);
   const etaFor = (addr) => { const p = provinceOf(addr); return p ? days(p.minDays, p.maxDays) : days(1, 5); };
 
+  /* ── locale root: '/' or '/ar/' (F-14) ───────────────────────────────── */
+  const ROOT = (() => {
+    const r = html.dataset.root || window.Shopify?.routes?.root || '/';
+    return `${String(r).replace(/\/+$/, '')}/`;
+  })();
+  const R = (path) => ROOT + String(path).replace(/^\/+/, '');
+
   /* ── cart (Shopify's own, through the Cart AJAX API) ─────────────────── */
   let cartState = null;
+  /** Shopper-facing wording for transport failures (offline, rate limit, server error) — F-15. */
+  const netError = (status) => {
+    if (!status) return L("You're offline — check your connection and try again.", 'مفيش إنترنت — اتأكد من الاتصال وجرّب تاني.');
+    if (status === 429) return L('Too many tries — wait a moment and try again.', 'محاولات كتير — استنى شوية وجرّب تاني.');
+    return L('Something went wrong on our side — please try again.', 'حصلت مشكلة من عندنا، جرّب تاني.');
+  };
   async function cartFetch(url, body) {
-    const res = await fetch(url, {
-      method: body ? 'POST' : 'GET',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: body ? JSON.stringify(body) : undefined,
-      credentials: 'same-origin',
-    });
+    let res;
+    try {
+      res = await fetch(R(url), {
+        method: body ? 'POST' : 'GET',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: body ? JSON.stringify(body) : undefined,
+        credentials: 'same-origin',
+      });
+    } catch (e) {
+      const err = new Error(netError(0));
+      err.code = 'offline';
+      throw err;
+    }
     const json = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(json.description || json.message || `HTTP ${res.status}`);
+    if (!res.ok) {
+      // Shopify's own 4xx explanations (sold out, only N left) are already worded for shoppers.
+      const msg = res.status === 429 || res.status >= 500 ? netError(res.status) : (json.description || json.message || netError(res.status));
+      const err = new Error(typeof msg === 'string' ? msg : netError(res.status));
+      err.status = res.status;
+      throw err;
+    }
     return json;
   }
   async function getCart(force = false) {
@@ -202,16 +256,54 @@
     renderBadges();
     return cartState;
   }
-  function setCart(c) {
+  /** What a cart looks like to the shopper — two equal signatures need no re-render. */
+  const cartSig = (c) => (c ? JSON.stringify([c.token, c.item_count, c.total_price, (c.items || []).map((i) => [i.key, i.quantity]), (c.discount_codes || []).map((d) => [d.code, d.applicable])]) : '');
+  function setCart(c, { broadcast = true } = {}) {
     cartState = c;
     renderBadges();
     document.dispatchEvent(new CustomEvent('oka:cart', { detail: c }));
+    // Other tabs of the shop refresh their cart when this changes (COM-09).
+    if (broadcast) { try { localStorage.setItem('oka.cartSync', String(Date.now())); } catch (e) {} }
     return c;
+  }
+  /**
+   * Re-read the cart when it may have changed elsewhere: another tab, Back
+   * from the bfcache, coming back to the app (COM-09). Only re-renders when
+   * something actually differs, and never while this tab's own changes run.
+   */
+  let cartWrites = 0;
+  let refreshing = null;
+  let lastRefresh = 0;
+  function refreshCart({ throttle = 0 } = {}) {
+    if (refreshing || cartWrites > 0 || cardPending.size > 0) return refreshing;
+    if (throttle && Date.now() - lastRefresh < throttle) return null;
+    lastRefresh = Date.now();
+    const before = cartSig(cartState);
+    refreshing = cartFetch('/cart.js')
+      .then((c) => {
+        if (cartWrites > 0 || cardPending.size > 0) return cartState;
+        if (cartSig(c) !== before) setCart(c, { broadcast: false });
+        else cartState = c;
+        return c;
+      })
+      .catch(() => cartState)
+      .finally(() => { refreshing = null; });
+    return refreshing;
+  }
+  /** Cart writes run one after another, so responses can't land out of order (F-02 / CH-07). */
+  let cartQueue = Promise.resolve();
+  function queued(fn) {
+    cartWrites += 1;
+    const run = cartQueue.then(fn, fn);
+    cartQueue = run.catch(() => {});
+    return run.finally(() => { cartWrites -= 1; });
   }
   async function addToCart(variantId, qty = 1, { silent = false } = {}) {
     try {
-      await cartFetch('/cart/add.js', { items: [{ id: Number(variantId), quantity: qty }] });
-      const c = setCart(await cartFetch('/cart.js'));
+      const c = await queued(async () => {
+        await cartFetch('/cart/add.js', { items: [{ id: Number(variantId), quantity: qty }] });
+        return setCart(await cartFetch('/cart.js'));
+      });
       haptic.success();
       if (!silent) {
         addedFeedback();
@@ -223,19 +315,24 @@
       throw err;
     }
   }
-  async function addManyToCart(items) {
-    await cartFetch('/cart/add.js', { items: items.map((i) => ({ id: Number(i.variantId), quantity: i.quantity })) });
-    return setCart(await cartFetch('/cart.js'));
+  function addManyToCart(items) {
+    return queued(async () => {
+      await cartFetch('/cart/add.js', { items: items.map((i) => ({ id: Number(i.variantId), quantity: i.quantity })) });
+      return setCart(await cartFetch('/cart.js'));
+    });
   }
-  async function changeLine(key, quantity) {
-    return setCart(await cartFetch('/cart/change.js', { id: key, quantity }));
+  function changeLine(key, quantity) {
+    return queued(async () => setCart(await cartFetch('/cart/change.js', { id: key, quantity })));
   }
   /**
    * Replace one product/variant in the cart with another, in one request so
    * the old line can't survive a key change between an add and a remove.
    * Keeps the quantity; merges into the new variant if it's already there.
    */
-  async function swapLine(oldVariantId, newVariantId, qty) {
+  function swapLine(oldVariantId, newVariantId, qty) {
+    return queued(() => swapLineNow(oldVariantId, newVariantId, qty));
+  }
+  async function swapLineNow(oldVariantId, newVariantId, qty) {
     const cur = await getCart(true);
     const have = (cur.items || []).filter((i) => String(i.variant_id) === String(newVariantId)).reduce((a, i) => a + i.quantity, 0);
     await cartFetch('/cart/update.js', { updates: { [oldVariantId]: 0, [newVariantId]: have + qty } });
@@ -262,8 +359,8 @@
     const placed = prev.checkoutToken || prev.order ? { cartToken: prev.cartToken, checkoutToken: prev.checkoutToken, order: prev.order } : prev.last;
     store.set('oka.lastCheckout', { cartToken: token, at: Date.now(), ...(placed ? { last: placed } : {}) });
   }
-  async function applyDiscount(code) {
-    return setCart(await cartFetch('/cart/update.js', { discount: code }));
+  function applyDiscount(code) {
+    return queued(async () => setCart(await cartFetch('/cart/update.js', { discount: code })));
   }
   const cartCount = () => (cartState ? cartState.item_count : 0);
   const cartQtyOf = (variantId) =>
@@ -295,6 +392,7 @@
     $$('.added-bar', app).forEach((x) => x.remove());
     const el = document.createElement('div');
     el.className = 'added-bar';
+    el.setAttribute('role', 'status');
     el.innerHTML = `<span class="added-tick">✓</span><span class="added-txt">${esc(L('Added to cart', 'اتضاف للسلة'))}</span>
       <a href="${esc(CFG.routes.cart)}" class="added-btn ghost">${esc(L('View cart', 'السلة'))}</a>
       ${cartTotals().merch >= (Number(CFG.minOrder) || 0) ? `<a href="${esc(CFG.routes.checkout)}" class="added-btn">${esc(L('Check out', 'اطلب'))}</a>` : ''}`;
@@ -308,6 +406,7 @@
     $$('.toast', app).forEach((x) => x.remove());
     const el = document.createElement('div');
     el.className = 'toast';
+    el.setAttribute('role', 'status');
     el.textContent = text;
     app.appendChild(el);
     setTimeout(() => el.remove(), 1400);
@@ -317,16 +416,18 @@
   let cataloguePromise = null;
   function loadCatalogue() {
     if (cataloguePromise) return cataloguePromise;
-    const cached = store.sget('oka.catalogue');
-    if (cached && Date.now() - cached.at < 60 * 1000) {
+    // One cache per storefront locale: /ar/ pages get translated titles and /ar/ links (V-02).
+    const key = `oka.catalogue.${html.dataset.locale || 'default'}`;
+    const cached = store.sget(key, {});
+    if (cached.data && typeof cached.data === 'object' && Date.now() - cached.at < 60 * 1000) {
       cataloguePromise = Promise.resolve(cached.data);
       return cataloguePromise;
     }
     cataloguePromise = fetch(CFG.catalogueUrl, { credentials: 'same-origin' })
-      .then((r) => r.text())
+      .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
       .then((txt) => {
         const data = JSON.parse(txt);
-        store.sset('oka.catalogue', { at: Date.now(), data });
+        store.sset(key, { at: Date.now(), data });
         return data;
       })
       .catch((err) => {
@@ -359,7 +460,7 @@
   const DURABLE = /hookah|cobra|part(y|ies)/i;
   const CONSUMABLE = /ready-to-smoke|tobacco|coal|bowl/i;
   const viewed = {
-    list: () => store.sget('oka.viewed') || [],
+    list: () => store.sget('oka.viewed', []),
     add(handle) {
       if (!handle) return;
       const l = viewed.list().filter((h) => h !== handle);
@@ -483,7 +584,7 @@
 
   /* ── wishlist (saved per device, and on the account through the service) ─ */
   const wishlist = {
-    all: () => store.get('oka.wishlist', {}),
+    all: () => store.get('oka.wishlist', {}),  // shape-checked by store.get (F-11)
     has: (id) => Boolean(wishlist.all()[id]),
     toggle(id) {
       const w = wishlist.all();
@@ -583,7 +684,9 @@
   async function api(path, { method = 'GET', body } = {}) {
     if (!viaProxy() && !viaDirect()) throw new Error('service-not-configured');
     const base = (viaProxy() ? CFG.proxy : CFG.service).replace(/\/$/, '');
-    const res = await fetch(base + path, {
+    let res;
+    try {
+      res = await fetch(base + path, {
       method,
       credentials: viaProxy() ? 'same-origin' : 'omit',
       headers: {
@@ -592,12 +695,18 @@
         ...(viaProxy() ? {} : { Authorization: `Storefront ${CFG.serviceToken}` }),
       },
       body: body ? JSON.stringify(body) : undefined,
-    });
+      });
+    } catch (e) {
+      const err = new Error(netError(0));
+      err.code = 'offline';
+      throw err;
+    }
     const txt = await res.text();
     let json;
-    try { json = JSON.parse(txt); } catch (e) { throw new Error(L('The service returned an unexpected answer.', 'حصلت مشكلة من عندنا، جرّب تاني.')); }
+    try { json = JSON.parse(txt); } catch (e) { const err = new Error(res.ok ? L('The service returned an unexpected answer.', 'حصلت مشكلة من عندنا، جرّب تاني.') : netError(res.status)); err.status = res.status; throw err; }
     if (!res.ok) {
-      const err = new Error(json.error || `HTTP ${res.status}`);
+      const err = new Error(json.error || netError(res.status));
+      err.status = res.status;
       if (json.code) err.code = json.code;
       throw err;
     }
@@ -615,6 +724,8 @@
     const next = store.get('oka.afterSignIn');
     if (!next) return;
     store.del('oka.afterSignIn');
+    // Same-site paths only (CH-05).
+    if (typeof next !== 'string' || next[0] !== '/' || /^\/[\/\\]/.test(next)) return;
     if (next !== location.pathname + location.search) location.replace(next);
   }
 
@@ -634,8 +745,9 @@
       const app = $('#app') || document.body;
       const scrim = document.createElement('div');
       scrim.className = 'alert-scrim';
-      scrim.innerHTML = `<div class="alert" role="alertdialog" aria-modal="true">
-        <div class="alert-body"><div class="alert-title">${esc(title)}</div>${message ? `<div class="alert-msg">${esc(message)}</div>` : ''}</div>
+      const id = `oka-alert-${Date.now().toString(36)}`;
+      scrim.innerHTML = `<div class="alert" role="alertdialog" aria-modal="true" aria-labelledby="${id}-t"${message ? ` aria-describedby="${id}-m"` : ''}>
+        <div class="alert-body"><div class="alert-title" id="${id}-t">${esc(title)}</div>${message ? `<div class="alert-msg" id="${id}-m">${esc(message)}</div>` : ''}</div>
         <div class="alert-btns${btns.length > 2 ? ' stack' : ''}">${btns
           .map((b, i) => `<button class="alert-btn ${b.style || ''}" data-i="${i}">${esc(b.text)}</button>`)
           .join('')}</div></div>`;
@@ -644,28 +756,105 @@
         if (!b) return;
         const btn = btns[+b.dataset.i];
         scrim.remove();
+        if (back && back.isConnected && back !== document.body) back.focus?.({ preventScroll: true });
         resolve(btn);
         if (btn.onPress) btn.onPress();
       });
+      const back = document.activeElement;
+      // Escape picks the cancel button (or the only one); Tab stays inside the alert (V-03).
+      scrim.addEventListener('keydown', (e) => {
+        const bs = [...scrim.querySelectorAll('.alert-btn')];
+        if (e.key === 'Escape') {
+          e.preventDefault(); e.stopPropagation();
+          const i = btns.findIndex((b) => b.style === 'cancel');
+          const pick = i >= 0 ? i : (btns.length === 1 ? 0 : -1);
+          if (pick >= 0) bs[pick].click();
+        } else if (e.key === 'Tab' && bs.length) {
+          e.preventDefault();
+          const i = bs.indexOf(document.activeElement);
+          bs[(i + (e.shiftKey ? bs.length - 1 : 1) + bs.length) % bs.length].focus();
+        }
+      });
       app.appendChild(scrim);
+      // Focus moves into the alert (V-03), onto its last (main) button.
+      const bs = scrim.querySelectorAll('.alert-btn');
+      if (bs.length) bs[bs.length - 1].focus({ preventScroll: true });
     });
   }
 
   /* ── age gate (overlays/AgeGate.js) ──────────────────────────────────── */
+  /**
+   * A modal dialog (AG-3 / V-03): role=dialog + aria-modal, focus moves in
+   * and Tab stays inside, and the rest of the app is inert until it's
+   * answered. "I'm under 18" shows a polite blocked message (AG-2); nothing
+   * is stored for it, so the question comes back on the next visit. Adults
+   * are remembered under the same key as before (oka.age).
+   */
+  const ageGateOpen = () => Boolean($('#app > .age-gate'));
   function ageGate() {
     if (!CFG.ageGate || store.get('oka.age')) return;
     const app = $('#app');
+    if (!app || ageGateOpen()) return;
     const el = document.createElement('div');
     el.className = 'overlay age-gate';
-    el.innerHTML = `<div class="age-card fade-in">
-      <div class="age-title"><span class="l-en">Are you 18 or older?</span><span class="l-ar">عندك ١٨ سنة أو أكتر؟</span></div>
-      <div class="age-body"><span class="l-en">Some OKA products contain tobacco and are sold to adults only.</span><span class="l-ar">شوية من منتجات أوكا فيها دخان، وبنبيعها للكبار بس.</span></div>
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-labelledby', 'age-gate-title');
+    el.setAttribute('aria-describedby', 'age-gate-body');
+    // The dialog itself takes focus, so the question is read out first and a stray Enter answers nothing.
+    el.tabIndex = -1;
+    el.style.outline = 'none';
+    const ask = `<div class="age-card fade-in">
+      <div class="age-title" id="age-gate-title"><span class="l-en">Are you 18 or older?</span><span class="l-ar">عندك ١٨ سنة أو أكتر؟</span></div>
+      <div class="age-body" id="age-gate-body"><span class="l-en">Some OKA products contain tobacco and are sold to adults only.</span><span class="l-ar">شوية من منتجات أوكا فيها دخان، وبنبيعها للكبار بس.</span></div>
       <button class="cta" data-yes><span class="l-en">Yes, I’m 18+</span><span class="l-ar">أيوه، عندي ١٨+</span></button>
+      <button class="age-lang" data-no><span class="l-en">No, I’m under 18</span><span class="l-ar">لأ، سني أقل من ١٨</span></button>
       <button class="age-lang" data-lang><span class="l-en">العربية</span><span class="l-ar">English</span></button>
     </div>`;
-    el.querySelector('[data-yes]').onclick = () => { store.set('oka.age', true); el.remove(); };
-    el.querySelector('[data-lang]').onclick = toggleLang;
+    const blocked = `<div class="age-card fade-in">
+      <div class="age-title" id="age-gate-title"><span class="l-en">Sorry, OKA is for adults only</span><span class="l-ar">معلش، أوكا للكبار بس</span></div>
+      <div class="age-body" id="age-gate-body"><span class="l-en">Our products are sold only to people aged 18 or older. Thanks for being honest — we’ll be happy to see you when you’re 18.</span><span class="l-ar">منتجاتنا بتتباع للي عندهم ١٨ سنة أو أكتر بس. شكراً إنك كنت صريح — هنستناك لما تكمل ١٨.</span></div>
+      <button class="age-lang" data-back-to-ask><span class="l-en">I pressed the wrong button</span><span class="l-ar">دوست على الزرار الغلط</span></button>
+    </div>`;
+    // Everything else in the app is inert while the gate is up; only what we changed is put back.
+    const madeInert = [];
+    $$(':scope > *', app).forEach((n) => {
+      if (n === el || n.hasAttribute('inert')) return;
+      n.setAttribute('inert', '');
+      madeInert.push(n);
+    });
+    const returnFocus = document.activeElement;
+    const show = (markup) => {
+      el.innerHTML = markup;
+      el.focus({ preventScroll: true });
+    };
+    const close = () => {
+      el.remove();
+      madeInert.forEach((n) => n.removeAttribute('inert'));
+      document.removeEventListener('keydown', trap, true);
+      if (returnFocus && returnFocus !== document.body && returnFocus.isConnected) returnFocus.focus?.({ preventScroll: true });
+    };
+    // Tab and Shift+Tab cycle inside the gate; Escape doesn't dismiss it.
+    function trap(e) {
+      if (!el.isConnected) return;
+      if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); return; }
+      if (e.key !== 'Tab') return;
+      const f = $$('button, a[href], input, [tabindex]:not([tabindex="-1"])', el).filter((x) => !x.disabled);
+      if (!f.length) { e.preventDefault(); return; }
+      const i = f.indexOf(document.activeElement);
+      const next = e.shiftKey ? (i <= 0 ? f[f.length - 1] : f[i - 1]) : (i < 0 || i === f.length - 1 ? f[0] : f[i + 1]);
+      e.preventDefault();
+      next.focus();
+    }
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('[data-yes]')) { store.set('oka.age', true); close(); return; }
+      if (e.target.closest('[data-no]')) { show(blocked); return; }
+      if (e.target.closest('[data-back-to-ask]')) { show(ask); return; }
+      if (e.target.closest('[data-lang]')) { e.stopPropagation(); toggleLang(); }
+    });
+    document.addEventListener('keydown', trap, true);
     app.appendChild(el);
+    show(ask);
   }
 
   /* ── AR: "See it on your table" (ArOverlay.js + ArViewer.js) ─────────── */
@@ -677,8 +866,12 @@
       const s = document.createElement('script');
       s.type = 'module';
       s.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js';
+      // Subresource Integrity (SEC-07): sha384 of this exact file, identical to the npm
+      // @google/model-viewer@4.0.0 dist/model-viewer.min.js. Change both together if the version moves.
+      s.integrity = 'sha384-sr9b4Ux0WhAUGclJ0ym0FSY2zSOMmNSn0bP/SA0e6bNCrpn/5W3QL8mm+LdlQMKw';
+      s.crossOrigin = 'anonymous';
       s.onload = resolve;
-      s.onerror = reject;
+      s.onerror = (e) => { modelViewerLoading = null; s.remove(); reject(e); };  // a later visit retries (AR-10)
       document.head.appendChild(s);
     });
     return modelViewerLoading;
@@ -697,6 +890,8 @@
     const app = $('#app');
     const menu = $('#side-menu');
     if (!app || !menu || app.classList.contains('menu-open')) return;
+    // Not over the 18+ gate (V-14): it has to be answered first.
+    if (ageGateOpen()) return;
     menuReturnFocus = document.activeElement;
     menu.removeAttribute('inert');
     menu.setAttribute('aria-hidden', 'false');
@@ -835,7 +1030,7 @@
 
       const ar = e.target.closest('[data-ar]');
       // The AR pill opens the product's AR screen (sections/oka-ar.liquid).
-      if (ar) { e.preventDefault(); location.href = `/products/${encodeURIComponent(ar.dataset.ar)}?view=ar`; return; }
+      if (ar) { e.preventDefault(); location.href = R(`products/${encodeURIComponent(ar.dataset.ar)}?view=ar`); return; }
 
       // A bundle offer: every variant in one cart call, so it lands whole or not at all.
       const bundle = e.target.closest('[data-add-bundle]');
@@ -885,6 +1080,9 @@
       const signIn = e.target.closest('[data-sign-in]');
       if (signIn) { e.preventDefault(); requireSignIn(signIn.dataset.signIn || undefined); return; }
 
+      // Desktop: a click on the page backdrop outside the app column closes the menu too (e2e MN-3b).
+      if (!e.target.closest('#app') && $('#app')?.classList.contains('menu-open')) { closeMenu(); return; }
+
       const opener = e.target.closest('[data-menu-open]');
       if (opener) { e.preventDefault(); openMenu(); return; }
       const closer = e.target.closest('[data-menu-close]');
@@ -906,7 +1104,7 @@
     arDigits, num, fmtPrice, fold, haptic,
     PROVINCES, provinceOf, provinceName, addresses, selectedAddress, selectAddress, customer,
     zoneFees, shippingFor, shipBar, etaFor, days,
-    getCart, setCart, addToCart, addManyToCart, changeLine, swapLine, applyDiscount, rememberCheckout, cartCount, cartQtyOf, cartTotals, toast,
+    getCart, setCart, refreshCart, addToCart, addManyToCart, changeLine, swapLine, applyDiscount, rememberCheckout, cartCount, cartQtyOf, cartTotals, toast,
     loadCatalogue, loadModelViewer, ptitle, pdesc, searchProducts, wishlist, paintHearts, recommend, recReason, viewed,
     api, hasService, requireSignIn, goBack, whatsappUrl, okaAlert,
     openMenu, closeMenu,
@@ -917,7 +1115,13 @@
     wire();
     resumeAfterSignIn();
     ageGate();
-    getCart().catch(() => {});
+    // Cards of products already in the cart show − qty + from the start (F-04).
+    getCart().then(() => syncCardSteppers()).catch(() => {});
+    // Keep the cart current across tabs, Back (bfcache) and returning to the app (COM-09).
+    window.addEventListener('pageshow', (e) => { if (e.persisted) refreshCart(); });
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refreshCart({ throttle: 2000 }); });
+    window.addEventListener('focus', () => refreshCart({ throttle: 2000 }));
+    window.addEventListener('storage', (e) => { if (e.key === 'oka.cartSync') refreshCart(); });
     // Warm the catalogue: search, the cart's rails and the AR overlay all read it.
     if ('requestIdleCallback' in window) requestIdleCallback(() => loadCatalogue());
     else setTimeout(loadCatalogue, 800);

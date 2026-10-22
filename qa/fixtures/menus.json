@@ -1,0 +1,80 @@
+[
+  {
+    "handle": "main-menu",
+    "title": "Main menu",
+    "links": [
+      {
+        "title": "Home",
+        "url": "/",
+        "type": "frontpage",
+        "links": []
+      },
+      {
+        "title": "Store",
+        "url": "/",
+        "type": "frontpage",
+        "links": []
+      },
+      {
+        "title": "How to Use",
+        "url": "/pages/how-to-use",
+        "type": "page",
+        "links": []
+      },
+      {
+        "title": "About us",
+        "url": "/pages/about-us",
+        "type": "page",
+        "links": []
+      },
+      {
+        "title": "FAQ",
+        "url": "/pages/faq",
+        "type": "page",
+        "links": []
+      },
+      {
+        "title": "Blog",
+        "url": "/blogs/news",
+        "type": "blog",
+        "links": []
+      },
+      {
+        "title": "Refund Policy",
+        "url": "/policies/refund-policy",
+        "type": "shop_policy",
+        "links": []
+      }
+    ]
+  },
+  {
+    "handle": "footer",
+    "title": "Footer menu",
+    "links": [
+      {
+        "title": "Search",
+        "url": "/search",
+        "type": "search",
+        "links": []
+      }
+    ]
+  },
+  {
+    "handle": "customer-account-main-menu",
+    "title": "Customer account main menu",
+    "links": [
+      {
+        "title": "Orders",
+        "url": "https://account.okaegypt.com/orders",
+        "type": "customer_account_page",
+        "links": []
+      },
+      {
+        "title": "Profile",
+        "url": "https://account.okaegypt.com/profile",
+        "type": "customer_account_page",
+        "links": []
+      }
+    ]
+  }
+]

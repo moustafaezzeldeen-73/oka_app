@@ -1,0 +1,144 @@
+{
+ "base": "http://localhost:9440",
+ "cases": [
+  {
+   "path": "orders:customer_get_order",
+   "mode": "malformed",
+   "pageErrors": [],
+   "consoleErr": [],
+   "rendered": "ع\nOrders\nNo orders yet\nSign in to see all your orders and track their delivery.",
+   "alive": true
+  },
+  {
+   "path": "orders:customer_get_order",
+   "mode": "error500",
+   "pageErrors": [],
+   "consoleErr": [
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+   ],
+   "rendered": "ع\nOrders\nNo orders yet\nSign in to see all your orders and track their delivery.",
+   "alive": true
+  },
+  {
+   "path": "orders:customer_get_order",
+   "mode": "cors",
+   "pageErrors": [],
+   "consoleErr": [],
+   "rendered": "ع\nOrders\nNo orders yet\nSign in to see all your orders and track their delivery.",
+   "alive": true
+  },
+  {
+   "path": "orders:customer_get_order",
+   "mode": "timeout",
+   "pageErrors": [],
+   "consoleErr": [
+    "Failed to load resource: net::ERR_TIMED_OUT"
+   ],
+   "rendered": "ع\nOrders\nNo orders yet\nSign in to see all your orders and track their delivery.",
+   "alive": true
+  },
+  {
+   "path": "orders:customer_get_order",
+   "mode": "sse",
+   "pageErrors": [],
+   "consoleErr": [],
+   "rendered": "Your last order\n#9000101\nProcessing\nOKA white\nEGP 169\n–\n1\n+\nTobacco Bowls- Blue Cloud - 12g\nEGP 98\n–\n2\n+\nDelivering to\nQA Tester · +20100000",
+   "alive": true
+  },
+  {
+   "path": "orders:customer_get_order",
+   "mode": "rpc-error",
+   "pageErrors": [],
+   "consoleErr": [],
+   "rendered": "ع\nOrders\nNo orders yet\nSign in to see all your orders and track their delivery.",
+   "alive": true
+  },
+  {
+   "path": "orders:customer_get_order",
+   "mode": "not-found",
+   "pageErrors": [],
+   "consoleErr": [],
+   "rendered": "ع\nOrders\nNo orders yet\nSign in to see all your orders and track their delivery.",
+   "alive": true
+  },
+  {
+   "path": "orders:customer_get_order",
+   "mode": "empty",
+   "pageErrors": [],
+   "consoleErr": [],
+   "rendered": "Your last order\n#9000101\nProcessing\nOKA white\nEGP 169\n–\n1\n+\nTobacco Bowls- Blue Cloud - 12g\nEGP 98\n–\n2\n+\nDelivering to\nQA Tester · +20100000",
+   "alive": true
+  },
+  {
+   "path": "jt:track_delivery",
+   "mode": "malformed",
+   "pageErrors": [],
+   "consoleErr": [],
+   "rendered": "We couldn’t reach J&T just now. Pull down to try again."
+  },
+  {
+   "path": "jt:track_delivery",
+   "mode": "error500",
+   "pageErrors": [],
+   "consoleErr": [
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+   ],
+   "rendered": "We couldn’t reach J&T just now. Pull down to try again."
+  },
+  {
+   "path": "jt:track_delivery",
+   "mode": "timeout",
+   "pageErrors": [],
+   "consoleErr": [
+    "Failed to load resource: net::ERR_TIMED_OUT"
+   ],
+   "rendered": "We couldn’t reach J&T just now. Pull down to try again."
+  },
+  {
+   "path": "jt:track_delivery",
+   "mode": "empty",
+   "pageErrors": [],
+   "consoleErr": [],
+   "rendered": "No scans yet\nProcessing\nPreparing to Ship\nShipped\nDelivered\nNo courier scans for this shipment yet. Updates appear here "
+  },
+  {
+   "path": "jt:track_delivery",
+   "mode": "tool-error",
+   "pageErrors": [],
+   "consoleErr": [],
+   "rendered": "We couldn’t reach J&T just now. Pull down to try again."
+  },
+  {
+   "path": "orders:customer_get_order",
+   "mode": "429",
+   "pageErrors": [],
+   "consoleErr": [
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)"
+   ],
+   "rendered": ""
+  },
+  {
+   "path": "orders:customer_get_order",
+   "mode": "502html",
+   "pageErrors": [],
+   "consoleErr": [
+    "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+   ],
+   "rendered": ""
+  },
+  {
+   "path": "cart:add latency+offline",
+   "pageErrors": [],
+   "consoleErr": [],
+   "requestFailed": []
+  },
+  {
+   "path": "cart:change out-of-order",
+   "pageErrors": [],
+   "consoleErr": [
+    "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+   ],
+   "serverItemCount": 0
+  }
+ ]
+}

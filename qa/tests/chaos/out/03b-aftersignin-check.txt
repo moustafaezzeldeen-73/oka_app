@@ -1,0 +1,4 @@
+{"bad":"{}","finalUrl":"http://localhost:9440/pages/[object%20Object]","navigations":2,"path":["/pages/account","/pages/[object%20Object]"]}
+{"bad":"\"a string\"","finalUrl":"http://localhost:9440/pages/a%20string","navigations":2,"path":["/pages/account","/pages/a%20string"]}
+{"bad":"\"//example.invalid/x\"","finalUrl":"http://example.invalid/x","navigations":2,"path":["/pages/account","http://example.invalid/x"]}
+{"bad":"\"/pages/orders\"","finalUrl":"http://localhost:9440/pages/orders","navigations":2,"path":["/pages/account","/pages/orders"]}

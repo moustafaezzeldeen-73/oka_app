@@ -9,10 +9,10 @@
   <div class="signin" data-login-panel>
     <p class="lead">{% render 'bi', en: 'Sign in with your email. Your orders, points and addresses follow you.', ar: 'ادخل بإيميلك. طلباتك ونقاطك وعناوينك هتكون معاك.' %}</p>
     {%- form 'customer_login', class: 'signin', style: 'padding:0' -%}
-      <label class="field-label">{% render 'bi', en: 'Email', ar: 'الإيميل' %}</label>
-      <input class="field-input" type="email" name="customer[email]" autocomplete="email" dir="ltr" required placeholder="name@example.com">
-      <label class="field-label">{% render 'bi', en: 'Password', ar: 'كلمة السر' %}</label>
-      <input class="field-input" type="password" name="customer[password]" autocomplete="current-password" dir="ltr" required placeholder="••••••">
+      <label class="field-label" for="login-customer-email">{% render 'bi', en: 'Email', ar: 'الإيميل' %}</label>
+      <input id="login-customer-email" class="field-input" type="email" name="customer[email]" autocomplete="email" dir="ltr" required placeholder="name@example.com">
+      <label class="field-label" for="login-customer-password">{% render 'bi', en: 'Password', ar: 'كلمة السر' %}</label>
+      <input id="login-customer-password" class="field-input" type="password" name="customer[password]" autocomplete="current-password" dir="ltr" required placeholder="••••••">
       {%- if form.errors -%}<div class="error-txt">{{ form.errors | default_errors }}</div>{%- endif -%}
       <button class="cta" type="submit" style="margin-top:8px">{% render 'bi', en: 'Sign in', ar: 'سجّل دخول' %}</button>
     {%- endform -%}
@@ -23,8 +23,8 @@
     {%- form 'recover_customer_password', class: 'signin', style: 'padding:0' -%}
       <p class="lead">{% render 'bi', en: 'We’ll email you a link to set a new password.', ar: 'هنبعتلك لينك على الإيميل تغيّر بيه كلمة السر.' %}</p>
       {%- if form.posted_successfully? -%}<div class="soft-notice">{% render 'bi', en: 'Check your email for the link.', ar: 'شوف الإيميل، بعتنالك اللينك.' %}</div>{%- endif -%}
-      <label class="field-label">{% render 'bi', en: 'Email', ar: 'الإيميل' %}</label>
-      <input class="field-input" type="email" name="email" autocomplete="email" dir="ltr" required>
+      <label class="field-label" for="login-email">{% render 'bi', en: 'Email', ar: 'الإيميل' %}</label>
+      <input id="login-email" class="field-input" type="email" name="email" autocomplete="email" dir="ltr" required>
       {%- if form.errors -%}<div class="error-txt">{{ form.errors | default_errors }}</div>{%- endif -%}
       <button class="cta" type="submit" style="margin-top:8px">{% render 'bi', en: 'Send link', ar: 'ابعت اللينك' %}</button>
     {%- endform -%}

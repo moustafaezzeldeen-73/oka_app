@@ -1,0 +1,37 @@
+corrupt-value cases: 90; with page errors / dead app: 5
+CRASH key=oka.afterSignIn store=undefined bad={} route=/pages/account errs="page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:9440/pages/account\", waiting until \"load\"\u001b[22m\n" alive=undefined
+CRASH key=oka.afterSignIn store=undefined bad="a string" route=/pages/account errs="page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:9440/pages/account\", waiting until \"load\"\u001b[22m\n" alive=undefined
+CRASH key=oka.afterSignIn store=undefined bad="ششششششششششششششششششش route=/pages/account errs="page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:9440/pages/account\", waiting until \"load\"\u001b[22m\n" alive=undefined
+CRASH key=oka.pendingCode store=local bad={} route=/cart errs=["code.trim is not a function"] alive=true
+CRASH key=oka.wishlist store=local bad=null route=/collections/hookahs errs=["Cannot read properties of null (reading 'oka-cloud-white-hookah')","Cannot read properties of null (reading 'oka-cloud-white-hookah')"] alive=true
+--- modes
+quota-exceeded                 route=/collections/hookahs errs=[] alive=true extra=[]
+quota-exceeded                 route=/products/oka-cobra errs=[] alive=true extra=[]
+quota-exceeded                 route=/cart errs=[] alive=true extra=[]
+quota-exceeded                 route=/ errs=[] alive=true extra=[]
+storage-disabled               route=/ errs=[] alive=true extra=
+storage-disabled               route=/collections/hookahs errs=[] alive=true extra=
+storage-disabled               route=/products/oka-cobra errs=[] alive=true extra=
+storage-disabled               route=/cart errs=[] alive=true extra=
+storage-disabled               route=/search?q=oka errs=[] alive=true extra=
+storage-disabled               route=/pages/orders errs=[] alive=true extra=
+cookies-cleared-between-navs   route= errs=[] alive=undefined extra=ع
+Cart
+Your cart is empty
+Browse best sellers
+OKA Pink
+EGP 169
+Add
+OKA white
+EGP 169
+Add
+OKA Cobra LED Rechargeable Base
+sessionStorage-cleared-midflow route= errs=[] alive=undefined extra=3 products
+OKA Cobra
+EGP 189
+Add
+OKA Cobra + OKA base
+EGP 357
+Add
+OKA Cobra LED 
+two-tabs-wishlist              route= errs=[] alive=undefined extra={"oka-cloud-white-hookah":true,"oka-victoria-pink-hookah":true}

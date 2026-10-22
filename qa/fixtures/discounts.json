@@ -1,0 +1,294 @@
+{
+  "_note": "automatic: exported read-only from the store (all active, none combine). codes: the store has NO active code discounts; these QA* codes are FAKE, for exercising the cart discount UI only.",
+  "automatic": [
+    {
+      "id": 1485310460202,
+      "__typename": "DiscountAutomaticBxgy",
+      "title": "tong free",
+      "status": "ACTIVE",
+      "startsAt": "2024-10-21T19:42:58Z",
+      "endsAt": null,
+      "usesPerOrderLimit": null,
+      "combinesWith": {
+        "orderDiscounts": false,
+        "productDiscounts": false,
+        "shippingDiscounts": false
+      },
+      "customerBuys": {
+        "value": {
+          "__typename": "DiscountPurchaseAmount",
+          "amount": "266.0"
+        },
+        "items": {
+          "__typename": "DiscountCollections",
+          "collections": {
+            "nodes": [
+              {
+                "handle": "hookahs"
+              },
+              {
+                "handle": "ready-to-smoke-bowls"
+              }
+            ]
+          }
+        }
+      },
+      "customerGets": {
+        "value": {
+          "__typename": "DiscountOnQuantity",
+          "quantity": {
+            "quantity": "1"
+          },
+          "effect": {
+            "__typename": "DiscountPercentage",
+            "percentage": 1
+          }
+        },
+        "items": {
+          "__typename": "DiscountProducts",
+          "products": {
+            "nodes": [
+              {
+                "handle": "tongs"
+              }
+            ]
+          },
+          "productVariants": {
+            "nodes": []
+          }
+        }
+      }
+    },
+    {
+      "id": 1505755267370,
+      "__typename": "DiscountAutomaticBxgy",
+      "title": "Valentines",
+      "status": "ACTIVE",
+      "startsAt": "2025-02-11T17:19:03Z",
+      "endsAt": null,
+      "usesPerOrderLimit": null,
+      "combinesWith": {
+        "orderDiscounts": false,
+        "productDiscounts": false,
+        "shippingDiscounts": false
+      },
+      "customerBuys": {
+        "value": {
+          "__typename": "DiscountQuantity",
+          "quantity": "2"
+        },
+        "items": {
+          "__typename": "DiscountProducts",
+          "products": {
+            "nodes": [
+              {
+                "handle": "oka-cloud-white-hookah"
+              },
+              {
+                "handle": "oka-carbon-black-hookah"
+              },
+              {
+                "handle": "oka-victoria-pink-hookah"
+              },
+              {
+                "handle": "oka-barbie-pink-hookah"
+              }
+            ]
+          },
+          "productVariants": {
+            "nodes": []
+          }
+        }
+      },
+      "customerGets": {
+        "value": {
+          "__typename": "DiscountOnQuantity",
+          "quantity": {
+            "quantity": "3"
+          },
+          "effect": {
+            "__typename": "DiscountAmount",
+            "amount": {
+              "amount": "24.0"
+            }
+          }
+        },
+        "items": {
+          "__typename": "DiscountProducts",
+          "products": {
+            "nodes": [
+              {
+                "handle": "tongs"
+              },
+              {
+                "handle": "tobacco-bowls-gum-mustic-12g"
+              },
+              {
+                "handle": "tobacco-bowls-cola-12g"
+              },
+              {
+                "handle": "tobacco-bowls-love-sixty-six-12g"
+              },
+              {
+                "handle": "tobacco-bowls-mint-12g"
+              },
+              {
+                "handle": "tobacco-bowls-cantaloup-12g"
+              },
+              {
+                "handle": "tobacco-bowls-grapes-12g"
+              },
+              {
+                "handle": "tobacco-bowls-two-apples-12g"
+              },
+              {
+                "handle": "tobacco-bowls-watermelon-12g"
+              },
+              {
+                "handle": "tobacco-bowls-lady-killer-12g"
+              },
+              {
+                "handle": "tobacco-bowls-iced-lemon-mint-12g"
+              },
+              {
+                "handle": "tobacco-bowls-mega-berry-12g"
+              },
+              {
+                "handle": "tobacco-bowls-pistachio-12g"
+              },
+              {
+                "handle": "tobacco-bowls-blueberry-12g"
+              },
+              {
+                "handle": "tobacco-bowls-gum-mint-12g"
+              },
+              {
+                "handle": "tobacco-bowls-gum-12g"
+              }
+            ]
+          },
+          "productVariants": {
+            "nodes": []
+          }
+        }
+      }
+    },
+    {
+      "id": 1612952633642,
+      "__typename": "DiscountAutomaticBasic",
+      "title": "The Trio Party",
+      "status": "ACTIVE",
+      "startsAt": "2026-05-17T18:27:58Z",
+      "endsAt": null,
+      "combinesWith": {
+        "orderDiscounts": false,
+        "productDiscounts": false,
+        "shippingDiscounts": false
+      },
+      "minimumRequirement": {
+        "__typename": "DiscountMinimumQuantity",
+        "greaterThanOrEqualToQuantity": "3"
+      },
+      "customerGets": {
+        "appliesOnOneTimePurchase": true,
+        "value": {
+          "__typename": "DiscountAmount",
+          "amount": {
+            "amount": "30.0"
+          },
+          "appliesOnEachItem": false
+        },
+        "items": {
+          "__typename": "DiscountCollections",
+          "collections": {
+            "nodes": [
+              {
+                "handle": "hookahs"
+              },
+              {
+                "handle": "oka-basic-hookahs-copy"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 1612953551146,
+      "__typename": "DiscountAutomaticBasic",
+      "title": "The Hexa Party",
+      "status": "ACTIVE",
+      "startsAt": "2026-05-17T18:32:19Z",
+      "endsAt": null,
+      "combinesWith": {
+        "orderDiscounts": false,
+        "productDiscounts": false,
+        "shippingDiscounts": false
+      },
+      "minimumRequirement": {
+        "__typename": "DiscountMinimumQuantity",
+        "greaterThanOrEqualToQuantity": "6"
+      },
+      "customerGets": {
+        "appliesOnOneTimePurchase": true,
+        "value": {
+          "__typename": "DiscountAmount",
+          "amount": {
+            "amount": "180.0"
+          },
+          "appliesOnEachItem": false
+        },
+        "items": {
+          "__typename": "DiscountCollections",
+          "collections": {
+            "nodes": [
+              {
+                "handle": "hookahs"
+              },
+              {
+                "handle": "oka-basic-hookahs-copy"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "codes": [
+    {
+      "code": "QA10",
+      "fake": true,
+      "type": "percentage",
+      "value": 10,
+      "min_subtotal": 0
+    },
+    {
+      "code": "QA50OFF",
+      "fake": true,
+      "type": "fixed_amount",
+      "value": 5000,
+      "min_subtotal": 0
+    },
+    {
+      "code": "QAMIN300",
+      "fake": true,
+      "type": "fixed_amount",
+      "value": 3000,
+      "min_subtotal": 30000
+    },
+    {
+      "code": "QAFREESHIP",
+      "fake": true,
+      "type": "free_shipping",
+      "value": 0,
+      "min_subtotal": 0
+    },
+    {
+      "code": "QAEXPIRED",
+      "fake": true,
+      "type": "percentage",
+      "value": 20,
+      "expired": true
+    }
+  ]
+}

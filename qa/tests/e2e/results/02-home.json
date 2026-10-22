@@ -1,0 +1,1298 @@
+[
+  {
+    "id": "HM-1",
+    "scenario": "Home loads, feed pages, no console/page errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "16 pages; snap=y mandatory; feed h=664/664; ",
+    "data": {
+      "pages": 16,
+      "kinds": [
+        "banner-page",
+        "col:العروض",
+        "col:شيشة أوكا المتميزة",
+        "banner-page",
+        "banner-page",
+        "col:أوكا بارتي",
+        "compare-page",
+        "col:أوكا كوبرا",
+        "banner-page",
+        "col:معسل أسود",
+        "banner-page",
+        "col:حجر جاهز للتدخين",
+        "banner-page",
+        "col:قطع الغيار",
+        "ribbon-page",
+        "policies-page"
+      ],
+      "snap": "y mandatory",
+      "fh": 664,
+      "vh": 664
+    },
+    "at": "2026-10-15T10:36:29.398Z"
+  },
+  {
+    "id": "HM-2",
+    "scenario": "Snap scrolling: feed scroll by one screen snaps to next page, active class follows",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "[{\"top\":664,\"h\":664,\"aligned\":true,\"active\":1},{\"top\":1328,\"h\":664,\"aligned\":true,\"active\":2},{\"top\":1992,\"h\":664,\"aligned\":true,\"active\":3},{\"top\":2656,\"h\":664,\"aligned\":true,\"active\":4}]",
+    "at": "2026-10-15T10:36:33.534Z"
+  },
+  {
+    "id": "HM-3",
+    "scenario": "Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "collection pages link to: [\"Offers\",\"OKA Premium Hookahs\",\"OKA Parties\",\"OKA Cobra\",\"Dark Tobacco\",\"Ready to smoke bowls\",\"OKA Parts\"]; setting collections absent from feed: hookahs, hoses, coal, bowls (SI-02 CONFIRMED)",
+    "at": "2026-10-15T10:36:33.540Z"
+  },
+  {
+    "id": "HM-4",
+    "scenario": "Every feed link (banners, offer cards, collection titles) resolves 200",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "15 links: /collections/oka-basic-hookahs-copy /collections/hookahs /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /policies/shipping-policy /ar/policies/shipping-policy /policies/refund-policy /ar/policies/refund-policy /policies/terms-of-service /ar/policies/terms-of-service /policies/privacy-policy /ar/policies/privacy-policy; bad=[]",
+    "at": "2026-10-15T10:36:33.828Z"
+  },
+  {
+    "id": "HM-5",
+    "scenario": "Offer slot not in focus: first tap only centres it (no add); tap in focus adds the bundle",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "slots=[{\"active\":true,\"l\":67,\"r\":323,\"w\":390},{\"active\":false,\"l\":-206,\"r\":51,\"w\":390}]; second fully visible=false; after side tap url=/ active=[false,true] cart items=0",
+    "at": "2026-10-15T10:36:37.331Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #1 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=4 missing= original=298 total=267 discounts=[] lineDisc=[\"tong free\"] totals=[\"المجموع قبل الشحن ٢٩٨ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٢٧ ج.م\",\"هتاخد ٢٦٧ نقطة لما يوصلك\"]",
+    "at": "2026-10-15T10:36:42.107Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #2 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=5 missing= original=467 total=395 discounts=[] lineDisc=[\"Valentines\",\"Valentines\",\"Valentines\"] totals=[\"المجموع قبل الشحن ٤٦٧ ج.م\",\"الخصم -٧٢ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٤٣١ ج.م\",\"هتاخد ٣٩٥ نقطة لما يوصلك\"]",
+    "at": "2026-10-15T10:36:46.528Z"
+  },
+  {
+    "id": "HM-7",
+    "scenario": "Offer button double-tap adds the bundle once (disabled guard)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "item_count=4 (bundle has 4 variants)",
+    "at": "2026-10-15T10:36:49.668Z"
+  },
+  {
+    "id": "HM-8",
+    "scenario": "Offer bundle containing a sold-out variant → toast, nothing added (atomic)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/ items=0 toast=\"معرفناش نضيف العرض — ممكن حاجة منه تكون خلصت\" (DOM-modified bundle to include sold-out foil)",
+    "at": "2026-10-15T10:36:53.739Z"
+  },
+  {
+    "id": "HM-9",
+    "scenario": "Product card: single tap opens PDP after 280ms",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "card href=/products/oka-victoria-pink-hookah landed=http://localhost:9410/products/oka-victoria-pink-hookah",
+    "at": "2026-10-15T10:36:56.196Z"
+  },
+  {
+    "id": "HM-10",
+    "scenario": "Product card: double tap adds to cart (no navigation)",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "qty=1 url=http://localhost:9410/",
+    "at": "2026-10-15T10:36:59.585Z"
+  },
+  {
+    "id": "HM-11",
+    "scenario": "Card \"Add\" turns into −/+; + and − update the cart; − to 0 restores Add",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "after Add: {\"addHidden\":true,\"n\":\"١\"} addedBar=0; after ++: cart=3 shown=٣; after ---: cart=0 {\"addHidden\":false,\"qtyHidden\":true}",
+    "at": "2026-10-15T10:37:07.376Z"
+  },
+  {
+    "id": "HM-12",
+    "scenario": "F-04: card shows −/+ on page load for a product already in the cart",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "FAIL",
+    "note": "after reload with qty 2 in cart: {\"addHidden\":false,\"stepper\":false,\"badge\":\"٢\"} → F-04 CONFIRMED",
+    "at": "2026-10-15T10:37:09.886Z"
+  },
+  {
+    "id": "HM-13",
+    "scenario": "Compare slider: auto-sweeps when on screen; keyboard range input moves divider",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "sweep 72.7867941661706%→31.548461574012254%; range→10%; mouse drag→80%",
+    "at": "2026-10-15T10:37:13.235Z"
+  },
+  {
+    "id": "HM-14",
+    "scenario": "Customer photos ribbon renders and rotates",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "translateZ(calc(var(--r) * -0.5)) rotateY(-6.750000000000002deg) → translateZ(calc(var(--r) * -0.5)) rotateY(-13.949999999999994deg)",
+    "at": "2026-10-15T10:37:15.754Z"
+  },
+  {
+    "id": "HM-15",
+    "scenario": "Policies page at the end of feed: links resolve",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "links=[\"/policies/shipping-policy\",\"/ar/policies/shipping-policy\",\"/policies/refund-policy\",\"/ar/policies/refund-policy\",\"/policies/terms-of-service\",\"/ar/policies/terms-of-service\",\"/policies/privacy-policy\",\"/ar/policies/privacy-policy\"] bad=[]",
+    "at": "2026-10-15T10:37:16.851Z"
+  },
+  {
+    "id": "HM-16",
+    "scenario": "Language switch from home header: rails reset, texts swap, no errors",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "label was EN; after: {\"lang\":\"en\",\"offerBtn\":\"Add bundle to cart\",\"img\":\"1_e837ee23-f89a-4575-a040-145c02960102.p\"}",
+    "at": "2026-10-15T10:37:19.188Z"
+  },
+  {
+    "id": "HM-17",
+    "scenario": "Back from PDP restores the home feed scroll position",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "before=3320 after Back=3320",
+    "at": "2026-10-15T10:37:24.567Z"
+  },
+  {
+    "id": "HM-LOG",
+    "scenario": "Home session console/page errors summary",
+    "ctx": "iPhone 13/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:37:24.569Z"
+  },
+  {
+    "id": "HM-1",
+    "scenario": "Home loads, feed pages, no console/page errors",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "16 pages; snap=y mandatory; feed h=664/664; ",
+    "data": {
+      "pages": 16,
+      "kinds": [
+        "banner-page",
+        "col:العروض",
+        "col:شيشة أوكا المتميزة",
+        "banner-page",
+        "banner-page",
+        "col:أوكا بارتي",
+        "compare-page",
+        "col:أوكا كوبرا",
+        "banner-page",
+        "col:معسل أسود",
+        "banner-page",
+        "col:حجر جاهز للتدخين",
+        "banner-page",
+        "col:قطع الغيار",
+        "ribbon-page",
+        "policies-page"
+      ],
+      "snap": "y mandatory",
+      "fh": 664,
+      "vh": 664
+    },
+    "at": "2026-10-15T10:37:26.958Z"
+  },
+  {
+    "id": "HM-2",
+    "scenario": "Snap scrolling: feed scroll by one screen snaps to next page, active class follows",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "[{\"top\":664,\"h\":664,\"aligned\":true,\"active\":1},{\"top\":1328,\"h\":664,\"aligned\":true,\"active\":2},{\"top\":1992,\"h\":664,\"aligned\":true,\"active\":3},{\"top\":2656,\"h\":664,\"aligned\":true,\"active\":4}]",
+    "at": "2026-10-15T10:37:31.117Z"
+  },
+  {
+    "id": "HM-3",
+    "scenario": "Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "FAIL",
+    "note": "collection pages link to: [\"Offers\",\"OKA Premium Hookahs\",\"OKA Parties\",\"OKA Cobra\",\"Dark Tobacco\",\"Ready to smoke bowls\",\"OKA Parts\"]; setting collections absent from feed: hookahs, hoses, coal, bowls (SI-02 CONFIRMED)",
+    "at": "2026-10-15T10:37:31.122Z"
+  },
+  {
+    "id": "HM-4",
+    "scenario": "Every feed link (banners, offer cards, collection titles) resolves 200",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "15 links: /collections/oka-basic-hookahs-copy /collections/hookahs /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /policies/shipping-policy /ar/policies/shipping-policy /policies/refund-policy /ar/policies/refund-policy /policies/terms-of-service /ar/policies/terms-of-service /policies/privacy-policy /ar/policies/privacy-policy; bad=[]",
+    "at": "2026-10-15T10:37:31.296Z"
+  },
+  {
+    "id": "HM-5",
+    "scenario": "Offer slot not in focus: first tap only centres it (no add); tap in focus adds the bundle",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "slots=[{\"active\":true,\"l\":67,\"r\":323,\"w\":390},{\"active\":false,\"l\":-206,\"r\":51,\"w\":390}]; second fully visible=false; after side tap url=/ active=[false,true] cart items=0",
+    "at": "2026-10-15T10:37:34.562Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #1 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=4 missing= original=298 total=267 discounts=[] lineDisc=[\"tong free\"] totals=[\"المجموع قبل الشحن ٢٩٨ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٢٧ ج.م\",\"هتاخد ٢٦٧ نقطة لما يوصلك\"]",
+    "at": "2026-10-15T10:37:38.732Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #2 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=5 missing= original=467 total=395 discounts=[] lineDisc=[\"Valentines\",\"Valentines\",\"Valentines\"] totals=[\"المجموع قبل الشحن ٤٦٧ ج.م\",\"الخصم -٧٢ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٤٣١ ج.م\",\"هتاخد ٣٩٥ نقطة لما يوصلك\"]",
+    "at": "2026-10-15T10:37:42.687Z"
+  },
+  {
+    "id": "HM-9",
+    "scenario": "Product card: single tap opens PDP after 280ms",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "card href=/products/oka-victoria-pink-hookah landed=http://localhost:9410/products/oka-victoria-pink-hookah",
+    "at": "2026-10-15T10:37:45.119Z"
+  },
+  {
+    "id": "HM-10",
+    "scenario": "Product card: double tap adds to cart (no navigation)",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "qty=1 url=http://localhost:9410/",
+    "at": "2026-10-15T10:37:48.531Z"
+  },
+  {
+    "id": "HM-11",
+    "scenario": "Card \"Add\" turns into −/+; + and − update the cart; − to 0 restores Add",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "after Add: {\"addHidden\":true,\"n\":\"١\"} addedBar=0; after ++: cart=3 shown=٣; after ---: cart=0 {\"addHidden\":false,\"qtyHidden\":true}",
+    "at": "2026-10-15T10:37:56.146Z"
+  },
+  {
+    "id": "HM-12",
+    "scenario": "F-04: card shows −/+ on page load for a product already in the cart",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "FAIL",
+    "note": "after reload with qty 2 in cart: {\"addHidden\":false,\"stepper\":false,\"badge\":\"٢\"} → F-04 CONFIRMED",
+    "at": "2026-10-15T10:37:58.203Z"
+  },
+  {
+    "id": "HM-13",
+    "scenario": "Compare slider: auto-sweeps when on screen; keyboard range input moves divider",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "sweep 73.79464355949207%→33.65662411439136%; range→10%; mouse drag→80%",
+    "at": "2026-10-15T10:38:01.739Z"
+  },
+  {
+    "id": "HM-14",
+    "scenario": "Customer photos ribbon renders and rotates",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "translateZ(calc(var(--r) * -0.5)) rotateY(-7.049700000000005deg) → translateZ(calc(var(--r) * -0.5)) rotateY(-14.248799999999987deg)",
+    "at": "2026-10-15T10:38:04.327Z"
+  },
+  {
+    "id": "HM-15",
+    "scenario": "Policies page at the end of feed: links resolve",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "links=[\"/policies/shipping-policy\",\"/ar/policies/shipping-policy\",\"/policies/refund-policy\",\"/ar/policies/refund-policy\",\"/policies/terms-of-service\",\"/ar/policies/terms-of-service\",\"/policies/privacy-policy\",\"/ar/policies/privacy-policy\"] bad=[]",
+    "at": "2026-10-15T10:38:05.414Z"
+  },
+  {
+    "id": "HM-16",
+    "scenario": "Language switch from home header: rails reset, texts swap, no errors",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "label was EN; after: {\"lang\":\"en\",\"offerBtn\":\"Add bundle to cart\",\"img\":\"1_e837ee23-f89a-4575-a040-145c02960102.p\"}",
+    "at": "2026-10-15T10:38:07.720Z"
+  },
+  {
+    "id": "HM-17",
+    "scenario": "Back from PDP restores the home feed scroll position",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "before=3320 after Back=3320",
+    "at": "2026-10-15T10:38:12.821Z"
+  },
+  {
+    "id": "HM-LOG",
+    "scenario": "Home session console/page errors summary",
+    "ctx": "iPhone 13/ar/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:38:12.823Z"
+  },
+  {
+    "id": "HM-1",
+    "scenario": "Home loads, feed pages, no console/page errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "16 pages; snap=y mandatory; feed h=664/664; ",
+    "data": {
+      "pages": 16,
+      "kinds": [
+        "banner-page",
+        "col:Offers",
+        "col:OKA Premium Hookahs",
+        "banner-page",
+        "banner-page",
+        "col:OKA Parties",
+        "compare-page",
+        "col:OKA Cobra",
+        "banner-page",
+        "col:Dark Tobacco",
+        "banner-page",
+        "col:Ready to smoke bowls",
+        "banner-page",
+        "col:OKA Parts",
+        "ribbon-page",
+        "policies-page"
+      ],
+      "snap": "y mandatory",
+      "fh": 664,
+      "vh": 664
+    },
+    "at": "2026-10-15T10:38:14.979Z"
+  },
+  {
+    "id": "HM-2",
+    "scenario": "Snap scrolling: feed scroll by one screen snaps to next page, active class follows",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "[{\"top\":664,\"h\":664,\"aligned\":true,\"active\":1},{\"top\":1328,\"h\":664,\"aligned\":true,\"active\":2},{\"top\":1992,\"h\":664,\"aligned\":true,\"active\":3},{\"top\":2656,\"h\":664,\"aligned\":true,\"active\":4}]",
+    "at": "2026-10-15T10:38:19.118Z"
+  },
+  {
+    "id": "HM-3",
+    "scenario": "Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "collection pages link to: [\"Offers\",\"OKA Premium Hookahs\",\"OKA Parties\",\"OKA Cobra\",\"Dark Tobacco\",\"Ready to smoke bowls\",\"OKA Parts\"]; setting collections absent from feed: hookahs, hoses, coal, bowls (SI-02 CONFIRMED)",
+    "at": "2026-10-15T10:38:19.124Z"
+  },
+  {
+    "id": "HM-4",
+    "scenario": "Every feed link (banners, offer cards, collection titles) resolves 200",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "15 links: /collections/oka-basic-hookahs-copy /collections/hookahs /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /policies/shipping-policy /ar/policies/shipping-policy /policies/refund-policy /ar/policies/refund-policy /policies/terms-of-service /ar/policies/terms-of-service /policies/privacy-policy /ar/policies/privacy-policy; bad=[]",
+    "at": "2026-10-15T10:38:19.321Z"
+  },
+  {
+    "id": "HM-5",
+    "scenario": "Offer slot not in focus: first tap only centres it (no add); tap in focus adds the bundle",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "slots=[{\"active\":true,\"l\":67,\"r\":323,\"w\":390},{\"active\":false,\"l\":339,\"r\":596,\"w\":390}]; second fully visible=false; after side tap url=/ active=[false,true] cart items=0",
+    "at": "2026-10-15T10:38:22.823Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #1 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=4 missing= original=298 total=267 discounts=[] lineDisc=[\"tong free\"] totals=[\"Subtotal EGP 298\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 327\",\"You'll earn 267 points on delivery\"]",
+    "at": "2026-10-15T10:38:26.866Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #2 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=5 missing= original=467 total=395 discounts=[] lineDisc=[\"Valentines\",\"Valentines\",\"Valentines\"] totals=[\"Subtotal EGP 467\",\"Discount -EGP 72\",\"Shipping EGP 36\",\"Total EGP 431\",\"You'll earn 395 points on delivery\"]",
+    "at": "2026-10-15T10:38:30.768Z"
+  },
+  {
+    "id": "HM-9",
+    "scenario": "Product card: single tap opens PDP after 280ms",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "card href=/products/oka-victoria-pink-hookah landed=http://localhost:9410/products/oka-victoria-pink-hookah",
+    "at": "2026-10-15T10:38:33.105Z"
+  },
+  {
+    "id": "HM-10",
+    "scenario": "Product card: double tap adds to cart (no navigation)",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "qty=1 url=http://localhost:9410/",
+    "at": "2026-10-15T10:38:36.425Z"
+  },
+  {
+    "id": "HM-11",
+    "scenario": "Card \"Add\" turns into −/+; + and − update the cart; − to 0 restores Add",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "after Add: {\"addHidden\":true,\"n\":\"1\"} addedBar=0; after ++: cart=3 shown=3; after ---: cart=0 {\"addHidden\":false,\"qtyHidden\":true}",
+    "at": "2026-10-15T10:38:43.843Z"
+  },
+  {
+    "id": "HM-12",
+    "scenario": "F-04: card shows −/+ on page load for a product already in the cart",
+    "ctx": "iPhone 13/en/guest",
+    "status": "FAIL",
+    "note": "after reload with qty 2 in cart: {\"addHidden\":false,\"stepper\":false,\"badge\":\"2\"} → F-04 CONFIRMED",
+    "at": "2026-10-15T10:38:45.969Z"
+  },
+  {
+    "id": "HM-13",
+    "scenario": "Compare slider: auto-sweeps when on screen; keyboard range input moves divider",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "sweep 73.74837473429879%→33.59724125784536%; range→10%; mouse drag→80%",
+    "at": "2026-10-15T10:38:49.435Z"
+  },
+  {
+    "id": "HM-14",
+    "scenario": "Customer photos ribbon renders and rotates",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "translateZ(calc(var(--r) * -0.5)) rotateY(-7.049700000000003deg) → translateZ(calc(var(--r) * -0.5)) rotateY(-14.248800000000001deg)",
+    "at": "2026-10-15T10:38:51.519Z"
+  },
+  {
+    "id": "HM-15",
+    "scenario": "Policies page at the end of feed: links resolve",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "links=[\"/policies/shipping-policy\",\"/ar/policies/shipping-policy\",\"/policies/refund-policy\",\"/ar/policies/refund-policy\",\"/policies/terms-of-service\",\"/ar/policies/terms-of-service\",\"/policies/privacy-policy\",\"/ar/policies/privacy-policy\"] bad=[]",
+    "at": "2026-10-15T10:38:52.698Z"
+  },
+  {
+    "id": "HM-16",
+    "scenario": "Language switch from home header: rails reset, texts swap, no errors",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "label was ع; after: {\"lang\":\"ar\",\"offerBtn\":\"عبيلي العرض فالشنطة\",\"img\":\"1_e837ee23-f89a-4575-a040-145c02960102.p\"}",
+    "at": "2026-10-15T10:38:54.847Z"
+  },
+  {
+    "id": "HM-17",
+    "scenario": "Back from PDP restores the home feed scroll position",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "before=3320 after Back=3320",
+    "at": "2026-10-15T10:38:59.853Z"
+  },
+  {
+    "id": "HM-LOG",
+    "scenario": "Home session console/page errors summary",
+    "ctx": "iPhone 13/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:38:59.855Z"
+  },
+  {
+    "id": "HM-1",
+    "scenario": "Home loads, feed pages, no console/page errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "16 pages; snap=y mandatory; feed h=664/664; ",
+    "data": {
+      "pages": 16,
+      "kinds": [
+        "banner-page",
+        "col:Offers",
+        "col:OKA Premium Hookahs",
+        "banner-page",
+        "banner-page",
+        "col:OKA Parties",
+        "compare-page",
+        "col:OKA Cobra",
+        "banner-page",
+        "col:Dark Tobacco",
+        "banner-page",
+        "col:Ready to smoke bowls",
+        "banner-page",
+        "col:OKA Parts",
+        "ribbon-page",
+        "policies-page"
+      ],
+      "snap": "y mandatory",
+      "fh": 664,
+      "vh": 664
+    },
+    "at": "2026-10-15T10:39:02.298Z"
+  },
+  {
+    "id": "HM-2",
+    "scenario": "Snap scrolling: feed scroll by one screen snaps to next page, active class follows",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "[{\"top\":664,\"h\":664,\"aligned\":true,\"active\":1},{\"top\":1328,\"h\":664,\"aligned\":true,\"active\":2},{\"top\":1992,\"h\":664,\"aligned\":true,\"active\":3},{\"top\":2656,\"h\":664,\"aligned\":true,\"active\":4}]",
+    "at": "2026-10-15T10:39:06.434Z"
+  },
+  {
+    "id": "HM-3",
+    "scenario": "Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "collection pages link to: [\"Offers\",\"OKA Premium Hookahs\",\"OKA Parties\",\"OKA Cobra\",\"Dark Tobacco\",\"Ready to smoke bowls\",\"OKA Parts\"]; setting collections absent from feed: hookahs, hoses, coal, bowls (SI-02 CONFIRMED)",
+    "at": "2026-10-15T10:39:06.441Z"
+  },
+  {
+    "id": "HM-4",
+    "scenario": "Every feed link (banners, offer cards, collection titles) resolves 200",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "15 links: /collections/oka-basic-hookahs-copy /collections/hookahs /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /policies/shipping-policy /ar/policies/shipping-policy /policies/refund-policy /ar/policies/refund-policy /policies/terms-of-service /ar/policies/terms-of-service /policies/privacy-policy /ar/policies/privacy-policy; bad=[]",
+    "at": "2026-10-15T10:39:06.647Z"
+  },
+  {
+    "id": "HM-5",
+    "scenario": "Offer slot not in focus: first tap only centres it (no add); tap in focus adds the bundle",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "slots=[{\"active\":true,\"l\":67,\"r\":323,\"w\":390},{\"active\":false,\"l\":339,\"r\":596,\"w\":390}]; second fully visible=false; after side tap url=/ active=[false,true] cart items=0",
+    "at": "2026-10-15T10:39:10.102Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #1 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=4 missing= original=298 total=267 discounts=[] lineDisc=[\"tong free\"] totals=[\"Subtotal EGP 298\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 327\",\"You'll earn 267 points on delivery\"]",
+    "at": "2026-10-15T10:39:14.129Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #2 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=5 missing= original=467 total=395 discounts=[] lineDisc=[\"Valentines\",\"Valentines\",\"Valentines\"] totals=[\"Subtotal EGP 467\",\"Discount -EGP 72\",\"Shipping EGP 36\",\"Total EGP 431\",\"You'll earn 395 points on delivery\"]",
+    "at": "2026-10-15T10:39:18.137Z"
+  },
+  {
+    "id": "HM-9",
+    "scenario": "Product card: single tap opens PDP after 280ms",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "card href=/products/oka-victoria-pink-hookah landed=http://localhost:9410/products/oka-victoria-pink-hookah",
+    "at": "2026-10-15T10:39:20.463Z"
+  },
+  {
+    "id": "HM-10",
+    "scenario": "Product card: double tap adds to cart (no navigation)",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "qty=1 url=http://localhost:9410/",
+    "at": "2026-10-15T10:39:23.660Z"
+  },
+  {
+    "id": "HM-11",
+    "scenario": "Card \"Add\" turns into −/+; + and − update the cart; − to 0 restores Add",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "after Add: {\"addHidden\":true,\"n\":\"1\"} addedBar=0; after ++: cart=3 shown=3; after ---: cart=0 {\"addHidden\":false,\"qtyHidden\":true}",
+    "at": "2026-10-15T10:39:31.537Z"
+  },
+  {
+    "id": "HM-12",
+    "scenario": "F-04: card shows −/+ on page load for a product already in the cart",
+    "ctx": "iPhone 13/en/customer",
+    "status": "FAIL",
+    "note": "after reload with qty 2 in cart: {\"addHidden\":false,\"stepper\":false,\"badge\":\"2\"} → F-04 CONFIRMED",
+    "at": "2026-10-15T10:39:34.083Z"
+  },
+  {
+    "id": "HM-13",
+    "scenario": "Compare slider: auto-sweeps when on screen; keyboard range input moves divider",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "sweep 72.81765220436137%→32.45228137066825%; range→10%; mouse drag→80%",
+    "at": "2026-10-15T10:39:37.652Z"
+  },
+  {
+    "id": "HM-14",
+    "scenario": "Customer photos ribbon renders and rotates",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "translateZ(calc(var(--r) * -0.5)) rotateY(-6.6006000000000045deg) → translateZ(calc(var(--r) * -0.5)) rotateY(-14.1003deg)",
+    "at": "2026-10-15T10:39:39.730Z"
+  },
+  {
+    "id": "HM-15",
+    "scenario": "Policies page at the end of feed: links resolve",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "links=[\"/policies/shipping-policy\",\"/ar/policies/shipping-policy\",\"/policies/refund-policy\",\"/ar/policies/refund-policy\",\"/policies/terms-of-service\",\"/ar/policies/terms-of-service\",\"/policies/privacy-policy\",\"/ar/policies/privacy-policy\"] bad=[]",
+    "at": "2026-10-15T10:39:40.743Z"
+  },
+  {
+    "id": "HM-16",
+    "scenario": "Language switch from home header: rails reset, texts swap, no errors",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "label was ع; after: {\"lang\":\"ar\",\"offerBtn\":\"عبيلي العرض فالشنطة\",\"img\":\"1_e837ee23-f89a-4575-a040-145c02960102.p\"}",
+    "at": "2026-10-15T10:39:43.110Z"
+  },
+  {
+    "id": "HM-17",
+    "scenario": "Back from PDP restores the home feed scroll position",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "before=3320 after Back=3320",
+    "at": "2026-10-15T10:39:48.091Z"
+  },
+  {
+    "id": "HM-LOG",
+    "scenario": "Home session console/page errors summary",
+    "ctx": "iPhone 13/en/customer",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:39:48.097Z"
+  },
+  {
+    "id": "HM-1",
+    "scenario": "Home loads, feed pages, no console/page errors",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "16 pages; snap=y mandatory; feed h=839/839; ",
+    "data": {
+      "pages": 16,
+      "kinds": [
+        "banner-page",
+        "col:العروض",
+        "col:شيشة أوكا المتميزة",
+        "banner-page",
+        "banner-page",
+        "col:أوكا بارتي",
+        "compare-page",
+        "col:أوكا كوبرا",
+        "banner-page",
+        "col:معسل أسود",
+        "banner-page",
+        "col:حجر جاهز للتدخين",
+        "banner-page",
+        "col:قطع الغيار",
+        "ribbon-page",
+        "policies-page"
+      ],
+      "snap": "y mandatory",
+      "fh": 839,
+      "vh": 839
+    },
+    "at": "2026-10-15T10:39:50.201Z"
+  },
+  {
+    "id": "HM-2",
+    "scenario": "Snap scrolling: feed scroll by one screen snaps to next page, active class follows",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "[{\"top\":839,\"h\":839,\"aligned\":true,\"active\":1},{\"top\":1678,\"h\":839,\"aligned\":true,\"active\":2},{\"top\":2517,\"h\":839,\"aligned\":true,\"active\":3},{\"top\":3356,\"h\":839,\"aligned\":true,\"active\":4}]",
+    "at": "2026-10-15T10:39:54.330Z"
+  },
+  {
+    "id": "HM-3",
+    "scenario": "Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "collection pages link to: [\"Offers\",\"OKA Premium Hookahs\",\"OKA Parties\",\"OKA Cobra\",\"Dark Tobacco\",\"Ready to smoke bowls\",\"OKA Parts\"]; setting collections absent from feed: hookahs, hoses, coal, bowls (SI-02 CONFIRMED)",
+    "at": "2026-10-15T10:39:54.338Z"
+  },
+  {
+    "id": "HM-4",
+    "scenario": "Every feed link (banners, offer cards, collection titles) resolves 200",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "15 links: /collections/oka-basic-hookahs-copy /collections/hookahs /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /policies/shipping-policy /ar/policies/shipping-policy /policies/refund-policy /ar/policies/refund-policy /policies/terms-of-service /ar/policies/terms-of-service /policies/privacy-policy /ar/policies/privacy-policy; bad=[]",
+    "at": "2026-10-15T10:39:54.505Z"
+  },
+  {
+    "id": "HM-5",
+    "scenario": "Offer slot not in focus: first tap only centres it (no add); tap in focus adds the bundle",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "slots=[{\"active\":true,\"l\":44,\"r\":368,\"w\":412},{\"active\":false,\"l\":-297,\"r\":28,\"w\":412}]; second fully visible=false; after side tap url=/ active=[false,true] cart items=0",
+    "at": "2026-10-15T10:39:57.668Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #1 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=4 missing= original=298 total=267 discounts=[] lineDisc=[\"tong free\"] totals=[\"المجموع قبل الشحن ٢٩٨ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٢٧ ج.م\",\"هتاخد ٢٦٧ نقطة لما يوصلك\"]",
+    "at": "2026-10-15T10:40:01.623Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #2 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=5 missing= original=467 total=395 discounts=[] lineDisc=[\"Valentines\",\"Valentines\",\"Valentines\"] totals=[\"المجموع قبل الشحن ٤٦٧ ج.م\",\"الخصم -٧٢ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٤٣١ ج.م\",\"هتاخد ٣٩٥ نقطة لما يوصلك\"]",
+    "at": "2026-10-15T10:40:05.414Z"
+  },
+  {
+    "id": "HM-9",
+    "scenario": "Product card: single tap opens PDP after 280ms",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "card href=/products/oka-victoria-pink-hookah landed=http://localhost:9410/products/oka-victoria-pink-hookah",
+    "at": "2026-10-15T10:40:07.771Z"
+  },
+  {
+    "id": "HM-10",
+    "scenario": "Product card: double tap adds to cart (no navigation)",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "qty=1 url=http://localhost:9410/",
+    "at": "2026-10-15T10:40:11.297Z"
+  },
+  {
+    "id": "HM-11",
+    "scenario": "Card \"Add\" turns into −/+; + and − update the cart; − to 0 restores Add",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "after Add: {\"addHidden\":true,\"n\":\"١\"} addedBar=0; after ++: cart=3 shown=٣; after ---: cart=0 {\"addHidden\":false,\"qtyHidden\":true}",
+    "at": "2026-10-15T10:40:18.827Z"
+  },
+  {
+    "id": "HM-12",
+    "scenario": "F-04: card shows −/+ on page load for a product already in the cart",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "FAIL",
+    "note": "after reload with qty 2 in cart: {\"addHidden\":false,\"stepper\":false,\"badge\":\"٢\"} → F-04 CONFIRMED",
+    "at": "2026-10-15T10:40:20.908Z"
+  },
+  {
+    "id": "HM-13",
+    "scenario": "Compare slider: auto-sweeps when on screen; keyboard range input moves divider",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "sweep 73.76100450078503%→33.613429005473556%; range→10%; mouse drag→80.00000148143583%",
+    "at": "2026-10-15T10:40:24.243Z"
+  },
+  {
+    "id": "HM-14",
+    "scenario": "Customer photos ribbon renders and rotates",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "translateZ(calc(var(--r) * -0.5)) rotateY(-6.600600000000003deg) → translateZ(calc(var(--r) * -0.5)) rotateY(-14.100299999999999deg)",
+    "at": "2026-10-15T10:40:26.370Z"
+  },
+  {
+    "id": "HM-15",
+    "scenario": "Policies page at the end of feed: links resolve",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "links=[\"/policies/shipping-policy\",\"/ar/policies/shipping-policy\",\"/policies/refund-policy\",\"/ar/policies/refund-policy\",\"/policies/terms-of-service\",\"/ar/policies/terms-of-service\",\"/policies/privacy-policy\",\"/ar/policies/privacy-policy\"] bad=[]",
+    "at": "2026-10-15T10:40:27.434Z"
+  },
+  {
+    "id": "HM-16",
+    "scenario": "Language switch from home header: rails reset, texts swap, no errors",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "label was EN; after: {\"lang\":\"en\",\"offerBtn\":\"Add bundle to cart\",\"img\":\"1_e837ee23-f89a-4575-a040-145c02960102.p\"}",
+    "at": "2026-10-15T10:40:29.560Z"
+  },
+  {
+    "id": "HM-17",
+    "scenario": "Back from PDP restores the home feed scroll position",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "before=4195 after Back=4195",
+    "at": "2026-10-15T10:40:34.453Z"
+  },
+  {
+    "id": "HM-LOG",
+    "scenario": "Home session console/page errors summary",
+    "ctx": "Pixel 7/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:40:34.455Z"
+  },
+  {
+    "id": "HM-1",
+    "scenario": "Home loads, feed pages, no console/page errors",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "16 pages; snap=y mandatory; feed h=839/839; ",
+    "data": {
+      "pages": 16,
+      "kinds": [
+        "banner-page",
+        "col:Offers",
+        "col:OKA Premium Hookahs",
+        "banner-page",
+        "banner-page",
+        "col:OKA Parties",
+        "compare-page",
+        "col:OKA Cobra",
+        "banner-page",
+        "col:Dark Tobacco",
+        "banner-page",
+        "col:Ready to smoke bowls",
+        "banner-page",
+        "col:OKA Parts",
+        "ribbon-page",
+        "policies-page"
+      ],
+      "snap": "y mandatory",
+      "fh": 839,
+      "vh": 839
+    },
+    "at": "2026-10-15T10:40:36.733Z"
+  },
+  {
+    "id": "HM-2",
+    "scenario": "Snap scrolling: feed scroll by one screen snaps to next page, active class follows",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "[{\"top\":839,\"h\":839,\"aligned\":true,\"active\":1},{\"top\":1678,\"h\":839,\"aligned\":true,\"active\":2},{\"top\":2517,\"h\":839,\"aligned\":true,\"active\":3},{\"top\":3356,\"h\":839,\"aligned\":true,\"active\":4}]",
+    "at": "2026-10-15T10:40:40.867Z"
+  },
+  {
+    "id": "HM-3",
+    "scenario": "Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "collection pages link to: [\"Offers\",\"OKA Premium Hookahs\",\"OKA Parties\",\"OKA Cobra\",\"Dark Tobacco\",\"Ready to smoke bowls\",\"OKA Parts\"]; setting collections absent from feed: hookahs, hoses, coal, bowls (SI-02 CONFIRMED)",
+    "at": "2026-10-15T10:40:40.884Z"
+  },
+  {
+    "id": "HM-4",
+    "scenario": "Every feed link (banners, offer cards, collection titles) resolves 200",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "15 links: /collections/oka-basic-hookahs-copy /collections/hookahs /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /policies/shipping-policy /ar/policies/shipping-policy /policies/refund-policy /ar/policies/refund-policy /policies/terms-of-service /ar/policies/terms-of-service /policies/privacy-policy /ar/policies/privacy-policy; bad=[]",
+    "at": "2026-10-15T10:40:41.110Z"
+  },
+  {
+    "id": "HM-5",
+    "scenario": "Offer slot not in focus: first tap only centres it (no add); tap in focus adds the bundle",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "slots=[{\"active\":true,\"l\":44,\"r\":368,\"w\":412},{\"active\":false,\"l\":384,\"r\":709,\"w\":412}]; second fully visible=false; after side tap url=/ active=[false,true] cart items=0",
+    "at": "2026-10-15T10:40:44.310Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #1 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=4 missing= original=298 total=267 discounts=[] lineDisc=[\"tong free\"] totals=[\"Subtotal EGP 298\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 327\",\"You'll earn 267 points on delivery\"]",
+    "at": "2026-10-15T10:40:48.523Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #2 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=5 missing= original=467 total=395 discounts=[] lineDisc=[\"Valentines\",\"Valentines\",\"Valentines\"] totals=[\"Subtotal EGP 467\",\"Discount -EGP 72\",\"Shipping EGP 36\",\"Total EGP 431\",\"You'll earn 395 points on delivery\"]",
+    "at": "2026-10-15T10:40:52.522Z"
+  },
+  {
+    "id": "HM-9",
+    "scenario": "Product card: single tap opens PDP after 280ms",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "card href=/products/oka-victoria-pink-hookah landed=http://localhost:9410/products/oka-victoria-pink-hookah",
+    "at": "2026-10-15T10:40:54.792Z"
+  },
+  {
+    "id": "HM-10",
+    "scenario": "Product card: double tap adds to cart (no navigation)",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "qty=1 url=http://localhost:9410/",
+    "at": "2026-10-15T10:40:58.122Z"
+  },
+  {
+    "id": "HM-11",
+    "scenario": "Card \"Add\" turns into −/+; + and − update the cart; − to 0 restores Add",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "after Add: {\"addHidden\":true,\"n\":\"1\"} addedBar=0; after ++: cart=3 shown=3; after ---: cart=0 {\"addHidden\":false,\"qtyHidden\":true}",
+    "at": "2026-10-15T10:41:05.203Z"
+  },
+  {
+    "id": "HM-12",
+    "scenario": "F-04: card shows −/+ on page load for a product already in the cart",
+    "ctx": "Pixel 7/en/guest",
+    "status": "FAIL",
+    "note": "after reload with qty 2 in cart: {\"addHidden\":false,\"stepper\":false,\"badge\":\"2\"} → F-04 CONFIRMED",
+    "at": "2026-10-15T10:41:07.266Z"
+  },
+  {
+    "id": "HM-13",
+    "scenario": "Compare slider: auto-sweeps when on screen; keyboard range input moves divider",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "sweep 73.50684855159723%→33.290761810335%; range→10%; mouse drag→80.00000148143583%",
+    "at": "2026-10-15T10:41:10.514Z"
+  },
+  {
+    "id": "HM-14",
+    "scenario": "Customer photos ribbon renders and rotates",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "translateZ(calc(var(--r) * -0.5)) rotateY(-6.449400000000005deg) → translateZ(calc(var(--r) * -0.5)) rotateY(-13.6494deg)",
+    "at": "2026-10-15T10:41:12.508Z"
+  },
+  {
+    "id": "HM-15",
+    "scenario": "Policies page at the end of feed: links resolve",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "links=[\"/policies/shipping-policy\",\"/ar/policies/shipping-policy\",\"/policies/refund-policy\",\"/ar/policies/refund-policy\",\"/policies/terms-of-service\",\"/ar/policies/terms-of-service\",\"/policies/privacy-policy\",\"/ar/policies/privacy-policy\"] bad=[]",
+    "at": "2026-10-15T10:41:13.611Z"
+  },
+  {
+    "id": "HM-16",
+    "scenario": "Language switch from home header: rails reset, texts swap, no errors",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "label was ع; after: {\"lang\":\"ar\",\"offerBtn\":\"عبيلي العرض فالشنطة\",\"img\":\"1_e837ee23-f89a-4575-a040-145c02960102.p\"}",
+    "at": "2026-10-15T10:41:15.941Z"
+  },
+  {
+    "id": "HM-17",
+    "scenario": "Back from PDP restores the home feed scroll position",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "before=4195 after Back=4195",
+    "at": "2026-10-15T10:41:21.238Z"
+  },
+  {
+    "id": "HM-LOG",
+    "scenario": "Home session console/page errors summary",
+    "ctx": "Pixel 7/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:41:21.240Z"
+  },
+  {
+    "id": "HM-1",
+    "scenario": "Home loads, feed pages, no console/page errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "16 pages; snap=y mandatory; feed h=900/900; ",
+    "data": {
+      "pages": 16,
+      "kinds": [
+        "banner-page",
+        "col:العروض",
+        "col:شيشة أوكا المتميزة",
+        "banner-page",
+        "banner-page",
+        "col:أوكا بارتي",
+        "compare-page",
+        "col:أوكا كوبرا",
+        "banner-page",
+        "col:معسل أسود",
+        "banner-page",
+        "col:حجر جاهز للتدخين",
+        "banner-page",
+        "col:قطع الغيار",
+        "ribbon-page",
+        "policies-page"
+      ],
+      "snap": "y mandatory",
+      "fh": 900,
+      "vh": 900
+    },
+    "at": "2026-10-15T10:41:23.276Z"
+  },
+  {
+    "id": "HM-2",
+    "scenario": "Snap scrolling: feed scroll by one screen snaps to next page, active class follows",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "[{\"top\":900,\"h\":900,\"aligned\":true,\"active\":1},{\"top\":1800,\"h\":900,\"aligned\":true,\"active\":2},{\"top\":2700,\"h\":900,\"aligned\":true,\"active\":3},{\"top\":3600,\"h\":900,\"aligned\":true,\"active\":4}]",
+    "at": "2026-10-15T10:41:27.432Z"
+  },
+  {
+    "id": "HM-3",
+    "scenario": "Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "FAIL",
+    "note": "collection pages link to: [\"Offers\",\"OKA Premium Hookahs\",\"OKA Parties\",\"OKA Cobra\",\"Dark Tobacco\",\"Ready to smoke bowls\",\"OKA Parts\"]; setting collections absent from feed: hookahs, hoses, coal, bowls (SI-02 CONFIRMED)",
+    "at": "2026-10-15T10:41:27.436Z"
+  },
+  {
+    "id": "HM-4",
+    "scenario": "Every feed link (banners, offer cards, collection titles) resolves 200",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "15 links: /collections/oka-basic-hookahs-copy /collections/hookahs /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /policies/shipping-policy /ar/policies/shipping-policy /policies/refund-policy /ar/policies/refund-policy /policies/terms-of-service /ar/policies/terms-of-service /policies/privacy-policy /ar/policies/privacy-policy; bad=[]",
+    "at": "2026-10-15T10:41:27.816Z"
+  },
+  {
+    "id": "HM-5",
+    "scenario": "Offer slot not in focus: first tap only centres it (no add); tap in focus adds the bundle",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "slots=[{\"active\":true,\"l\":546,\"r\":894,\"w\":1440},{\"active\":false,\"l\":182,\"r\":530,\"w\":1440}]; second fully visible=true; after side tap url=/collections/hookahs active=[] cart items=0",
+    "at": "2026-10-15T10:41:30.835Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #1 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=4 missing= original=298 total=267 discounts=[] lineDisc=[\"tong free\"] totals=[\"المجموع قبل الشحن ٢٩٨ ج.م\",\"الخصم -٣١ ج.م\",\"الشحن ٦٠ ج.م\",\"الإجمالي ٣٢٧ ج.م\",\"هتاخد ٢٦٧ نقطة لما يوصلك\"]",
+    "at": "2026-10-15T10:41:34.598Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #2 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=5 missing= original=467 total=395 discounts=[] lineDisc=[\"Valentines\",\"Valentines\",\"Valentines\"] totals=[\"المجموع قبل الشحن ٤٦٧ ج.م\",\"الخصم -٧٢ ج.م\",\"الشحن ٣٦ ج.م\",\"الإجمالي ٤٣١ ج.م\",\"هتاخد ٣٩٥ نقطة لما يوصلك\"]",
+    "at": "2026-10-15T10:41:38.404Z"
+  },
+  {
+    "id": "HM-9",
+    "scenario": "Product card: single tap opens PDP after 280ms",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "card href=/products/oka-victoria-pink-hookah landed=http://localhost:9410/products/oka-victoria-pink-hookah",
+    "at": "2026-10-15T10:41:40.851Z"
+  },
+  {
+    "id": "HM-10",
+    "scenario": "Product card: double tap adds to cart (no navigation)",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "qty=1 url=http://localhost:9410/",
+    "at": "2026-10-15T10:41:44.079Z"
+  },
+  {
+    "id": "HM-11",
+    "scenario": "Card \"Add\" turns into −/+; + and − update the cart; − to 0 restores Add",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "after Add: {\"addHidden\":true,\"n\":\"١\"} addedBar=0; after ++: cart=3 shown=٣; after ---: cart=0 {\"addHidden\":false,\"qtyHidden\":true}",
+    "at": "2026-10-15T10:41:50.913Z"
+  },
+  {
+    "id": "HM-12",
+    "scenario": "F-04: card shows −/+ on page load for a product already in the cart",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "FAIL",
+    "note": "after reload with qty 2 in cart: {\"addHidden\":false,\"stepper\":false,\"badge\":\"٢\"} → F-04 CONFIRMED",
+    "at": "2026-10-15T10:41:52.768Z"
+  },
+  {
+    "id": "HM-13",
+    "scenario": "Compare slider: auto-sweeps when on screen; keyboard range input moves divider",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "sweep 73.65127309184379%→32.58384826091995%; range→10%; mouse drag→80%",
+    "at": "2026-10-15T10:41:55.951Z"
+  },
+  {
+    "id": "HM-14",
+    "scenario": "Customer photos ribbon renders and rotates",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "translateZ(calc(var(--r) * -0.5)) rotateY(-6.299099999999997deg) → translateZ(calc(var(--r) * -0.5)) rotateY(-13.64849999999999deg)",
+    "at": "2026-10-15T10:41:57.746Z"
+  },
+  {
+    "id": "HM-15",
+    "scenario": "Policies page at the end of feed: links resolve",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "links=[\"/policies/shipping-policy\",\"/ar/policies/shipping-policy\",\"/policies/refund-policy\",\"/ar/policies/refund-policy\",\"/policies/terms-of-service\",\"/ar/policies/terms-of-service\",\"/policies/privacy-policy\",\"/ar/policies/privacy-policy\"] bad=[]",
+    "at": "2026-10-15T10:41:58.605Z"
+  },
+  {
+    "id": "HM-16",
+    "scenario": "Language switch from home header: rails reset, texts swap, no errors",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "label was EN; after: {\"lang\":\"en\",\"offerBtn\":\"Add bundle to cart\",\"img\":\"1_e837ee23-f89a-4575-a040-145c02960102.p\"}",
+    "at": "2026-10-15T10:42:00.793Z"
+  },
+  {
+    "id": "HM-17",
+    "scenario": "Back from PDP restores the home feed scroll position",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "before=4500 after Back=4500",
+    "at": "2026-10-15T10:42:05.961Z"
+  },
+  {
+    "id": "HM-LOG",
+    "scenario": "Home session console/page errors summary",
+    "ctx": "Desktop 1440/ar/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:42:05.962Z"
+  },
+  {
+    "id": "HM-1",
+    "scenario": "Home loads, feed pages, no console/page errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "16 pages; snap=y mandatory; feed h=900/900; ",
+    "data": {
+      "pages": 16,
+      "kinds": [
+        "banner-page",
+        "col:Offers",
+        "col:OKA Premium Hookahs",
+        "banner-page",
+        "banner-page",
+        "col:OKA Parties",
+        "compare-page",
+        "col:OKA Cobra",
+        "banner-page",
+        "col:Dark Tobacco",
+        "banner-page",
+        "col:Ready to smoke bowls",
+        "banner-page",
+        "col:OKA Parts",
+        "ribbon-page",
+        "policies-page"
+      ],
+      "snap": "y mandatory",
+      "fh": 900,
+      "vh": 900
+    },
+    "at": "2026-10-15T10:42:08.123Z"
+  },
+  {
+    "id": "HM-2",
+    "scenario": "Snap scrolling: feed scroll by one screen snaps to next page, active class follows",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "[{\"top\":900,\"h\":900,\"aligned\":true,\"active\":1},{\"top\":1800,\"h\":900,\"aligned\":true,\"active\":2},{\"top\":2700,\"h\":900,\"aligned\":true,\"active\":3},{\"top\":3600,\"h\":900,\"aligned\":true,\"active\":4}]",
+    "at": "2026-10-15T10:42:12.263Z"
+  },
+  {
+    "id": "HM-3",
+    "scenario": "Collections shown on the feed vs the 10 setting collections (SI-02: hookahs/hoses/coal/bowls hidden)",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "FAIL",
+    "note": "collection pages link to: [\"Offers\",\"OKA Premium Hookahs\",\"OKA Parties\",\"OKA Cobra\",\"Dark Tobacco\",\"Ready to smoke bowls\",\"OKA Parts\"]; setting collections absent from feed: hookahs, hoses, coal, bowls (SI-02 CONFIRMED)",
+    "at": "2026-10-15T10:42:12.267Z"
+  },
+  {
+    "id": "HM-4",
+    "scenario": "Every feed link (banners, offer cards, collection titles) resolves 200",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "15 links: /collections/oka-basic-hookahs-copy /collections/hookahs /collections/oka-parties /collections/oka-cobra /collections/dark-tobacco /collections/ready-to-smoke-bowls /collections/oka-parts /policies/shipping-policy /ar/policies/shipping-policy /policies/refund-policy /ar/policies/refund-policy /policies/terms-of-service /ar/policies/terms-of-service /policies/privacy-policy /ar/policies/privacy-policy; bad=[]",
+    "at": "2026-10-15T10:42:12.408Z"
+  },
+  {
+    "id": "HM-5",
+    "scenario": "Offer slot not in focus: first tap only centres it (no add); tap in focus adds the bundle",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "slots=[{\"active\":true,\"l\":546,\"r\":894,\"w\":1440},{\"active\":false,\"l\":910,\"r\":1258,\"w\":1440}]; second fully visible=true; after side tap url=/ active=[true,false] cart items=0",
+    "at": "2026-10-15T10:42:15.244Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #1 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=4 missing= original=298 total=267 discounts=[] lineDisc=[\"tong free\"] totals=[\"Subtotal EGP 298\",\"Discount -EGP 31\",\"Shipping EGP 60\",\"Total EGP 327\",\"You'll earn 267 points on delivery\"]",
+    "at": "2026-10-15T10:42:19.084Z"
+  },
+  {
+    "id": "HM-6",
+    "scenario": "Offer #2 \"Add bundle to cart\" → straight to /cart with every bundle variant",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "url=http://localhost:9410/cart items=5 missing= original=467 total=395 discounts=[] lineDisc=[\"Valentines\",\"Valentines\",\"Valentines\"] totals=[\"Subtotal EGP 467\",\"Discount -EGP 72\",\"Shipping EGP 36\",\"Total EGP 431\",\"You'll earn 395 points on delivery\"]",
+    "at": "2026-10-15T10:42:22.921Z"
+  },
+  {
+    "id": "HM-9",
+    "scenario": "Product card: single tap opens PDP after 280ms",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "card href=/products/oka-victoria-pink-hookah landed=http://localhost:9410/products/oka-victoria-pink-hookah",
+    "at": "2026-10-15T10:42:25.190Z"
+  },
+  {
+    "id": "HM-10",
+    "scenario": "Product card: double tap adds to cart (no navigation)",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "qty=1 url=http://localhost:9410/",
+    "at": "2026-10-15T10:42:28.467Z"
+  },
+  {
+    "id": "HM-11",
+    "scenario": "Card \"Add\" turns into −/+; + and − update the cart; − to 0 restores Add",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "after Add: {\"addHidden\":true,\"n\":\"1\"} addedBar=0; after ++: cart=3 shown=3; after ---: cart=0 {\"addHidden\":false,\"qtyHidden\":true}",
+    "at": "2026-10-15T10:42:35.400Z"
+  },
+  {
+    "id": "HM-12",
+    "scenario": "F-04: card shows −/+ on page load for a product already in the cart",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "FAIL",
+    "note": "after reload with qty 2 in cart: {\"addHidden\":false,\"stepper\":false,\"badge\":\"2\"} → F-04 CONFIRMED",
+    "at": "2026-10-15T10:42:37.294Z"
+  },
+  {
+    "id": "HM-13",
+    "scenario": "Compare slider: auto-sweeps when on screen; keyboard range input moves divider",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "sweep 73.0716694461386%→32.75815861074189%; range→10%; mouse drag→80%",
+    "at": "2026-10-15T10:42:40.495Z"
+  },
+  {
+    "id": "HM-14",
+    "scenario": "Customer photos ribbon renders and rotates",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "translateZ(calc(var(--r) * -0.5)) rotateY(-6.450299999999998deg) → translateZ(calc(var(--r) * -0.5)) rotateY(-13.949999999999994deg)",
+    "at": "2026-10-15T10:42:42.579Z"
+  },
+  {
+    "id": "HM-15",
+    "scenario": "Policies page at the end of feed: links resolve",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "links=[\"/policies/shipping-policy\",\"/ar/policies/shipping-policy\",\"/policies/refund-policy\",\"/ar/policies/refund-policy\",\"/policies/terms-of-service\",\"/ar/policies/terms-of-service\",\"/policies/privacy-policy\",\"/ar/policies/privacy-policy\"] bad=[]",
+    "at": "2026-10-15T10:42:43.694Z"
+  },
+  {
+    "id": "HM-16",
+    "scenario": "Language switch from home header: rails reset, texts swap, no errors",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "label was ع; after: {\"lang\":\"ar\",\"offerBtn\":\"عبيلي العرض فالشنطة\",\"img\":\"1_e837ee23-f89a-4575-a040-145c02960102.p\"}",
+    "at": "2026-10-15T10:42:45.870Z"
+  },
+  {
+    "id": "HM-17",
+    "scenario": "Back from PDP restores the home feed scroll position",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "before=4500 after Back=4500",
+    "at": "2026-10-15T10:42:51.295Z"
+  },
+  {
+    "id": "HM-LOG",
+    "scenario": "Home session console/page errors summary",
+    "ctx": "Desktop 1440/en/guest",
+    "status": "PASS",
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[],\"httpErrors\":[]}",
+    "at": "2026-10-15T10:42:51.296Z"
+  }
+]

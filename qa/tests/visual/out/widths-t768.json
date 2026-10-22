@@ -1,0 +1,2563 @@
+[
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/collections",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/collections/oka-cobra",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/collections/ready-to-smoke-bowls?sort_by=price-ascending",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 1785
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 1785
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/collections/all?filter.v.availability=1",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 5005
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 5005
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/collections/hookahs?page=2",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/collections/does-not-exist",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/products/oka-cloud-white-hookah",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/products/oka-cobra",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/products/oka-black-tobacco",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/products/oka-cobra-oka-base",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/products/1-pcs-of-foil",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/products/tongs?variant=46037718303018",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/products/oka-cloud-white-hookah?view=ar",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/products/tongs?view=ar",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/products/foil",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/account",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/orders",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/orders?order=%239000101",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/addresses",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/addresses?view=oka-add-address",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/loyalty",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/subscriptions",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/subscriptions?view=oka-subscribe",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/wishlist",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/support",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/checkout-review",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/track?awb=JEGQA0000000002&order=%239000103",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/about-us",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/how-to-use",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/contact",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/faq",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/pages/online-store",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/search",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/search?q=%D8%B4%D9%8A%D8%B4%D9%87",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 2117
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 2117
+   },
+   {
+    "el": "button.heart-btn",
+    "text": "احفظ في المفضلة",
+    "by": "header.top-bar",
+    "scrollTop": 2117
+   },
+   {
+    "el": "button.heart-btn",
+    "text": "احفظ في المفضلة",
+    "by": "header.top-bar",
+    "scrollTop": 2117
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/search?q=hookah",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 1151
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "عبيلي فالشنطة",
+    "by": "header.top-bar",
+    "scrollTop": 1151
+   },
+   {
+    "el": "button.heart-btn",
+    "text": "احفظ في المفضلة",
+    "by": "header.top-bar",
+    "scrollTop": 1151
+   },
+   {
+    "el": "button.heart-btn",
+    "text": "احفظ في المفضلة",
+    "by": "header.top-bar",
+    "scrollTop": 1151
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/cart",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "a.line-img",
+    "text": "",
+    "by": "header.top-bar",
+    "scrollTop": 181
+   },
+   {
+    "el": "button.line-variant",
+    "text": "غيّر",
+    "by": "header.top-bar",
+    "scrollTop": 181
+   },
+   {
+    "el": "button.step-btn",
+    "text": "–",
+    "by": "header.top-bar",
+    "scrollTop": 181
+   },
+   {
+    "el": "button.step-btn",
+    "text": "+",
+    "by": "header.top-bar",
+    "scrollTop": 181
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/account",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/account/login",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/account/register",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/account/addresses",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/account/orders/9100000003",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/account/reset/9000000000001/qatoken",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/account/activate/9000000000001/qatoken",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/policies/refund-policy",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/policies/privacy-policy",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/policies/shipping-policy",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/policies/terms-of-service",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/policies/contact-information",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/password",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": ""
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/gift_cards/qa12345678",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "error": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at eval (eval at evaluate (:290:30), <anonymous>:4:23)\n    at UtilityScript.evaluate (<anonymous>:292:16)"
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/nope-404",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/ar/",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/ar/products/oka-cobra",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/ar/collections/hookahs",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/ar/pages/support",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "ar",
+  "route": "/checkout",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "error": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at eval (eval at evaluate (:290:30), <anonymous>:4:23)\n    at UtilityScript.evaluate (<anonymous>:292:16)"
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/collections",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/collections/oka-cobra",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/collections/ready-to-smoke-bowls?sort_by=price-ascending",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 1784
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 1784
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/collections/all?filter.v.availability=1",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 5004
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 5004
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/collections/hookahs?page=2",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/collections/does-not-exist",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/products/oka-cloud-white-hookah",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/products/oka-cobra",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/products/oka-black-tobacco",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/products/oka-cobra-oka-base",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/products/1-pcs-of-foil",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/products/tongs?variant=46037718303018",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/products/oka-cloud-white-hookah?view=ar",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/products/tongs?view=ar",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/products/foil",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/account",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/orders",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/orders?order=%239000101",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/addresses",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/addresses?view=oka-add-address",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/loyalty",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/subscriptions",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/subscriptions?view=oka-subscribe",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/wishlist",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/support",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.hdr-btn.flip",
+    "text": "Back",
+    "by": "header.top-bar",
+    "scrollTop": 34
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/checkout-review",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/track?awb=JEGQA0000000002&order=%239000103",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/about-us",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/how-to-use",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/contact",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/faq",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/pages/online-store",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/search",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/search?q=%D8%B4%D9%8A%D8%B4%D9%87",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 2116
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 2116
+   },
+   {
+    "el": "button.heart-btn",
+    "text": "Save to wishlist",
+    "by": "header.top-bar",
+    "scrollTop": 2116
+   },
+   {
+    "el": "button.heart-btn",
+    "text": "Save to wishlist",
+    "by": "header.top-bar",
+    "scrollTop": 2116
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/search?q=hookah",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 1150
+   },
+   {
+    "el": "button.gcard-add",
+    "text": "Add",
+    "by": "header.top-bar",
+    "scrollTop": 1150
+   },
+   {
+    "el": "button.heart-btn",
+    "text": "Save to wishlist",
+    "by": "header.top-bar",
+    "scrollTop": 1150
+   },
+   {
+    "el": "button.heart-btn",
+    "text": "Save to wishlist",
+    "by": "header.top-bar",
+    "scrollTop": 1150
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/cart",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": [
+   {
+    "el": "a.line-img",
+    "text": "",
+    "by": "header.top-bar",
+    "scrollTop": 193
+   },
+   {
+    "el": "button.step-btn",
+    "text": "–",
+    "by": "header.top-bar",
+    "scrollTop": 193
+   },
+   {
+    "el": "button.step-btn",
+    "text": "+",
+    "by": "header.top-bar",
+    "scrollTop": 193
+   }
+  ]
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/account",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/account/login",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/account/register",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/account/addresses",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/account/orders/9100000003",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/account/reset/9000000000001/qatoken",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/account/activate/9000000000001/qatoken",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/policies/refund-policy",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/policies/privacy-policy",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/policies/shipping-policy",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/policies/terms-of-service",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/policies/contact-information",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/password",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": ""
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/gift_cards/qa12345678",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "error": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at eval (eval at evaluate (:290:30), <anonymous>:4:23)\n    at UtilityScript.evaluate (<anonymous>:292:16)"
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/nope-404",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/ar/",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/ar/products/oka-cobra",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/ar/collections/hookahs",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/ar/pages/support",
+  "lang": "ar",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "lock": {
+   "mq": false,
+   "transform": "none",
+   "appW": 430,
+   "appH": 1024,
+   "appL": 169,
+   "appT": 0,
+   "rot": "-90deg"
+  },
+  "covered": []
+ },
+ {
+  "vp": "t768",
+  "locale": "en",
+  "route": "/checkout",
+  "lang": "en",
+  "docOverflow": false,
+  "docScrollW": 768,
+  "outOfViewport": [],
+  "clipped": [],
+  "ellipsis": 0,
+  "error": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at eval (eval at evaluate (:290:30), <anonymous>:4:23)\n    at UtilityScript.evaluate (<anonymous>:292:16)"
+ }
+]

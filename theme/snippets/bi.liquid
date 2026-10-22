@@ -2,5 +2,8 @@
   Bilingual text. Both languages are in the page; the <html lang> attribute
   shows one, so the language toggle is instant — the app's behaviour.
   Usage: {% render 'bi', en: 'Cart', ar: 'السلة' %}
+  Values are plain text and are HTML-escaped here (CH-03). `escape_once` keeps
+  entities callers already pass (e.g. '&lt;350 g', 'Food-grade &amp; …', or a
+  description run through strip_html) from being double-escaped. Don't pass markup.
 {%- endcomment -%}
-<span class="l-en">{{ en }}</span><span class="l-ar">{{ ar | default: en }}</span>
+<span class="l-en">{{ en | escape_once }}</span><span class="l-ar">{{ ar | default: en | escape_once }}</span>

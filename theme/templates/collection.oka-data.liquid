@@ -8,6 +8,13 @@
   server's fetchAdminCatalogue() assigns `cat`.
 {%- endcomment -%}
 {%- assign seen = ',' -%}
+{%- comment -%}
+  SI-02: every setting collection a product is in ("inCats"), as "handle:,p1,p2," entries,
+  so a category (e.g. Hoses) isn't lost just because its products were assigned
+  (`cat`) to an earlier collection.
+{%- endcomment -%}
+{%- capture memb -%}{%- for c in settings.oka_collections -%}{{ c.handle }}:,{%- for p in c.products limit: 50 -%}{{ p.handle }},{%- endfor -%};{%- endfor -%}{%- endcapture -%}
+{%- assign memb = memb | split: ';' -%}
 {%- capture products_json -%}
   {%- for c in settings.oka_collections -%}
     {%- for p in c.products limit: 50 -%}
@@ -52,6 +59,7 @@
         "variantId": {{ v.id }},
         "url": {{ p.url | json }},
         "cat": {{ c.handle | json }},
+        "inCats": [{%- assign pprobe = ',' | append: p.handle | append: ',' -%}{%- assign firstm = true -%}{%- for m in memb -%}{%- if m contains pprobe -%}{%- unless firstm -%},{%- endunless -%}{%- assign firstm = false -%}{{ m | split: ':' | first | json }}{%- endif -%}{%- endfor -%}],
         "price": {{ price }},
         "compareAtPrice": {% if compare > 0 %}{{ compare }}{% else %}null{% endif %},
         "stock": {{ stock }},
@@ -70,7 +78,8 @@
 {%- endcapture -%}
 {
   "cats": [
-    {%- capture live -%}{% render 'live-collections', dedupe: true %}{%- endcapture -%}
+    {%- comment -%} SI-02: every setting collection with an active product (no dedupe), like the search chips. {%- endcomment -%}
+    {%- capture live -%}{% render 'live-collections', dedupe: false %}{%- endcapture -%}
     {%- assign first_cat = true -%}
     {%- for c in settings.oka_collections -%}
       {%- assign probe = ',' | append: c.handle | append: ',' -%}

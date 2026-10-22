@@ -1,6 +1,14 @@
 {%- layout none -%}
+{%- liquid
+  # SI-19: the page's language as on the rest of the site (no oka.js here):
+  # the /ar URL's locale, else the theme's default language.
+  assign gc_lang = settings.default_lang | default: 'ar'
+  unless request.locale.primary
+    assign gc_lang = request.locale.iso_code
+  endunless
+-%}
 <!doctype html>
-<html lang="en">
+<html lang="{{ gc_lang }}" dir="{% if gc_lang == 'ar' %}rtl{% else %}ltr{% endif %}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,12 +19,12 @@
   <body style="overflow:auto">
     <div class="app" style="height:auto;min-height:100vh;padding:40px 22px;gap:18px">
       <div class="loyal-card" style="margin:0">
-        <div class="tier">{{ shop.name | upcase }} GIFT CARD</div>
+        <div class="tier"><span class="l-en">{{ shop.name | upcase | escape }} GIFT CARD</span><span class="l-ar">كارت هدية {{ shop.name | escape }}</span></div>
         <div class="points-row"><span class="points">{{ gift_card.balance | money }}</span></div>
         <div class="next-tier">{{ gift_card.code | format_code }}</div>
       </div>
-      {%- if gift_card.expired or gift_card.enabled == false -%}<div class="notice" style="margin:0">This gift card is no longer valid.</div>{%- endif -%}
-      <a class="cta" href="{{ shop.url }}">Continue Shopping</a>
+      {%- if gift_card.expired or gift_card.enabled == false -%}<div class="notice" style="margin:0">{% render 'bi', en: 'This gift card is no longer valid.', ar: 'كارت الهدية ده مبقاش شغال.' %}</div>{%- endif -%}
+      <a class="cta" href="{{ routes.root_url }}">{% render 'bi', en: 'Continue Shopping', ar: 'كمّل تسوّق' %}</a>
     </div>
   </body>
 </html>
