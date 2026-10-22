@@ -23,11 +23,11 @@
           <a href="?order={{ o.name | url_encode }}" class="order-card" data-open-order="{{ o.name | escape }}">
             <div class="order-thumb">{% if hero.image %}{{ hero.image | image_url: width: 120 | image_tag: alt: '' }}{% endif %}</div>
             <div style="flex:1;min-width:0">
-              <div class="order-top"><span class="order-name">{{ o.name }}</span><span class="order-total">{% render 'price', cents: o.total_price %}</span></div>
+              <div class="order-top"><span class="order-name">{{ o.name | escape }}</span><span class="order-total">{% render 'price', cents: o.total_price %}</span></div>
               <div class="order-meta">
                 {%- assign hero_ar = hero.product.metafields.oka.title_ar.value | default: hero.title -%}
                 {%- if more > 0 -%}
-                  <span class="l-en">{{ hero.title }} +{{ more }} more</span><span class="l-ar">{{ hero_ar }} و{% render 'ar-digits', s: more %} أخرى</span>
+                  <span class="l-en">{{ hero.title | escape_once }} +{{ more }} more</span><span class="l-ar">{{ hero_ar | escape_once }} و{% render 'ar-digits', s: more %} أخرى</span>
                 {%- else -%}{% render 'bi', en: hero.title, ar: hero_ar %}{%- endif -%}
               </div>
               <div class="order-state {{ state_class }}" data-order-state="{{ o.name | escape }}">
@@ -57,7 +57,10 @@
       </a>
     {%- endif -%}
     {%- comment -%} TESTING ONLY — the staff J&T lookup, after the customer's own orders. Remove with snippets/test-lookup.liquid before launch. {%- endcomment -%}
-    {%- if settings.test_panel -%}<div style="height:18px"></div>{% render 'test-lookup' %}{%- endif -%}
+    {%- comment -%} SEC-05: only for a signed-in customer tagged staff / oka-staff, and only while the setting is on. {%- endcomment -%}
+    {%- if settings.test_panel and customer -%}
+      {%- if customer.tags contains 'staff' or customer.tags contains 'oka-staff' -%}<div style="height:18px"></div>{% render 'test-lookup' %}{%- endif -%}
+    {%- endif -%}
     <div style="height:26px"></div>
   </div>
 

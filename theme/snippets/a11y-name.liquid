@@ -1,0 +1,14 @@
+{%- comment -%}
+  An accessible name for an image-only link (V-07): visually hidden text, in
+  both languages (the page's language rule hides the other one, which also
+  drops it from the accessible name). Pass a collection `c`, a product `p`, or
+  plain `en` / `ar` text — the first one given is used.
+  Usage: <a href="…">{% render 'a11y-name', c: collection %}<img alt=""></a>
+  Optional `id`, to point an input's aria-labelledby at it.
+{%- endcomment -%}
+<span class="a11y-name"{% if id != blank %} id="{{ id | escape }}"{% endif %} style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0">
+  {%- if c != blank -%}{% render 'ctitle', c: c %}
+  {%- elsif p != blank -%}{% render 'ptitle', p: p %}
+  {%- else -%}{% render 'bi', en: en, ar: ar %}
+  {%- endif -%}
+</span>

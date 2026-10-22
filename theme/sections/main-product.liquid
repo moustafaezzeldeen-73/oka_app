@@ -53,10 +53,10 @@
       <a class="pdp-3d press" href="{{ ar_url }}">{% render 'bi', en: '3D · AR', ar: '٣D · AR' %}</a>
     {%- endif -%}
     <div class="pdp-btns">
-      <button class="circle-38 flip" data-back="{{ routes.root_url }}" aria-label="Back">{% render 'icon', name: 'chevron-left' %}</button>
+      <button class="circle-38 flip" data-back="{{ routes.root_url }}">{% render 'a11y-name', en: 'Back', ar: 'رجوع' %}{% render 'icon', name: 'chevron-left' %}</button>
       <div>
-        <button class="circle-38" data-share aria-label="Share">↗</button>
-        <button class="circle-38" data-wish aria-label="Wishlist">{% render 'icon', name: 'heart' %}</button>
+        <button class="circle-38" data-share>{% render 'a11y-name', en: 'Share', ar: 'شارك' %}<span aria-hidden="true">↗</span></button>
+        <button class="circle-38" data-wish>{% render 'a11y-name', en: 'Wishlist', ar: 'المفضلة' %}{% render 'icon', name: 'heart' %}</button>
       </div>
     </div>
   </div>
@@ -84,9 +84,9 @@
     <div class="qty-row">
       <span class="qty-label">{% render 'bi', en: 'Quantity', ar: 'العدد' %}</span>
       <div class="stepper">
-        <button class="step-btn" data-qty="-1" aria-label="Less">–</button>
+        <button class="step-btn" data-qty="-1">{% render 'a11y-name', en: 'Less', ar: 'أقل' %}<span aria-hidden="true">–</span></button>
         <span class="step-qty" data-qty-val>1</span>
-        <button class="step-btn" data-qty="1" aria-label="More">+</button>
+        <button class="step-btn" data-qty="1">{% render 'a11y-name', en: 'More', ar: 'أكتر' %}<span aria-hidden="true">+</span></button>
       </div>
     </div>
 
@@ -120,12 +120,16 @@
       <video class="arx-cam" data-ar-cam muted playsinline autoplay hidden></video>
       <div class="arx-reticle" data-ar-reticle hidden><i></i></div>
       <div class="arx-stage" data-ar-stage>
-        {%- if p.featured_image -%}<img class="arx-fallback" data-ar-photo src="{{ p.featured_image | image_url: width: 700 }}" alt="{{ p.title | escape }}" loading="lazy">{%- endif -%}
-        <div class="arx-loading" data-ar-loading>{% render 'bi', en: 'Scroll here to see it in your space', ar: 'وقف هنا وشوفها في مكانك' %}</div>
+        {%- if p.featured_image -%}{%- liquid
+  # Theme check ImgWidthAndHeight: intrinsic size (never wider than the source) + height:auto, so layout is unchanged.
+  assign fw = p.featured_image.width | default: 700 | at_most: 700
+  assign fh = fw | divided_by: p.featured_image.aspect_ratio | round
+-%}<img class="arx-fallback" data-ar-photo src="{{ p.featured_image | image_url: width: 700 }}" alt="{{ p.title | escape }}" width="{{ fw }}" height="{{ fh }}" style="height:auto" loading="lazy">{%- endif -%}
+        <div class="arx-loading" data-ar-loading>{% render 'bi', en: 'Tap Open camera to see it in your room', ar: 'دوس افتح الكاميرا وشوفها في أوضتك' %}</div>
       </div>
       <div class="arx-top">
-        <div class="arx-chip" data-ar-status><i></i><span data-ar-status-text>{% render 'bi', en: 'Your space', ar: 'في مكانك' %}</span></div>
-        <a class="arx-circle press" href="{{ ar_url }}" aria-label="Full screen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="arx-chip" data-ar-status role="status" aria-live="polite"><i></i><span data-ar-status-text>{% render 'bi', en: 'Your space', ar: 'في مكانك' %}</span></div>
+        <a class="arx-circle press" href="{{ ar_url }}">{% render 'a11y-name', en: 'Full screen', ar: 'ملء الشاشة' %}<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <div class="arx-panel">
         <button class="arx-live press" data-ar-live>
@@ -172,7 +176,7 @@
 </div>
 
 <div class="buy-bar">
-  <a href="{{ routes.cart_url }}" class="cart-btn" aria-label="Cart">
+  <a href="{{ routes.cart_url }}" class="cart-btn">{% render 'a11y-name', en: 'Cart', ar: 'السلة' %}
     {% render 'icon', name: 'cart', px: 20 %}
     <span class="badge" data-cart-count data-count="{{ cart.item_count }}">{% if cart.item_count > 0 %}{% render 'num', n: cart.item_count %}{% endif %}</span>
   </a>

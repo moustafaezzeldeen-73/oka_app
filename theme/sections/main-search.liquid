@@ -6,7 +6,7 @@
   {% render 'screen-header', en: 'Search', ar: 'دوّر' %}
   <div class="search-wrap">
     <input type="search" class="search-input" data-search value="{{ search.terms | escape }}" autofocus enterkeyhint="search" autocomplete="off"
-      data-ph-en="Search hookahs, bowls & accessories" data-ph-ar="دوّر على شيشة، بولّات وإكسسوارات" aria-label="Search">
+      data-ph-en="Search hookahs, bowls & accessories" data-ph-ar="دوّر على شيشة، بولّات وإكسسوارات" aria-labelledby="search-input-name">{% render 'a11y-name', id: 'search-input-name', en: 'Search', ar: 'دوّر' %}
   </div>
   <div class="cat-chips" data-cats>
     {%- capture live -%}{% render 'live-collections', dedupe: false %}{%- endcapture -%}

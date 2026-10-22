@@ -233,7 +233,7 @@
         "type": "checkbox",
         "id": "test_panel",
         "label": "J&T lookup panel (staff testing)",
-        "info": "Adds a box to the Orders page that finds a customer's J&T shipments by phone, or tracks AWB numbers, through the tracking service above. Turn it off before publishing.",
+        "info": "Adds a box to the Orders page that finds a customer's J&T shipments by phone, or tracks AWB numbers, through the tracking service above. Shown only to signed-in customers tagged 'staff' or 'oka-staff' (tag them in Admin → Customers). Note: the tracking key is still in the page source for everyone; turn this off when not testing.",
         "default": false
       }
     ]

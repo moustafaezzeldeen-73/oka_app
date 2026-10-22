@@ -9,20 +9,44 @@
   <h2 class="page-title">{% render 'bi', en: block.settings.title_en, ar: block.settings.title_ar %}</h2>
   <div class="pol-list">
     {%- liquid
+      # F-14: each language's URL prefix from the store's published languages ('' for the primary one), not a hard-coded '/ar'.
+      assign en_root = ''
+      assign ar_root = '/ar'
+      for lang in localization.available_languages
+        assign lr = lang.root_url | default: '/'
+        if lr == '/'
+          assign lr = ''
+        endif
+        if lang.iso_code == 'en'
+          assign en_root = lr
+        elsif lang.iso_code == 'ar'
+          assign ar_root = lr
+        endif
+      endfor
+      # SI-07: Liquid has no shop.contact_information; the store's Contact policy is always at /policies/contact-information.
       assign keys = 'shipping_policy,refund_policy,terms_of_service,privacy_policy,contact_information' | split: ','
       assign en_names = 'Shipping policy,Returns & refunds,Terms of service,Privacy policy,Contact information' | split: ','
       assign ar_names = 'سياسة الشحن,الاسترجاع والاسترداد,الشروط والأحكام,سياسة الخصوصية,بيانات التواصل' | split: ','
     -%}
     {%- for key in keys -%}
-      {%- assign pol = shop[key] -%}
-      {%- if pol and pol.url -%}
-        {%- comment -%} The same policy in each language: Shopify serves the Arabic translation under /ar. {%- endcomment -%}
-        {%- assign base = pol.url | remove_first: '/ar/' | prepend: '/' | replace: '//', '/' -%}
-        <a class="pol-row press s98 l-en" href="{{ base }}">
-          <span>{{ en_names[forloop.index0] }}</span>
+      {%- liquid
+        assign base = ''
+        if key == 'contact_information'
+          assign base = '/policies/contact-information'
+        else
+          assign pol = shop[key]
+          if pol and pol.url
+            assign base = pol.url | split: '/policies/' | last | prepend: '/policies/'
+          endif
+        endif
+      -%}
+      {%- if base != blank -%}
+        {%- comment -%} The same policy in each language: Shopify serves the translation under that language's root. {%- endcomment -%}
+        <a class="pol-row press s98 l-en" href="{{ en_root }}{{ base }}">
+          <span>{{ en_names[forloop.index0] | escape }}</span>
           <span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right', px: 15 %}</span>
         </a>
-        <a class="pol-row press s98 l-ar" href="/ar{{ base }}">
+        <a class="pol-row press s98 l-ar" href="{{ ar_root }}{{ base }}">
           <span>{{ ar_names[forloop.index0] }}</span>
           <span class="flip" style="display:flex">{% render 'icon', name: 'chevron-right', px: 15 %}</span>
         </a>

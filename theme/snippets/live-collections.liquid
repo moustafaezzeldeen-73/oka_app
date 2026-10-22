@@ -8,6 +8,8 @@
   dedupe: true  — the home feed shows each product only under the first
                   collection that has it, so a collection whose products all
                   appeared earlier is empty *there* and is hidden too.
+                  Use it only for the feed: category lists (search chips,
+                  catalogue `cats`) use dedupe: false (SI-02).
 
   Usage:
     {%- capture live -%}{% render 'live-collections', dedupe: true %}{%- endcapture -%}

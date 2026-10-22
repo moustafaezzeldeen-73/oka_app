@@ -1,7 +1,7 @@
 {%- comment -%} CollectionScreen.js — sort chip cycles, two filter toggles, the 2-up grid. {%- endcomment -%}
 <div class="screen fade-in" data-screen="collection">
   <div class="coll-bar">
-    <button class="coll-back flip" data-back="{{ routes.root_url }}" aria-label="Back">{% render 'icon', name: 'chevron-left' %}</button>
+    <button class="coll-back flip" data-back="{{ routes.root_url }}">{% render 'a11y-name', en: 'Back', ar: 'رجوع' %}{% render 'icon', name: 'chevron-left' %}</button>
     <h1 class="coll-title">{% if collection.handle == 'all' %}{% render 'bi', en: 'All', ar: 'الكل' %}{% else %}{% render 'ctitle', c: collection %}{% endif %}</h1>
   </div>
 

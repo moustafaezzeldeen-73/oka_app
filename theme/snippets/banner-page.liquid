@@ -41,7 +41,12 @@
         {%- if fit == 'contain' -%}
           <div class="banner-back-wrap" aria-hidden="true"><div class="banner-backdrop" style="background-image: url({{ img | image_url: width: 200 }})"></div></div>
         {%- endif -%}
-        {%- if link != blank -%}<a href="{{ link }}" class="banner-fill">{%- else -%}<div class="banner-fill">{%- endif -%}
+        {%- if link != blank -%}<a href="{{ link }}" class="banner-fill">
+          {%- comment -%} V-07: a name for the picture link when the picture has no alt text. {%- endcomment -%}
+          {%- if img.alt == blank -%}
+            {%- if block.settings.link == blank and block.settings.before != blank -%}{% render 'a11y-name', c: block.settings.before %}{%- else -%}{% render 'a11y-name', en: 'See the offer', ar: 'شوف العرض' %}{%- endif -%}
+          {%- endif -%}
+        {%- else -%}<div class="banner-fill">{%- endif -%}
           {%- comment -%} The opening banner is the first thing most visitors see: load it at once. {%- endcomment -%}
           {%- liquid
             assign page_lang = settings.default_lang

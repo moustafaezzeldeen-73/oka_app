@@ -10,12 +10,16 @@
 :root {
   --ink: #1d1d1f;
   --accent: #1d1d1f;
-  --muted: rgba(110,110,115,0.45);
-  --ink-soft: rgba(110,110,115,0.7);
-  --ink-softer: rgba(110,110,115,0.5);
-  --ink-95: rgba(110,110,115,0.95);
-  --ink-90: rgba(110,110,115,0.9);
+  /* Secondary text greys: opaque and >= 4.5:1 on the white/#f5f5f7 canvas
+     and the 5% grey boxes (WCAG 1.4.3, V-05). Were rgba(110,110,115,.45-.95). */
+  --muted: #6b6b70;
+  --ink-soft: #636368;
+  --ink-softer: #6b6b70;
+  --ink-95: #5a5a5f;
+  --ink-90: #5f5f64;
   --green: #1f8f4e;
+  /* Green used as text (rewards, "why" lines, status): 5.4:1 on white. */
+  --green-text: #177a41;
   --green-deep: #166b3b;
   --red: #b3261e;
   --red-deep: #8c1d18;
@@ -57,6 +61,8 @@ a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 input, textarea, select { font: inherit; color: var(--ink); }
 input::placeholder { color: rgba(110,110,115,0.6); }
+/* Emails, phones and URLs are typed left-to-right even on Arabic pages (V-11). */
+input[type="email"], input[type="tel"], input[type="url"] { direction: ltr; }
 p, h1, h2, h3 { margin: 0; font-weight: inherit; font-size: inherit; }
 [hidden] { display: none !important; }
 .nums { unicode-bidi: isolate; direction: ltr; }
@@ -65,8 +71,11 @@ html[lang="ar"] .nums-ar { unicode-bidi: isolate; }
 /* ── the shell (App.js) ───────────────────────────────────────────────── */
 .app {
   position: relative;
-  height: 100vh;
-  height: 100dvh;
+  /* F-09: without dvh (Chrome < 108, iOS < 15.4, older WebViews) 100vh is the
+     *largest* viewport and the page never scrolls to hide the toolbar, so the
+     bottom bars ended up under it. body is height:100% of the small (visible)
+     viewport, so 100% is the right fallback; dvh still wins where supported. */
+  height: 100%;
   max-width: var(--app-w);
   margin: 0 auto;
   display: flex;
@@ -77,6 +86,7 @@ html[lang="ar"] .nums-ar { unicode-bidi: isolate; }
     radial-gradient(circle 100px at 109% 82%, rgba(255,70,30,0.10), rgba(255,70,30,0) 70%),
     linear-gradient(180deg, #ffffff 0%, #fafafc 55%, #f5f5f7 100%);
 }
+@supports (height: 100dvh) { .app { height: 100dvh; } }
 html[dir="rtl"] .app {
   background:
     radial-gradient(circle 110px at 108% -80px, rgba(255,124,48,0.14), rgba(255,124,48,0) 70%),
@@ -645,9 +655,9 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .pdp-block { border-top: 1px solid var(--card-border); padding-top: 14px; margin-bottom: 14px; }
 .spread { display: flex; justify-content: space-between; align-items: center; }
 .deliver { font-size: 12.5px; font-weight: 600; }
-.deliver-muted { font-size: 12.5px; font-weight: 600; color: rgba(110,110,115,0.6); }
+.deliver-muted { font-size: 12.5px; font-weight: 600; color: var(--ink-softer); }
 .fee { font-size: 12px; color: var(--ink-softer); }
-.pay { font-size: 11.5px; color: rgba(110,110,115,0.45); margin-top: 8px; }
+.pay { font-size: 11.5px; color: var(--muted); margin-top: 8px; }
 .desc { font-size: 13px; line-height: 21px; color: var(--ink-soft); }
 .desc p + p { margin-top: 8px; }
 .points-box { padding: 12px 14px; border-radius: 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); font-size: 12px; font-weight: 600; color: var(--ink-soft); }
@@ -693,7 +703,9 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .line-unit { font-size: 12px; margin-top: 3px; }
 .line-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
 .line-total { font-size: 13px; font-weight: 800; }
-.line-remove { align-self: flex-start; font-size: 12px; padding: 2px; }
+.line-remove { align-self: flex-start; font-size: 12px; padding: 2px; position: relative; }
+/* Touch targets (V-09): bigger hit areas, same look. The ✕ reaches ~42x45px. */
+.line-remove::after { content: ""; position: absolute; top: -13px; bottom: -13px; inset-inline-start: -12px; inset-inline-end: -16px; }
 .cart-ship { margin: 16px 22px; padding: 12px 16px; border-radius: 16px; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.12); }
 .cart-ship .progress { margin-bottom: 8px; }
 .cart-ship .ship-txt { font-size: 12px; color: var(--ink); }
@@ -714,7 +726,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .totals { margin: 0 22px 18px; padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); }
 .totals .sum-row { font-size: 13px; }
 .grand { padding-top: 12px; padding-bottom: 4px; border-top: 1px solid rgba(0,0,0,0.1); margin-top: 8px; font-size: 16px; font-weight: 800; }
-.earn { font-size: 12px; font-weight: 600; color: var(--green); margin-top: 6px; }
+.earn { font-size: 12px; font-weight: 600; color: var(--green-text); margin-top: 6px; }
 .rail-title { padding: 0 22px 10px; font-weight: 700; font-size: 16px; }
 .xrail { gap: 14px; padding: 0 22px 22px; }
 .cs-slot { flex: 0 0 132px; width: 132px; }
@@ -740,6 +752,8 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .hero-img { width: 78px; height: 88px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .hero-img img { width: 100%; height: 100%; object-fit: contain; }
 .hero-meta { flex: 1; min-width: 0; }
+/* Checkout review: the chevron link to the cart gets a 44px hit area around the same 16px icon (V-09). */
+.hero-row > a[href]:last-child { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 44px; height: 44px; margin: -14px; }
 .hero-title { font-size: 15.5px; font-weight: 600; line-height: 21px; }
 .hero-total { font-size: 15px; font-weight: 500; margin-top: 6px; }
 .arrives { padding: 20px 22px 6px; }
@@ -776,7 +790,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .order-total { font-size: 13.5px; font-weight: 700; }
 .order-meta { font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .order-state { font-size: 12px; font-weight: 700; margin-top: 4px; color: var(--ink-soft); }
-.order-state.green { color: var(--green); }
+.order-state.green { color: var(--green-text); }
 .order-state.red { color: var(--red); }
 .cancelled-banner { margin: 0 22px 16px; padding: 14px; border-radius: 16px; background: rgba(179,38,30,0.08); border: 1px solid rgba(179,38,30,0.25); color: var(--red); }
 .cancelled-banner b { display: block; font-size: 15px; font-weight: 800; }
@@ -794,7 +808,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .inv-row > :first-child { color: var(--ink-soft); }
 .inv-row > :last-child { font-weight: 600; }
 .inv-row.strong > * { font-size: 16px; font-weight: 800; color: var(--ink) !important; }
-.inv-row.green > :last-child { color: var(--green); }
+.inv-row.green > :last-child { color: var(--green-text); }
 .inv-rule { height: 1px; background: var(--hairline-soft); margin: 3px 0; }
 .pay-note { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
 .steps { display: flex; gap: 10px; padding: 22px 22px 24px; }
@@ -819,7 +833,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .courier-btns { display: flex; gap: 10px; margin-top: 13px; }
 .courier-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 11px 0; border-radius: 999px; color: #fff; font-size: 13.5px; font-weight: 700; }
 .courier-btn.call { background: var(--green-deep); }
-.courier-btn.wa { background: #25D366; }
+.courier-btn.wa { background: #0e7a55; } /* white text 5.3:1 (was #25D366, 2:1) */
 .action-needed { margin: 14px 22px 0; padding: 14px; border-radius: 16px; background: rgba(179,38,30,0.07); border: 1px solid rgba(179,38,30,0.25); color: var(--red-deep); }
 .action-needed b { display: block; font-size: 12px; font-weight: 800; margin-bottom: 4px; }
 .action-needed span { font-size: 12.5px; line-height: 19px; font-weight: 600; }
@@ -844,7 +858,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .menu-row:last-child { border-bottom: 0; }
 .menu-row:active { background: rgba(0,0,0,0.035); }
 .menu-row.sign-out { font-weight: 700; color: #3a3a3c; }
-.build-tag { font-size: 11px; color: rgba(110,110,115,0.55); margin-top: 18px; text-align: center; }
+.build-tag { font-size: 11px; color: var(--muted); margin-top: 18px; text-align: center; }
 
 /* ── Addresses ────────────────────────────────────────────────────────── */
 .addr-card { display: block; margin: 0 22px 12px; padding: 16px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.1); cursor: pointer; }
@@ -856,7 +870,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .addr-line { font-size: 13.5px; line-height: 21px; margin-top: 2px; }
 .addr-eta { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
 .addr-actions { display: flex; gap: 18px; margin-top: 10px; }
-.addr-action { font-size: 12.5px; font-weight: 700; color: var(--accent); }
+.addr-action { font-size: 12.5px; font-weight: 700; color: var(--accent); padding: 14px 9px; margin: -14px -9px; } /* 44px tall hit area, same layout (V-09) */
 .addr-action.red { color: var(--red); }
 .outline-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px 0; border-radius: 999px; border: 1px solid rgba(0,0,0,0.16); font-size: 14px; font-weight: 700; transition: transform .17s var(--ease-out); }
 .outline-btn:active { transform: scale(.98); }
@@ -957,7 +971,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .status-badge { border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; flex-shrink: 0; }
 .sub-next { font-size: 12.5px; font-weight: 600; margin-top: 10px; }
 .sub-err { font-size: 12px; line-height: 17px; margin-top: 8px; color: var(--red-deep); }
-.sub-hist { font-size: 11.5px; margin-top: 6px; color: rgba(110,110,115,0.85); }
+.sub-hist { font-size: 11.5px; margin-top: 6px; color: var(--ink-soft); }
 .sub-actions { display: flex; gap: 8px; margin-top: 14px; }
 .sub-btn { flex: 1; padding: 10px 0; border-radius: 999px; border: 1px solid rgba(0,0,0,0.16); font-size: 12.5px; font-weight: 600; text-align: center; }
 .sub-btn.red { background: rgba(179,38,30,0.08); border-color: rgba(179,38,30,0.25); color: var(--red-deep); }
@@ -977,7 +991,9 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 /* ── Overlays ─────────────────────────────────────────────────────────── */
 .overlay { position: absolute; inset: 0; z-index: 20; }
-.age-gate { display: flex; align-items: center; padding: 0 28px; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); background: rgba(255,255,255,0.35); z-index: 40; }
+/* z-index: the 18+ gate sits above every page layer — side menu 40/41, sheets,
+   AR screen 50, toasts 55/56, alerts 58 (V-14). */
+.age-gate { display: flex; align-items: center; padding: 0 28px; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); background: rgba(255,255,255,0.35); z-index: 70; }
 .age-card { width: 100%; background: #fff; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 48px rgba(0,0,0,0.12); text-align: center; }
 .age-title { font-size: 20px; font-weight: 800; }
 .age-body { font-size: 14px; line-height: 21px; color: var(--ink-soft); }
@@ -1021,6 +1037,10 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 /* Edit order sheet */
 .scrim { position: absolute; inset: 0; z-index: 30; background: rgba(0,0,0,0.32); animation: okaFade .25s var(--ease) both; }
 .sheet { position: absolute; left: 0; right: 0; bottom: 0; top: 9%; z-index: 31; display: flex; flex-direction: column; background: var(--sheet-bg); border-radius: 26px 26px 0 0; overflow: hidden; box-shadow: 0 -14px 40px rgba(0,0,0,0.25); animation: okaFadeIn .3s var(--ease) both; }
+/* On the full-screen AR page (?view=ar) the screen is z 50, so the sheets it
+   opens (after-add recommendations, variant pick) come above it (F-08/AR-04). */
+.t-product-ar #app > .scrim { z-index: 52; }
+.t-product-ar #app > .sheet, .t-product-ar #app > .join-sheet { z-index: 53; }
 .grabber { width: 38px; height: 4px; border-radius: 3px; background: rgba(0,0,0,0.18); margin: 10px auto 0; }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid var(--card-border); }
 .sheet-title { font-weight: 800; font-size: 19px; }
@@ -1042,7 +1062,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .accept.dim { background: #d9d9de; color: #8e8e93; pointer-events: none; }
 
 /* iOS-style alert (Alert.alert) */
-.alert-scrim { position: absolute; inset: 0; z-index: 50; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; animation: okaFade .2s var(--ease) both; }
+.alert-scrim { position: absolute; inset: 0; z-index: 58; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; animation: okaFade .2s var(--ease) both; }
 .alert { width: 270px; border-radius: 14px; overflow: hidden; background: rgba(242,242,247,0.96); -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px); text-align: center; animation: okaPop .3s var(--ease) both; }
 .alert-body { padding: 19px 16px 18px; }
 .alert-title { font-size: 17px; font-weight: 600; line-height: 22px; }
@@ -1058,10 +1078,13 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 
 /* the "added" tick that stands in for the success haptic on desktop */
 .toast {
-  position: absolute; left: 50%; bottom: calc(28px + env(safe-area-inset-bottom)); z-index: 45;
-  transform: translateX(-50%);
+  /* Centred with margins rather than translateX(-50%), which the fade-in's
+     `transform` used to wipe out (V-01); wraps instead of running off-screen.
+     z 55: above the AR screen (50) so its feedback shows there (F-08/AR-04). */
+  position: absolute; left: 12px; right: 12px; bottom: calc(28px + env(safe-area-inset-bottom)); z-index: 55;
+  width: max-content; max-width: calc(100% - 24px); margin: 0 auto;
   padding: 10px 16px; border-radius: 999px; background: rgba(29,29,31,0.92); color: #fff;
-  font-size: 13px; font-weight: 700; white-space: nowrap;
+  font-size: 13px; font-weight: 700; line-height: 18px; white-space: normal; text-align: center; overflow-wrap: anywhere;
   animation: okaFadeIn .25s var(--ease) both;
   pointer-events: none;
 }
@@ -1146,19 +1169,36 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 /* ── Portrait lock ─────────────────────────────────────────────────────────
  * The web can't stop a phone from rotating, so a phone turned sideways gets
  * the portrait layout turned back the other way: the shop stays upright
- * relative to the phone, exactly as if rotation were locked. Phones only
- * (coarse pointer, short landscape viewport) — tablets and desktops lay out
- * normally. --rot is set from the device's angle in layout/theme.liquid.
+ * relative to the phone, exactly as if rotation were locked. Phones only —
+ * tablets and desktops lay out normally. --rot is set from the device's
+ * angle in layout/theme.liquid.
+ *
+ * F-01 / V-19: "sideways" must come from the DEVICE, not the viewport (an
+ * on-screen keyboard makes a portrait viewport wider than tall). The head
+ * script in theme.liquid toggles `portrait-lock` + `oka-landscape` together,
+ * only while a phone-sized screen is really held sideways and nothing is
+ * being typed, so the rotation keys on that pair.
  */
-@media (orientation: landscape) and (max-height: 540px) and (hover: none) and (pointer: coarse) {
-  html.portrait-lock .app {
+html.portrait-lock.oka-landscape .app {
+  position: fixed; top: 50%; left: 50%; margin: 0;
+  width: 100vh; width: 100dvh; max-width: none;
+  height: 100vw; height: 100dvw;
+  transform: translate(-50%, -50%) rotate(var(--rot, -90deg));
+}
+/* The notch is now on a side of the viewport, i.e. the top of the shop. */
+html.portrait-lock.oka-landscape { --top-pad: max(env(safe-area-inset-left), env(safe-area-inset-right), 8px); }
+/* Fallback for an older head script that sets `portrait-lock` permanently and
+   never `oka-landscape`: the old viewport query, tightened so a keyboard can't
+   trip it — a portrait phone with the keyboard up is barely wider than tall
+   (< 3:2), and nothing wider than a phone (> 1000px, landscape tablets) turns. */
+@media (orientation: landscape) and (max-height: 540px) and (max-width: 1000px) and (min-aspect-ratio: 3/2) and (hover: none) and (pointer: coarse) {
+  html.portrait-lock:not(.oka-landscape) .app {
     position: fixed; top: 50%; left: 50%; margin: 0;
     width: 100vh; width: 100dvh; max-width: none;
     height: 100vw; height: 100dvw;
     transform: translate(-50%, -50%) rotate(var(--rot, -90deg));
   }
-  /* The notch is now on a side of the viewport, i.e. the top of the shop. */
-  html.portrait-lock { --top-pad: max(env(safe-area-inset-left), env(safe-area-inset-right), 8px); }
+  html.portrait-lock:not(.oka-landscape) { --top-pad: max(env(safe-area-inset-left), env(safe-area-inset-right), 8px); }
 }
 /* ── TESTING ONLY: staff order lookup (snippets/test-lookup.liquid) ───── */
 .test-panel {
@@ -1182,7 +1222,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .track-order { font-size: 22px; font-weight: 800; }
 .track-awb { margin-top: 2px; font-size: 13px; color: var(--ink-soft); }
 .track-detail { margin: 0 22px; border-radius: 18px; border-top: 1px solid var(--card-border); }
-.track-external { display: block; margin: 18px 22px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--ink-soft); text-decoration: underline; }
+.track-external { display: block; margin: 6px 22px -12px; padding: 12px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--ink-soft); text-decoration: underline; }
 .test-who { margin: 0 22px 12px; font-size: 13px; font-weight: 700; color: var(--red-deep); }
 .test-order { margin-bottom: 4px; }
 .test-detail { margin: -4px 22px 16px; padding: 14px; border-radius: 0 0 18px 18px; border: 1px solid var(--card-border); border-top: 0; background: rgba(255,255,255,0.6); }
@@ -1225,6 +1265,8 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
   margin-top: 5px; padding: 4px 10px; border-radius: 999px;
   background: rgba(0,0,0,0.06); font-size: 11.5px; color: var(--ink);
 }
+.line-variant { position: relative; }
+.line-variant::after { content: ""; position: absolute; top: -6px; bottom: -6px; left: 0; right: 0; } /* ~34px tall hit area (V-09) */
 .line-variant span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 .line-variant b { font-weight: 800; color: var(--ink-soft); }
 .variant-sheet { top: auto; max-height: 72%; }
@@ -1251,21 +1293,21 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .rcard { display: flex; flex-direction: column; }
 .rcard-img { display: block; }
 .rcard-body { display: flex; flex-direction: column; flex: 1; }
-.rcard-why { font-size: 10px; font-weight: 700; color: var(--green); line-height: 13px; margin-bottom: 3px; }
+.rcard-why { font-size: 10px; font-weight: 700; color: var(--green-text); line-height: 13px; margin-bottom: 3px; }
 .rcard-why.up { color: #8a5a00; }
 .rcard-title { display: block; }
 .rcard-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 4px; }
 .rcard-foot .rcard-price { margin-top: 0; }
 .rcard-add { width: 26px; height: 26px; border-radius: 13px; background: var(--dark-grad); color: #fff; font-size: 17px; font-weight: 600; line-height: 26px; text-align: center; }
-.cs-why { font-size: 10.5px; font-weight: 700; color: var(--green); margin-top: 8px; line-height: 13px; }
-.cs-why.ship { color: #b05a00; }
+.cs-why { font-size: 10.5px; font-weight: 700; color: var(--green-text); margin-top: 8px; line-height: 13px; }
+.cs-why.ship { color: #a35300; }
 .cs-why + .cs-title { margin-top: 2px; }
 .rec-sheet { top: auto; max-height: 70%; }
 .rec-sheet .rec-lead { padding: 4px 20px 10px; font-size: 13px; color: rgba(0,0,0,0.55); }
 .rec-row { width: calc(100% - 40px); }
 .rec-row .cat-item-img { width: 52px; height: 52px; border-radius: 10px; background: #f2f2f2; display: flex; }
 .rec-row b { display: block; font-size: 14px; }
-.rec-row .rec-why { display: block; font-size: 11.5px; color: var(--green); font-weight: 700; margin-top: 2px; }
+.rec-row .rec-why { display: block; font-size: 11.5px; color: var(--green-text); font-weight: 700; margin-top: 2px; }
 .rec-row .rec-add { padding: 8px 14px; border-radius: 999px; background: var(--dark-grad); color: #fff; font-size: 12px; font-weight: 700; flex-shrink: 0; }
 .rec-row .rec-add.done { background: var(--green); }
 .last-chance .lc-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -1287,10 +1329,10 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .contact-form { padding: 0 22px 40px; display: flex; flex-direction: column; gap: 12px; }
 .contact-field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 700; }
 .contact-field input, .contact-field textarea { font: inherit; font-weight: 500; font-size: 16px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--card-border); background: #fff; }
-.contact-ok { padding: 12px 14px; border-radius: 14px; background: rgba(52,199,89,0.12); color: var(--green); font-weight: 700; }
+.contact-ok { padding: 12px 14px; border-radius: 14px; background: rgba(52,199,89,0.12); color: var(--green-text); font-weight: 700; }
 
 /* ── After add to cart: next steps (replaces the old theme's cart notification) ── */
-.added-bar { position: absolute; left: 12px; right: 12px; top: calc(66px + env(safe-area-inset-top)); z-index: 46; display: flex; align-items: center; gap: 8px; padding: 9px 10px 9px 14px; border-radius: 18px; background: rgba(29,29,31,0.94); color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.25); animation: okaFadeIn .25s var(--ease) both; }
+.added-bar { position: absolute; left: 12px; right: 12px; top: calc(66px + env(safe-area-inset-top)); z-index: 56; display: flex; align-items: center; gap: 8px; padding: 9px 10px 9px 14px; border-radius: 18px; background: rgba(29,29,31,0.94); color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.25); animation: okaFadeIn .25s var(--ease) both; }
 .added-tick { width: 22px; height: 22px; border-radius: 11px; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
 .added-txt { flex: 1; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .added-btn { padding: 8px 12px; border-radius: 999px; background: #fff; color: #1d1d1f; font-size: 12.5px; font-weight: 800; white-space: nowrap; }
@@ -1374,7 +1416,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .eo-quoting.small { padding: 2px 0; }
 .eo-diff { align-self: flex-end; font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
 .eo-diff.up { background: rgba(255,149,0,0.14); color: #b25d00; }
-.eo-diff.down { background: rgba(52,199,89,0.14); color: var(--green); }
+.eo-diff.down { background: rgba(52,199,89,0.14); color: var(--green-text); }
 .eo-note { font-size: 12px; line-height: 17px; color: #b25d00; }
 .eo-picker { padding: 6px 0 16px; }
 .eo-picker-head { position: sticky; top: 0; z-index: 2; display: flex; gap: 10px; align-items: center; padding: 8px 20px 12px; background: var(--sheet-bg); }
@@ -1432,7 +1474,7 @@ html[dir="rtl"] .flip { transform: scaleX(-1); }
 .reel-item.sound .reel-sound .reel-w { display: inline; }
 .reel-item.sound .reel-sound .reel-x { display: none; }
 
-.story { margin-top: 26px; }
+.story { margin-top: 26px; overflow-wrap: anywhere; } /* a long unbroken token can't push the page sideways (AR-15) */
 .story-hero {
   margin: 0 12px; padding: 26px 20px 22px; border-radius: 26px; color: #fff;
   background: radial-gradient(140% 120% at 100% 0%, #3b3b42 0%, #161618 55%, #0d0d0e 100%);
@@ -1461,7 +1503,7 @@ html[lang="ar"] .story-eyebrow { letter-spacing: 0; }
 html[lang="ar"] .story-steps li::before { content: counter(s, arabic-indic); }
 .story-steps li b { font-size: 14px; font-weight: 800; }
 .story-steps li span { font-size: 12.5px; line-height: 18px; color: var(--ink-soft); }
-.story-link { display: inline-block; margin-top: 14px; font-size: 13px; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+.story-link { display: inline-block; margin-top: 2px; padding: 12px 0; margin-bottom: -12px; font-size: 13px; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
 .story-cross { display: flex; align-items: center; justify-content: space-between; margin: 12px 12px 0; padding: 16px 18px; border-radius: 20px; background: #f4f4f6; font-weight: 800; font-size: 14px; }
 html[lang="ar"] .story-cross b { transform: scaleX(-1); }
 
@@ -1520,10 +1562,23 @@ html[lang="ar"] .arx-steps li::before { content: counter(a, arabic-indic); }
 
 /* Product page: full-screen pages, one per swipe, like the home feed. Every page fills the screen
    (a taller one, e.g. the buy card on a small phone, scrolls inside before moving on). */
-.screen[data-screen="product"] { --pg-h: calc(100svh - var(--bar-h) - max(env(safe-area-inset-bottom), 8px)); --buy-h: 104px; scroll-snap-type: y mandatory; scroll-padding-top: var(--bar-h); overscroll-behavior-y: contain; }
+.screen[data-screen="product"] { --pg-h: calc(100vh - var(--bar-h) - max(env(safe-area-inset-bottom), 8px)); --buy-h: 104px; scroll-snap-type: y mandatory; scroll-padding-top: var(--bar-h); overscroll-behavior-y: contain; }
+/* No svh (F-09/F-12): the 100vh value above stands, instead of an invalid --pg-h that dropped every page height. */
+@supports (height: 100svh) { .screen[data-screen="product"] { --pg-h: calc(100svh - var(--bar-h) - max(env(safe-area-inset-bottom), 8px)); } }
 .screen[data-screen="product"] > .snap-pg,
 .screen[data-screen="product"] .story > .snap-pg { scroll-snap-align: start; scroll-snap-stop: always; min-height: var(--pg-h); }
 .screen[data-screen="product"] .story { margin-top: 0; }
+/* Mouse / trackpad (AR-08): a wheel turns in small steps, and mandatory
+   snapping pulled every step back to the top page, so a desktop shopper could
+   never leave it. Free scrolling there; touch keeps one page per swipe. */
+@media (hover: hover) and (pointer: fine) {
+  .screen[data-screen="product"] { scroll-snap-type: none; }
+}
+/* Keyboard focus is scrolled clear of the floating logo bar and the fixed buy
+   bar (WCAG 2.4.11, V-10). scroll-margin on the focused control only — the
+   snap pages' own alignment is untouched. */
+.screen[data-screen="product"] :focus { scroll-margin-top: 12px; scroll-margin-bottom: calc(var(--buy-h, 104px) + 12px); }
+.screen[data-screen="checkout"] :focus { scroll-margin-bottom: 110px; }
 .screen[data-screen="product"] .story-pg { display: flex; flex-direction: column; justify-content: center; padding: 14px 0 var(--buy-h); }
 .screen[data-screen="product"] .story-pg-hero .story-hero { min-height: calc(var(--pg-h) - var(--buy-h) - 28px); display: flex; flex-direction: column; justify-content: center; }
 .screen[data-screen="product"] .pdp-top { padding-bottom: var(--buy-h); }
@@ -1540,7 +1595,7 @@ html[lang="ar"] .arx-steps li::before { content: counter(a, arabic-indic); }
 .ar-screen.ar-inline {
   position: relative; inset: auto; z-index: auto; overflow: hidden;
   margin: 10px 10px 0; border-radius: 28px;
-  height: calc(var(--pg-h, 100svh) - var(--buy-h, 104px) - 20px); min-height: 440px;
+  height: calc(var(--pg-h, 100vh) - var(--buy-h, 104px) - 20px); min-height: 440px;
 }
 .screen[data-screen="product"] > .ar-inline { min-height: 0; margin-bottom: calc(var(--buy-h) + 10px); }
 .ar-inline .arx-stage { inset: 0 0 96px; }
@@ -1553,3 +1608,37 @@ html[lang="ar"] .arx-steps li::before { content: counter(a, arabic-indic); }
 .ar-inline .arx-fallback { max-height: 62%; }
 /* While the camera runs, the product follows the room (phone motion sensor) instead of the screen. */
 .arx-stage.anchored { will-change: transform; }
+
+/* ── Reduced motion (F-13 / V-12 / AR-11) ────────────────────────────────
+ * Decorative loops (buy-button glow, AR reticle/chip pulse, swipe-up cue,
+ * pops, fades) stop; transitions become instant, so every state change
+ * still happens. The loading spinner keeps turning: it is the only sign
+ * that something is in progress.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .cta.glow, .arx-reticle, .arx-chip i, .swipe-up { animation: none !important; }
+  .spinner { animation-duration: 1.2s !important; animation-iteration-count: infinite !important; }
+}
+
+/* ── Forced colours (V-16): selection must not rely on background alone ── */
+@media (forced-colors: active) {
+  .chip.dark, .chip.on, .cat-chip.on, .cat-chip.active, .side-link.active, .prov-chip.on, .prov.on,
+  .variant-pick.on, .addr-card.active, .addr-pick.on, .pay-opt.on, .type-btn.on, .freq-row.on, .reward-btn.on {
+    outline: 3px solid Highlight; outline-offset: 1px;
+  }
+  .side-link.active { text-decoration: underline; }
+}
+
+/* iOS Safari zooms into any focused field under 16px; with pinch-zoom now
+   allowed (V-08) that jump is avoided by 16px text in fields on iOS only. */
+@supports (-webkit-touch-callout: none) {
+  .search-input, .field-input, .discount-input { font-size: 16px; }
+}

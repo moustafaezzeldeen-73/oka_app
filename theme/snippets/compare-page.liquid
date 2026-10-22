@@ -33,7 +33,8 @@
         {%- if a_ar -%}{{ a_ar | image_url: width: 1200 | image_tag: alt: '', class: 'compare-img l-ar', loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 431px) 430px, 100vw', draggable: 'false' }}{%- endif -%}
       </div>
       <div class="compare-line" aria-hidden="true"><span class="compare-knob">{% render 'icon', name: 'chevron-left', px: 14 %}{% render 'icon', name: 'chevron-right', px: 14 %}</span></div>
-      <input class="compare-range" type="range" min="0" max="100" value="50" data-compare-range aria-label="Compare before and after">
+      {%- assign cmp_name_id = 'cmp-name-' | append: block.id -%}
+      <input class="compare-range" type="range" min="0" max="100" value="50" data-compare-range aria-labelledby="cmp-name-{{ block.id }}">{% render 'a11y-name', id: cmp_name_id, en: 'Compare before and after', ar: 'قارن قبل وبعد' %}
     </div>
     {%- if link != blank -%}
       <a href="{{ link }}" class="offer-cta banner-cta">{% render 'bi', en: 'Shop now', ar: 'اتسوّق دلوقتي' %}</a>

@@ -28,9 +28,9 @@
   /** QtyStepper — `size` matches the three variants in the app. */
   const stepper = (qty, { size = 32, fs = 16, gap = 10, attrs = '' } = {}) =>
     `<div class="stepper${size < 28 ? ' small' : ''}" style="--sz:${size}px;--fs:${fs}px;--gap:${gap}px">
-      <button class="step-btn" data-step="-1" ${attrs} aria-label="Less">–</button>
+      <button class="step-btn" data-step="-1" ${attrs} aria-label="${esc(L('Less', 'أقل'))}">–</button>
       <span class="step-qty">${esc(num(qty))}</span>
-      <button class="step-btn" data-step="1" ${attrs} aria-label="More">+</button>
+      <button class="step-btn" data-step="1" ${attrs} aria-label="${esc(L('More', 'أكتر'))}">+</button>
     </div>`;
   const sumRow = (label, value, cls = '') => `<div class="sum-row ${cls}"><span>${esc(label)}</span><span>${esc(value)}</span></div>`;
   const img = (src, alt = '') => (src ? `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy">` : '');
@@ -41,7 +41,7 @@
         <a href="${esc(p.url)}" class="gcard-title">${esc(O.ptitle(p))}</a>
         <div class="gcard-row">
           <span class="gcard-price">${esc(fmtPrice(p.price))}</span>
-          <button class="gcard-add" data-add="${p.variantId}"${p.stock === 0 || p.available === false ? ' data-soldout' : ''}>${esc(L('Add', 'عبيلي فالشنطة'))}</button>
+          <button class="gcard-add" data-add="${esc(p.variantId)}"${p.stock === 0 || p.available === false ? ' data-soldout' : ''}>${esc(L('Add', 'عبيلي فالشنطة'))}</button>
         </div>
       </div>
     </div>`;
@@ -56,6 +56,231 @@
     try { return O.setCart(JSON.parse(el.textContent)); } catch (e) { return null; }
   };
   const errText = (err) => String(err?.message ?? err);
+
+  /* ── defensive helpers (QA fixes) ────────────────────────────────────── */
+  const isObj = (v) => Boolean(v) && typeof v === 'object' && !Array.isArray(v);
+  /** A stored value of the wrong shape (null, "{}", a string…) falls back instead of crashing a screen. */
+  const sObj = (k) => { const v = O.store.get(k, null); return isObj(v) ? v : {}; };
+  const sArr = (k) => { const v = O.store.get(k, null); return Array.isArray(v) ? v : []; };
+  /*
+   * Repair wrong-typed values that oka.js reads without checking (wishlist,
+   * viewed), before any screen paints. Only values of the wrong type are
+   * reset; good values are left alone.
+   */
+  (function sanitizeStorage() {
+    try {
+      const w = localStorage.getItem('oka.wishlist');
+      if (w != null) { let ok = false; try { ok = isObj(JSON.parse(w)); } catch (e) {} if (!ok) localStorage.removeItem('oka.wishlist'); }
+    } catch (e) { /* storage blocked */ }
+    try {
+      const v = sessionStorage.getItem('oka.viewed');
+      if (v != null) { let ok = false; try { ok = Array.isArray(JSON.parse(v)); } catch (e) {} if (!ok) sessionStorage.removeItem('oka.viewed'); }
+    } catch (e) { /* storage blocked */ }
+  })();
+  /** Only a same-origin path ("/pages/x?y") — never "//host", "http:", "javascript:" or an object. */
+  const safePath = (p) => (typeof p === 'string' && /^\/(?![/\\])/.test(p) ? p : null);
+  /** Only http(s) links from API data. */
+  const safeUrl = (u) => { try { const x = new URL(String(u), location.href); return /^https?:$/.test(x.protocol) ? x.href : null; } catch (e) { return null; } };
+  /** Arabic-Indic / Persian digits → 0-9. */
+  const latinDigits = (s) => String(s ?? '').replace(/[٠-٩]/g, (d) => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/[۰-۹]/g, (d) => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));
+  /** A typed phone number in one form: Latin digits, no spaces/dashes/dots/brackets, "00" international prefix as "+". */
+  const normPhone = (s) => latinDigits(s).trim().replace(/[\s\-.()‎‏]/g, '').replace(/^00/, '+');
+  /** Egyptian mobile: 01x… with optional +20 / 0020 / 20 (also "+20 0…"). */
+  const isEgMobile = (s) => /^(?:\+?20)?0?1[0125]\d{8}$/.test(normPhone(s));
+  /** Shopper-facing words for an error: no raw "Failed to fetch" / "HTTP 429" in either language. */
+  function userError(err) {
+    const m = errText(err);
+    if (/failed to fetch|networkerror|load failed|network request failed|offline/i.test(m) || (typeof navigator !== 'undefined' && navigator.onLine === false)) {
+      return L('You seem to be offline. Check your connection and try again.', 'شكلك مش متصل بالنت. اتأكد من الاتصال وجرّب تاني.');
+    }
+    if (/HTTP 429/.test(m)) return L('Too many tries just now. Please wait a moment and try again.', 'محاولات كتير دلوقتي. استنى شوية وجرّب تاني.');
+    if (/HTTP 5\d\d/.test(m)) return L('The store didn’t answer. Please try again.', 'المتجر مردّش. جرّب تاني.');
+    if (/^HTTP \d+$/.test(m) || /service-not-configured/.test(m)) return L('Something went wrong. Please try again.', 'حصلت مشكلة. جرّب تاني.');
+    return m;
+  }
+  /** Money as shown in the theme, but never "NaN", and with 2 decimals when the amount isn't whole (COM-12/14). */
+  function money(n) {
+    const v = Number(n);
+    if (!Number.isFinite(v)) return '—';
+    const r = Math.round(v * 100) / 100;
+    if (Math.abs(r - Math.round(r)) < 0.005) return fmtPrice(Math.round(r));
+    const s = r.toFixed(2);
+    return O.isRtl() ? `${O.arDigits(s).replace('.', '٫')} ج.م` : `EGP ${s}`;
+  }
+  /** "− amount", isolated so the sign stays with its number in RTL and LTR (COM-14). */
+  const minus = (n) => `⁨−${money(n)}⁩`;
+  /** A range of fees/totals, e.g. "EGP 60–80" / "٦٠–٨٠ ج.م". */
+  const moneyRange = (a, b) => (O.isRtl() ? `${O.arDigits(Math.round(a))}–${O.arDigits(Math.round(b))} ج.م` : `EGP ${Math.round(a)}–${Math.round(b)}`);
+
+  /** One polite live region for the whole app: "Added to cart", toasts, cart updates (V-04). */
+  let liveEl = null;
+  function announce(text) {
+    if (!text) return;
+    if (!liveEl) {
+      liveEl = document.createElement('div');
+      liveEl.setAttribute('role', 'status');
+      liveEl.setAttribute('aria-live', 'polite');
+      liveEl.className = 'oka-live';
+      liveEl.style.cssText = 'position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0';
+      document.body.appendChild(liveEl);
+    }
+    liveEl.textContent = '';
+    setTimeout(() => { liveEl.textContent = String(text); }, 60);
+  }
+  // Toasts and the added-to-cart bar (drawn by oka.js) are read out unless they already carry their own live region.
+  if ('MutationObserver' in window) {
+    new MutationObserver((records) => {
+      records.forEach((r) => r.addedNodes.forEach((n) => {
+        if (n.nodeType !== 1 || !n.matches?.('.toast, .added-bar')) return;
+        if (n.getAttribute('aria-live') || n.getAttribute('role') === 'status' || n.getAttribute('role') === 'alert') return;
+        announce((n.matches('.added-bar') ? n.querySelector('.added-txt')?.textContent : n.textContent) || '');
+      }));
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
+
+  /**
+   * Bottom sheets as dialogs (V-03 / CH-11): role, label, focus moved in and
+   * kept in, Escape closes, focus goes back to whatever opened it.
+   * Returns a function to call when the sheet closes.
+   */
+  let sheetSeq = 0;
+  function modalize(sheet, close) {
+    const opener = document.activeElement;
+    sheet.setAttribute('role', 'dialog');
+    sheet.setAttribute('aria-modal', 'true');
+    sheet.tabIndex = -1;
+    const label = () => {
+      const t0 = sheet.querySelector('.sheet-title');
+      if (t0) { if (!t0.id) t0.id = `oka-sheet-title-${++sheetSeq}`; sheet.setAttribute('aria-labelledby', t0.id); }
+    };
+    label();
+    const focusables = () => [...sheet.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+      .filter((el) => !el.hidden && el.offsetParent !== null);
+    const onKey = (e) => {
+      if (!sheet.isConnected) return document.removeEventListener('keydown', onKey, true);
+      // Only the top-most sheet, and never while an alert is up over it.
+      const sheets = [...document.querySelectorAll('.sheet')];
+      if (sheets[sheets.length - 1] !== sheet || document.querySelector('.alert-scrim')) return;
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      if (e.key !== 'Tab') return;
+      label();
+      const f = focusables();
+      if (!f.length) { e.preventDefault(); sheet.focus(); return; }
+      const first = f[0];
+      const last = f[f.length - 1];
+      if (!sheet.contains(document.activeElement)) { e.preventDefault(); first.focus(); return; }
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener('keydown', onKey, true);
+    requestAnimationFrame(() => { if (sheet.isConnected && !sheet.contains(document.activeElement)) (sheet.querySelector('.sheet-close') || sheet).focus({ preventScroll: true }); });
+    return () => {
+      document.removeEventListener('keydown', onKey, true);
+      if (opener && opener.isConnected && typeof opener.focus === 'function') opener.focus({ preventScroll: true });
+    };
+  }
+
+  /* ── governorate matching (COM-03): server/config/zones.js resolveProvince, ported ── */
+  const GOV_ALIASES = {
+    C: ['Cairo', 'القاهرة', 'Al Qahirah', 'Qahirah', 'Al Qahira', 'مدينة نصر', 'Nasr City', 'المعادي', 'Maadi', 'مصر الجديدة', 'Heliopolis', 'التجمع', 'New Cairo', 'Tagamoa', 'Fifth Settlement', 'شبرا', 'Shubra', 'المقطم', 'Mokattam', 'الزمالك', 'Zamalek', 'وسط البلد', 'عين شمس', 'Ain Shams', 'المرج', 'الشروق', 'El Shorouk', 'مدينتي', 'Madinaty', 'العاصمة الإدارية', 'دار السلام', 'الرحاب', 'Rehab'],
+    GZ: ['Giza', 'الجيزة', 'Al Jizah', 'الهرم', 'Haram', 'فيصل', 'Faisal', 'الدقي', 'Dokki', 'المهندسين', 'Mohandessin', 'العجوزة', 'Agouza', 'إمبابة', 'Imbaba', 'بولاق الدكرور', 'حدائق الأهرام', 'Hadayek El Ahram'],
+    SU: ['6th of October', '٦ أكتوبر', '6 أكتوبر', 'السادس من أكتوبر', 'أكتوبر', 'October', '6th October', '6 October', 'الشيخ زايد', 'Sheikh Zayed', 'Zayed'],
+    HU: ['Helwan', 'حلوان', 'التبين', '15 مايو', 'May 15'],
+    ALX: ['Alexandria', 'الإسكندرية', 'اسكندرية', 'إسكندرية', 'Alex', 'Al Iskandariyah', 'Iskandariyah', 'Iskandariya', 'سيدي بشر', 'Sidi Beshr', 'المنتزه', 'Montaza', 'سموحة', 'Smouha', 'العجمي', 'Agami', 'ميامي', 'Miami', 'محرم بك', 'برج العرب', 'Borg El Arab'],
+    KB: ['Qalyubia', 'القليوبية', 'Qaliubiya', 'Kalyubia', 'Qalyubiyah', 'بنها', 'Banha', 'Benha', 'شبرا الخيمة', 'Shubra El Kheima', 'العبور', 'Obour', 'القناطر', 'القناطر الخيرية', 'El Qanater'],
+    DK: ['Dakahlia', 'الدقهلية', 'المنصورة', 'Mansoura', 'Dakahlya', 'Daqahliyah'],
+    DT: ['Damietta', 'دمياط', 'رأس البر', 'Ras El Bar'],
+    FYM: ['Faiyum', 'الفيوم', 'Fayoum', 'Fayum'],
+    IS: ['Ismailia', 'الإسماعيلية', 'Ismailiya'],
+    KFS: ['Kafr el-Sheikh', 'كفر الشيخ', 'Kafr El Sheikh', 'Kafrelsheikh'],
+    MNF: ['Monufia', 'المنوفية', 'Menoufia', 'Menofia', 'Minufiyah', 'شبين الكوم', 'Shebin'],
+    PTS: ['Port Said', 'بورسعيد', 'بور سعيد', 'Portsaid'],
+    SUZ: ['Suez', 'السويس'],
+    SHR: ['Al Sharqia', 'الشرقية', 'Sharqia', 'Sharkia', 'Sharqiyah', 'الزقازيق', 'Zagazig', 'العاشر من رمضان', '10th of Ramadan'],
+    BH: ['Beheira', 'البحيرة', 'Behera', 'Buhayrah', 'دمنهور', 'Damanhour'],
+    GH: ['Gharbia', 'الغربية', 'Gharbiya', 'طنطا', 'Tanta', 'المحلة', 'Mahalla'],
+    ASN: ['Aswan', 'أسوان'],
+    AST: ['Asyut', 'أسيوط', 'Assiut', 'Assiout', 'صدفا'],
+    BNS: ['Beni Suef', 'بني سويف', 'Bani Sweif', 'Beni Sweif', 'Bani Suwayf'],
+    LX: ['Luxor', 'الأقصر'],
+    MN: ['Minya', 'المنيا', 'Menia', 'Minia'],
+    KN: ['Qena', 'قنا', 'Qina', 'Kena'],
+    SHG: ['Sohag', 'سوهاج', 'Suhag'],
+    MT: ['Matrouh', 'مطروح', 'Marsa Matrouh', 'Marsa Matruh', 'Matruh', 'الساحل الشمالي', 'North Coast', 'العلمين', 'Alamein'],
+    WAD: ['New Valley', 'الوادي الجديد', 'الخارجة', 'Kharga'],
+    SIN: ['North Sinai', 'شمال سيناء', 'شمال سينا', 'العريش', 'Arish'],
+    JS: ['South Sinai', 'جنوب سيناء', 'جنوب سينا', 'شرم الشيخ', 'Sharm', 'Sharm El Sheikh', 'دهب', 'Dahab'],
+    BA: ['Red Sea', 'البحر الأحمر', 'الغردقة', 'Hurghada', 'سفاجا', 'Safaga'],
+  };
+  const govFold = (s) => latinDigits(s).toLowerCase()
+    .replace(/[ً-ْـ]/g, '')
+    .replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي')
+    .replace(/(^|\s)ال/g, '$1')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim();
+  let govMatchers = null;
+  const matchers = () => govMatchers || (govMatchers = Object.entries(GOV_ALIASES)
+    .flatMap(([code, names]) => names.map((n) => ({ key: govFold(n), code })))
+    .filter((m) => m.key)
+    .sort((a, b) => b.key.length - a.key.length));
+  function resolveGov(...texts) {
+    for (const text of texts) {
+      if (!text) continue;
+      const raw = String(text).trim();
+      if (GOV_ALIASES[raw.toUpperCase()]) return raw.toUpperCase();
+      const f = govFold(raw);
+      if (!f) continue;
+      const exact = matchers().find((m) => m.key === f);
+      if (exact) return exact.code;
+      const padded = ` ${f} `;
+      const inside = matchers().find((m) => m.key.length > 2 && padded.includes(` ${m.key} `));
+      if (inside) return inside.code;
+    }
+    return null;
+  }
+  // Offered to oka.js (provinceOf / etaFor) without a hard dependency.
+  if (!O.resolveGov) O.resolveGov = resolveGov;
+  /** The governorate of an address — by code, else by the ported resolver; null when unknown (never Cairo by default). */
+  function provinceFor(addr) {
+    if (!addr) return null;
+    const code = String(addr.provinceCode || '').toUpperCase();
+    const byCode = O.PROVINCES.find((p) => p.code === code);
+    if (byCode) return byCode;
+    const c = resolveGov(addr.province, addr.city);
+    return c ? O.PROVINCES.find((p) => p.code === c) || null : null;
+  }
+  /**
+   * The shipping fee for `merch` (after discounts) to `addr` (COM-01):
+   * { known: true, fee } once the governorate is known, else the range across
+   * every zone { known: false, min, max } — never the Cairo fee as if it were fact.
+   */
+  function shipQuote(merch, addr) {
+    const p = provinceFor(addr);
+    if (p) return { known: true, fee: O.shippingFor(merch, { provinceCode: p.code }), province: p };
+    const over = merch >= (Number(CFG.tier) || 300);
+    const fees = Object.values(CFG.zones || {}).map((z) => Number(over ? z?.over : z?.under)).filter(Number.isFinite);
+    if (!fees.length) return { known: true, fee: O.shippingFor(merch) };
+    const min = Math.min(...fees);
+    const max = Math.max(...fees);
+    return min === max ? { known: true, fee: min } : { known: false, min, max };
+  }
+  const feeText = (q) => (q.known ? (q.fee === 0 ? t('shipFree') : money(q.fee)) : moneyRange(q.min, q.max));
+  const totalText = (merch, q) => (q.known ? money(merch + q.fee) : moneyRange(merch + q.min, merch + q.max));
+  const govNote = () => L('Shipping depends on your governorate — the exact fee shows at checkout.', 'الشحن بيختلف حسب المحافظة — المبلغ بالظبط هيظهر وانت بتكمّل الطلب.');
+  /** The "add a little more" bar; without a known governorate it doesn't name a fee. */
+  function shipBarFor(merch, addr, q) {
+    if (q.known) return O.shipBar(merch, q.province ? { provinceCode: q.province.code } : addr);
+    const tier = Number(CFG.tier) || 300;
+    if (merch < tier) return { pct: Math.min(100, Math.round((merch / tier) * 100)), text: t('freeShipProgress', { n: Math.max(0, Math.ceil(tier - merch)) }) };
+    return { pct: 100, text: t('freeShipReached') };
+  }
+  /** A discount Shopify reports on the shipping line (cart.js cart_level_discount_applications target_type "shipping_line"), if any (COM-04). */
+  function shippingDiscount(c) {
+    const apps = (c?.cart_level_discount_applications || []).filter((a) => a && a.target_type === 'shipping_line');
+    if (!apps.length) return null;
+    const free = apps.some((a) => a.value_type === 'percentage' && Number(a.value) >= 100);
+    return { free };
+  }
 
   /**
    * Mouse drag for horizontal rails. Touch scrolls them natively; this gives
@@ -191,7 +416,7 @@
       if (card._t) {
         clearTimeout(card._t);
         card._t = null;
-        if (!card.hasAttribute('data-soldout')) O.addToCart(card.dataset.variant, 1);
+        if (!card.hasAttribute('data-soldout')) O.addToCart(card.dataset.variant, 1).catch(() => {}); // oka.js already told them why
         return;
       }
       card._t = setTimeout(() => { card._t = null; go(card.getAttribute('href')); }, 280);
@@ -383,7 +608,9 @@
     const items = $$('[data-item]', gridEl);
     const sortBtn = $('[data-sort]', root);
     let sortBy = O.store.sget('oka.sort', 'featured');
-    const filters = O.store.sget('oka.filters', { inStock: false, onSale: false });
+    if (!SORTS.some((x) => x.id === sortBy)) sortBy = 'featured';
+    const fRaw = O.store.sget('oka.filters', null);
+    const filters = isObj(fRaw) ? fRaw : { inStock: false, onSale: false };
 
     function apply() {
       const visible = items.filter((el) =>
@@ -432,6 +659,12 @@
       if (!q) { results.innerHTML = ''; return; }
       const { products } = await O.loadCatalogue();
       if (input.value.trim() !== q) return;
+      // The catalogue didn't load (offline, 5xx): say so and offer a retry, not "No results" (F-15).
+      if (!products.length) {
+        results.innerHTML = `<div class="empty" style="color:var(--ink-soft);font-size:14px">${esc(L('Couldn’t load the products. Check your connection and try again.', 'معرفناش نحمّل المنتجات. اتأكد من النت وجرّب تاني.'))}
+          <div style="margin-top:12px"><button type="button" class="outline-btn" data-search-retry>${esc(L('Try again', 'جرّب تاني'))}</button></div></div>`;
+        return;
+      }
       const found = O.searchProducts(products, q);
       results.innerHTML = found.length
         ? `<div class="count" style="padding-top:0;padding-bottom:12px">${esc(`${num(found.length)} ${t('productsCount')}`)}</div>${grid(found)}`
@@ -444,6 +677,7 @@
       render();
     });
     input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); input.blur(); } });
+    results.addEventListener('click', (e) => { if (e.target.closest('[data-search-retry]')) render(); });
     render();
     onLang(render);
   }
@@ -492,13 +726,17 @@
       $('[data-qty-val]', root).textContent = num(qty);
       const buyPrice = $('[data-buy-price]');
       if (buyPrice) buyPrice.textContent = fmtPrice(price * qty);
-      const sub = O.cartTotals().subtotal + price * qty;
-      const bar = O.shipBar(sub);
+      // Same basis as the cart and checkout: the basket after discounts (COM-07).
+      const sub = O.cartTotals().merch + price * qty;
+      const addr = O.selectedAddress();
+      const q = shipQuote(sub, addr);
+      const bar = shipBarFor(sub, addr, q);
       $('[data-ship-pct]', root).style.width = `${bar.pct}%`;
       $('[data-ship-txt]', root).textContent = bar.text;
-      const fee = O.shippingFor(sub);
-      $('[data-fee]', root).textContent = fee === 0 ? t('shipFree') : fmtPrice(fee);
-      $('[data-eta]', root).textContent = O.etaFor(O.selectedAddress());
+      const feeEl = $('[data-fee]', root);
+      feeEl.textContent = feeText(q);
+      if (q.known) feeEl.removeAttribute('title'); else feeEl.title = govNote();
+      $('[data-eta]', root).textContent = O.etaFor(q.province ? { provinceCode: q.province.code } : addr);
     }
     $$('[data-qty]', root).forEach((b) => b.addEventListener('click', () => {
       const dir = Number(b.dataset.qty);
@@ -507,11 +745,20 @@
     }));
 
     const buy = $('[data-buy]');
+    let buying = false;
     if (buy) buy.addEventListener('click', () => {
+      // One add at a time (F-05 / CH-07): a second tap while the first is on its way does nothing.
+      if (buying) return;
       // Never more than is in stock, counting what's already in the cart.
       const room = Math.max(0, (stock || 50) - O.cartQtyOf(variant));
       const q = Math.min(qty, room);
-      if (q > 0) O.addToCart(variant, q);
+      if (q <= 0) return;
+      buying = true;
+      buy.setAttribute('aria-busy', 'true');
+      buy.classList.add('busy');
+      O.addToCart(variant, q)
+        .catch(() => {}) // oka.js has already shown why; no unhandled rejection (CH-08)
+        .finally(() => { buying = false; buy.removeAttribute('aria-busy'); buy.classList.remove('busy'); });
     });
 
     // Videos play muted while in view (like a reel) and pause when scrolled away; the speaker turns sound on.
@@ -520,13 +767,25 @@
       dragScroll(reel);
       const vids = $$('[data-reel-item] video', root);
       vids.forEach((v) => { v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.removeAttribute('controls'); });
+      // No autoplay for "reduce motion" or Save-Data; a tap still plays (AR-11).
+      const noAutoplay = () => (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || Boolean(navigator.connection?.saveData);
       const io = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
         entries.forEach((en) => {
-          if (en.isIntersecting && en.intersectionRatio > 0.6) en.target.play().catch(() => {});
+          if (en.isIntersecting && en.intersectionRatio > 0.6) { if (!noAutoplay() && !document.hidden) en.target.play().catch(() => {}); }
           else en.target.pause();
         });
       }, { threshold: [0, 0.6, 1] }) : null;
       vids.forEach((v) => io && io.observe(v));
+      document.addEventListener('visibilitychange', () => { if (document.hidden) vids.forEach((v) => v.pause()); });
+      // The speaker button: a name in the page's language and its on/off state.
+      const paintSound = () => $$('[data-reel-sound]', reel).forEach((b) => {
+        const v = $('video', b.closest('[data-reel-item]') || reel);
+        const on = Boolean(v && !v.muted);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.setAttribute('aria-label', L('Sound', 'الصوت'));
+      });
+      paintSound();
+      onLang(paintSound);
       reel.addEventListener('click', (e) => {
         const item = e.target.closest('[data-reel-item]');
         const v = item && $('video', item);
@@ -537,20 +796,22 @@
           v.muted = !on;
           item.classList.toggle('sound', on);
           if (on) v.play().catch(() => {});
+          paintSound();
           return;
         }
         if (v.paused) v.play().catch(() => {}); else v.pause();
       });
     }
 
-    // The AR section opens the camera by itself once it fills the screen, and lets it go when scrolled away.
+    // The AR section shows the 3D model once it fills the screen; the camera opens only on a tap on
+    // "Open camera" (AR-05 / F-10), and is let go when the section is scrolled away.
     const arSec = $('[data-ar-view]', root);
     if (arSec && arSec.dataset.glb) {
       const view = arView(arSec);
       let on = false;
       if ('IntersectionObserver' in window) {
         new IntersectionObserver(([en]) => {
-          if (en.intersectionRatio >= 0.75 && !on) { on = true; view.start(); }
+          if (en.intersectionRatio >= 0.75 && !on) { on = true; view.start({ camera: false }); }
           else if (en.intersectionRatio < 0.35 && on) { on = false; view.stop(); }
         }, { root, threshold: [0, 0.35, 0.75, 1] }).observe(arSec);
       }
@@ -569,12 +830,12 @@
         if (!list.length) { wrap.hidden = true; return; }
         $('[data-related-list]', root).innerHTML = list.map((r) => `
           <div class="rcard">
-            <a href="${esc(r.p.url)}" class="rcard-img">${img(r.p.img)}</a>
+            <a href="${esc(r.p.url)}" class="rcard-img" aria-label="${esc(O.ptitle(r.p))}">${img(r.p.img)}</a>
             <div class="rcard-body">
               <div class="rcard-why${r.why === 'upgrade' ? ' up' : ''}">${esc(O.recReason(r))}</div>
               <a href="${esc(r.p.url)}" class="rcard-title">${esc(O.ptitle(r.p))}</a>
               <div class="rcard-foot"><span class="rcard-price">${esc(fmtPrice(r.p.price))}</span>
-                <button class="rcard-add press" data-add="${r.p.variantId}" aria-label="${esc(t('add'))}">+</button></div>
+                <button class="rcard-add press" data-add="${esc(r.p.variantId)}" aria-label="${esc(t('add'))}">+</button></div>
             </div>
           </div>`).join('');
         wrap.hidden = false;
@@ -653,9 +914,61 @@
       else window.removeEventListener('deviceorientation', onTilt);
     }
 
+    /*
+     * Camera state (AR-01/02/03/05/09): at most one getUserMedia in flight and one stream ever;
+     * a stream that arrives after the section was left, the tab hidden, or another stream exists
+     * is stopped at once. The camera opens only after a tap ("Open camera") — or by itself on the
+     * AR screen when the permission is already granted — and is never re-asked after a refusal
+     * until the shopper taps again.
+     */
+    let starting = null;   // the pending getUserMedia promise
+    let wantCam = false;   // the shopper asked for the camera (tap), so return to it after hide/show
+    let camErr = null;     // the last camera error name, kept so place() doesn't paint over it
+    let modelFailed = false;
+    // AR-14: the status chip is announced.
+    const chipEl = $('[data-ar-status]', root);
+    if (chipEl) { chipEl.setAttribute('role', 'status'); chipEl.setAttribute('aria-live', 'polite'); }
+    // The camera on/off button, added once to the top bar.
+    let camBtn = $('[data-ar-cam-toggle]', root);
+    if (!camBtn && d.glb) {
+      camBtn = document.createElement('button');
+      camBtn.type = 'button';
+      camBtn.className = 'arx-chip arx-cam-toggle press';
+      camBtn.setAttribute('data-ar-cam-toggle', '');
+      camBtn.style.cssText = 'cursor:pointer;color:inherit;border:0;font:inherit;font-size:12px;font-weight:700';
+      const top = $('.arx-top', root);
+      if (top) top.appendChild(camBtn); else root.appendChild(camBtn);
+      camBtn.hidden = true;
+      camBtn.textContent = L('Open camera', 'افتح الكاميرا');
+      camBtn.setAttribute('aria-label', L('Open the camera to see it in your room', 'افتح الكاميرا عشان تشوفها في أوضتك'));
+      camBtn.setAttribute('aria-pressed', 'false');
+    }
+    const paintCamBtn = () => {
+      if (!camBtn) return;
+      const on = Boolean(stream) || (Boolean(starting) && wantCam);
+      camBtn.textContent = on ? L('Close camera', 'اقفل الكاميرا') : L('Open camera', 'افتح الكاميرا');
+      camBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      camBtn.setAttribute('aria-label', on ? L('Close the camera', 'اقفل الكاميرا') : L('Open the camera to see it in your room', 'افتح الكاميرا عشان تشوفها في أوضتك'));
+      camBtn.hidden = !active || modelFailed;
+    };
+    const CAM_ERR = {
+      NotAllowedError: ['Camera blocked — allow it in your browser settings', 'الكاميرا مقفولة — اسمح بيها من إعدادات المتصفح'],
+      SecurityError: ['Camera blocked — allow it in your browser settings', 'الكاميرا مقفولة — اسمح بيها من إعدادات المتصفح'],
+      NotFoundError: ['No camera found — showing 3D', 'مفيش كاميرا — بنعرضها ٣D'],
+      OverconstrainedError: ['No camera found — showing 3D', 'مفيش كاميرا — بنعرضها ٣D'],
+      NotReadableError: ['Camera is busy in another app', 'الكاميرا شغالة في تطبيق تاني'],
+      AbortError: ['Camera didn’t start — tap Open camera to try again', 'الكاميرا مشتغلتش — دوس افتح الكاميرا وجرّب تاني'],
+    };
+    const camStatus = () => {
+      if (modelFailed) return status('3D unavailable', 'الـ ٣D مش متاح', 'model');
+      if (starting && wantCam) return status('Waiting for camera permission…', 'مستنيين إذن الكاميرا…', 'search');
+      if (camErr) { const m = CAM_ERR[camErr] || ['Camera off — showing 3D', 'الكاميرا مقفولة — بنعرضها ٣D']; return status(m[0], m[1], 'model'); }
+      return status('3D · drag to turn it', '٣D · اسحب عشان تلفّها', 'model');
+    };
+
     function place() {
       if (placed || !modelReady || !active) return;
-      if (!stream) return status('3D · drag to turn it', '٣D · اسحب عشان تلفّها', 'model');
+      if (!stream) return camStatus();
       placed = true;
       root.classList.remove('placed');
       reticle.classList.remove('lock');
@@ -671,26 +984,46 @@
         timer = setTimeout(() => { reticle.hidden = true; }, 900);
       }, 1100);
     }
-    async function startCamera() {
-      if (stream) return;
-      if (!navigator.mediaDevices?.getUserMedia) return status('3D · drag to turn it', '٣D · اسحب عشان تلفّها', 'model');
-      status('Opening camera…', 'بنفتح الكاميرا…', 'search');
-      try {
-        const s = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } } });
-        if (!active) { s.getTracks().forEach((t) => t.stop()); return; }
-        stream = s;
-        cam.srcObject = stream;
-        cam.hidden = false;
-        await cam.play().catch(() => {});
-        root.classList.add('cam-on');
-        place();
-      } catch (e) {
-        status('Camera off — showing 3D', 'الكاميرا مقفولة — بنعرضها ٣D', 'model');
-        root.classList.add('placed');
-      }
+    function startCamera() {
+      if (stream || starting) return starting || Promise.resolve();
+      if (!active || document.hidden || modelFailed) return Promise.resolve();
+      if (!navigator.mediaDevices?.getUserMedia) { camErr = 'NotFoundError'; wantCam = false; paintCamBtn(); camStatus(); return Promise.resolve(); }
+      camErr = null;
+      const p = navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } } })
+        .catch((e) => {
+          // A camera that can't meet the size asked for: once more with any camera.
+          if (e && e.name === 'OverconstrainedError') return navigator.mediaDevices.getUserMedia({ audio: false, video: true });
+          throw e;
+        })
+        .then(async (s) => {
+          starting = null;
+          // Left, hidden, closed, or a stream already open meanwhile: let this one go at once.
+          if (!active || document.hidden || !wantCam || stream) { s.getTracks().forEach((tr) => tr.stop()); paintCamBtn(); camStatus(); return; }
+          stream = s;
+          cam.srcObject = stream;
+          cam.hidden = false;
+          paintCamBtn();
+          await cam.play().catch(() => {});
+          if (stream !== s) return;
+          root.classList.add('cam-on');
+          place();
+          if (!modelReady) status('Loading 3D…', 'بنحمّل الـ ٣D…', 'search');
+        }, (e) => {
+          starting = null;
+          camErr = (e && e.name) || 'Error';
+          // A refusal is not asked again by itself (visibility, scroll); a tap on "Open camera" can.
+          wantCam = false;
+          paintCamBtn();
+          camStatus();
+          if (modelReady || modelFailed) root.classList.add('placed');
+        });
+      starting = p;
+      paintCamBtn();
+      camStatus();
+      return p;
     }
     function stopCamera() {
-      stream?.getTracks().forEach((t) => t.stop());
+      stream?.getTracks().forEach((tr) => tr.stop());
       stream = null;
       if (cam) { cam.srcObject = null; cam.hidden = true; }
       root.classList.remove('cam-on', 'placed');
@@ -698,45 +1031,83 @@
       anchor(false);
       clearTimeout(timer);
       if (reticle) reticle.hidden = true;
+      if (modelReady) root.classList.add('placed');
+      paintCamBtn();
     }
+    /** 3D unavailable (AR-06/AR-10): photo back, a clear message, camera let go; Add to cart is untouched. */
+    function modelFail() {
+      if (modelReady || modelFailed) return;
+      modelFailed = true;
+      clearTimeout(modelTimer);
+      if (mv) { try { mv.remove(); } catch (e) {} mv = null; }
+      const ph = $('[data-ar-photo]', root);
+      if (ph) ph.hidden = false;
+      if (loading) { loading.hidden = false; loading.textContent = L('The 3D view isn’t available right now. Here’s the photo instead.', 'عرض الـ ٣D مش متاح دلوقتي. دي صورة المنتج.'); }
+      wantCam = false;
+      stopCamera();
+      root.classList.remove('model-on');
+      status('3D unavailable', 'الـ ٣D مش متاح', 'model');
+      modelLoading = null; // a later visit to the section may try again
+    }
+    let modelTimer = null;
+    const hasWebGL = () => {
+      try { const c = document.createElement('canvas'); return Boolean(c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl')); } catch (e) { return false; }
+    };
     function loadModel() {
       if (modelLoading) return modelLoading;
+      if (modelReady) return Promise.resolve();
+      modelFailed = false;
+      if (!hasWebGL()) { modelFail(); return Promise.resolve(); }
+      clearTimeout(modelTimer);
+      // The script and the model together get 20 s; a hanging CDN or model never leaves "Loading 3D…" forever.
+      modelTimer = setTimeout(() => { if (!modelReady) modelFail(); }, 20000);
       modelLoading = O.loadModelViewer().then(() => {
-        mv = document.createElement('model-viewer');
-        mv.setAttribute('src', d.glb);
-        if (d.usdz) mv.setAttribute('ios-src', d.usdz);
-        mv.setAttribute('alt', d.title || '');
-        ['ar', 'camera-controls'].forEach((a) => mv.setAttribute(a, ''));
-        mv.setAttribute('touch-action', 'pan-y');
-        mv.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
-        mv.setAttribute('ar-scale', 'fixed');
-        mv.setAttribute('ar-placement', 'floor');
-        // Seen from a little above, as if it stood on the floor or a table in front of you.
-        mv.setAttribute('camera-orbit', '0deg 72deg auto');
-        mv.setAttribute('min-camera-orbit', 'auto 40deg auto');
-        mv.setAttribute('max-camera-orbit', 'auto 88deg auto');
-        mv.setAttribute('shadow-intensity', '1.4');
-        mv.setAttribute('shadow-softness', '0.6');
-        mv.setAttribute('exposure', '1.1');
-        mv.setAttribute('environment-image', 'neutral');
-        mv.setAttribute('interaction-prompt', 'none');
-        mv.style.setProperty('--progress-bar-color', 'transparent');
-        mv.addEventListener('load', () => {
-          modelReady = true;
-          if (loading) loading.hidden = true;
-          const ph = $('[data-ar-photo]', root);
-          if (ph) ph.hidden = true;
-          root.classList.add('model-on');
-          if (!stream) root.classList.add('placed');
-          place();
-        });
-        mv.addEventListener('ar-status', (e) => {
-          if (e.detail.status === 'failed') O.okaAlert(L('AR didn’t start', 'الـ AR مشتغلش'), L('Your phone couldn’t start AR. It’s still shown in your camera here.', 'موبايلك مقدرش يشغّل الـ AR. لسه ظاهرة في الكاميرا هنا.'));
-          // Back from the phone's AR: bring the live camera back.
-          if (e.detail.status === 'not-presenting' && active) startCamera();
-        });
-        stage.appendChild(mv);
+        if (modelFailed) return;
+        try {
+          mv = document.createElement('model-viewer');
+          mv.setAttribute('src', d.glb);
+          if (d.usdz) mv.setAttribute('ios-src', d.usdz);
+          mv.setAttribute('alt', d.title || '');
+          ['ar', 'camera-controls'].forEach((a) => mv.setAttribute(a, ''));
+          // AR-07: in the product page's inline section a mouse wheel scrolls the page, not the model's zoom
+          // (the full-screen AR page keeps zoom).
+          if (root.hasAttribute('data-ar-view') && window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches) mv.setAttribute('disable-zoom', '');
+          mv.setAttribute('touch-action', 'pan-y');
+          mv.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+          mv.setAttribute('ar-scale', 'fixed');
+          mv.setAttribute('ar-placement', 'floor');
+          // Seen from a little above, as if it stood on the floor or a table in front of you.
+          mv.setAttribute('camera-orbit', '0deg 72deg auto');
+          mv.setAttribute('min-camera-orbit', 'auto 40deg auto');
+          mv.setAttribute('max-camera-orbit', 'auto 88deg auto');
+          mv.setAttribute('shadow-intensity', '1.4');
+          mv.setAttribute('shadow-softness', '0.6');
+          mv.setAttribute('exposure', '1.1');
+          mv.setAttribute('environment-image', 'neutral');
+          mv.setAttribute('interaction-prompt', 'none');
+          mv.style.setProperty('--progress-bar-color', 'transparent');
+          mv.addEventListener('load', () => {
+            if (modelFailed) return;
+            modelReady = true;
+            clearTimeout(modelTimer);
+            if (loading) loading.hidden = true;
+            const ph = $('[data-ar-photo]', root);
+            if (ph) ph.hidden = true;
+            root.classList.add('model-on');
+            if (!stream) root.classList.add('placed');
+            place();
+          });
+          // A 404, a corrupt file or a WebGL failure (AR-06).
+          mv.addEventListener('error', () => modelFail());
+          mv.addEventListener('ar-status', (e) => {
+            if (e.detail.status === 'failed') O.okaAlert(L('AR didn’t start', 'الـ AR مشتغلش'), L('Your phone couldn’t start AR. It’s still shown in your camera here.', 'موبايلك مقدرش يشغّل الـ AR. لسه ظاهرة في الكاميرا هنا.'));
+            // Back from the phone's AR: bring the live camera back, if the shopper had it on.
+            if (e.detail.status === 'not-presenting' && active && wantCam) startCamera();
+          });
+          stage.appendChild(mv);
+        } catch (e) { modelFail(); }
       }).catch(() => {
+        modelFail();
         if (loading) loading.textContent = L('Couldn’t load the 3D model. Check your connection.', 'معرفناش نحمّل الموديل. اتأكد من النت.');
       });
       return modelLoading;
@@ -752,30 +1123,52 @@
       } else O.okaAlert(L('Open it on your phone', 'افتحها من الموبايل'), L('Real-size AR needs a phone (Android or iPhone).', 'الـ AR بالحجم الحقيقي محتاج موبايل (أندرويد أو آيفون).'));
     }
     $('[data-ar-live]', root)?.addEventListener('click', launchAr);
+    camBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (stream || (starting && wantCam)) { wantCam = false; stopCamera(); camStatus(); return; }
+      wantCam = true;
+      camErr = null;
+      if (!modelLoading && !modelReady) loadModel();
+      startCamera();
+      paintCamBtn();
+      if (!stream) camStatus();
+    });
     root.addEventListener('click', (e) => {
       if (!active || e.target.closest('a, button, [data-ar-live]')) return;
       if (root.classList.contains('cam-on') && mv) launchAr();
     });
-    window.addEventListener('pagehide', stopCamera);
+    window.addEventListener('pagehide', () => { wantCam = false; stopCamera(); });
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) stopCamera();
-      else if (active) startCamera();
+      else if (active && wantCam) startCamera();
     });
 
     return {
-      start() {
+      /** opts.camera: true opens the camera now (only when the shopper already allowed it, or asked). */
+      start(opts = {}) {
         if (!d.glb) { if (loading) loading.hidden = true; return; }
         active = true;
         loadModel();
-        startCamera();
+        if (opts.camera) { wantCam = true; startCamera(); }
+        paintCamBtn();
         place();
+        if (!modelReady && !modelFailed && !starting && !stream) status('Loading 3D…', 'بنحمّل الـ ٣D…', 'search');
       },
-      stop() { active = false; stopCamera(); status('Your space', 'في مكانك'); },
+      stop() { active = false; wantCam = false; stopCamera(); paintCamBtn(); status('Your space', 'في مكانك'); },
     };
   }
 
   function productAr(root) {
-    arView(root).start();
+    // The AR screen was opened on purpose, so the camera comes on by itself — but only when the
+    // browser already has the permission (no prompt without a tap) and not on Back/Forward (AR-05).
+    const view = arView(root);
+    let navType = '';
+    try { navType = performance.getEntriesByType('navigation')[0]?.type || ''; } catch (e) {}
+    const auto = (granted) => view.start({ camera: granted && navType !== 'back_forward' && !document.hidden });
+    if (navigator.permissions?.query) {
+      navigator.permissions.query({ name: 'camera' }).then((r) => auto(r.state === 'granted'), () => auto(false));
+    } else auto(false);
   }
 
   /* ════════════════════════════════════════════════════════════════════
@@ -787,6 +1180,9 @@
     let code = '';
     let codeState = null; // { code, applied, message }
     let checking = false;
+    const linePending = new Map(); // line key → quantity the shopper wants
+    const lineSent = new Map();    // line key → quantity last sent
+    let lineChain = Promise.resolve();
 
     const byVariant = (id) => catalogue.products.find((p) => String(p.variantId) === String(id));
     /** Other products in the same collection at the same price, e.g. the other tobacco-bowl flavours. */
@@ -808,9 +1204,12 @@
       const applied = (cartData.discount_codes || []).find((x) => x.applicable);
       if (!code && applied) { code = applied.code; codeState = { code: applied.code, applied: true }; }
       const { subtotal, discount, merch } = O.cartTotals(cartData);
-      const shipping = O.shippingFor(merch);
-      const total = merch + shipping;
-      const bar = O.shipBar(merch);
+      const addrNow = O.selectedAddress();
+      const shipDisc = shippingDiscount(cartData);
+      // A shipping discount Shopify reports: free → 0; any other → the fee is left to checkout.
+      const q = shipDisc ? { known: true, fee: 0 } : shipQuote(merch, addrNow);
+      const bar = shipBarFor(merch, addrNow, q);
+      const tier = Number(CFG.tier) || 300;
       const minOrder = Number(CFG.minOrder) || 0;
       const belowMinimum = minOrder > 0 && merch < minOrder;
       const points = Math.floor(Math.max(0, merch) * (CFG.earnPointsPerEgp || 1));
@@ -822,10 +1221,10 @@
           ${best.length ? `<div class="rail-title">${esc(t('browse'))}</div>
           <div class="xrail hscroll" style="padding-bottom:26px" data-drag>${best.map((p) => `
             <div class="bs-card">
-              <a href="${esc(p.url)}" class="bs-img" style="display:block">${img(p.img)}</a>
+              <a href="${esc(p.url)}" class="bs-img" style="display:block" aria-label="${esc(O.ptitle(p))}">${img(p.img)}</a>
               <div class="bs-body">
                 <a href="${esc(p.url)}" class="bs-title" style="display:block">${esc(O.ptitle(p))}</a>
-                <div class="bs-foot"><span class="bs-price">${esc(fmtPrice(p.price))}</span><button class="bs-add press s96" data-add="${p.variantId}"${p.stock === 0 ? ' data-soldout' : ''}>${esc(L('Add', 'عبيلي فالشنطة'))}</button></div>
+                <div class="bs-foot"><span class="bs-price">${esc(fmtPrice(p.price))}</span><button class="bs-add press s96" data-add="${esc(p.variantId)}"${p.stock === 0 ? ' data-soldout' : ''}>${esc(L('Add', 'عبيلي فالشنطة'))}</button></div>
               </div>
             </div>`).join('')}</div>` : ''}`;
         $$('[data-drag]', host).forEach(dragScroll);
@@ -847,15 +1246,15 @@
           return `<div class="swipe" data-swipe data-key="${esc(it.key)}" data-handle="${esc(it.handle)}">
             <div class="swipe-act swipe-wish" aria-hidden="true">${heartSvg(true)}<span>${esc(saved ? L('Saved', 'محفوظ') : L('Wishlist', 'المفضلة'))}</span></div>
             <div class="swipe-act swipe-del" aria-hidden="true">${trashSvg()}<span>${esc(L('Delete', 'امسح'))}</span></div>
-            <div class="line" data-key="${esc(it.key)}" data-qty="${it.quantity}" data-max="${p ? (p.stock || 50) : 50}" data-variant="${it.variant_id}" data-handle="${esc(it.handle)}" data-has-variants="${hasVariants}">
-              <a href="${esc(it.url)}" class="line-img">${img(it.image)}</a>
+            <div class="line" data-key="${esc(it.key)}" data-qty="${it.quantity}" data-max="${p ? (p.stock || 50) : 50}" data-variant="${esc(it.variant_id)}" data-handle="${esc(it.handle)}" data-has-variants="${hasVariants}">
+              <a href="${esc(it.url)}" class="line-img" aria-label="${esc(lineTitle(it))}">${img(it.image)}</a>
               <div class="line-body">
                 <div class="line-title">${esc(lineTitle(it))}</div>
                 ${canSwap ? `<button class="line-variant" data-replace>${hasVariants && it.variant_title ? `<span>${esc(it.variant_title)}</span>` : ''}<b>${esc(L('Change', 'غيّر'))}</b>${chevron(11)}</button>` : ''}
                 <div class="line-unit">${esc(fmtPrice(it.original_price / 100))}</div>
-                <div class="line-foot">${stepper(it.quantity, { size: 24, fs: 13, gap: 8 })}<span class="line-total">${esc(fmtPrice(it.original_line_price / 100))}</span></div>
+                <div class="line-foot">${stepper(linePending.has(it.key) ? linePending.get(it.key) : it.quantity, { size: 24, fs: 13, gap: 8 })}<span class="line-total">${esc(fmtPrice(it.original_line_price / 100))}</span></div>
               </div>
-              <button class="line-remove" data-remove aria-label="Remove">✕</button>
+              <button class="line-remove" data-remove aria-label="${esc(L('Remove', 'امسح'))}">✕</button>
             </div>
           </div>`;
         }).join('')}
@@ -866,27 +1265,29 @@
         </div>
 
         <div class="discount-row">
-          <input class="discount-input" data-code value="${esc(code)}" placeholder="${esc(t('discountPlaceholder'))}" autocomplete="off" autocapitalize="characters">
+          <input class="discount-input" data-code value="${esc(code)}" placeholder="${esc(t('discountPlaceholder'))}" aria-label="${esc(t('discountPlaceholder'))}" dir="ltr" autocomplete="off" autocapitalize="characters">
           <button class="apply-btn" data-apply>${checking ? spinner(true).replace('spinner', 'spinner sm') : esc(codeState?.applied && codeState.code === code ? t('applied') : t('apply'))}</button>
         </div>
         ${codeState && !codeState.applied && codeState.message ? `<div class="code-error">${esc(codeState.message)}</div>` : ''}
 
         <div class="totals">
-          ${sumRow(t('subtotal'), fmtPrice(subtotal))}
-          ${discount > 0 ? sumRow(t('discount'), `-${fmtPrice(discount)}`) : ''}
-          ${sumRow(t('shipping'), shipping === 0 ? t('shipFree') : fmtPrice(shipping))}
-          ${sumRow(t('total'), fmtPrice(total), 'grand')}
+          ${sumRow(t('subtotal'), money(subtotal))}
+          ${discount > 0 ? sumRow(t('discount'), minus(discount)) : ''}
+          ${sumRow(t('shipping'), shipDisc && !shipDisc.free ? L('Calculated at checkout', 'هيتحسب وانت بتكمّل الطلب') : feeText(q))}
+          ${sumRow(t('total'), totalText(merch, q), 'grand')}
+          ${!q.known ? `<div class="earn ship-note" data-gov-note>${esc(govNote())}</div>` : ''}
+          ${discount > 0 && subtotal >= tier && merch < tier ? `<div class="earn ship-note">${esc(L(`With this discount the order is under ${fmtPrice(tier)}, so the lower shipping rate no longer applies.`, `بالخصم ده الطلب بقى أقل من ${fmtPrice(tier)}، فسعر الشحن الأقل مش هينطبق.`))}</div>` : ''}
           <div class="earn">${esc(t('earnOnDelivery', { n: points }))}</div>
         </div>
 
         ${crossSell.length ? `<div class="rail-title">${esc(L('Complete your setup', 'كمّل جلستك'))}</div>
         <div class="xrail hscroll" data-drag>${crossSell.map(({ p, why }) => `
           <div class="cs-slot">
-            <a href="${esc(p.url)}" class="cs-card">${img(p.img)}</a>
+            <a href="${esc(p.url)}" class="cs-card" aria-label="${esc(O.ptitle(p))}">${img(p.img)}</a>
             ${why === 'ship' || why === 'again' || why === 'with' ? `<div class="cs-why${why === 'ship' ? ' ship' : ''}">${esc(O.recReason({ why }))}</div>` : ''}
             <div class="cs-title">${esc(O.ptitle(p))}</div>
             <div class="cs-price">${esc(fmtPrice(p.price))}</div>
-            <button class="cs-add" data-add="${p.variantId}"${p.stock === 0 ? ' data-soldout' : ''}>${esc(t('add'))}</button>
+            <button class="cs-add" data-add="${esc(p.variantId)}"${p.stock === 0 ? ' data-soldout' : ''}>${esc(t('add'))}</button>
           </div>`).join('')}</div>` : ''}
 
         ${!O.customer ? `<button class="join-nudge" data-sign-in="${esc(CFG.routes.cart)}">
@@ -939,7 +1340,7 @@
           row.style.transition = 'height .25s ease .18s, margin .25s ease .18s, opacity .2s ease .18s';
           row.style.height = `${row.offsetHeight}px`;
           requestAnimationFrame(() => { row.style.height = '0px'; row.style.marginBottom = '0px'; row.style.opacity = '0'; });
-          try { await O.changeLine(row.dataset.key, 0); } catch (err) { O.okaAlert(L('Could not update', 'معرفناش نحدّث'), errText(err)); render(); }
+          setLine(row.dataset.key, 0);
           return;
         }
         // Wishlist: save it (never un-save from here) and slide back.
@@ -1020,7 +1421,7 @@
       const catTitle = me ? (catalogue.cats || []).find((c) => c.id === me.cat) : null;
       const sizedImg = (src) => (src ? `<img src="${esc(src)}${String(src).includes('?') ? '&' : '?'}width=120" alt="" loading="lazy">` : '');
       const row = ({ id, pic, name, price, on, soldOut }) => `
-        <button class="sheet-item variant-pick${on ? ' on' : ''}" data-pick="${id}"${soldOut ? ' disabled' : ''}>
+        <button class="sheet-item variant-pick${on ? ' on' : ''}" data-pick="${esc(id)}"${soldOut ? ' disabled' : ''}>
           <span class="cat-item-img">${sizedImg(pic)}</span>
           <span style="flex:1;min-width:0;text-align:start"><b class="variant-name">${esc(name)}</b>
             <span class="variant-price">${esc(fmtPrice(price))}${soldOut ? ` · ${esc(L('Sold out', 'خلص'))}` : ''}</span></span>
@@ -1029,7 +1430,7 @@
       sheet.innerHTML = `
         <div class="grabber"></div>
         <div class="sheet-head"><span class="sheet-title">${esc(L('Change', 'غيّر'))}</span>
-          <button class="sheet-close" data-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <button class="sheet-close" data-close aria-label="${esc(L('Close', 'اقفل'))}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
         <div class="sheet-body" style="padding-bottom:16px">
           ${variants.length ? `<div class="sec-label">${esc(optName || L('Options', 'الأنواع'))}</div>
           ${variants.map((v) => row({ id: v.id, pic: v.featured_image?.src || product.featured_image, name: v.title, price: v.price / 100, on: String(v.id) === current, soldOut: !v.available })).join('')}` : ''}
@@ -1037,7 +1438,9 @@
           ${siblings.map((p) => row({ id: p.variantId, pic: p.img, name: O.ptitle(p), price: p.price, on: false, soldOut: false })).join('')}` : ''}
         </div>`;
       app.append(scrim, sheet);
-      const close = () => { scrim.remove(); sheet.remove(); };
+      let unmodal = null;
+      const close = () => { scrim.remove(); sheet.remove(); unmodal?.(); unmodal = null; };
+      unmodal = modalize(sheet, close);
       scrim.addEventListener('click', close);
       sheet.addEventListener('click', async (e) => {
         if (e.target.closest('[data-close]')) return close();
@@ -1052,13 +1455,42 @@
           close();
         } catch (err) {
           pick.classList.remove('busy');
-          O.okaAlert(L('Could not change it', 'معرفناش نغيّره'), errText(err));
+          O.okaAlert(L('Could not change it', 'معرفناش نغيّره'), userError(err));
         }
       });
     }
 
     let lastCart = null;
     const currentCart = () => lastCart;
+
+    /*
+     * Cart −/+ (F-02 / CH-07): each tap updates the number at once and sets the
+     * line's wanted quantity; the /cart/change.js calls run one after another
+     * and each sends the latest wanted quantity, so fast taps all count and a
+     * slow earlier answer can never win over a later tap.
+     */
+    function setLine(key, qty, line) {
+      if (linePending.has(key) ? linePending.get(key) === qty : (line && Number(line.dataset.qty) === qty)) return;
+      linePending.set(key, qty);
+      const qEl = line && $('.step-qty', line);
+      if (qEl) qEl.textContent = num(qty);
+      O.haptic.selectionTick?.();
+      lineChain = lineChain.then(async () => {
+        if (!linePending.has(key)) return;
+        const want = linePending.get(key);
+        if (lineSent.get(key) === want) { linePending.delete(key); return; }
+        lineSent.set(key, want);
+        try {
+          await O.changeLine(key, want);
+          if (linePending.get(key) === want) { linePending.delete(key); lineSent.delete(key); render(); announce(L('Cart updated', 'السلة اتحدّثت')); }
+        } catch (err) {
+          linePending.delete(key);
+          lineSent.delete(key);
+          render();
+          O.okaAlert(L('Could not update', 'معرفناش نحدّث'), userError(err));
+        }
+      });
+    }
 
     host.addEventListener('click', async (e) => {
       if (swipe.justMoved) { e.preventDefault(); e.stopPropagation(); return; }
@@ -1071,14 +1503,16 @@
       if (line && e.target.closest('[data-replace]')) { openVariants(line); return; }
       const step = e.target.closest('[data-step]');
       if (line && step) {
-        const q = Number(line.dataset.qty) + Number(step.dataset.step);
+        const key = line.dataset.key;
+        const cur = linePending.has(key) ? linePending.get(key) : Number(line.dataset.qty);
+        const q = cur + Number(step.dataset.step);
         const max = Number(line.dataset.max) || 50;
         if (q > max) return;
-        try { await O.changeLine(line.dataset.key, Math.max(0, q)); } catch (err) { O.okaAlert(L('Could not update', 'معرفناش نحدّث'), errText(err)); }
+        setLine(key, Math.max(0, q), line);
         return;
       }
       if (line && e.target.closest('[data-remove]')) {
-        try { await O.changeLine(line.dataset.key, 0); } catch (err) { O.okaAlert(L('Could not update', 'معرفناش نحدّث'), errText(err)); }
+        setLine(line.dataset.key, 0, line);
         return;
       }
       if (e.target.closest('[data-apply]')) { applyCode(); return; }
@@ -1115,6 +1549,8 @@
         render();
         return;
       }
+      // Codes that already work on this basket stay if the new one is refused (COM-06).
+      const prev = (lastCart?.discount_codes || []).filter((x) => x.applicable && x.code.toLowerCase() !== c.toLowerCase()).map((x) => x.code);
       checking = true;
       render();
       try {
@@ -1125,10 +1561,10 @@
           O.haptic.success();
         } else {
           codeState = { code: c, applied: false, message: L('This code can’t be used on this basket.', 'الكود ده مينفعش على السلة دي.') };
-          if (dc) await O.applyDiscount('').catch(() => {});
+          if (dc || prev.length) await O.applyDiscount(prev.join(',')).catch(() => {});
         }
       } catch (err) {
-        codeState = { code: c, applied: false, message: errText(err) };
+        codeState = { code: c, applied: false, message: userError(err) };
       } finally {
         checking = false;
         render();
@@ -1137,13 +1573,17 @@
 
     lastCart = inlineCart(root);
     // A redeemed loyalty voucher arrives here ready to apply.
-    const pending = O.store.get('oka.pendingCode');
-    if (pending) { O.store.del('oka.pendingCode'); code = pending; }
+    const pendingRaw = O.store.get('oka.pendingCode');
+    const pending = typeof pendingRaw === 'string' ? pendingRaw.trim() : '';
+    if (pendingRaw != null) O.store.del('oka.pendingCode');
+    if (pending) code = pending;
     render();
     if (pending) applyCode();
     O.loadCatalogue().then((cat) => { catalogue = cat; render(); });
     onCart((e) => { lastCart = e.detail; render(); });
     onLang(render);
+    // Back to this page from checkout (bfcache): no spinner left on the button (F-16).
+    window.addEventListener('pageshow', (e) => { if (e.persisted) render(); });
   }
 
   /**
@@ -1196,8 +1636,9 @@
       if (!items.length) { go(CFG.routes.cart); return; }
       const addr = O.selectedAddress();
       const { subtotal, discount, merch } = O.cartTotals(cartData);
-      const shipping = O.shippingFor(merch, addr);
-      const total = merch + shipping;
+      const shipDisc = shippingDiscount(cartData);
+      const q = shipDisc ? { known: true, fee: 0 } : shipQuote(merch, addr);
+      const totalStr = totalText(merch, q);
       const minOrder = Number(CFG.minOrder) || 0;
       const belowMinimum = minOrder > 0 && merch < minOrder;
       const count = cartData.item_count;
@@ -1205,7 +1646,7 @@
       const heroP = catalogue.products.find((p) => String(p.variantId) === String(hero.variant_id));
       const heroTitle = heroP ? O.ptitle(heroP) : hero.product_title;
       const eta = O.etaFor(addr);
-      const shipBarNow = O.shipBar(merch, addr);
+      const shipBarNow = shipBarFor(merch, addr, q);
       const code = (cartData.discount_codes || []).find((x) => x.applicable)?.code;
 
       host.innerHTML = `
@@ -1213,9 +1654,9 @@
           <div class="hero-img">${img(hero.image)}</div>
           <div class="hero-meta">
             <div class="hero-title">${esc(heroTitle)}${count > 1 ? esc(L(` + ${count - 1} more`, ` + ${num(count - 1)}`)) : ''}</div>
-            <div class="hero-total">${esc(fmtPrice(total))}</div>
+            <div class="hero-total">${esc(totalStr)}</div>
           </div>
-          <a href="${esc(CFG.routes.cart)}" aria-label="Cart">${chevron(16)}</a>
+          <a href="${esc(CFG.routes.cart)}" aria-label="${esc(L('Cart', 'السلة'))}">${chevron(16)}</a>
         </div>
         <div class="divider"></div>
         <div class="arrives">
@@ -1242,7 +1683,7 @@
           <div class="field-k">${esc(t('paymentTitle'))}</div>
           <div class="field-v" style="display:flex;flex-direction:column;gap:12px">
             <div class="pay-row"><span class="radio on"></span><span class="pay-label">${esc(t('cod'))}</span></div>
-            <div class="cod-note">${esc(`${t('codNote')}: ${fmtPrice(total)}`)}</div>
+            <div class="cod-note">${esc(`${t('codNote')}: ${totalStr}`)}</div>
           </div>
         </div>
         <div class="divider top"></div>
@@ -1252,15 +1693,15 @@
           <div class="field-k">${esc(t('total'))}</div>
           <div class="field-v" style="display:flex;flex-direction:column;gap:4px">
             ${addr ? `
-              <div class="spread field-txt"><span>${esc(t('subtotal'))}</span><span>${esc(fmtPrice(subtotal))}</span></div>
-              ${discount > 0 ? `<div class="spread field-txt"><span>${esc(`${t('discount')}${code ? ` (${code})` : ''}`)}</span><span>${esc(`-${fmtPrice(discount)}`)}</span></div>` : ''}
-              <div class="spread field-txt"><span>${esc(t('shipping'))}</span><span>${esc(shipping === 0 ? t('shipFree') : fmtPrice(shipping))}</span></div>
+              <div class="spread field-txt"><span>${esc(t('subtotal'))}</span><span>${esc(money(subtotal))}</span></div>
+              ${discount > 0 ? `<div class="spread field-txt"><span>${esc(`${t('discount')}${code ? ` (${code})` : ''}`)}</span><span>${esc(minus(discount))}</span></div>` : ''}
+              <div class="spread field-txt"><span>${esc(t('shipping'))}</span><span>${esc(shipDisc && !shipDisc.free ? L('Calculated at checkout', 'هيتحسب وانت بتكمّل الطلب') : feeText(q))}</span></div>
               <div class="ship-box checkout-ship">
                 <div class="progress"><i style="width:${shipBarNow.pct}%"></i></div>
                 <div class="ship-txt">${esc(shipBarNow.text)}</div>
               </div>
-              <div class="quote-warn">${esc(L('Shipping is an estimate until your address is confirmed.', 'مصاريف الشحن تقديرية — هتتأكد لما نثبّت العنوان.'))}</div>
-              <div class="arrives-title" style="margin-top:6px">${esc(fmtPrice(total))}</div>
+              <div class="quote-warn">${esc(q.known ? L('Shipping is an estimate until your address is confirmed.', 'مصاريف الشحن تقديرية — هتتأكد لما نثبّت العنوان.') : govNote())}</div>
+              <div class="arrives-title" style="margin-top:6px">${esc(totalStr)}</div>
               ${belowMinimum ? `<div class="quote-warn">${esc(L(`The minimum order is ${fmtPrice(minOrder)}.`, `أقل طلب ${fmtPrice(minOrder)}.`))}</div>` : ''}`
             : `<div class="field-txt">${esc(L('Add an address to see your total.', 'ضيف عنوان عشان نحسب الإجمالي.'))}</div>`}
           </div>
@@ -1284,7 +1725,7 @@
             <div class="lc-row">
               <span class="lc-img">${img(r.p.img)}</span>
               <span class="lc-body"><b>${esc(O.ptitle(r.p))}</b><span>${esc(O.recReason(r))} · ${esc(fmtPrice(r.p.price))}</span></span>
-              <button class="lc-add press" data-add="${r.p.variantId}">${esc(t('add'))}</button>
+              <button class="lc-add press" data-add="${esc(r.p.variantId)}">${esc(t('add'))}</button>
             </div>`).join('')}</div>
         </div>
         <div class="divider top"></div>`;
@@ -1297,6 +1738,7 @@
     $('[data-place]', bar).addEventListener('click', () => {
       if (!bar.dataset.ok) return;
       const btn = $('[data-place]', bar);
+      if (btn.dataset.label == null) btn.dataset.label = btn.innerHTML;
       btn.innerHTML = spinner();
       // Shopify's checkout takes it from here: it charges the store's own
       // shipping rate for the address and records the payment method.
@@ -1307,6 +1749,13 @@
     O.getCart(true).then((c) => { cartData = c; render(); }).catch(() => {});
     O.loadCatalogue().then((c) => { catalogue = c; render(); });
     onLang(render);
+    // Back from Shopify's checkout (bfcache): the Place/guest buttons lose their spinner (F-16).
+    window.addEventListener('pageshow', (e) => {
+      if (!e.persisted) return;
+      const btn = $('[data-place]', bar);
+      if (btn && btn.dataset.label != null) btn.innerHTML = btn.dataset.label;
+      render();
+    });
   }
 
   /* ════════════════════════════════════════════════════════════════════
@@ -1447,7 +1896,7 @@
         </div>` : ''}
       </div>` : ''}
       ${o.actionNeeded ? `<div class="action-needed" style="margin:14px 0 0"><b>${esc(L('Action needed', 'محتاجين منك حاجة'))}</b><span>${esc(o.actionNeeded)}</span></div>` : ''}
-      ${o.photo ? `<div class="test-meta"><a href="${esc(o.photo)}" target="_blank" rel="noopener">${esc(L('Delivery photo', 'صورة التسليم'))}</a></div>` : ''}`;
+      ${o.photo && safeUrl(o.photo) ? `<div class="test-meta"><a href="${esc(safeUrl(o.photo))}" target="_blank" rel="noopener noreferrer">${esc(L('Delivery photo', 'صورة التسليم'))}</a></div>` : ''}`;
   }
 
   /* ── Track shipment (/pages/track?awb=…&order=…) ─────────────────────── */
@@ -1494,19 +1943,23 @@
         body: JSON.stringify({ jsonrpc: '2.0', id: ++ordersRpcId, method: 'tools/call', params: { name: action, arguments: args } }),
       });
     } catch (e) {
-      throw apiError('Something went wrong. Please try again or contact us.', `network: ${e.message} (blocked by the browser? the API only accepts www.okaegypt.com and okaegypt.com)`);
+      throw Object.assign(apiError('Something went wrong. Please try again or contact us.', `network: ${e.message} (blocked by the browser? the API only accepts www.okaegypt.com and okaegypt.com)`), { transport: true });
     }
-    if (!res.ok) throw apiError('Something went wrong. Please try again or contact us.', `HTTP ${res.status}`);
+    if (!res.ok) {
+      const ra = Number(res.headers?.get?.('Retry-After'));
+      throw Object.assign(apiError('Something went wrong. Please try again or contact us.', `HTTP ${res.status}`), { transport: true, status: res.status, retryAfter: Number.isFinite(ra) && ra > 0 ? ra : 0 });
+    }
     const raw = await res.text();
     const line = raw.split('\n').find((l) => l.startsWith('data: '));
     let msg;
-    try { msg = JSON.parse(line ? line.slice(6) : raw); } catch (e) { throw apiError('Something went wrong. Please try again or contact us.', `unreadable reply: ${raw.slice(0, 160)}`); }
+    try { msg = JSON.parse(line ? line.slice(6) : raw); } catch (e) { throw Object.assign(apiError('Something went wrong. Please try again or contact us.', `unreadable reply: ${raw.slice(0, 160)}`), { transport: true }); }
     const text = msg.result?.content?.[0]?.text ?? '';
     if (msg.error || msg.result?.isError) {
       // Input-validation errors start with "MCP error"; never shown raw.
       throw apiError(!text || text.startsWith('MCP error') ? 'Please check the details you entered and try again.' : text, text || msg.error?.message || 'error');
     }
-    return JSON.parse(text);
+    // A reply that isn't the JSON we expect is a service fault, never "Unexpected token…" on screen (F-15).
+    try { return JSON.parse(text); } catch (e) { throw Object.assign(apiError('Something went wrong. Please try again or contact us.', `unreadable result: ${String(text).slice(0, 160)}`), { transport: true }); }
   }
   /** "Too late to change it": shipped, or already being prepared (fulfilled) in Shopify. */
   const SHIPPED_RE = /already been shipped|being prepared for shipping/i;
@@ -1552,14 +2005,14 @@
     const box = $('[data-rate]', det);
     if (!box || !(CFG.orders && CFG.orders.ratings) || !hasOrdersApi()) return;
     const name = det.dataset.orderDetail;
-    const rated = O.store.get('oka.rated', {});
+    const rated = sObj('oka.rated');
     const thanks = (r) => {
       box.innerHTML = `<div class="rate-done"><div class="rate-stars static">${starRow(r.stars)}</div>
         <b>${esc(L('Thanks for rating your order', 'شكرًا على تقييمك'))}</b>
         ${r.comment ? `<p>“${esc(r.comment)}”</p>` : ''}</div>`;
     };
     box.hidden = false;
-    if (rated[name]) return thanks(rated[name]);
+    if (isObj(rated[name]) && Number(rated[name].stars) >= 1) return thanks({ stars: Math.min(5, Number(rated[name].stars)), comment: typeof rated[name].comment === 'string' ? rated[name].comment : '' });
     let stars = 0;
     box.innerHTML = `
       <div class="rate-k">${esc(L('How was your order?', 'طلبك كان عامل إزاي؟'))}</div>
@@ -1590,7 +2043,7 @@
       send.innerHTML = spinner();
       try {
         await ordersApi('customer_rate_order', { orderNumber: name, phone: det.dataset.phone || O.customer?.phone || '', stars, comment });
-        const all = O.store.get('oka.rated', {});
+        const all = sObj('oka.rated');
         all[name] = { stars, comment };
         O.store.set('oka.rated', all);
         O.haptic.success?.();
@@ -1608,8 +2061,19 @@
   function lastOrderStored() {
     const v = O.store.get('oka.lastOrder');
     if (!v) return null;
-    return typeof v === 'string' ? { name: v, phone: '' } : v;
+    if (typeof v === 'string') return { name: v, phone: '' };
+    return isObj(v) && typeof v.name === 'string' ? { name: v.name, phone: typeof v.phone === 'string' ? v.phone : '' } : null;
   }
+  /** How long this browser keeps a guest's last order (SEC-06 / CH-12): 30 days after it was placed. */
+  const GUEST_ORDER_DAYS = 30;
+  /** What the orders API says is still to be paid to the courier, else the total (COM-05). */
+  const dueOf = (v) => {
+    for (const k of ['totalOutstanding', 'outstanding', 'amountDue', 'totalDue']) {
+      const n = Number(v?.[k]);
+      if (v?.[k] != null && v[k] !== '' && Number.isFinite(n)) return n;
+    }
+    return Number(v?.total || 0);
+  };
 
   /**
    * Not signed in: the last order placed from this browser, found by the
@@ -1623,17 +2087,46 @@
     const box = $('[data-guest-last]', root);
     if (!box || O.customer) return;
     const empty = $('[data-guest-empty]', root);
-    const saved = O.store.get('oka.lastCheckout', null) || {};
+    const saved = sObj('oka.lastCheckout');
+    // Kept 30 days after the order was placed (or the checkout started), then forgotten on this device.
+    const maxAge = GUEST_ORDER_DAYS * 86400000;
+    const ageOf = (c) => {
+      const tms = Date.parse(c?.order?.placedAt || '') || Number(c?.at) || 0;
+      return tms ? Date.now() - tms : 0;
+    };
+    const tok = (v) => typeof v === 'string' && v.length > 0;
+    const fresh = (c) => isObj(c) && (tok(c.checkoutToken) || tok(c.cartToken) || isObj(c.order)) && ageOf(c) <= maxAge;
     // The checkout this browser went to last, then the placed order before it (if that checkout was left unfinished).
-    const cands = [saved, saved.last].filter((c) => c && (c.checkoutToken || c.cartToken || c.order));
-    const sessionOf = (c) => ({ session: { ...(c.checkoutToken ? { checkoutToken: c.checkoutToken } : {}), ...(c.cartToken ? { cartToken: String(c.cartToken).split('?')[0] } : {}) } });
+    const cands = [saved, saved.last].filter(fresh);
+    if (!cands.length && Object.keys(saved).length) O.store.del('oka.lastCheckout');
+    /** "Not your order?" — forget it on this device. */
+    const forget = () => {
+      O.store.del('oka.lastCheckout');
+      O.store.del('oka.lastOrder');
+      view = null;
+      box.hidden = true;
+      box.innerHTML = '';
+      if (empty) empty.hidden = false;
+      announce(L('Removed from this device', 'اتشال من الجهاز ده'));
+    };
+    /** A finished order (delivered or cancelled) is shown this once, then not kept on the device. */
+    const dropIfDone = (v) => {
+      const done = v && (v.cancelled || v.status === 'cancelled' || v.delivered === true || v.status === 'delivered');
+      if (!done || !auth || !auth.session) return;
+      const cur = sObj('oka.lastCheckout');
+      const same = (c) => isObj(c) && ((c.checkoutToken && c.checkoutToken === auth.session.checkoutToken) || (c.cartToken && String(c.cartToken).split('?')[0] === auth.session.cartToken));
+      if (same(cur)) { if (isObj(cur.last)) O.store.set('oka.lastCheckout', { ...cur.last }); else O.store.del('oka.lastCheckout'); }
+      else if (same(cur.last)) { const { last, ...rest } = cur; O.store.set('oka.lastCheckout', rest); }
+    };
+    let loadErr = null;
+    const sessionOf = (c) => ({ session: { ...(tok(c.checkoutToken) ? { checkoutToken: c.checkoutToken } : {}), ...(tok(c.cartToken) ? { cartToken: String(c.cartToken).split('?')[0] } : {}) } });
     let auth = null;
     let view = null;
 
     /** What the pixel saved at checkout, shaped like the API's view. */
     const fromSnapshot = (o) => ({
       snapshot: true, orderNumber: '', placedAt: o.placedAt, status: 'placed', cancelled: false, canCancel: false, canEdit: false,
-      items: o.items || [], address: o.address || {}, phone: o.phone || '',
+      items: Array.isArray(o.items) ? o.items.filter(isObj) : [], address: isObj(o.address) ? o.address : {}, phone: typeof o.phone === 'string' ? o.phone : '',
       itemsTotal: o.itemsTotal, discount: o.discount || 0, shipping: o.shipping || 0, total: o.total || 0,
     });
 
@@ -1656,7 +2149,8 @@
           <div class="guest-detail-head"><div><div class="guest-last-k">${esc(L('Your last order', 'آخر طلب ليك'))}</div><b class="nums">${esc(view.orderNumber || (view.placedAt ? new Date(view.placedAt).toLocaleDateString(O.lang() === 'ar' ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'short' }) : ''))}</b></div>
             <span class="order-state ${view.status === 'cancelled' ? 'red' : view.status === 'shipped' ? 'green' : ''}">${esc(L(...st))}</span></div>
           <div class="items" style="padding:10px 0">${(view.items || []).map((it) => {
-            const live = view.canEdit && !view.snapshot && it.variantId;
+            // −/+ only where they work: the order can still be edited AND changed (F-16).
+            const live = view.canEdit && view.canCancel && !view.snapshot && it.variantId;
             return `
             <div class="item-row"${live ? ` data-g-item="${esc(it.variantId)}"` : ''}><div class="item-img">${img(it.image)}</div>
               <div style="flex:1;min-width:0"><div class="item-title">${esc(it.title)}</div>
@@ -1673,15 +2167,20 @@
           </div>
           <div class="guest-totals">
             ${sumRow(t('subtotal'), fmtPrice(view.itemsTotal ?? view.subtotal))}
-            ${view.discount > 0 ? sumRow(L('Discount', 'الخصم'), `−${fmtPrice(view.discount)}`) : ''}
-            ${sumRow(t('shipping'), fmtPrice(view.shipping))}
-            ${sumRow(L('Total (cash on delivery)', 'الإجمالي (كاش عند الاستلام)'), fmtPrice(view.total), 'grand')}
+            ${view.discount > 0 ? sumRow(L('Discount', 'الخصم'), minus(view.discount)) : ''}
+            ${sumRow(t('shipping'), money(view.shipping))}
+            ${dueOf(view) !== Number(view.total || 0)
+              ? `${sumRow(t('total'), money(view.total))}${sumRow(L('To pay the courier', 'هتدفع للمندوب'), money(dueOf(view)), 'grand')}`
+              : sumRow(L('Total (cash on delivery)', 'الإجمالي (كاش عند الاستلام)'), money(view.total), 'grand')}
           </div>
+          ${loadErr ? `<div class="order-actions-hint" data-g-err style="margin:12px 0 0">${esc(L('We couldn’t load this order’s latest status just now.', 'معرفناش نجيب آخر حالة للطلب دلوقتي.'))}
+            <button type="button" class="eo-link" data-g-retry>${esc(L('Try again', 'جرّب تاني'))}</button></div>` : ''}
           ${view.canCancel ? `<div class="order-actions" style="padding:14px 0 0">
               <button class="edit-btn" data-g-edit>${esc(L('Edit order', 'عدّل الطلب'))}</button>
               <button class="cancel-btn" data-g-cancel>${esc(L('Cancel Order', 'الغي الطلب'))}</button></div>
             <div class="order-actions-hint" style="margin:10px 0 0">${esc(L('Change items, address or phone until we start preparing it for shipping.', 'غيّر المنتجات أو العنوان أو الموبايل لحد ما نبدأ نجهّزه للشحن.'))}</div>`
-          : view.status === 'cancelled' ? '' : view.snapshot ? `<div class="order-actions-hint" style="margin:12px 0 0">${esc(L('We couldn’t load this order’s latest status just now, so changes aren’t available. Please try again in a little while.', 'معرفناش نجيب آخر حالة للطلب دلوقتي، فالتعديل مش متاح. جرّب تاني كمان شوية.'))}</div>` : `<div class="shipped-note" style="margin:14px 0 0"><b>${esc(L('This order is on its way', 'الطلب ده في الطريق'))}</b><span>${esc(L('It’s being prepared or shipped, so it can no longer be changed online.', 'بيتجهّز أو اتشحن، فمينفعش يتغيّر أونلاين دلوقتي.'))}</span></div>`}
+          : view.status === 'cancelled' ? '' : view.snapshot ? loadErr ? '' : `<div class="order-actions-hint" style="margin:12px 0 0">${esc(L('We couldn’t load this order’s latest status just now, so changes aren’t available. Please try again in a little while.', 'معرفناش نجيب آخر حالة للطلب دلوقتي، فالتعديل مش متاح. جرّب تاني كمان شوية.'))}</div>` : `<div class="shipped-note" style="margin:14px 0 0"><b>${esc(L('This order is on its way', 'الطلب ده في الطريق'))}</b><span>${esc(L('It’s being prepared or shipped, so it can no longer be changed online.', 'بيتجهّز أو اتشحن، فمينفعش يتغيّر أونلاين دلوقتي.'))}</span></div>`}
+          <div class="order-actions-hint" style="margin:12px 0 0"><button type="button" class="eo-link" data-g-forget>${esc(L('Not your order? Forget it on this device', 'مش طلبك؟ امسحه من الجهاز ده'))}</button></div>
         </div>`;
     }
     async function load() {
@@ -1689,29 +2188,58 @@
       if (empty) empty.hidden = true;
       box.hidden = false;
       // Show what this browser kept straight away; the live order replaces it when the API answers.
-      const snap = cands[0].order;
-      if (snap) { view = fromSnapshot(snap); render(); } else box.innerHTML = `<div class="guest-loading">${spinner(true)}</div>`;
+      const snap = isObj(cands[0].order) ? cands[0].order : null;
+      loadErr = null;
+      if (snap) { view = fromSnapshot(snap); render(); } else if (!view) box.innerHTML = `<div class="guest-loading">${spinner(true)}</div>`;
       if (hasOrdersApi()) {
         for (const c of cands) {
-          if (!c.checkoutToken && !c.cartToken) continue;
+          if (!tok(c.checkoutToken) && !tok(c.cartToken)) continue;
           try {
             const v = await ordersApi('customer_get_order', sessionOf(c));
+            if (!isObj(v)) throw Object.assign(new Error('unreadable'), { transport: true });
             auth = sessionOf(c); view = v;
             break;
           } catch (err) {
             // Not placed (checkout left unfinished) or not found: try the earlier one.
+            // The service failing (network, 5xx, 429, garbled reply) is not "no order" (CH-06): stop and offer a retry.
+            if (err && err.transport) { loadErr = err; break; }
           }
         }
-        if (!auth && !snap && cands[1]?.order) view = fromSnapshot(cands[1].order);
+        if (!auth && !snap) {
+          const older = cands.find((c) => isObj(c.order));
+          if (older) view = fromSnapshot(older.order);
+        }
       }
-      if (view) return render();
+      if (view) { render(); dropIfDone(view); return; }
+      if (loadErr) {
+        box.hidden = false;
+        box.innerHTML = `<div class="guest-order"><div class="guest-last-k">${esc(L('Your last order', 'آخر طلب ليك'))}</div>
+          <div class="awaiting" data-g-err style="margin:10px 0 0">${esc(L('We couldn’t load your order just now. Please check your connection and try again.', 'معرفناش نجيب طلبك دلوقتي. اتأكد من النت وجرّب تاني.'))}</div>
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"><button type="button" class="edit-btn" data-g-retry>${esc(L('Try again', 'جرّب تاني'))}</button>
+          <button type="button" class="eo-link" data-g-forget>${esc(L('Not your order? Forget it on this device', 'مش طلبك؟ امسحه من الجهاز ده'))}</button></div></div>`;
+        return;
+      }
       // Nothing placed (checkout left unfinished) or nothing found: nothing to show.
       box.hidden = true;
       box.innerHTML = '';
       if (empty) empty.hidden = false;
     }
 
+    let retryAt = 0;
     box.addEventListener('click', async (e) => {
+      if (e.target.closest('[data-g-forget]')) { forget(); return; }
+      const retry = e.target.closest('[data-g-retry]');
+      if (retry) {
+        if (retry.disabled) return;
+        // Honour the service's Retry-After (capped at 2 minutes).
+        const wait = Math.min(120, Number(loadErr?.retryAfter) || 0) * 1000;
+        if (Date.now() < retryAt) return;
+        retryAt = Date.now() + wait;
+        retry.disabled = true;
+        retry.innerHTML = spinner(true);
+        setTimeout(() => load(), Math.max(0, wait));
+        return;
+      }
       const itemStep = e.target.closest('[data-g-item] [data-step]');
       const edit = e.target.closest('[data-g-edit]') || (itemStep && $('[data-g-edit]', box));
       const cancel = e.target.closest('[data-g-cancel]');
@@ -1739,6 +2267,7 @@
               await ordersApi('customer_cancel_order', { ...auth, reason: 'Cancelled by the customer on the website' });
               view = { ...view, status: 'cancelled', cancelled: true, canCancel: false, canEdit: false };
               render();
+              dropIfDone(view);
               O.haptic.success();
               O.okaAlert(L('Order cancelled', 'الطلب اتلغى'), L(`Your order ${view.orderNumber} has been cancelled.`, `طلبك ${view.orderNumber} اتلغى.`));
             } catch (err) { ordersApiFail(L('Could not cancel', 'معرفناش نلغيه'), err); } finally { cancel.classList.remove('busy'); }
@@ -1750,12 +2279,14 @@
     load();
   }
 
+  /** The order's lines as Liquid wrote them; a broken value means no −/+ rather than a crashed page. */
+  const parseLines = (det) => { try { const v = JSON.parse(det.dataset.lines || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
   function orders(root) {
     guestLastOrder(root);
     const list = $('[data-orders-list]', root);
     const details = $$('[data-order-detail]', root);
     const standalone = root.hasAttribute('data-standalone');
-    const cancelledHere = O.store.get('oka.cancelled', {});
+    const cancelledHere = sObj('oka.cancelled');
 
     const fillEta = (det) => {
       const eta = O.etaFor({ provinceCode: det.dataset.province });
@@ -1767,7 +2298,7 @@
     const dropSteppers = (det) => $$('[data-oi]', det).forEach((row) => { row.querySelector('.stepper')?.remove(); row.removeAttribute('data-oi'); });
     if (hasOrdersApi()) details.forEach((det) => {
       if (det.dataset.fulfilled === 'true' || det.dataset.cancelled === 'true') return;
-      const lines = JSON.parse(det.dataset.lines || '[]');
+      const lines = parseLines(det);
       $$('.items .item-row', det).forEach((row, i) => {
         if (!lines[i] || !lines[i].quantity || !lines[i].variantId) return;
         row.setAttribute('data-oi', String(i));
@@ -1808,6 +2339,8 @@
     // An order cancelled from here shows as cancelled at once, even while
     // Shopify's background cancel job hasn't reached it yet.
     function markCancelled(name) {
+      // Remember it on this device, so a reload before Shopify's page catches up still shows it cancelled.
+      if (!cancelledHere[name]) { cancelledHere[name] = Date.now(); O.store.set('oka.cancelled', cancelledHere); }
       const det = details.find((x) => x.dataset.orderDetail === name);
       if (det) {
         det.dataset.cancelled = 'true';
@@ -1944,7 +2477,7 @@
       const name = det.dataset.orderDetail;
       const shipped = det.dataset.fulfilled === 'true';
       const cancelled = det.dataset.cancelled === 'true';
-      const lines = JSON.parse(det.dataset.lines || '[]');
+      const lines = parseLines(det);
 
       const itemStep = e.target.closest('[data-oi] [data-step]');
       if (hasOrdersApi() && !shipped && !cancelled && (itemStep || e.target.closest('[data-edit-order]') || e.target.closest('[data-cancel-order]'))) {
@@ -2005,7 +2538,14 @@
         return changesUnavailable();
       }
 
-      if (e.target.closest('[data-reorder]')) {
+      const reBtn = e.target.closest('[data-reorder]');
+      if (reBtn) {
+        // One "Order again" at a time (CH-10): repeat taps while it's adding do nothing.
+        if (reBtn.dataset.busy) return;
+        reBtn.dataset.busy = '1';
+        reBtn.classList.add('busy');
+        reBtn.setAttribute('aria-busy', 'true');
+        const done = () => { delete reBtn.dataset.busy; reBtn.classList.remove('busy'); reBtn.removeAttribute('aria-busy'); };
         // Matched to today's catalogue by variant — coal, foil and bowls are bought again and again.
         const { products } = await O.loadCatalogue();
         const items = [];
@@ -2015,14 +2555,17 @@
           if (p && p.stock !== 0 && p.available !== false) items.push({ variantId: l.variantId, quantity: l.quantity });
           else missing += 1;
         });
-        if (!items.length) return O.okaAlert(L('Not available', 'مش متاح'), L('These items aren’t available right now.', 'المنتجات دي مش متوفرة دلوقتي.'));
+        if (!items.length) { done(); return O.okaAlert(L('Not available', 'مش متاح'), L('These items aren’t available right now.', 'المنتجات دي مش متوفرة دلوقتي.')); }
         try {
           await O.addManyToCart(items);
           O.haptic.success();
           if (missing) await O.okaAlert(L('Added what’s available', 'ضفنا الموجود'), L(`${missing} item(s) aren’t available right now.`, `${num(missing)} منتج مش متوفر حالياً.`));
           go(CFG.routes.cart);
+          // Leaving for the cart: the guard stays on, but comes off if the page is shown again from the bfcache.
+          window.addEventListener('pageshow', done, { once: true });
         } catch (err) {
-          O.okaAlert(L('Could not add', 'معرفناش نضيفه'), errText(err));
+          done();
+          O.okaAlert(L('Could not add', 'معرفناش نضيفه'), userError(err));
         }
       }
     });
@@ -2043,7 +2586,6 @@
   /** preset: { variantId, delta } — a −/+ tapped on the order itself, applied as the sheet opens. */
   async function openEditOrder(auth, view, onSaved, preset) {
     const { products } = await O.loadCatalogue();
-    const EG_MOBILE = /^(?:\+?20|0)?1[0125]\d{8}$/;
     const orig = {
       items: (view.items || []).map((it) => ({ variantId: String(it.variantId), qty: it.quantity })),
       address: { ...view.address },
@@ -2069,7 +2611,8 @@
     scrim.className = 'scrim';
     const sheet = document.createElement('div');
     sheet.className = 'sheet edit-order';
-    const close = () => { clearTimeout(timer); scrim.remove(); sheet.remove(); };
+    let unmodal = null;
+    const close = () => { clearTimeout(timer); scrim.remove(); sheet.remove(); unmodal?.(); unmodal = null; };
     scrim.addEventListener('click', close);
 
     // A product added in this edit and taken back to 0 just goes; the order's own items stay, marked removed.
@@ -2083,13 +2626,13 @@
     const itemsChanged = () => key(wantedItems()) !== key(orig.items.map((i) => ({ variantId: i.variantId, quantity: i.qty })));
     const addrFields = ['name', 'provinceCode', 'city', 'address1', 'address2'];
     const addressChanged = () => addrFields.some((k) => String(addr[k] || '').trim() !== String(orig.address[k] || '').trim());
-    const phoneChanged = () => String(addr.phone).replace(/\D/g, '').slice(-10) !== String(orig.phone).replace(/\D/g, '').slice(-10);
+    const phoneChanged = () => normPhone(addr.phone).replace(/\D/g, '').slice(-10) !== normPhone(orig.phone).replace(/\D/g, '').slice(-10);
     const changed = () => itemsChanged() || addressChanged() || phoneChanged();
     const repriced = () => itemsChanged() || addr.provinceCode !== orig.address.provinceCode;
     function problems() {
       if (!wantedItems().length) return L('To remove everything, cancel the order instead.', 'لو عايز تشيل كل حاجة، الغي الطلب.');
       if (addr.name.trim().length < 2) return L('Enter the receiver’s name.', 'اكتب اسم المستلم.');
-      if (!EG_MOBILE.test(String(addr.phone).replace(/[\s-]/g, ''))) return L('Enter a full mobile number, e.g. 01012345678', 'اكتب رقم الموبايل كامل، مثلاً 01012345678');
+      if (!isEgMobile(addr.phone)) return L('Enter a full mobile number, e.g. 01012345678', 'اكتب رقم الموبايل كامل، مثلاً 01012345678');
       if (!addr.provinceCode) return L('Choose the governorate.', 'اختار المحافظة.');
       if (!addr.city.trim()) return L('Enter the area.', 'اكتب المنطقة.');
       if (addr.address1.trim().length < 5) return L('Enter the street and building.', 'اكتب الشارع ورقم العمارة.');
@@ -2100,18 +2643,19 @@
       const t0 = Number(view.total || 0);
       if (!repriced()) {
         return `${sumRow(t('subtotal'), fmtPrice(view.itemsTotal ?? view.subtotal))}
-          ${view.discount > 0 ? sumRow(L('Discount', 'الخصم'), `−${fmtPrice(view.discount)}`) : ''}
-          ${sumRow(t('shipping'), fmtPrice(view.shipping))}
-          ${sumRow(L('Total (cash on delivery)', 'الإجمالي (كاش عند الاستلام)'), fmtPrice(t0), 'total')}`;
+          ${view.discount > 0 ? sumRow(L('Discount', 'الخصم'), minus(view.discount)) : ''}
+          ${sumRow(t('shipping'), money(view.shipping))}
+          ${sumRow(L('Total (cash on delivery)', 'الإجمالي (كاش عند الاستلام)'), money(t0), 'total')}`;
       }
       if (quoting && !quote) return `<div class="eo-quoting">${spinner(true)}<span>${esc(L('Working out your new total…', 'بنحسب الإجمالي الجديد…'))}</span></div>`;
       if (quoteErr) return `<div class="code-error">${esc(quoteErr)}</div>`;
       if (!quote) return '';
-      const diff = Math.round((quote.total - t0) * 100) / 100;
+      // A difference that rounds to 0 isn't shown as "EGP 0 more than before" (COM-13).
+      const diff = Math.round(quote.total - t0);
       return `${sumRow(t('subtotal'), fmtPrice(quote.itemsTotal))}
-        ${quote.discount > 0 ? sumRow(L('Discount', 'الخصم'), `−${fmtPrice(quote.discount)}`) : ''}
-        ${sumRow(t('shipping'), quote.shipping === 0 ? t('shipFree') : fmtPrice(quote.shipping))}
-        ${sumRow(L('New total (cash on delivery)', 'الإجمالي الجديد (كاش عند الاستلام)'), fmtPrice(quote.total), 'total')}
+        ${quote.discount > 0 ? sumRow(L('Discount', 'الخصم'), minus(quote.discount)) : ''}
+        ${sumRow(t('shipping'), quote.shipping === 0 ? t('shipFree') : money(quote.shipping))}
+        ${sumRow(L('New total (cash on delivery)', 'الإجمالي الجديد (كاش عند الاستلام)'), money(quote.total), 'total')}
         ${diff !== 0 ? `<div class="eo-diff ${diff > 0 ? 'up' : 'down'}">${esc(diff > 0 ? L(`${fmtPrice(diff)} more than before`, `${fmtPrice(diff)} زيادة عن قبل`) : L(`${fmtPrice(-diff)} less than before`, `${fmtPrice(-diff)} أقل من قبل`))}</div>` : ''}
         ${(quote.lostCodes || []).length ? `<div class="eo-note">${esc(L(`Code ${quote.lostCodes.join(', ')} no longer applies to this order.`, `الكود ${quote.lostCodes.join('، ')} مبقاش ينطبق على الطلب ده.`))}</div>` : ''}
         ${quoting ? `<div class="eo-quoting small">${spinner(true)}</div>` : ''}`;
@@ -2130,14 +2674,18 @@
         </div>`).join('');
     }
     function pickerHtml() {
+      return `<div class="eo-picker">
+          <div class="eo-picker-head"><input data-search type="search" placeholder="${esc(L('Search products', 'دوّر على منتج'))}" value="${esc(query)}">
+            <button class="eo-link" data-picker-done>${esc(L('Done', 'تمام'))}</button></div>
+          <div data-picker-list>${pickerListHtml()}</div>
+        </div>`;
+    }
+    function pickerListHtml() {
       const f = O.fold ? O.fold(query) : query.toLowerCase();
       const list = products.filter((p) => p.available !== false && p.stock !== 0)
         .filter((p) => !f || (O.fold ? O.fold(`${p.titleEn} ${p.titleAr}`) : `${p.titleEn} ${p.titleAr}`.toLowerCase()).includes(f))
         .slice(0, 60);
-      return `<div class="eo-picker">
-          <div class="eo-picker-head"><input data-search type="search" placeholder="${esc(L('Search products', 'دوّر على منتج'))}" value="${esc(query)}">
-            <button class="eo-link" data-picker-done>${esc(L('Done', 'تمام'))}</button></div>
-          ${list.map((p) => {
+      return `${list.map((p) => {
             const inOrder = rows.filter((r) => r.variantId === String(p.variantId)).reduce((a, r) => a + r.qty, 0);
             return `<div class="eo-pick-row">
               <div class="cat-item-img">${img(p.img)}</div>
@@ -2145,18 +2693,34 @@
               ${inOrder ? `<div data-pick-variant="${esc(p.variantId)}">${stepper(inOrder, { size: 28, fs: 14, gap: 8 })}</div>`
                 : `<button class="eo-add" data-add-variant="${esc(p.variantId)}" aria-label="${esc(L('Add', 'ضيف'))}">+</button>`}
             </div>`;
-          }).join('') || `<div class="awaiting" style="margin:10px 0">${esc(L('No products match.', 'مفيش منتجات بالاسم ده.'))}</div>`}
-        </div>`;
+          }).join('') || `<div class="awaiting" style="margin:10px 0">${esc(L('No products match.', 'مفيش منتجات بالاسم ده.'))}</div>`}`;
+    }
+    /** The footer only (total, problems, Save): what typing in a field can change — never the inputs themselves (F-06). */
+    function footHtml() {
+      const why = problems();
+      const busy = saving || (repriced() && (quoting || !quote || quoteErr));
+      return `${summary()}
+          ${why && changed() ? `<div class="code-error">${esc(why)}</div>` : ''}
+          <button class="accept${!changed() || why || busy ? ' dim' : ''}" data-save>${saving ? spinner() : esc(changed() ? L('Save changes', 'احفظ التعديلات') : L('No changes yet', 'مفيش تعديلات لسه'))}</button>`;
+    }
+    function renderFoot() {
+      const foot = $('.eo-foot', sheet);
+      if (!foot) return render();
+      foot.innerHTML = footHtml();
+    }
+    /** The picker's list only, so the search box keeps its caret and IME composition. */
+    function renderPickerList() {
+      const list = $('[data-picker-list]', sheet);
+      if (!list) return render();
+      list.innerHTML = pickerListHtml();
     }
     function render() {
       const scrollTop = $('.sheet-body', sheet)?.scrollTop || 0;
       const focusName = document.activeElement?.closest?.('.edit-order') ? document.activeElement.getAttribute('data-f') || (document.activeElement.matches('[data-search]') ? 'search' : null) : null;
-      const why = problems();
-      const busy = saving || (repriced() && (quoting || !quote || quoteErr));
       sheet.innerHTML = `
         <div class="grabber"></div>
         <div class="sheet-head"><span class="sheet-title">${esc(L(`Edit order ${view.orderNumber}`, `عدّل الطلب ${view.orderNumber}`))}</span>
-          <button class="sheet-close" data-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <button class="sheet-close" data-close aria-label="${esc(L('Close', 'اقفل'))}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
         <div class="sheet-body">
           ${picker ? pickerHtml() : `
           <div class="eo-sec">${esc(L('Items', 'المنتجات'))}</div>
@@ -2177,9 +2741,7 @@
           <div style="height:12px"></div>`}
         </div>
         ${picker ? '' : `<div class="sheet-foot eo-foot">
-          ${summary()}
-          ${why && changed() ? `<div class="code-error">${esc(why)}</div>` : ''}
-          <button class="accept${!changed() || why || busy ? ' dim' : ''}" data-save>${saving ? spinner() : esc(changed() ? L('Save changes', 'احفظ التعديلات') : L('No changes yet', 'مفيش تعديلات لسه'))}</button>
+          ${footHtml()}
         </div>`}`;
       $('.sheet-body', sheet).scrollTop = scrollTop;
       if (focusName) {
@@ -2190,10 +2752,10 @@
     // Reprice shortly after the last change; an older answer never overwrites a newer one.
     function requote() {
       clearTimeout(timer);
-      if (!repriced()) { quote = null; quoteErr = ''; quoting = false; return render(); }
-      if (problems() && !wantedItems().length) { quote = null; return render(); }
+      if (!repriced()) { quote = null; quoteErr = ''; quoting = false; return renderFoot(); }
+      if (problems() && !wantedItems().length) { quote = null; return renderFoot(); }
       quoting = true;
-      render();
+      renderFoot();
       timer = setTimeout(async () => {
         const mine = ++seq;
         const args = { ...auth };
@@ -2210,7 +2772,7 @@
           quote = null; quoteErr = ordersApiMessage(err);
         }
         quoting = false;
-        render();
+        renderFoot();
       }, 450);
     }
 
@@ -2220,10 +2782,10 @@
         addr[f] = e.target.value;
         // Only the governorate changes the price; other fields just re-check the form.
         if (f === 'provinceCode') requote();
-        else { const foot = $('.eo-foot', sheet); if (foot) render(); }
+        else renderFoot();
         return;
       }
-      if (e.target.matches('[data-search]')) { query = e.target.value; render(); }
+      if (e.target.matches('[data-search]')) { query = e.target.value; renderPickerList(); }
     });
     sheet.addEventListener('change', (e) => {
       const sel = e.target.closest('[data-option]');
@@ -2232,12 +2794,13 @@
       const o = r.options.find((x) => String(x.variantId) === sel.value);
       r.variantId = sel.value;
       if (o) { r.variant = o.title; r.price = Number(o.price); }
+      render();
       requote();
     });
     sheet.addEventListener('click', async (e) => {
       if (e.target.closest('[data-close]')) return close();
       if (e.target.closest('[data-open-picker]')) { picker = true; query = ''; render(); $('[data-search]', sheet)?.focus(); return; }
-      if (e.target.closest('[data-picker-done]')) { picker = false; return requote(); }
+      if (e.target.closest('[data-picker-done]')) { picker = false; render(); return requote(); }
       const add = e.target.closest('[data-add-variant]');
       if (add) {
         const p = products.find((x) => String(x.variantId) === add.dataset.addVariant);
@@ -2262,6 +2825,7 @@
         const r = rows[Number(step.closest('[data-i]').dataset.i)];
         r.qty = Math.max(0, Math.min(20, r.qty + Number(step.dataset.step)));
         prune();
+        render();
         return requote();
       }
       if (!e.target.closest('[data-save]') || saving || !changed()) return;
@@ -2269,11 +2833,11 @@
       if (why) return;
       if (repriced() && (!quote || quoting || quoteErr)) return;
       saving = true;
-      render();
+      renderFoot();
       const args = { ...auth };
       if (itemsChanged()) args.items = wantedItems();
       if (addressChanged()) args.address = { name: addr.name.trim(), provinceCode: addr.provinceCode, city: addr.city.trim(), address1: addr.address1.trim(), address2: addr.address2.trim() };
-      if (phoneChanged()) args.newPhone = addr.phone.trim();
+      if (phoneChanged()) args.newPhone = normPhone(addr.phone);
       if (quote && repriced()) args.expectedTotal = quote.total;
       try {
         const updated = await ordersApi('customer_update_order', args);
@@ -2285,14 +2849,15 @@
         saving = false;
         // The price moved: show the new one and let them save again.
         if (/total is now/i.test(errText(err))) { quote = null; requote(); }
-        else render();
+        else renderFoot();
         ordersApiFail(L('Could not save the changes', 'معرفناش نحفظ التعديلات'), err);
       }
     });
     const pre = preset && view.canEdit ? rows.find((r) => r.variantId === String(preset.variantId)) : null;
     if (pre) pre.qty = Math.max(0, Math.min(20, pre.qty + Number(preset.delta)));
     app.append(scrim, sheet);
-    if (pre) requote(); else render();
+    if (pre) { render(); requote(); } else render();
+    unmodal = modalize(sheet, close);
   }
 
   /** Orders change only through the orders API; without its key in Theme settings there's no other route. */
@@ -2416,7 +2981,7 @@
         } catch (err) {
           saving = false;
           render();
-          O.okaAlert(L('Could not save the edit', 'معرفناش نحفظ التعديل'), errText(err));
+          O.okaAlert(L('Could not save the edit', 'معرفناش نحفظ التعديل'), userError(err));
         }
       }
     });
@@ -2445,14 +3010,15 @@
               await O.api('/customer/delete-request', { method: 'POST', body: {} });
               go(CFG.routes.logout);
             } catch (err) {
-              O.okaAlert(L('Could not send the request', 'معرفناش نبعت الطلب'), errText(err));
+              O.okaAlert(L('Could not send the request', 'معرفناش نبعت الطلب'), userError(err));
             }
           },
         },
       ],
     ));
     const out = $('[data-sign-out]', root);
-    if (out) out.addEventListener('click', () => { O.store.del('oka.addr'); O.store.del('oka.wishlist'); O.store.del('oka.cancelled'); });
+    // Signing out also forgets the last order kept on this device (SEC-06).
+    if (out) out.addEventListener('click', () => { O.store.del('oka.addr'); O.store.del('oka.wishlist'); O.store.del('oka.cancelled'); O.store.del('oka.lastCheckout'); O.store.del('oka.lastOrder'); });
   }
 
   /* ════════════════════════════════════════════════════════════════════
@@ -2460,7 +3026,10 @@
    * ════════════════════════════════════════════════════════════════════ */
   function addressesScreen(root) {
     // Back from saving a new one to wherever the shopper was going (checkout, usually).
-    const after = O.store.get('oka.afterAddress');
+    // Only a same-origin path is followed (CH-05); anything else is dropped.
+    const afterRaw = O.store.get('oka.afterAddress');
+    const after = safePath(afterRaw);
+    if (afterRaw != null && !after) O.store.del('oka.afterAddress');
     if (after && document.referrer && /\/(account\/addresses|pages\/addresses)/.test(new URL(document.referrer).pathname + new URL(document.referrer).search)) {
       O.store.del('oka.afterAddress');
       location.replace(after);
@@ -2519,7 +3088,7 @@
             });
           }
         } catch (err) {
-          O.okaAlert(L('Could not update the default address', 'معرفناش نغيّر العنوان الأساسي'), errText(err));
+          O.okaAlert(L('Could not update the default address', 'معرفناش نغيّر العنوان الأساسي'), userError(err));
         }
         return;
       }
@@ -2541,7 +3110,7 @@
                   postForm(`/account/addresses/${id}`, { _method: 'delete' });
                 }
               } catch (err) {
-                O.okaAlert(L('Could not delete', 'معرفناش نمسحه'), errText(err));
+                O.okaAlert(L('Could not delete', 'معرفناش نمسحه'), userError(err));
               }
             },
           },
@@ -2565,7 +3134,7 @@
     const form = $('[data-addr-form]', root);
     if (!form) return;
     O.applyAttrs(root);
-    if (!O.store.get('oka.afterAddress') && document.referrer) {
+    if (!safePath(O.store.get('oka.afterAddress')) && document.referrer) {
       const ref = new URL(document.referrer);
       if (ref.origin === location.origin && !/addresses/.test(ref.pathname + ref.search)) O.store.set('oka.afterAddress', ref.pathname + ref.search);
     }
@@ -2632,7 +3201,7 @@
           if (!field('phone').value && O.customer?.phone) field('phone').value = O.customer.phone;
           $('[data-found]', root).hidden = false;
         } catch (err) {
-          O.okaAlert(L('Could not find your location', 'معرفناش نحدد مكانك'), errText(err));
+          O.okaAlert(L('Could not find your location', 'معرفناش نحدد مكانك'), userError(err));
         } finally { done(); }
       }, () => {
         done();
@@ -2649,7 +3218,9 @@
       if (!v('street')) missing.push(L('street', 'الشارع'));
       if (!v('city')) missing.push(L('area', 'المنطقة'));
       if (!provinceCode) missing.push(L('governorate', 'المحافظة'));
-      if (!/^(\+?20|0)?1[0125]\d{8}$/.test(v('phone').replace(/[\s-]/g, ''))) missing.push(L('a valid mobile number', 'رقم موبايل صحيح'));
+      // Arabic-Indic digits and +20 / 0020 / 20 prefixes are accepted (CH-09); the number is saved in Latin digits.
+      if (isEgMobile(v('phone'))) field('phone').value = normPhone(v('phone'));
+      else missing.push(L('a valid mobile number', 'رقم موبايل صحيح'));
       if (missing.length) {
         O.okaAlert(L('Missing details', 'ناقص بيانات'), L('Please add: ', 'محتاجين: ') + missing.join(L(', ', '، ')));
         return;
@@ -2660,7 +3231,7 @@
       const btn = $('[data-save]', form);
       const btnHtml = btn.innerHTML;
       btn.innerHTML = spinner();
-      const next = O.store.get('oka.afterAddress') || CFG.routes.addresses;
+      const next = safePath(O.store.get('oka.afterAddress')) || CFG.routes.addresses;
 
       if (O.hasService()) {
         try {
@@ -2677,7 +3248,7 @@
         } catch (err) {
           saving = false;
           btn.innerHTML = btnHtml;
-          O.okaAlert(L('Could not save the address', 'معرفناش نحفظ العنوان'), errText(err));
+          O.okaAlert(L('Could not save the address', 'معرفناش نحفظ العنوان'), userError(err));
         }
         return;
       }
@@ -2700,9 +3271,20 @@
   const DEFAULT_REWARDS = [
     { id: 'off20', points: 200, en: '20 EGP off orders over 300', ar: 'خصم ٢٠ ج.م على طلب فوق ٣٠٠' },
     { id: 'off50', points: 500, en: '50 EGP off orders over 600', ar: 'خصم ٥٠ ج.م على طلب فوق ٦٠٠' },
-    { id: 'ship', points: 800, en: 'Free delivery (80 EGP off) over 800', ar: 'شحن ببلاش (خصم ٨٠ ج.م) على طلب فوق ٨٠٠' },
+    { id: 'ship', points: 800, egp: 80, minOrder: 800, en: '80 EGP off orders over 800', ar: 'خصم ٨٠ ج.م على طلب فوق ٨٠٠' },
     { id: 'off150', points: 1500, en: '150 EGP off orders over 1,500', ar: 'خصم ١٥٠ ج.م على طلب فوق ١٥٠٠' },
   ];
+  /** Stored vouchers that have the shape the screen needs. */
+  const validVouchers = () => sArr('oka.vouchers').filter((v) => isObj(v) && typeof v.code === 'string' && isObj(v.reward));
+  /** COM-10: the 80-off reward is a discount on the order, not free delivery (the fee over 300 is at most 56). */
+  const rewardText = (r) => {
+    if (r && r.id === 'ship' && /free delivery/i.test(String(r.en || ''))) {
+      const egp = Number(r.egp) || 80;
+      const min = Number(r.minOrder) || 800;
+      return L(`${egp} EGP off orders over ${min}`, `خصم ${O.arDigits(egp)} ج.م على طلب فوق ${O.arDigits(min)}`);
+    }
+    return L(r?.en, r?.ar);
+  };
   function loyalty(root) {
     if (!O.customer) return;
     let balance = root.dataset.points === '' ? null : Number(root.dataset.points);
@@ -2725,20 +3307,20 @@
         ? L(`${fmtPts(next.points - (balance ?? 0))} points to your next reward · worth EGP ${worth}`, `${fmtPts(next.points - (balance ?? 0))} نقطة للمكافأة الجاية · قيمتها ${fmtPts(worth)} ج.م`)
         : L('Every reward is unlocked', 'تقدر تبدّل أي هدية');
 
-      const vouchers = (O.store.get('oka.vouchers', []) || []).filter((v) => new Date(v.endsAt) > new Date());
+      const vouchers = validVouchers().filter((v) => new Date(v.endsAt) > new Date());
       $('[data-vouchers]', root).innerHTML = vouchers.length ? `
         <div class="section-title">${esc(L('Your codes', 'أكوادك'))}</div>
         <div class="rewards">${vouchers.map((v) => `
           <button class="reward-row" data-voucher="${esc(v.code)}"><span style="flex:1;min-width:0">
             <span class="reward-title" style="display:block">${esc(v.code)}</span>
-            <span class="reward-cost" style="display:block">${esc(L(v.reward.en, v.reward.ar))}</span>
+            <span class="reward-cost" style="display:block">${esc(rewardText(v.reward))}</span>
           </span></button>`).join('')}</div>` : '';
 
       $('[data-rewards]', root).innerHTML = rewards.map((r) => {
         const ok = balance != null && balance >= r.points;
         return `<div class="reward-row">
           <span style="flex:1;min-width:0">
-            <span class="reward-title" style="display:block">${esc(L(r.en, r.ar))}</span>
+            <span class="reward-title" style="display:block">${esc(rewardText(r))}</span>
             <span class="reward-cost" style="display:block">${esc(L(`${fmtPts(r.points)} points`, `${fmtPts(r.points)} نقطة`))}</span>
           </span>
           <button class="reward-btn${ok ? ' on' : ''}" data-redeem="${esc(r.id)}">${busyId === r.id ? spinner().replace('spinner', 'spinner sm') : esc(ok ? L('Redeem', 'بدّل') : L('Locked', 'مقفول'))}</button>
@@ -2755,7 +3337,7 @@
     }
 
     function showVoucher(v) {
-      O.okaAlert(L('Your voucher code', 'كود الخصم بتاعك'), `${v.code}\n\n${L(v.reward.en, v.reward.ar)}`, [
+      O.okaAlert(L('Your voucher code', 'كود الخصم بتاعك'), `${v.code}\n\n${rewardText(v.reward)}`, [
         { text: L('Copy', 'انسخ'), onPress: () => navigator.clipboard?.writeText(v.code).catch(() => {}) },
         { text: L('Use in cart', 'استخدمه في السلة'), onPress: () => { O.store.set('oka.pendingCode', v.code); go(CFG.routes.cart); } },
       ]);
@@ -2764,7 +3346,7 @@
     root.addEventListener('click', (e) => {
       const vb = e.target.closest('[data-voucher]');
       if (vb) {
-        const v = (O.store.get('oka.vouchers', []) || []).find((x) => x.code === vb.dataset.voucher);
+        const v = validVouchers().find((x) => x.code === vb.dataset.voucher);
         if (v) showVoucher(v);
         return;
       }
@@ -2783,7 +3365,7 @@
         return;
       }
       O.okaAlert(L('Redeem points', 'بدّل نقاطك'),
-        L(`${fmtPts(r.points)} points for a one-time code: ${r.en}. Valid for 90 days.`, `هنخصم ${fmtPts(r.points)} نقطة ونديك كود: ${r.ar}. صالح ${fmtPts(90)} يوم ولمرة واحدة.`),
+        L(`${fmtPts(r.points)} points for a one-time code: ${rewardText(r)}. Valid for 90 days.`, `هنخصم ${fmtPts(r.points)} نقطة ونديك كود: ${rewardText(r)}. صالح ${fmtPts(90)} يوم ولمرة واحدة.`),
         [
           { text: L('Back', 'ارجع'), style: 'cancel' },
           {
@@ -2795,10 +3377,10 @@
                 const res = await O.api('/loyalty/redeem', { method: 'POST', body: { rewardId: r.id } });
                 O.haptic.success();
                 balance = res.balance;
-                O.store.set('oka.vouchers', [res.voucher, ...(O.store.get('oka.vouchers', []) || [])].slice(0, 10));
+                O.store.set('oka.vouchers', [res.voucher, ...validVouchers()].slice(0, 10));
                 showVoucher(res.voucher);
               } catch (err) {
-                O.okaAlert(L('Could not redeem', 'معرفناش نبدّل'), errText(err));
+                O.okaAlert(L('Could not redeem', 'معرفناش نبدّل'), userError(err));
               } finally { busyId = null; render(); }
             },
           },
@@ -2812,7 +3394,7 @@
         if (Array.isArray(r.rewards) && r.rewards.length) rewards = r.rewards;
         error = null;
         render();
-      }).catch((err) => { error = errText(err); render(); });
+      }).catch((err) => { error = userError(err); render(); });
     } else if (balance == null) {
       balance = 0;
       render();
@@ -2885,7 +3467,7 @@
         const r = await O.api(`/subscriptions/${encodeURIComponent(sub.id)}/${action}`, { method: 'POST', body: {} });
         subs = subs.map((s) => (s.id === sub.id ? r.subscription : s));
       } catch (err) {
-        O.okaAlert(L('Could not do that', 'معرفناش نعملها'), errText(err));
+        O.okaAlert(L('Could not do that', 'معرفناش نعملها'), userError(err));
       } finally { busyId = null; render(); }
     }
 
@@ -2918,7 +3500,8 @@
     const host = $('[data-subscribe-root]', root);
     if (!host) return;
     if (!O.hasService()) { host.innerHTML = serviceMissing(); return; }
-    const editing = O.store.sget('oka.editingSub');
+    const editingRaw = O.store.sget('oka.editingSub');
+    const editing = isObj(editingRaw) && editingRaw.id != null ? editingRaw : null;
     if (editing) $('.hdr-title', root).innerHTML = `<span class="l-en">Edit Subscription</span><span class="l-ar">عدّل الاشتراك</span>`;
     const pct = CFG.subscriptionDiscount || 5;
     let frequencies = [
@@ -2932,6 +3515,9 @@
     let picked = null;
     let subCart = {};
     let submitting = false;
+    // The order service's own minimum (it skips a cycle below it); its documented default until /storefront-config answers.
+    let serviceMin = null;
+    const subMinOrder = () => Math.max(Number(CFG.minOrder) || 0, serviceMin ?? 150);
 
     function render() {
       if (!catalogue) { host.innerHTML = `<div style="display:flex;justify-content:center;padding:30px">${spinner(true)}</div>`; return; }
@@ -2939,13 +3525,17 @@
       const freq = frequencies.find((f) => f.id === frequencyId) || null;
       const entries = Object.keys(subCart).map((id) => ({ p: products.find((x) => x.id === id), qty: subCart[id] })).filter((e) => e.p);
       const subtotal = entries.reduce((a, e) => a + e.p.price * e.qty, 0);
-      const discount = freq ? Math.round(subtotal * (freq.discountPct / 100)) : 0;
-      const shipping = O.shippingFor(subtotal - discount);
-      const total = subtotal - discount + shipping;
-      const minOrder = Number(CFG.minOrder) || 0;
-      const below = entries.length > 0 && minOrder > 0 && subtotal - discount < minOrder;
+      // As the server bills each cycle (services/jobs.js, COM-08): every unit rounded at its discounted price,
+      // and the fee on the full price, for the delivery address's governorate.
+      const unit = (price) => (freq ? Math.round(price * (1 - freq.discountPct / 100)) : price);
+      const merch = entries.reduce((a, e) => a + unit(Number(e.p.price)) * e.qty, 0);
+      const discount = subtotal - merch;
       const sel = O.selectedAddress();
       const active = picked || addrs.find((a) => sel && numericId(a.id) === String(sel.id)) || addrs.find((a) => a.isDefault) || null;
+      const shipAddr = active ? (isObj(active.raw) ? { provinceCode: active.raw.provinceCode || active.provinceCode, province: active.raw.province || active.province, city: active.raw.city || active.city } : active) : sel;
+      const q = shipQuote(subtotal, shipAddr);
+      const minOrder = subMinOrder();
+      const below = entries.length > 0 && minOrder > 0 && merch < minOrder;
       const can = Boolean(freq) && entries.length > 0 && Boolean(active) && !below;
       const scroll = root.scrollTop;
 
@@ -2973,9 +3563,10 @@
         <div class="rule16"></div>
         <div class="sub-totals">
           ${sumRow(t('subtotal'), fmtPrice(subtotal))}
-          ${freq ? sumRow(L(`${freq.discountPct}% discount`, `خصم ${num(freq.discountPct)}٪`), `-${fmtPrice(discount)}`, 'green') : ''}
-          ${sumRow(L('Shipping', 'الشحن'), shipping > 0 ? fmtPrice(shipping) : L('Free', 'ببلاش'))}
-          ${sumRow(L('Each delivery', 'كل مرة توصيل'), fmtPrice(total), 'main')}
+          ${freq ? sumRow(L(`${freq.discountPct}% discount`, `خصم ${num(freq.discountPct)}٪`), minus(discount), 'green') : ''}
+          ${sumRow(L('Shipping', 'الشحن'), q.known ? (q.fee > 0 ? money(q.fee) : L('Free', 'ببلاش')) : moneyRange(q.min, q.max))}
+          ${sumRow(L('Each delivery', 'كل مرة توصيل'), totalText(merch, q), 'main')}
+          ${!q.known ? `<div class="hint">${esc(govNote())}</div>` : ''}
         </div>
         <div style="padding:6px 22px 30px">
           <button class="cta bold" data-submit>${submitting ? spinner() : esc(editing ? L('Save changes', 'احفظ التعديلات') : L('Start subscription', 'ابدأ الاشتراك'))}</button>
@@ -3020,12 +3611,13 @@
         } catch (err) {
           submitting = false;
           render();
-          O.okaAlert(L('Could not save the subscription', 'معرفناش نحفظ الاشتراك'), errText(err));
+          O.okaAlert(L('Could not save the subscription', 'معرفناش نحفظ الاشتراك'), userError(err));
         }
       }
     });
 
     render();
+    O.api('/storefront-config').then((r) => { const m = Number(r?.minOrder); if (Number.isFinite(m) && m >= 0) { serviceMin = m; render(); } }).catch(() => {});
     O.api('/subscription-frequencies').then((r) => { if (r.frequencies?.length) { frequencies = r.frequencies; render(); } }).catch(() => {});
     Promise.all([O.loadCatalogue(), serviceAddresses()]).then(([cat, list]) => {
       catalogue = cat;
@@ -3101,6 +3693,8 @@
    * ════════════════════════════════════════════════════════════════════ */
   function testLookup(panel) {
     const results = $('[data-tl-results]');
+    // Only with the theme's own test panel on the page (SEC-05: gated by the test_panel setting).
+    if (!results || !panel) return;
     const field = (k) => $(`[data-tl-${k}]`, panel);
     const errEl = field('error');
     let data = null;
@@ -3208,7 +3802,8 @@
     const catalogue = await O.loadCatalogue();
     const me = catalogue.products.find((p) => String(p.variantId) === String(e.detail?.variantId));
     if (!me) return;
-    const shown = O.store.sget('oka.recShown') || [];
+    const shownRaw = O.store.sget('oka.recShown');
+    const shown = Array.isArray(shownRaw) ? shownRaw : [];
     if (shown.includes(me.id)) return;
     const picks = O.recommend(catalogue, { moment: 'added', anchor: me.id, limit: 6 })
       .filter((r) => (r.why === 'with' || r.why === 'again' || r.why === 'saved') && r.score >= 0.12)
@@ -3228,15 +3823,15 @@
     sheet.innerHTML = `
       <div class="grabber"></div>
       <div class="sheet-head"><span class="sheet-title">${esc(L('Added ✓', 'اتضاف ✓'))}</span>
-        <button class="sheet-close" data-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+        <button class="sheet-close" data-close aria-label="${esc(L('Close', 'اقفل'))}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round"/></svg></button></div>
       <div class="sheet-body" style="padding-bottom:12px">
         <div class="rec-lead">${esc(L(`People who buy ${title} usually add:`, `اللي بيشتروا ${title} غالبًا بيضيفوا:`))}</div>
         ${picks.map((r) => `
           <div class="sheet-item rec-row">
-            <a href="${esc(r.p.url)}" class="cat-item-img">${img(r.p.img)}</a>
+            <a href="${esc(r.p.url)}" class="cat-item-img" aria-label="${esc(O.ptitle(r.p))}">${img(r.p.img)}</a>
             <span style="flex:1;min-width:0"><b>${esc(O.ptitle(r.p))}</b>
               <span class="rec-why">${esc(O.recReason(r, title))} · ${esc(fmtPrice(r.p.price))}</span></span>
-            <button class="rec-add press" data-rec-add="${r.p.variantId}">${esc(t('add'))}</button>
+            <button class="rec-add press" data-rec-add="${esc(r.p.variantId)}">${esc(t('add'))}</button>
           </div>`).join('')}
         <div style="display:flex;gap:10px;padding:6px 20px 4px">
           <button class="cta" style="flex:1;background:rgba(0,0,0,0.06);color:#1d1d1f" data-close>${esc(L('Keep shopping', 'كمّل تسوق'))}</button>
@@ -3244,7 +3839,9 @@
         </div>
       </div>`;
     app.append(scrim, sheet);
-    const close = () => { scrim.remove(); sheet.remove(); };
+    let unmodal = null;
+    const close = () => { scrim.remove(); sheet.remove(); unmodal?.(); unmodal = null; };
+    unmodal = modalize(sheet, close);
     scrim.addEventListener('click', close);
     sheet.addEventListener('click', async (ev) => {
       if (ev.target.closest('[data-close]')) return close();
@@ -3255,6 +3852,7 @@
         await O.addToCart(add.dataset.recAdd, 1, { silent: true });
         add.classList.add('done');
         add.textContent = L('Added', 'اتضاف');
+        announce(L('Added to cart', 'اتضاف للسلة'));
       } catch (err) { add.disabled = false; }
     });
   });

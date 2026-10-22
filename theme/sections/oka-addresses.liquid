@@ -2,6 +2,34 @@
   AddressesScreen.js. Tapping a card chooses where the next order ships;
   "Make default" and "Delete" are separate, explicit actions.
 {%- endcomment -%}
+{%- liquid
+  # SI-01: with Shopify's new customer accounts, routes.account_url is the hosted
+  # account (https://account.…), and the classic /account/addresses form posts
+  # used without the order service don't exist. Then addresses are managed on
+  # the hosted Profile page. Classic accounts, or the order service, keep this screen.
+  assign hosted_accounts = false
+  if routes.account_url contains '://'
+    assign hosted_accounts = true
+  endif
+  assign addr_service = false
+  if settings.proxy_path != blank or settings.service_url != blank and settings.service_key != blank
+    assign addr_service = true
+  endif
+  assign addr_hosted = false
+  if hosted_accounts and addr_service == false
+    assign addr_hosted = true
+  endif
+  assign acct_parts = routes.account_url | split: '?'
+  # shopify.dev: append the page to routes.account_url's base (before any '?').
+  assign acct_base = acct_parts | first
+  if acct_base contains '/orders'
+    assign acct_base = acct_base | split: '/orders' | first
+  endif
+  assign profile_url = acct_base | append: '/profile'
+  if acct_parts.size > 1
+    assign profile_url = profile_url | append: '?' | append: acct_parts.last
+  endif
+-%}
 <div class="screen fade-in" data-screen="addresses">
   {% render 'screen-header', en: 'My addresses', ar: 'عناويني', back: '/pages/account' %}
   {%- if customer -%}
@@ -11,22 +39,24 @@
     {%- for a in customer.addresses -%}
       {%- assign is_default = false -%}
       {%- if a.id == customer.default_address.id -%}{%- assign is_default = true -%}{%- endif -%}
-      <div class="addr-card" data-addr="{{ a.id }}" data-province="{{ a.province_code }}" data-default="{{ is_default }}" role="button" tabindex="0">
+      <div class="addr-card" data-addr="{{ a.id }}" data-province="{{ a.province_code | escape }}" data-default="{{ is_default }}" role="button" tabindex="0">
         <div class="addr-inner">
           <div style="flex:1;min-width:0">
             <div class="addr-labelrow">
               <span class="addr-label" data-addr-label><span class="l-en">Address {{ forloop.index }}</span><span class="l-ar">عنوان {% render 'ar-digits', s: forloop.index %}</span></span>
               {%- if is_default -%}<span class="addr-badge">{% render 'bi', en: 'Default', ar: 'الأساسي' %}</span>{%- endif -%}
             </div>
-            <div class="addr-line">{{ a.name | default: customer.name }}</div>
-            <div class="addr-line">{{ a.address1 }}{% if a.address2 != blank %}, {{ a.address2 }}{% endif %}</div>
-            <div class="addr-line">{{ a.city }}</div>
+            <div class="addr-line">{{ a.name | default: customer.name | escape }}</div>
+            <div class="addr-line">{{ a.address1 | escape }}{% if a.address2 != blank %}, {{ a.address2 | escape }}{% endif %}</div>
+            <div class="addr-line">{{ a.city | escape }}</div>
             {%- assign ph = a.phone | default: customer.phone -%}
-            {%- if ph != blank -%}<div class="addr-line" style="letter-spacing:.5px"><span class="nums">{{ ph }}</span></div>{%- endif -%}
+            {%- if ph != blank -%}<div class="addr-line" style="letter-spacing:.5px"><span class="nums">{{ ph | escape }}</span></div>{%- endif -%}
             <div class="addr-eta"><span class="l-en">Delivery in <span data-eta></span></span><span class="l-ar">بيوصل في <span data-eta></span></span></div>
             <div class="addr-actions">
+              {%- unless addr_hosted -%}
               {%- unless is_default -%}<button class="addr-action" data-make-default>{% render 'bi', en: 'Make default', ar: 'خليه الأساسي' %}</button>{%- endunless -%}
               <button class="addr-action red" data-delete-addr>{% render 'bi', en: 'Delete', ar: 'امسح' %}</button>
+              {%- endunless -%}
             </div>
           </div>
           <span class="radio lg"></span>
@@ -34,7 +64,11 @@
       </div>
     {%- endfor -%}
     <div style="padding:6px 22px 30px">
-      <a href="/pages/addresses?view=oka-add-address" class="outline-btn">{% render 'icon', name: 'plus', px: 16 %}{% render 'bi', en: 'Add new address', ar: 'ضيف عنوان جديد' %}</a>
+      {%- if addr_hosted -%}
+        <a href="{{ profile_url | escape }}" class="outline-btn" data-hosted-addresses>{% render 'icon', name: 'plus', px: 16 %}{% render 'bi', en: 'Add or edit addresses in your account', ar: 'ضيف أو عدّل عناوينك من حسابك' %}</a>
+      {%- else -%}
+        <a href="{{ routes.root_url | append: '/' | replace: '//', '/' }}pages/addresses?view=oka-add-address" class="outline-btn">{% render 'icon', name: 'plus', px: 16 %}{% render 'bi', en: 'Add new address', ar: 'ضيف عنوان جديد' %}</a>
+      {%- endif -%}
     </div>
   {%- else -%}
     <a href="{{ routes.storefront_login_url | default: routes.account_login_url }}" class="notice" data-sign-in="/pages/addresses">{% render 'bi', en: 'Sign in to see your saved addresses.', ar: 'سجّل دخولك عشان تشوف عناوينك المحفوظة.' %}</a>

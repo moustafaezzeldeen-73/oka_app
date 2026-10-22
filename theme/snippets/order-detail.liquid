@@ -43,10 +43,25 @@
   if o.financial_status == 'paid' or o.financial_status == 'partially_refunded' or o.financial_status == 'refunded'
     assign paid = true
   endif
+  # COM-05: what the courier collects = total minus what is already paid (store
+  # credit / partial payments are successful sale or capture transactions).
+  # Liquid has no order.total_outstanding.
+  assign paid_cents = 0
+  for t in o.transactions
+    if t.status == 'success'
+      if t.kind == 'sale' or t.kind == 'capture'
+        assign paid_cents = paid_cents | plus: t.amount
+      endif
+    endif
+  endfor
+  assign due_cents = o.total_price | minus: paid_cents | at_least: 0
+  if paid == false and paid_cents > 0 and due_cents == 0
+    assign paid = true
+  endif
 -%}
 <div class="order-detail" data-order-detail="{{ o.name | escape }}" data-step="{{ step }}" data-fulfilled="{{ is_fulfilled }}"
   data-cancelled="{{ o.cancelled }}" data-phone="{{ sa.phone | default: o.billing_address.phone | default: o.phone | default: customer.phone | escape }}" data-has-awb="{% if tracking_number != blank %}true{% else %}false{% endif %}" data-awb="{{ tracking_number | escape }}"
-  data-province="{{ sa.province_code }}" data-lines='[{%- for li in o.line_items -%}{"variantId":{{ li.variant_id | json }},"quantity":{{ li.quantity }},"handle":{{ li.product.handle | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]'
+  data-province="{{ sa.province_code | escape }}" data-lines='[{%- for li in o.line_items -%}{"variantId":{{ li.variant_id | json }},"quantity":{{ li.quantity }},"handle":{{ li.product.handle | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]'
   {% if standalone != true %}hidden{% endif %}>
 
   {% render 'screen-header', en: 'Order Details', ar: 'تفاصيل الطلب', back: '/pages/orders' %}
@@ -96,7 +111,7 @@
       <div class="inv-row strong"><span>{% render 'bi', en: 'Total', ar: 'الإجمالي' %}</span><span>{% render 'price', cents: o.total_price %}</span></div>
       <div class="pay-note">
         {%- if paid -%}{% render 'bi', en: 'Paid', ar: 'اتدفع' %}
-        {%- else -%}{% render 'bi', en: 'Cash on delivery', ar: 'كاش عند الاستلام' %}{% unless o.cancelled %}<span class="l-en"> — pay the courier {% render 'price', cents: o.total_price %}</span><span class="l-ar"> — هتدفع {% render 'price', cents: o.total_price %} للمندوب</span>{% endunless %}
+        {%- else -%}{% render 'bi', en: 'Cash on delivery', ar: 'كاش عند الاستلام' %}{% unless o.cancelled %}<span class="l-en"> — pay the courier {% render 'price', cents: due_cents %}</span><span class="l-ar"> — هتدفع {% render 'price', cents: due_cents %} للمندوب</span>{% endunless %}
         {%- endif -%}
       </div>
     </div>
@@ -136,10 +151,10 @@
   <div class="field">
     <div class="field-k" style="color:var(--ink-95)">{% render 'bi', en: 'Ships to', ar: 'هيتشحن على' %}</div>
     <div class="field-v">
-      <div class="field-strong">{{ sa.name | default: customer.name }}</div>
-      <div class="field-txt">{{ sa.address1 }}{% if sa.address2 != blank %}, {{ sa.address2 }}{% endif %}</div>
-      <div class="field-txt">{{ sa.city }}</div>
-      <div class="field-phone"><span class="nums">{{ sa.phone | default: customer.phone }}</span></div>
+      <div class="field-strong">{{ sa.name | default: customer.name | escape }}</div>
+      <div class="field-txt">{{ sa.address1 | escape }}{% if sa.address2 != blank %}, {{ sa.address2 | escape }}{% endif %}</div>
+      <div class="field-txt">{{ sa.city | escape }}</div>
+      <div class="field-phone"><span class="nums">{{ sa.phone | default: customer.phone | escape }}</span></div>
     </div>
   </div>
 
@@ -153,9 +168,9 @@
   <div class="field">
     <div class="field-k" style="color:var(--ink-95)">{% render 'bi', en: 'Order number', ar: 'رقم الطلب' %}</div>
     <div class="field-v">
-      <div class="field-strong" style="font-weight:600">{{ o.name }}</div>
+      <div class="field-strong" style="font-weight:600">{{ o.name | escape }}</div>
       {%- if tracking_number != blank -%}
-        <div class="field-txt" data-tracking>{% render 'bi', en: 'Tracking: ', ar: 'رقم التتبع: ' %}<span class="nums">{{ tracking_number }}</span></div>
+        <div class="field-txt" data-tracking>{% render 'bi', en: 'Tracking: ', ar: 'رقم التتبع: ' %}<span class="nums">{{ tracking_number | escape }}</span></div>
         {%- liquid
           # Our own tracking page for this shipment when live J&T tracking is
           # set up; otherwise the courier's site.
@@ -164,15 +179,15 @@
             assign own_page = true
             assign enc_awb = tracking_number | url_encode
             assign enc_order = o.name | url_encode
-            assign tracking_url = '/pages/track?awb=' | append: enc_awb | append: '&order=' | append: enc_order
+            assign tracking_url = routes.root_url | append: '/' | replace: '//', '/' | append: 'pages/track?awb=' | append: enc_awb | append: '&order=' | append: enc_order
           elsif tracking_url == blank and settings.tracking_url != blank
             assign tracking_url = settings.tracking_url | replace: '{number}', tracking_number
           endif
         -%}
         {%- if tracking_url != blank -%}
-          <a class="track-btn" href="{{ tracking_url }}"{% unless own_page %} target="_blank" rel="noopener" data-copy="{% unless settings.tracking_url contains '{number}' %}{{ tracking_number }}{% endunless %}"{% endunless %}>
+          <a class="track-btn" href="{{ tracking_url | escape }}"{% unless own_page %} target="_blank" rel="noopener" data-copy="{% unless settings.tracking_url contains '{number}' %}{{ tracking_number | escape }}{% endunless %}"{% endunless %}>
             {% render 'icon', name: 'box', px: 16 %}
-            {%- if tracking_company != blank -%}<span class="l-en">Track on {{ tracking_company }}</span><span class="l-ar">تابع على {{ tracking_company }}</span>{%- else -%}{% render 'bi', en: 'Track shipment', ar: 'تابع الشحنة' %}{%- endif -%}
+            {%- if tracking_company != blank -%}<span class="l-en">Track on {{ tracking_company | escape }}</span><span class="l-ar">تابع على {{ tracking_company | escape }}</span>{%- else -%}{% render 'bi', en: 'Track shipment', ar: 'تابع الشحنة' %}{%- endif -%}
           </a>
         {%- endif -%}
       {%- endif -%}

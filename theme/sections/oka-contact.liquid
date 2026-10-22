@@ -8,10 +8,10 @@
     {%- elsif form.errors -%}
       <div class="code-error">{{ form.errors | default_errors }}</div>
     {%- endif -%}
-    <label class="contact-field"><span>{% render 'bi', en: 'Name', ar: 'الاسم' %}</span><input type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></label>
-    <label class="contact-field"><span>{% render 'bi', en: 'Phone', ar: 'الموبايل' %}</span><input type="tel" name="contact[phone]" autocomplete="tel" inputmode="tel" value="{{ form.phone }}"></label>
-    <label class="contact-field"><span>{% render 'bi', en: 'Email', ar: 'الإيميل' %}</span><input type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}"></label>
-    <label class="contact-field"><span>{% render 'bi', en: 'Message', ar: 'رسالتك' %}</span><textarea name="contact[body]" rows="5">{{ form.body }}</textarea></label>
+    <label class="contact-field"><span>{% render 'bi', en: 'Name', ar: 'الاسم' %}</span><input type="text" name="contact[name]" autocomplete="name" value="{{ form.name | escape_once }}"></label>
+    <label class="contact-field"><span>{% render 'bi', en: 'Phone', ar: 'الموبايل' %}</span><input type="tel" name="contact[phone]" autocomplete="tel" inputmode="tel" value="{{ form.phone | escape_once }}"></label>
+    <label class="contact-field"><span>{% render 'bi', en: 'Email', ar: 'الإيميل' %}</span><input type="email" name="contact[email]" autocomplete="email" dir="ltr" required value="{{ form.email | escape_once }}"></label>
+    <label class="contact-field"><span>{% render 'bi', en: 'Message', ar: 'رسالتك' %}</span><textarea name="contact[body]" rows="5">{{ form.body | escape_once }}</textarea></label>
     <button class="cta" type="submit">{% render 'bi', en: 'Send', ar: 'ابعت' %}</button>
   {%- endform -%}
 </div>
