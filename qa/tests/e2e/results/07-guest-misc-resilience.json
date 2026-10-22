@@ -5,7 +5,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "empty visible=true",
-    "at": "2026-10-19T11:43:56.885Z"
+    "at": "2026-10-21T16:00:32.018Z"
   },
   {
     "id": "GO-2",
@@ -13,7 +13,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "lastCheckout keys=cartToken,at; calls=[{\"tool\":\"customer_get_order\",\"args\":[\"session\"],\"session\":[\"cartToken\"]}]; box=\"آخر طلب ليك #9000101 بنراجعه OKA white ١٦٩ ج.م – ١ + Tobacco Bowls- Blue Cloud - 12g ٩٨ ج.م – ٢ + هيتوصّل على QA Tester · +201000000001 1 Test Street، Building 1, Floor 2, Apt 3 Nasr City، القاهرة المجموع قبل الشحن ٢٦٧ ج.م الشحن ٦٠ ج.م الإجمالي (كاش عند الاستل\" (harness mock maps any session to the fixture's first order)",
-    "at": "2026-10-19T11:44:00.949Z"
+    "at": "2026-10-21T16:00:36.175Z"
   },
   {
     "id": "GO-3",
@@ -21,15 +21,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "sheet=1 alert=\"الطلب اتعدّل طلبك #9000101 بقى ٤٧٢ ج.م، هتدفعهم عند الاستلام. تمام\" tools=[\"customer_get_order\",\"customer_quote_order\",\"customer_update_order\"]",
-    "at": "2026-10-19T11:44:06.196Z"
-  },
-  {
-    "id": "GO-4",
-    "scenario": "Guest cancels last order (confirm) → cancelled state",
-    "ctx": "iPhone 13/ar/guest",
-    "status": "PASS",
-    "note": "alert=\"الطلب اتلغى طلبك #9000101 اتلغى. تمام\" state=\"ملغي\"",
-    "at": "2026-10-19T11:44:11.601Z"
+    "at": "2026-10-21T16:00:41.483Z"
   },
   {
     "id": "GO-5",
@@ -37,7 +29,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "FAIL",
     "note": "box=\"آخر طلب ليك ١٨ أكتوبر اتطلب OKA white × ١ · ١٦٩ ج.م هيتوصّل على Guest QA · 01000000055 1 QA St Nasr City، القاهرة المجموع قبل الشحن ١٦٩ ج.م الشحن ٦٠ ج.م الإجمالي (كاش عند الاستلام) ٢٢٩ ج.م معرفناش نجيب آخر حالة للطلب دلوقتي، فالتعديل مش متاح. جرّب تاني كمان شوية.\" → SEC-06 CONFIRMED: name/phone/address from localStorage shown to whoever opens the page on this browser (no sign-in, no expiry)",
-    "at": "2026-10-19T11:44:14.836Z"
+    "at": "2026-10-21T16:00:44.757Z"
   },
   {
     "id": "GO-6",
@@ -45,7 +37,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "spinner while waiting=true; after timeout {\"boxHidden\":true,\"empty\":true}",
-    "at": "2026-10-19T11:44:25.031Z"
+    "at": "2026-10-21T16:00:54.934Z"
   },
   {
     "id": "GO-7",
@@ -53,7 +45,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "FAIL",
     "note": "steppers=2; sheet/alert after tap=0 → F-16 (guest part) CONFIRMED",
-    "at": "2026-10-19T11:44:28.351Z"
+    "at": "2026-10-21T16:00:58.262Z"
   },
   {
     "id": "MP-1",
@@ -61,7 +53,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 404 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN مش موجود الصفحة دي مش موجودة. كمّل تسوّق ١\",\"home\":4,\"theme\":true} ",
-    "at": "2026-10-19T11:44:29.519Z"
+    "at": "2026-10-21T16:00:59.323Z"
   },
   {
     "id": "MP-1",
@@ -69,7 +61,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 404 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN مش موجود الصفحة دي مش موجودة. كمّل تسوّق ١\",\"home\":4,\"theme\":true} ",
-    "at": "2026-10-19T11:44:30.550Z"
+    "at": "2026-10-21T16:01:00.355Z"
   },
   {
     "id": "MP-1",
@@ -77,7 +69,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 404 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN مش موجود الصفحة دي مش موجودة. كمّل تسوّق ١\",\"home\":4,\"theme\":true} ",
-    "at": "2026-10-19T11:44:31.568Z"
+    "at": "2026-10-21T16:01:01.411Z"
   },
   {
     "id": "MP-1",
@@ -85,7 +77,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"Enter\",\"home\":0,\"theme\":false} ",
-    "at": "2026-10-19T11:44:32.553Z"
+    "at": "2026-10-21T16:01:02.423Z"
   },
   {
     "id": "MP-1",
@@ -93,7 +85,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"\",\"lang\":\"en\",\"text\":\"OKA EGYPT GIFT CARD 100.00 EGP QAQA 1234 5678 0000 Continue Shopping\",\"home\":0,\"theme\":false} ",
-    "at": "2026-10-19T11:44:33.612Z"
+    "at": "2026-10-21T16:01:03.528Z"
   },
   {
     "id": "MP-1",
@@ -101,7 +93,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco rea\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:44:34.717Z"
+    "at": "2026-10-21T16:01:04.654Z"
   },
   {
     "id": "MP-1",
@@ -109,7 +101,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Privacy policy Last updated: 6/7/2023 This Privacy Policy describes how OKA (the \\\"Site\\\", \\\"we\\\", \\\"us\\\", or \\\"our\\\") collects, uses, and disclo\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:44:35.807Z"
+    "at": "2026-10-21T16:01:05.808Z"
   },
   {
     "id": "MP-1",
@@ -117,7 +109,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Shipping Shipping & Delivery Policy Order Confirmation All orders require a mandatory confirmation via phone call before dispatch. Our te\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:44:36.907Z"
+    "at": "2026-10-21T16:01:06.909Z"
   },
   {
     "id": "MP-1",
@@ -125,7 +117,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Terms of service OVERVIEW This website is operated by OKA. Throughout the site, the terms “we”, “us” and “our” refer to OKA. OKA offers t\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:44:38.004Z"
+    "at": "2026-10-21T16:01:08.015Z"
   },
   {
     "id": "MP-1",
@@ -133,7 +125,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Contact Trade name: OKA Hookahs LLC Phone number: 0105 093 1690 Email: oka-egypt@hotmail.com ١\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:44:39.057Z"
+    "at": "2026-10-21T16:01:09.055Z"
   },
   {
     "id": "MP-1",
@@ -141,7 +133,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Privacy policy Last updated: 6/7/2023 This Privacy Policy describes how OKA (the \\\"Site\\\", \\\"we\\\", \\\"us\\\", or \\\"our\\\") collects, uses, and disclo\",\"home\":0,\"theme\":true} ",
-    "at": "2026-10-19T11:44:40.189Z"
+    "at": "2026-10-21T16:01:10.221Z"
   },
   {
     "id": "MP-1",
@@ -149,7 +141,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco rea\",\"home\":0,\"theme\":true} ",
-    "at": "2026-10-19T11:44:41.279Z"
+    "at": "2026-10-21T16:01:11.310Z"
   },
   {
     "id": "MT-1",
@@ -157,7 +149,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "FAIL",
     "note": "tab A after B changed cart (mint 2 + tongs): {\"lines\":[\"49399990976810×1\"],\"badge\":\"١\"}; + in tab A → cart mint=2 (A computed from stale qty 1 → set 2, so B's change was silently overwritten); A now shows [\"49399990976810×2\",\"46037718303018×1\"] → COM-09 CONFIRMED",
-    "at": "2026-10-19T11:44:47.133Z"
+    "at": "2026-10-21T16:01:17.261Z"
   },
   {
     "id": "MT-2",
@@ -165,7 +157,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "cart=0; page after Back {\"badge\":\"\",\"stepper\":false,\"nav\":\"back_forward\"}",
-    "at": "2026-10-19T11:44:52.829Z"
+    "at": "2026-10-21T16:01:22.953Z"
   },
   {
     "id": "BF-1",
@@ -173,7 +165,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "trail(path:badge)=/cart:١ /products/oka-cobra:١ /collections/oka-cobra:١ /:١ /collections/oka-parts:١ →/ →/collections/oka-cobra →/products/oka-cobra →/cart →/checkout ",
-    "at": "2026-10-19T11:45:02.441Z"
+    "at": "2026-10-21T16:01:32.599Z"
   },
   {
     "id": "RL-1",
@@ -181,7 +173,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "INFO",
     "note": "PDP qty after reload=١ (resets to 1); unapplied code typed then reload → field=\"\" (draft not kept)",
-    "at": "2026-10-19T11:45:06.430Z"
+    "at": "2026-10-21T16:01:36.592Z"
   },
   {
     "id": "OF-1",
@@ -189,7 +181,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "FAIL",
     "note": "alert=\"معرفناش نضيفه Failed to fetch تمام\" → F-15 CONFIRMED (raw browser error shown)",
-    "at": "2026-10-19T11:45:09.249Z"
+    "at": "2026-10-21T16:01:39.324Z"
   },
   {
     "id": "OF-2",
@@ -197,7 +189,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "alert=\"معرفناش نحدّث Failed to fetch تمام\" qty shown=2",
-    "at": "2026-10-19T11:45:11.632Z"
+    "at": "2026-10-21T16:01:41.711Z"
   },
   {
     "id": "OF-3",
@@ -205,7 +197,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "INFO",
     "note": "{\"url\":\"chrome-error://chromewebdata/\",\"btn\":null}",
-    "at": "2026-10-19T11:45:14.702Z"
+    "at": "2026-10-21T16:01:44.798Z"
   },
   {
     "id": "OF-4",
@@ -213,7 +205,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "INFO",
     "note": "\"Out for delivery Processing Preparing to Ship Shipped Delivered Out for delivery with courier QA Courier (01000000009) 2\"",
-    "at": "2026-10-19T11:45:18.212Z"
+    "at": "2026-10-21T16:01:48.324Z"
   },
   {
     "id": "OF-5",
@@ -221,7 +213,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "FAIL",
     "note": "code-error=\"Failed to fetch\" → F-15 CONFIRMED",
-    "at": "2026-10-19T11:45:20.380Z"
+    "at": "2026-10-21T16:01:50.565Z"
   },
   {
     "id": "GM-LOG",
@@ -229,7 +221,7 @@
     "ctx": "iPhone 13/ar/guest",
     "status": "PASS",
     "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart",
-    "at": "2026-10-19T11:45:20.382Z"
+    "at": "2026-10-21T16:01:50.566Z"
   },
   {
     "id": "GO-1",
@@ -237,31 +229,31 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "empty visible=true",
-    "at": "2026-10-19T11:45:22.479Z"
+    "at": "2026-10-21T16:01:52.685Z"
   },
   {
     "id": "GO-2",
     "scenario": "Guest checks out → oka.lastCheckout saved → /pages/orders shows the last order (customer_get_order by cart token)",
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
-    "note": "lastCheckout keys=cartToken,at; calls=[{\"tool\":\"customer_get_order\",\"args\":[\"session\"],\"session\":[\"cartToken\"]}]; box=\"Your last order #9000101 Cancelled OKA white × 1 · EGP 169 Tobacco Bowls- Blue Cloud - 12g × 2 · EGP 98 Delivering to QA Tester · +201000000001 1 Test Street, Building 1, Floor 2, Apt 3 Nasr City, Cairo Subtotal EGP 267 Shipping EGP 60 Total (cash on delivery)\" (harness mock maps any session to the fixture's first order)",
-    "at": "2026-10-19T11:45:26.482Z"
+    "note": "lastCheckout keys=cartToken,at; calls=[{\"tool\":\"customer_get_order\",\"args\":[\"session\"],\"session\":[\"cartToken\"]}]; box=\"Your last order #9000101 Processing OKA white EGP 169 – 1 + Tobacco Bowls- Blue Cloud - 12g EGP 98 – 2 + Delivering to QA Tester · +201000000001 1 Test Street, Building 1, Floor 2, Apt 3 Nasr City, Cairo Subtotal EGP 267 Shipping EGP 60 Total (cash on delivery\" (harness mock maps any session to the fixture's first order)",
+    "at": "2026-10-21T16:01:56.820Z"
   },
   {
     "id": "GO-3",
     "scenario": "Guest edits last order via item + → sheet → save",
     "ctx": "iPhone 13/en/guest",
-    "status": "FAIL",
-    "note": "no steppers on guest order",
-    "at": "2026-10-19T11:45:26.489Z"
+    "status": "PASS",
+    "note": "sheet=1 alert=\"Order updated Your order #9000101 now comes to EGP 472, paid on delivery. OK\" tools=[\"customer_get_order\",\"customer_quote_order\",\"customer_update_order\"]",
+    "at": "2026-10-21T16:02:02.128Z"
   },
   {
     "id": "GO-4",
     "scenario": "Guest cancels last order (confirm) → cancelled state",
     "ctx": "iPhone 13/en/guest",
-    "status": "ERROR",
-    "note": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-g-cancel]')\u001b[22m\n",
-    "at": "2026-10-19T11:45:59.051Z"
+    "status": "PASS",
+    "note": "alert=\"Order cancelled Your order #9000101 has been cancelled. OK\" state=\"Cancelled\"",
+    "at": "2026-10-21T16:02:07.557Z"
   },
   {
     "id": "GO-5",
@@ -269,7 +261,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "FAIL",
     "note": "box=\"Your last order 18 Oct Placed OKA white × 1 · EGP 169 Delivering to Guest QA · 01000000055 1 QA St Nasr City, Cairo Subtotal EGP 169 Shipping EGP 60 Total (cash on delivery) EGP 229 We couldn’t load this order’s latest status just now, so changes aren’t available. Please try again in a little while.\" → SEC-06 CONFIRMED: name/phone/address from localStorage shown to whoever opens the page on this browser (no sign-in, no expiry)",
-    "at": "2026-10-19T11:46:02.393Z"
+    "at": "2026-10-21T16:02:10.792Z"
   },
   {
     "id": "GO-6",
@@ -277,7 +269,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "spinner while waiting=true; after timeout {\"boxHidden\":true,\"empty\":true}",
-    "at": "2026-10-19T11:46:12.556Z"
+    "at": "2026-10-21T16:02:20.973Z"
   },
   {
     "id": "GO-7",
@@ -285,7 +277,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "FAIL",
     "note": "steppers=2; sheet/alert after tap=0 → F-16 (guest part) CONFIRMED",
-    "at": "2026-10-19T11:46:15.901Z"
+    "at": "2026-10-21T16:02:24.307Z"
   },
   {
     "id": "MP-1",
@@ -293,7 +285,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 404 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Not found This page doesn’t exist. Continue Shopping 1\",\"home\":4,\"theme\":true} ",
-    "at": "2026-10-19T11:46:16.949Z"
+    "at": "2026-10-21T16:02:25.381Z"
   },
   {
     "id": "MP-1",
@@ -301,7 +293,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 404 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Not found This page doesn’t exist. Continue Shopping 1\",\"home\":4,\"theme\":true} ",
-    "at": "2026-10-19T11:46:17.955Z"
+    "at": "2026-10-21T16:02:26.487Z"
   },
   {
     "id": "MP-1",
@@ -309,7 +301,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 404 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Not found This page doesn’t exist. Continue Shopping 1\",\"home\":4,\"theme\":true} ",
-    "at": "2026-10-19T11:46:18.950Z"
+    "at": "2026-10-21T16:02:27.529Z"
   },
   {
     "id": "MP-1",
@@ -317,7 +309,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"Enter\",\"home\":0,\"theme\":false} ",
-    "at": "2026-10-19T11:46:19.930Z"
+    "at": "2026-10-21T16:02:28.547Z"
   },
   {
     "id": "MP-1",
@@ -325,7 +317,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"\",\"lang\":\"en\",\"text\":\"OKA EGYPT GIFT CARD 100.00 EGP QAQA 1234 5678 0000 Continue Shopping\",\"home\":0,\"theme\":false} ",
-    "at": "2026-10-19T11:46:21.023Z"
+    "at": "2026-10-21T16:02:29.667Z"
   },
   {
     "id": "MP-1",
@@ -333,7 +325,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco read\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:46:22.106Z"
+    "at": "2026-10-21T16:02:30.829Z"
   },
   {
     "id": "MP-1",
@@ -341,7 +333,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Privacy policy Last updated: 6/7/2023 This Privacy Policy describes how OKA (the \\\"Site\\\", \\\"we\\\", \\\"us\\\", or \\\"our\\\") collects, uses, and disclos\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:46:23.195Z"
+    "at": "2026-10-21T16:02:31.976Z"
   },
   {
     "id": "MP-1",
@@ -349,7 +341,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Shipping Shipping & Delivery Policy Order Confirmation All orders require a mandatory confirmation via phone call before dispatch. Our tea\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:46:24.316Z"
+    "at": "2026-10-21T16:02:33.062Z"
   },
   {
     "id": "MP-1",
@@ -357,7 +349,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Terms of service OVERVIEW This website is operated by OKA. Throughout the site, the terms “we”, “us” and “our” refer to OKA. OKA offers th\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:46:25.400Z"
+    "at": "2026-10-21T16:02:34.169Z"
   },
   {
     "id": "MP-1",
@@ -365,7 +357,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Contact Trade name: OKA Hookahs LLC Phone number: 0105 093 1690 Email: oka-egypt@hotmail.com 1\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:46:26.403Z"
+    "at": "2026-10-21T16:02:35.199Z"
   },
   {
     "id": "MP-1",
@@ -373,7 +365,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Privacy policy Last updated: 6/7/2023 This Privacy Policy describes how OKA (the \\\"Site\\\", \\\"we\\\", \\\"us\\\", or \\\"our\\\") collects, uses, and disclo\",\"home\":0,\"theme\":true} ",
-    "at": "2026-10-19T11:46:27.585Z"
+    "at": "2026-10-21T16:02:36.399Z"
   },
   {
     "id": "MP-1",
@@ -381,7 +373,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco rea\",\"home\":0,\"theme\":true} ",
-    "at": "2026-10-19T11:46:28.660Z"
+    "at": "2026-10-21T16:02:37.577Z"
   },
   {
     "id": "MT-1",
@@ -389,7 +381,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "FAIL",
     "note": "tab A after B changed cart (mint 2 + tongs): {\"lines\":[\"49399990976810×1\"],\"badge\":\"1\"}; + in tab A → cart mint=2 (A computed from stale qty 1 → set 2, so B's change was silently overwritten); A now shows [\"49399990976810×2\",\"46037718303018×1\"] → COM-09 CONFIRMED",
-    "at": "2026-10-19T11:46:34.527Z"
+    "at": "2026-10-21T16:02:43.378Z"
   },
   {
     "id": "MT-2",
@@ -397,7 +389,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "cart=0; page after Back {\"badge\":\"\",\"stepper\":false,\"nav\":\"back_forward\"}",
-    "at": "2026-10-19T11:46:40.199Z"
+    "at": "2026-10-21T16:02:48.940Z"
   },
   {
     "id": "BF-1",
@@ -405,7 +397,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "trail(path:badge)=/cart:1 /products/oka-cobra:1 /collections/oka-cobra:1 /:1 /collections/oka-parts:1 →/ →/collections/oka-cobra →/products/oka-cobra →/cart →/checkout ",
-    "at": "2026-10-19T11:46:49.501Z"
+    "at": "2026-10-21T16:02:58.429Z"
   },
   {
     "id": "RL-1",
@@ -413,7 +405,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "INFO",
     "note": "PDP qty after reload=1 (resets to 1); unapplied code typed then reload → field=\"\" (draft not kept)",
-    "at": "2026-10-19T11:46:53.380Z"
+    "at": "2026-10-21T16:03:02.304Z"
   },
   {
     "id": "OF-1",
@@ -421,7 +413,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "FAIL",
     "note": "alert=\"Could not add Failed to fetch OK\" → F-15 CONFIRMED (raw browser error shown)",
-    "at": "2026-10-19T11:46:55.926Z"
+    "at": "2026-10-21T16:03:05.023Z"
   },
   {
     "id": "OF-2",
@@ -429,7 +421,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "alert=\"Could not update Failed to fetch OK\" qty shown=2",
-    "at": "2026-10-19T11:46:58.282Z"
+    "at": "2026-10-21T16:03:07.405Z"
   },
   {
     "id": "OF-3",
@@ -437,7 +429,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "INFO",
     "note": "{\"url\":\"chrome-error://chromewebdata/\",\"btn\":null}",
-    "at": "2026-10-19T11:47:01.345Z"
+    "at": "2026-10-21T16:03:10.462Z"
   },
   {
     "id": "OF-4",
@@ -445,7 +437,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "INFO",
     "note": "\"خرجت للتوصيل مع المندوب بنراجعه بيتجهز للشحن اتشحن وصل Out for delivery with courier QA Courier (01000000009) 2026-10-13\"",
-    "at": "2026-10-19T11:47:04.866Z"
+    "at": "2026-10-21T16:03:13.999Z"
   },
   {
     "id": "OF-5",
@@ -453,7 +445,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "FAIL",
     "note": "code-error=\"Failed to fetch\" → F-15 CONFIRMED",
-    "at": "2026-10-19T11:47:07.035Z"
+    "at": "2026-10-21T16:03:16.193Z"
   },
   {
     "id": "GM-LOG",
@@ -461,7 +453,7 @@
     "ctx": "iPhone 13/en/guest",
     "status": "PASS",
     "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart",
-    "at": "2026-10-19T11:47:07.037Z"
+    "at": "2026-10-21T16:03:16.195Z"
   },
   {
     "id": "GO-1",
@@ -469,7 +461,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "PASS",
     "note": "empty visible=true",
-    "at": "2026-10-19T11:47:09.182Z"
+    "at": "2026-10-21T16:03:18.427Z"
   },
   {
     "id": "GO-2",
@@ -477,7 +469,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "PASS",
     "note": "lastCheckout keys=cartToken,at; calls=[{\"tool\":\"customer_get_order\",\"args\":[\"session\"],\"session\":[\"cartToken\"]}]; box=\"آخر طلب ليك #9000101 ملغي OKA white × ١ · ١٦٩ ج.م Tobacco Bowls- Blue Cloud - 12g × ٢ · ٩٨ ج.م هيتوصّل على QA Tester · +201000000001 1 Test Street، Building 1, Floor 2, Apt 3 Nasr City، القاهرة المجموع قبل الشحن ٢٦٧ ج.م الشحن ٦٠ ج.م الإجمالي (كاش عند الاستلام)\" (harness mock maps any session to the fixture's first order)",
-    "at": "2026-10-19T11:47:13.178Z"
+    "at": "2026-10-21T16:03:22.508Z"
   },
   {
     "id": "MP-1",
@@ -485,7 +477,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "PASS",
     "note": "HTTP 404 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN مش موجود الصفحة دي مش موجودة. كمّل تسوّق ١\",\"home\":4,\"theme\":true} ",
-    "at": "2026-10-19T11:47:14.193Z"
+    "at": "2026-10-21T16:03:23.578Z"
   },
   {
     "id": "MP-1",
@@ -493,7 +485,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"Enter\",\"home\":0,\"theme\":false} ",
-    "at": "2026-10-19T11:47:15.165Z"
+    "at": "2026-10-21T16:03:24.562Z"
   },
   {
     "id": "MP-1",
@@ -501,7 +493,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"EN Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco rea\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:47:16.263Z"
+    "at": "2026-10-21T16:03:25.668Z"
   },
   {
     "id": "MT-1",
@@ -509,7 +501,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "FAIL",
     "note": "tab A after B changed cart (mint 2 + tongs): {\"lines\":[\"49399990976810×1\"],\"badge\":\"١\"}; + in tab A → cart mint=2 (A computed from stale qty 1 → set 2, so B's change was silently overwritten); A now shows [\"49399990976810×2\",\"46037718303018×1\"] → COM-09 CONFIRMED",
-    "at": "2026-10-19T11:47:22.214Z"
+    "at": "2026-10-21T16:03:31.585Z"
   },
   {
     "id": "MT-2",
@@ -517,7 +509,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "PASS",
     "note": "cart=0; page after Back {\"badge\":\"\",\"stepper\":false,\"nav\":\"back_forward\"}",
-    "at": "2026-10-19T11:47:27.980Z"
+    "at": "2026-10-21T16:03:37.340Z"
   },
   {
     "id": "BF-1",
@@ -525,7 +517,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "PASS",
     "note": "trail(path:badge)=/cart:١ /products/oka-cobra:١ /collections/oka-cobra:١ /:١ /collections/oka-parts:١ →/ →/collections/oka-cobra →/products/oka-cobra →/cart →/checkout ",
-    "at": "2026-10-19T11:47:37.504Z"
+    "at": "2026-10-21T16:03:47.171Z"
   },
   {
     "id": "RL-1",
@@ -533,7 +525,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "INFO",
     "note": "PDP qty after reload=١ (resets to 1); unapplied code typed then reload → field=\"\" (draft not kept)",
-    "at": "2026-10-19T11:47:41.546Z"
+    "at": "2026-10-21T16:03:51.128Z"
   },
   {
     "id": "OF-1",
@@ -541,7 +533,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "FAIL",
     "note": "alert=\"معرفناش نضيفه Failed to fetch تمام\" → F-15 CONFIRMED (raw browser error shown)",
-    "at": "2026-10-19T11:47:44.157Z"
+    "at": "2026-10-21T16:03:53.826Z"
   },
   {
     "id": "OF-2",
@@ -549,7 +541,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "PASS",
     "note": "alert=\"معرفناش نحدّث Failed to fetch تمام\" qty shown=2",
-    "at": "2026-10-19T11:47:46.511Z"
+    "at": "2026-10-21T16:03:56.290Z"
   },
   {
     "id": "OF-3",
@@ -557,7 +549,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "INFO",
     "note": "{\"url\":\"chrome-error://chromewebdata/\",\"btn\":null}",
-    "at": "2026-10-19T11:47:49.607Z"
+    "at": "2026-10-21T16:03:59.476Z"
   },
   {
     "id": "OF-4",
@@ -565,7 +557,7 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "INFO",
     "note": "\"Out for delivery Processing Preparing to Ship Shipped Delivered Out for delivery with courier QA Courier (01000000009) 2\"",
-    "at": "2026-10-19T11:47:53.129Z"
+    "at": "2026-10-21T16:04:03.059Z"
   },
   {
     "id": "OF-5",
@@ -573,15 +565,15 @@
     "ctx": "Pixel 7/ar/guest",
     "status": "FAIL",
     "note": "code-error=\"Failed to fetch\" → F-15 CONFIRMED",
-    "at": "2026-10-19T11:47:55.372Z"
+    "at": "2026-10-21T16:04:05.400Z"
   },
   {
     "id": "GM-LOG",
     "scenario": "Guest/misc session error summary",
     "ctx": "Pixel 7/ar/guest",
     "status": "PASS",
-    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"GET http://localhost:9410/cdn/s",
-    "at": "2026-10-19T11:47:55.373Z"
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/update.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/cdn/shop/files/20250923_2252_Dewed_Mint_Leaves_rem",
+    "at": "2026-10-21T16:04:05.402Z"
   },
   {
     "id": "GO-1",
@@ -589,7 +581,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "PASS",
     "note": "empty visible=true",
-    "at": "2026-10-19T11:47:57.479Z"
+    "at": "2026-10-21T16:04:07.652Z"
   },
   {
     "id": "GO-2",
@@ -597,7 +589,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "PASS",
     "note": "lastCheckout keys=cartToken,at; calls=[{\"tool\":\"customer_get_order\",\"args\":[\"session\"],\"session\":[\"cartToken\"]}]; box=\"Your last order #9000101 Cancelled OKA white × 1 · EGP 169 Tobacco Bowls- Blue Cloud - 12g × 2 · EGP 98 Delivering to QA Tester · +201000000001 1 Test Street, Building 1, Floor 2, Apt 3 Nasr City, Cairo Subtotal EGP 267 Shipping EGP 60 Total (cash on delivery)\" (harness mock maps any session to the fixture's first order)",
-    "at": "2026-10-19T11:48:01.431Z"
+    "at": "2026-10-21T16:04:11.689Z"
   },
   {
     "id": "MP-1",
@@ -605,7 +597,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "PASS",
     "note": "HTTP 404 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Not found This page doesn’t exist. Continue Shopping 1\",\"home\":4,\"theme\":true} ",
-    "at": "2026-10-19T11:48:02.442Z"
+    "at": "2026-10-21T16:04:12.704Z"
   },
   {
     "id": "MP-1",
@@ -613,7 +605,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"rtl\",\"lang\":\"ar\",\"text\":\"Enter\",\"home\":0,\"theme\":false} ",
-    "at": "2026-10-19T11:48:03.402Z"
+    "at": "2026-10-21T16:04:13.680Z"
   },
   {
     "id": "MP-1",
@@ -621,7 +613,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "PASS",
     "note": "HTTP 200 {\"dir\":\"ltr\",\"lang\":\"en\",\"text\":\"ع Refund policy We have a 14-day return policy, which means you have 14 days after receiving your item to request a return. The tobacco read\",\"home\":2,\"theme\":true} ",
-    "at": "2026-10-19T11:48:04.488Z"
+    "at": "2026-10-21T16:04:14.781Z"
   },
   {
     "id": "MT-1",
@@ -629,7 +621,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "FAIL",
     "note": "tab A after B changed cart (mint 2 + tongs): {\"lines\":[\"49399990976810×1\"],\"badge\":\"1\"}; + in tab A → cart mint=2 (A computed from stale qty 1 → set 2, so B's change was silently overwritten); A now shows [\"49399990976810×2\",\"46037718303018×1\"] → COM-09 CONFIRMED",
-    "at": "2026-10-19T11:48:10.310Z"
+    "at": "2026-10-21T16:04:20.664Z"
   },
   {
     "id": "MT-2",
@@ -637,7 +629,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "PASS",
     "note": "cart=0; page after Back {\"badge\":\"\",\"stepper\":false,\"nav\":\"back_forward\"}",
-    "at": "2026-10-19T11:48:15.926Z"
+    "at": "2026-10-21T16:04:26.147Z"
   },
   {
     "id": "BF-1",
@@ -645,7 +637,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "PASS",
     "note": "trail(path:badge)=/cart:1 /products/oka-cobra:1 /collections/oka-cobra:1 /:1 /collections/oka-parts:1 →/ →/collections/oka-cobra →/products/oka-cobra →/cart →/checkout ",
-    "at": "2026-10-19T11:48:25.155Z"
+    "at": "2026-10-21T16:04:35.611Z"
   },
   {
     "id": "RL-1",
@@ -653,7 +645,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "INFO",
     "note": "PDP qty after reload=1 (resets to 1); unapplied code typed then reload → field=\"\" (draft not kept)",
-    "at": "2026-10-19T11:48:29.064Z"
+    "at": "2026-10-21T16:04:39.573Z"
   },
   {
     "id": "OF-1",
@@ -661,7 +653,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "FAIL",
     "note": "alert=\"Could not add Failed to fetch OK\" → F-15 CONFIRMED (raw browser error shown)",
-    "at": "2026-10-19T11:48:31.672Z"
+    "at": "2026-10-21T16:04:42.183Z"
   },
   {
     "id": "OF-2",
@@ -669,7 +661,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "PASS",
     "note": "alert=\"Could not update Failed to fetch OK\" qty shown=2",
-    "at": "2026-10-19T11:48:34.022Z"
+    "at": "2026-10-21T16:04:44.555Z"
   },
   {
     "id": "OF-3",
@@ -677,7 +669,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "INFO",
     "note": "{\"url\":\"chrome-error://chromewebdata/\",\"btn\":null}",
-    "at": "2026-10-19T11:48:37.071Z"
+    "at": "2026-10-21T16:04:47.639Z"
   },
   {
     "id": "OF-4",
@@ -685,7 +677,7 @@
     "ctx": "Pixel 7/en/guest",
     "status": "INFO",
     "note": "\"خرجت للتوصيل مع المندوب بنراجعه بيتجهز للشحن اتشحن وصل Out for delivery with courier QA Courier (01000000009) 2026-10-13\"",
-    "at": "2026-10-19T11:48:40.635Z"
+    "at": "2026-10-21T16:04:51.191Z"
   },
   {
     "id": "OF-5",
@@ -693,22 +685,22 @@
     "ctx": "Pixel 7/en/guest",
     "status": "FAIL",
     "note": "code-error=\"Failed to fetch\" → F-15 CONFIRMED",
-    "at": "2026-10-19T11:48:42.832Z"
+    "at": "2026-10-21T16:04:53.404Z"
   },
   {
     "id": "GM-LOG",
     "scenario": "Guest/misc session error summary",
     "ctx": "Pixel 7/en/guest",
     "status": "PASS",
-    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart",
-    "at": "2026-10-19T11:48:42.833Z"
+    "note": "{\"consoleErrors\":[],\"pageErrors\":[],\"requestFailed\":[\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/add.js net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/change.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://localhost:9410/checkout net::ERR_INTERNET_DISCONNECTED\",\"POST http://localhost:9410/cart/clear.js net::ERR_ABORTED\",\"POST http://localhost:9410/cart/update.js net::ERR_INTERNET_DISCONNECTED\",\"GET http://local",
+    "at": "2026-10-21T16:04:53.406Z"
   },
   {
     "id": "EX-1",
     "scenario": "External calls audit (whole run): hosts contacted, key header present",
     "ctx": "all",
     "status": "INFO",
-    "note": "calls=423 hosts={\"ajax.googleapis.com\":26,\"cdn.shopify.com\":170,\"website-app-649584328410.europe-west1.run.app\":225,\"nominatim.openstreetmap.org\":2} tools={\"track_delivery\":147,\"customer_get_order\":51,\"customer_quote_order\":10,\"customer_update_order\":4,\"customer_cancel_order\":13} requests carrying x-api-key=225 (SEC-01: key is sent from every browser)",
-    "at": "2026-10-19T11:48:42.875Z"
+    "note": "calls=813 hosts={\"ajax.googleapis.com\":42,\"cdn.shopify.com\":324,\"website-app-649584328410.europe-west1.run.app\":438,\"nominatim.openstreetmap.org\":9} tools={\"track_delivery\":300,\"customer_get_order\":84,\"customer_quote_order\":20,\"customer_update_order\":10,\"customer_cancel_order\":24} requests carrying x-api-key=438 (SEC-01: key is sent from every browser)",
+    "at": "2026-10-21T16:04:53.469Z"
   }
 ]

@@ -42,7 +42,8 @@ for (const device of MOBILES) for (const locale of ['ar', 'en']) {
       const tools = extSince(n0).map((c) => c.tool);
       return { status: sheet && tools.includes('customer_update_order') ? 'PASS' : 'FAIL', note: `sheet=${sheet} alert="${al}" tools=${JSON.stringify(tools)}` };
     });
-    await step(rec, { id: 'GO-4', scenario: 'Guest cancels last order (confirm) → cancelled state', ctx }, async () => {
+    // The harness keeps cancel state per server: cancel only in the last full context so earlier edits still see an open order.
+    if (locale === 'en') await step(rec, { id: 'GO-4', scenario: 'Guest cancels last order (confirm) → cancelled state', ctx }, async () => {
       await s.goto('/pages/orders', { settle: 2500 });
       await pg.locator('[data-g-cancel]').click(); await sleep(300);
       await pg.locator('.alert-btn.destructive').click(); await sleep(2000);
