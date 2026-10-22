@@ -96,6 +96,7 @@
   <label class="check"><input type="checkbox" id="live"> Live shipments</label>
   <button id="refresh">Refresh orders</button>
   <button id="audit">Audit &amp; fix</button>
+  <button id="fees">Fix fees</button>
   <button id="ship" class="primary">Create AWBs</button>
 </header>
 
@@ -240,6 +241,40 @@ $("audit").addEventListener("click", async () => {
     const data = await api(`/orders/audit?windowDays=2&apply=true&commit=${commit}`);
     $("result").innerHTML = `<h3>Audit ${commit ? "applied" : "preview"}</h3><pre>${esc(JSON.stringify(data.fixes, null, 2))}</pre>`;
     note(`${data.fixes.length} order(s) with correctable findings.`, "warn");
+    await refresh();
+  } catch (error) {
+    note(error.message, "bad");
+  }
+});
+
+// Fee fixes change what the customer pays at the door, so the preview is
+// shown first and the commit is a separate, explicit confirmation of exactly
+// those changes.
+$("fees").addEventListener("click", async () => {
+  note("Checking shipping fees…");
+  try {
+    const preview = await api("/fees/fix", { method: "POST", body: { windowDays: 2, commit: false } });
+    const s = preview.summary;
+    const lines = preview.results.map((r) =>
+      r.status === "fix"
+        ? `${r.orderName}: ${r.currentFee} -> ${r.expectedFee} (${r.direction}, total ${r.currentTotal} -> ${r.newTotal})`
+        : `${r.orderName}: ${r.status} — ${r.reason}`
+    );
+    $("result").innerHTML = `<h3>Fee check</h3>
+      <p>${s.checked} checked · ${s.alreadyCorrect} correct · ${s.toFix} to fix (${s.increases} up, ${s.decreases} down) · ${s.blocked} blocked · net COD change ${s.netDelta} EGP</p>
+      <pre>${esc(lines.join("\n") || "Nothing to change.")}</pre>`;
+    if (!s.toFix) return note("All shipping fees match the zone table.", "");
+
+    const ok = confirm(`Apply ${s.toFix} fee correction(s)?\n\n${s.increases} raise what the customer pays, ${s.decreases} lower it.\nNet change to COD: ${s.netDelta} EGP.`);
+    if (!ok) return note("Preview only — nothing changed.", "warn");
+
+    note("Applying fee corrections…");
+    const done = await api("/fees/fix", {
+      method: "POST",
+      // Only the orders the preview showed, so nothing new slips in between.
+      body: { commit: true, orderIds: preview.results.filter((r) => r.status === "fix").map((r) => r.orderId) },
+    });
+    note(`${done.summary.applied} fee(s) corrected, ${done.summary.failed} failed.`, done.summary.failed ? "bad" : "");
     await refresh();
   } catch (error) {
     note(error.message, "bad");

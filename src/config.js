@@ -33,7 +33,9 @@ const bool = (value, fallback = false) =>
 
 export const config = {
   port: Number(process.env.PORT || 3000),
-  dataDir: path.join(ROOT, "data"),
+  // Overridable so tests write their ledgers to a throwaway directory instead
+  // of the real shipment/fee history.
+  dataDir: process.env.DATA_DIR || path.join(ROOT, "data"),
 
   shopify: {
     shop: process.env.SHOPIFY_SHOP || "",

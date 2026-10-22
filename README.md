@@ -59,6 +59,7 @@ the production base URL, so the safety is in this app:
 | `GET` | `/api/health` | Credential status + current risk thresholds |
 | `GET` | `/api/orders?windowDays=2` | Unfulfilled orders, each with its audit verdict and any existing AWB |
 | `GET` | `/api/orders/audit?apply=true&commit=true` | `apply` computes fixes, `commit` writes them |
+| `POST` | `/api/fees/fix` | `{ commit, orderIds?, windowDays? }` — dry run unless `commit: true`; see below |
 | `POST` | `/api/shipments` | `{ orderIds?, dryRun, force, fulfill }` — batch, returns the two risk batches |
 | `POST` | `/api/shipments/:orderId` | One order |
 | `POST` | `/api/awb` | `{ trackingNumbers, awbType }` → base64 PDF, chunked at Bosta's 50 limit |
@@ -86,6 +87,40 @@ the production base URL, so the safety is in this app:
   self-referential, since the total already contains the fee being checked.
 - **Duplicates** — matching phone or email anywhere in the window. The
   highest-value order is the survivor; the rest are flagged for review.
+
+## Shipping-fee correction
+
+The audit flags a shipping line that disagrees with the zone table;
+`/api/fees/fix` (and the **Fix fees** button) corrects it on the Shopify order
+via `orderEditBegin` → `orderEditRemoveShippingLine` → `orderEditAddShippingLine`
+→ `orderEditCommit`, checked field-by-field against the live Admin schema.
+Remove-and-add rather than an in-place update because Shopify's
+`orderEditUpdateShippingLine` only edits lines *added during the same edit* —
+it would fail on every real order. The new line keeps the original title. The customer is not
+notified; a staff note and a dated line on the order note record the change,
+and every applied fix is appended to `data/fees.jsonl`.
+
+It is a dry run unless the request says `commit: true`. The preview lists
+each change with its **direction** and the **net change to COD** across the
+window, because an increase means the customer pays more at the door than
+checkout showed them. The button only commits the orders the preview showed.
+
+It refuses, rather than guessing, when:
+
+- **the order already has a Bosta AWB** — Bosta's COD was set from the old
+  total, so changing Shopify alone makes the two disagree on what the courier
+  collects. Change the COD on Bosta instead.
+- **the province is unresolved or contradicts the city** — the expected fee
+  depends on the province, so fix the address first.
+- **there isn't exactly one shipping line** — none to reprice, or no safe way
+  to know which of several to change.
+
+Nothing changes until `orderEditCommit` succeeds: if the remove or add step
+fails, the edit is abandoned uncommitted and the order is exactly as it was —
+it can never be left with its old shipping line removed and no new one.
+
+Needs `write_order_edits` on the Shopify token in addition to the scopes listed
+in `.env.example`.
 
 ## Risk classification
 

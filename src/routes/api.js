@@ -5,6 +5,7 @@ import * as callProvider from "../lib/callProvider.js";
 import { existingTranscript, transcribeAndAttach } from "../services/callTranscripts.js";
 import { readAll, shipmentsByOrderId } from "../lib/ledger.js";
 import { runAudit } from "../services/audit.js";
+import { correctFees } from "../services/feeCorrection.js";
 import { shipBatch, shipOrder } from "../services/shipping.js";
 import { auditOrders } from "../domain/audit.js";
 import { PROVINCES } from "../domain/zones.js";
@@ -71,6 +72,26 @@ router.get(
         dryRun: !boolParam(req.query.commit),
       }),
     );
+  }),
+);
+
+/**
+ * Corrects shipping fees that disagree with the zone table.
+ *
+ * Changing the fee changes what the customer pays at the door, so this is a
+ * dry run unless the body says `commit: true`. The dry run is the review step:
+ * it lists every change with its direction and the net effect on COD.
+ */
+router.post(
+  "/fees/fix",
+  wrap(async (req, res) => {
+    const { orderIds = [], windowDays, commit = false } = req.body || {};
+
+    const orders = orderIds.length
+      ? (await Promise.all(orderIds.map((id) => shopify.fetchOrder(id)))).filter(Boolean)
+      : await shopify.fetchUnfulfilledOrders({ windowDays: intParam(windowDays, 2) });
+
+    res.json(await correctFees(orders, { dryRun: commit !== true }));
   }),
 );
 
